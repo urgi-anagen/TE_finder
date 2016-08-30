@@ -1,0 +1,22 @@
+=============================================
+BLASTER parameter:
+-----------------
+Blaster output prefix: DmelChr4.fa-blastn
+Subject bank: DmelChr4.fa
+Query bank: DmelChr4.fa
+all_by_all: FALSE
+NCBI-BLAST-PLUS
+Blast name: blastn
+Blast parameter: 
+Nb concurrent processes: 1
+Cutter bank:	length=50000
+	 	 over=100
+	 	 word=11
+	 	 extention=_cut
+Bank cut: DmelChr4.fa_cut
+Query cut : DmelChr4.fa_cut
+sensitivity level: 0
+e-value filter: 1e-10
+identity filter: 0
+length filter: 20
+=============================================

@@ -1,0 +1,3 @@
+gcc -c -MD -I. -I../SDGlib -I../DGElib -I../BLRlib -DVERSION="2.24" -o BLRGroup.o BLRGroup.cpp
+gcc -c -O3 -ggdb -Wall -DVERSION="2.24"  -I. -I../SDGlib -I../DGElib -I../BLRlib -o BLRGroup.o BLRGroup.cpp
+gcc -O3 -ggdb -Wall -DVERSION="2.24"  -DVERSION="2.23" -static -I. -I../SDGlib -I../DGElib -I../BLRlib  -L. -L../SDGlib -L../DGElib -L../BLRlib BLRGroup.o grouper.o -o grouper2 -lBLR -lDGE -lsdg -lstdc++ -lm

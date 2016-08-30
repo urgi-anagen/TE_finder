@@ -1,0 +1,66 @@
+#
+# Global definitions and rules for TE_finder
+#
+
+VERSION = "2.272"
+
+OS := $(shell uname)
+
+CXX = gcc
+CC = gcc
+
+#CXXFLAG = -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+#CXXFLAG = -m32 -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+
+#CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+
+## MacOS
+CXXFLAG = -O3 -std=c++11 -pthread -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+
+LDFLAG =
+
+BASE = ..
+
+SDG_LIB = $(BASE)/SDGlib
+SDG_HEADERS= $(BASE)/SDGlib
+
+DGE_LIB = $(BASE)/DGElib
+DGE_HEADERS= $(BASE)/DGElib
+
+BLR_LIB = $(BASE)/BLRlib
+BLR_HEADERS= $(BASE)/BLRlib
+
+#THREADPOOL_LIB = $(BASE)/threadpool-0.2/lib
+#THREADPOOL_HEADERS= $(BASE)/threadpool-0.2/include/
+
+OBJ_LIB=$(SDG_LIB)/libsdg.a $(DGE_LIB)/libDGE.a  $(BLR_LIB)/libBLR.a
+
+#INCLUDE = -I. -I$(SDG_HEADERS) -I$(DGE_HEADERS) -I$(BLR_HEADERS) -I$(THREADPOOL_HEADERS)
+#LIB = -L. -L$(SDG_LIB) -L$(DGE_LIB) -L$(BLR_LIB) -L$(THREADPOOL_LIB)
+#LINK = -lBLR -lDGE -lsdg -lstdc++ -lm -lcppunit -lthreadpool -pthread
+
+INCLUDE = -I. -I$(SDG_HEADERS) -I$(DGE_HEADERS) -I$(BLR_HEADERS) 
+LIB = -L. -L$(SDG_LIB) -L$(DGE_LIB) -L$(BLR_LIB) 
+LINK = -lBLR -lDGE -lsdg -lstdc++ -lm -lcppunit -pthread
+
+TAR = tar
+LN = ln -f
+AR = ar
+RANLIB = ranlib
+
+OBJ = 
+
+SOURCES = *.cpp 
+
+.SUFFIXES: .o .h .cpp .c
+
+%.o : %.cpp
+	$(CXX) -c $(CXXFLAG) -MD $(INCLUDE) -DVERSION=$(VERSION) -o $@ $<
+	@cp $*.d $*.P; \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+	    -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
+	rm -f $*.d
+
+	$(CXX) -c $(CXXFLAG) $(INCLUDE) -o $@ $<
+
+-include $(SOURCES:%.cpp=$(DEPDIR)/%.P)
