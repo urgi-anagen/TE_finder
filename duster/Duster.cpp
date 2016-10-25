@@ -705,7 +705,7 @@ void Duster::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 
 	clock_begin = clock();
 	std::cout<<"merge fragments..."<<std::flush;
-	fragMerge(frag,(wdist+1)*kmer_size,fmerged);
+	fragMerge(frag,fdist,fmerged);
 	std::cout<<"ok"<<std::endl;
 	std::cout<<fmerged.size()<<" ranges found";
 	clock_end = clock();

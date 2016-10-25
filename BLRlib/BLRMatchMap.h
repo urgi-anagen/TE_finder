@@ -137,8 +137,8 @@ class BLRMatchMap
   void writePath(const SDGString& filename, std::list<RangePairSet>& rps_list, int verbose=0);
   void writeRpsList(std::list<RangePairSet>& rps_list,std::ostream& out);
   void writeRpsListAttribute(std::list<RangePairSet>& rps_list, std::ostream& out);
-  void writeBED(const SDGString& filename, const std::list<RangePairSet>& rps_list, SDGString& color, int verbose);
-  void writeBED(std::ostream& out, const std::list<RangePairSet>& rps_list, SDGString& color, int verbose);
+  void writeBED(const SDGString& filename, const std::list<RangePairSet>& rps_list, const SDGString& color, int verbose);
+  void writeBED(std::ostream& out, const std::list<RangePairSet>& rps_list, const SDGString& color, int verbose);
   void writeMatch(const SDGString& filename, int verbose=0);
   RangeMap writeMap(const SDGString& filename, int verbose=0);
   void writeSeq(const RangeMap& matchmap, const SDGString& filename, int verbose=0);

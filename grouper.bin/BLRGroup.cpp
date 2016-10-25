@@ -581,10 +581,8 @@ void BLRGroup::group( int verbose )
 						std::cout<<"Connect the fragments..."<<std::endl<<std::flush;
 					match_map.mapPath(true, false, false, false, verbose-1);
 					//match_map.mapPathWithThreads(true, false, false, false, verbose-1);
-			if (verbose>0)
-				match_map.writePath(grouper_parameter->getPrefixFileName() +  ".gpath");
-			if(verbose>0)
-	    		  	std::cout<<"Fragments were connected."<<std::endl;
+					if(verbose>0)
+						std::cout<<"Fragments were connected."<<std::endl;
 	      		}
 	      	else
 	    	  match_map.mapPath(false, false, false, false, 0);
@@ -612,6 +610,9 @@ void BLRGroup::group( int verbose )
 			rp_list = match_map.getRpsList();
       	}
       	
+	if (verbose>0)
+		match_map.writePath(grouper_parameter->getPrefixFileName() +  ".gpath",rp_list );
+
 	cover_limit = grouper_parameter->getCoverage();
 	if(verbose>0)
 	{
