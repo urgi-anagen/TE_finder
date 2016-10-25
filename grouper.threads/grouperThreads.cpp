@@ -29,10 +29,7 @@ void loadFromAlignFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
 			match_map.mapPath(true, false, false, false, verbose-1);
 			//match_map.mapPathWithThreads(true, false, false, false, verbose-1);
 			if (verbose>0)
-				{
-					match_map.writePath(para->getPrefixFileName() +  ".gpath");
 					std::cout<<"Fragments were connected."<<std::endl;
-				}
 		}
 	else //No fragment join
 	  match_map.mapPath(false, false, false, false, 0);

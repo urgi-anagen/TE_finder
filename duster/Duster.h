@@ -25,12 +25,12 @@ struct Info_kmer
 	  unsigned hash_key;
 
 	  Info_kmer(unsigned h=0, unsigned c=0, double ec=0, double e=0, double d=0, double g=0):
-		  hash_key(h),
 		  count(c),
 		  expected_count(ec),
 		  entropy(e),
 		  diversity(d),
-		  good_kmer(g)
+		  good_kmer(g),
+		  hash_key(h)
 		  {};
 
     bool operator< (const Info_kmer& k) const
@@ -119,7 +119,7 @@ class Duster
 
 
   std::vector< SDGString > subjectName;
-  unsigned kmer_size, bkmer_size, mkmer_size, wdist, min_size, step_q, max_key, nfrag;
+  unsigned kmer_size, bkmer_size, mkmer_size, wdist, fdist, min_size, step_q, max_key, nfrag;
   unsigned nbseqQ,nbseqS;
 
   struct Key : std::pair<long,long>
@@ -167,7 +167,7 @@ class Duster
 
  public:
 
-  Duster(unsigned w=10,unsigned bw=2, unsigned wd=1, unsigned minsize=20, unsigned msk=0):
+  Duster(unsigned w=10,unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned msk=0):
     hseq(w,msk),
     bhseq(bw),
     mhseq(w/2),
@@ -176,6 +176,7 @@ class Duster
     bkmer_size(bw),
     mkmer_size(w/2),
     wdist(wd),
+    fdist(fd),
     min_size(minsize),
     step_q(w),
     nbseqQ(0), 

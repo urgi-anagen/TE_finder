@@ -11,7 +11,7 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=10, bkmer_size=1, kmer_dist=5, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=0;
+unsigned kmer_size=10, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 
@@ -26,13 +26,15 @@ void help(void)
       <<"   -h, --help:\n\t this help"<<std::endl
       <<"   -w, --kmer:\n\t kmer length (<16), default: "<<kmer_size<<std::endl
       <<"   -k, --kmask:\n\t length of k-mer mask, default: "<<kmask<<std::endl
-      <<"   -d, --kmer_dist:\n\t number of kmer between two matching kmer, default: "
+      <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
 	<<kmer_dist<<std::endl
+    <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
+	<<frag_connect_dist<<std::endl
     <<"   -s, --min_size:\n\t min size range to report, default: "
 	<<min_size<<std::endl
-    <<"   -f, --filter_cutoff:\n\t filter kmer with counts over a percentile, default: "
+    <<"   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
 	<<count_cutoff<<std::endl
-    <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability, default: "
+    <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability (Value [0-1]), default: "
     <<diversity_cutoff<<std::endl
     <<"   -m, --min_count:\n\t filter kmer with counts less than this value, default: "
 	<<min_count<<std::endl
@@ -50,9 +52,11 @@ void show_parameter(SDGString filename1,SDGString filename2)
 	  <<"Model sequences: "<<filename2<<std::endl
       <<"   -w, --kmer:\t kmer length (<16): "<<kmer_size<<std::endl
       <<"   -k, --kmask:\t length of k-mer mask, default: "<<kmask<<std::endl
-      <<"   -d, --kmer_dist:\t number of kmer between two matching kmer: "<<kmer_dist<<std::endl
+      <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect, default: "<<kmer_dist<<std::endl
+      <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
+   	<<frag_connect_dist<<std::endl
       <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
-      <<"   -f, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
+      <<"   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
       <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability: "<<diversity_cutoff<<std::endl
       <<"   -m, --min_count:\t filter kmer with counts less than this value: "<<min_count<<std::endl
       <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
@@ -83,8 +87,9 @@ int main(int argc, char* argv[])
 		  {"kmer",required_argument, 0, 'w'},
 		  {"kmask",required_argument, 0, 'k'},
 		  {"kmer_dist",required_argument, 0, 'd'},
+		  {"frag_connect_dist",required_argument, 0, 'f'},
 		  {"min_size",required_argument, 0, 's'},
-		  {"filter_cutoff",required_argument, 0, 'f'},
+		  {"filter_cutoff",required_argument, 0, 'C'},
 		  {"min_count",required_argument, 0, 'm'},
 		  {"diversity_cutoff",required_argument, 0, 'D'},
 		  {"background_kmer_size",required_argument, 0, 'b'},
@@ -97,7 +102,7 @@ int main(int argc, char* argv[])
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:w:k:s:f:D:m:b:o:c:n:a",
+		c = getopt_long (argc, argv, "hd:f:w:k:s:C:D:m:b:o:c:n:a",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -126,12 +131,17 @@ int main(int argc, char* argv[])
 				kmer_dist=atoi(optarg);
 			  break;
 			}
+		  case 'f':
+			{
+				frag_connect_dist=atoi(optarg);
+			  break;
+			}
 		  case 's':
 			{
 				min_size=atoi(optarg);
 			  break;
 			}
-		  case 'f':
+		  case 'C':
 			{
 				count_cutoff=atof(optarg);
 			  break;
@@ -212,6 +222,17 @@ int main(int argc, char* argv[])
 
     show_parameter(filename1,filename2);
 
+    //Check parameters
+    if(count_cutoff<0 || count_cutoff>1)
+    {
+    	std::cout<<"count_cutoff must be in interval [0-1]! Entered value is "<<count_cutoff<<std::endl;
+    	exit( EXIT_FAILURE );
+    }
+    if(diversity_cutoff<0 || diversity_cutoff>1)
+    {
+    	std::cout<<"diversity_cutoff must be in interval [0-1]! Entered value is "<<diversity_cutoff<<std::endl;
+    	exit( EXIT_FAILURE );
+    }
 
 
     if(stat_only)
@@ -225,14 +246,14 @@ int main(int argc, char* argv[])
         	unsigned nb_kmer;
 
         	std::cout<<"\n======Compute kmer background probability for "<<bw-1<<" Markov's chain order======"<<std::endl;
-    	    Duster hsrch(kmer_size,bw,kmer_dist,min_size,kmask);
+    	    Duster hsrch(kmer_size,bw,kmer_dist,min_size,frag_connect_dist, kmask);
     		hsrch.kmer_analysis(filename2,kmer_size, bw, kmer_size/2, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
     	}
     	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
     	exit( EXIT_SUCCESS );
     }
 
-    Duster hsrch(kmer_size,bkmer_size,kmer_dist,min_size,kmask);
+    Duster hsrch(kmer_size,bkmer_size,kmer_dist,frag_connect_dist, min_size,kmask);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;

@@ -1045,7 +1045,7 @@ void BLRMatchMap::writeRpsList(std::list<RangePairSet>& rps_list, std::ostream& 
     }
 }
 //---------------------------------------------------------------------------
-void BLRMatchMap::writeBED(const SDGString& filename, const std::list<RangePairSet>& rps_list, SDGString& color, int verbose)
+void BLRMatchMap::writeBED(const SDGString& filename, const std::list<RangePairSet>& rps_list, const SDGString& color, int verbose)
 {
 	std::ostringstream bedStream;	
 	writeBED(bedStream, rps_list, color, verbose);	
@@ -1053,7 +1053,7 @@ void BLRMatchMap::writeBED(const SDGString& filename, const std::list<RangePairS
 	bedFile<<bedStream.str();
 }
 //---------------------------------------------------------------------------
-void BLRMatchMap::writeBED(std::ostream& out, const std::list<RangePairSet>& rps_list, SDGString& color, int verbose)
+void BLRMatchMap::writeBED(std::ostream& out, const std::list<RangePairSet>& rps_list, const SDGString& color, int verbose)
 {
    if(verbose>0)
 	   std::cout<<"writing 'bed' file..."<<std::flush;

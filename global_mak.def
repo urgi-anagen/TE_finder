@@ -2,20 +2,21 @@
 # Global definitions and rules for TE_finder
 #
 
-VERSION = "2.272"
+VERSION = "2.27"
 
 OS := $(shell uname)
 
 CXX = gcc
 CC = gcc
 
+## Linux
 #CXXFLAG = -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 #CXXFLAG = -m32 -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
-#CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 ## MacOS
-CXXFLAG = -O3 -std=c++11 -pthread -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+#CXXFLAG = -O3 -std=c++11 -pthread -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 LDFLAG =
 
