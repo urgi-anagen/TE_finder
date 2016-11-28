@@ -167,7 +167,7 @@ class Duster
 
  public:
 
-  Duster(unsigned w=10,unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned msk=0):
+  Duster(unsigned w=10,unsigned step=1, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned msk=0):
     hseq(w,msk),
     bhseq(bw),
     mhseq(w/2),
@@ -178,14 +178,13 @@ class Duster
     wdist(wd),
     fdist(fd),
     min_size(minsize),
-    step_q(w),
+    step_q(step),
     nbseqQ(0), 
     nbseqS(0)
     {
       if(w>16) 
 		throw SDGException(NULL,"Duster: Kmer size must be <= 16 !!");
       max_key=(unsigned)pow(4,hseq.getEffectiveKmerSize());
-      //hash2wpos.resize(max_key+1);
     };
 
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
