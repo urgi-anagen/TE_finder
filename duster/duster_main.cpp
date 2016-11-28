@@ -11,7 +11,7 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=10, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=0;
+unsigned kmer_size=10, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 
@@ -25,6 +25,7 @@ void help(void)
       <<" options:"<<std::endl
       <<"   -h, --help:\n\t this help"<<std::endl
       <<"   -w, --kmer:\n\t kmer length (<16), default: "<<kmer_size<<std::endl
+      <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
       <<"   -k, --kmask:\n\t length of k-mer mask, default: "<<kmask<<std::endl
       <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
 	<<kmer_dist<<std::endl
@@ -51,6 +52,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
 	  <<"Query sequences: "<<filename1<<std::endl
 	  <<"Model sequences: "<<filename2<<std::endl
       <<"   -w, --kmer:\t kmer length (<16): "<<kmer_size<<std::endl
+      <<"   -S, --step_q:\t step on query sequence, default: "<<step_q<<std::endl
       <<"   -k, --kmask:\t length of k-mer mask, default: "<<kmask<<std::endl
       <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect, default: "<<kmer_dist<<std::endl
       <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
@@ -85,6 +87,7 @@ int main(int argc, char* argv[])
 		{
 		  {"help",no_argument, 0, 'h'},
 		  {"kmer",required_argument, 0, 'w'},
+		  {"step_q",required_argument, 0, 'S'},
 		  {"kmask",required_argument, 0, 'k'},
 		  {"kmer_dist",required_argument, 0, 'd'},
 		  {"frag_connect_dist",required_argument, 0, 'f'},
@@ -102,7 +105,7 @@ int main(int argc, char* argv[])
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:k:s:C:D:m:b:o:c:n:a",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:a",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -119,6 +122,11 @@ int main(int argc, char* argv[])
 		  case 'w':
 			{
 			  kmer_size=atoi(optarg);
+			  break;
+			}
+		  case 'S':
+			{
+			  step_q=atoi(optarg);
 			  break;
 			}
 		  case 'k':
@@ -253,7 +261,7 @@ int main(int argc, char* argv[])
     	exit( EXIT_SUCCESS );
     }
 
-    Duster hsrch(kmer_size,bkmer_size,kmer_dist,frag_connect_dist, min_size,kmask);
+    Duster hsrch(kmer_size,step_q, bkmer_size,kmer_dist,frag_connect_dist, min_size,kmask);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
