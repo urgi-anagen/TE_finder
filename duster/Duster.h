@@ -134,7 +134,7 @@ class Duster
   		std::vector<unsigned>& bcount, unsigned& nb_bkmer,
   		std::vector<unsigned>& mcount, unsigned& nb_mkmer,
   		std::vector<unsigned>& ncount, unsigned& nb_nuc);
-  void kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize,
+  void kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize, unsigned mask,
 		  const std::vector<unsigned>& wcount, unsigned nb_kmer,
 		  const std::vector<unsigned>& bcount, unsigned nb_bkmer,
 		  const std::vector<unsigned>& mcount, unsigned nb_mkmer,
@@ -167,7 +167,7 @@ class Duster
 
  public:
 
-  Duster(unsigned w=10,unsigned step=1, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned msk=0):
+  Duster(unsigned w=10, unsigned msk=0, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20,unsigned step=1):
     hseq(w,msk),
     bhseq(bw),
     mhseq(w/2),
@@ -182,15 +182,15 @@ class Duster
     nbseqQ(0), 
     nbseqS(0)
     {
-      if(w>16) 
+      if(hseq.getEffectiveKmerSize()>16)
 		throw SDGException(NULL,"Duster: Kmer size must be <= 16 !!");
       max_key=(unsigned)pow(4,hseq.getEffectiveKmerSize());
     };
 
-  void load(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
+  void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		  unsigned min_count,
-		  unsigned kmask,bool & valid_idx_file, bool first_iter);
-  void kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size,
+		  bool & valid_idx_file, bool first_iter);
+  void kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size,
 		  double count_cutoff, double diversity_cutoff,
 		  std::vector<unsigned>& wcount,
 		  unsigned& nb_kmer,
