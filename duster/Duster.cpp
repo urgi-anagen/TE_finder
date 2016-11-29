@@ -311,13 +311,13 @@ void Duster::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize,
     //Compute kmer background probabilities
     for(unsigned k=0; k<max_key_bkmer;k++)
     {
-    	bprob[k]=(double)(bcount[k]+0.0001)/nb_bkmer; //use pseudo count!!
+    	bprob[k]=(double)(bcount[k]+0.0001)/nb_bcount; //use pseudo count!!
     }
 
     //Compute kmer model probabilities
     for(unsigned k=0; k<max_key_mkmer;k++)
     {
-    	mprob[k]=(double)(mcount[k]+0.0001)/nb_mkmer; //use pseudo count!!
+    	mprob[k]=(double)(mcount[k]+0.0001)/nb_mcount; //use pseudo count!!
     }
 
     //Compute kmer background independance and conditional probabilities
