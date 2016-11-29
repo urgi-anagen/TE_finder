@@ -1,10 +1,10 @@
 #include "Duster.h"
 
 //-------------------------------------------------------------------------
-void Duster::load(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
-		unsigned min_count,unsigned kmask,bool & valid_idx_file, bool first_iter)
+void Duster::load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
+		unsigned min_count,bool & valid_idx_file, bool first_iter)
 {
-  
+
   nbseqS=0;
 
   clock_t begin, end;
@@ -16,11 +16,11 @@ void Duster::load(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer
   if(!valid_idx_file)
     {
 	  //Count kmers and filters
-	  std::vector<unsigned> kmer_count((unsigned)pow(4,hseq.getEffectiveKmerSize()),0);
+	  std::vector<unsigned> kmer_count((unsigned)pow(4,kmer_size-kmask),0);
 	  unsigned nb_kmer=0;
 	  std::list< Info_kmer > list_infokmer;
 	  Info_kmer kmer_threshold;
-	  kmer_analysis(filenameS,kmer_size, bkmer_size, mkmer_size, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
+	  kmer_analysis(filenameS,kmer_size, kmask, bkmer_size, mkmer_size, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
       kmer_filter(list_infokmer, kmer_threshold, min_count, kmer_count, first_iter);
       end = clock();
       std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
@@ -60,7 +60,7 @@ void Duster::load(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer
   std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
-void Duster::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size,
+void Duster::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size,
 		double count_cutoff, double diversity_cutoff, std::vector<unsigned>& kmer_count, unsigned& nb_kmer,
 		std::list< Info_kmer >& list_infokmer, Info_kmer& kmer_threshold)
 {
@@ -83,7 +83,7 @@ void Duster::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsig
 
 
   kmer_count[0]=0; //remove kmers AAAAAA... NNNNNN.... XXXXX....
-  kmer_prob(kmer_size, bkmer_size, mkmer_size,
+  kmer_prob(kmer_size, bkmer_size, mkmer_size,mask,
 		  kmer_count,nb_kmer,
 		  background_count, nb_bkmer,
 		  model_count, nb_mkmer,
@@ -109,13 +109,13 @@ void Duster::kmer_counts(const SDGString& filenameS, unsigned kmer_size, unsigne
   std::cout<<"Counting kmer of size "<<kmer_size<<" ... "<<std::flush;
 
   SDGFastaIstream inS(filenameS);
-  //unsigned count_seq=0;
+  unsigned count_seq=0;
   while(inS)
 	{
 	  SDGBioSeq sS;
 	  if(inS)
 		inS>>sS;
-	  //std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::endl;
+	  std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::endl;
 	  nb_kmer+=hashSeqCount(sS,kmer_size, wcount);
 	  nb_bkmer+=hashSeqBackgroundCount(sS,bkmer_size, bcount);
 	  nb_mkmer+=hashSeqModelCount(sS,mkmer_size, mcount);
@@ -280,7 +280,7 @@ void Duster::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_infokm
 }
 //-------------------------------------------------------------------------
 //
-void Duster::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize,
+void Duster::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsigned mask,
 		const std::vector<unsigned>& wcount, unsigned nb_kmer,
 		const std::vector<unsigned>& bcount, unsigned nb_bkmer,
 		const std::vector<unsigned>& mcount, unsigned nb_mkmer,
@@ -288,12 +288,14 @@ void Duster::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize,
 		std::list< Info_kmer >& list_infokmer)
 {
 	std::cout<<"\nCompute kmer stats ... "<<std::endl;
-	Duster h(wsize,bwsize, 0);
+	Duster h(wsize,mask,bwsize, 0);
+	std::cout<<"kmer size="<<wsize
+			<<"\tmask size="<<mask
+			<<"\teffective kmer size="<<h.hseq.getEffectiveKmerSize()<<std::endl;
+
 	std::cout<<"\nSequence composition:\n";
 
 	//Compute nucleotide probabilities
-	unsigned nb_bcount=bcount.size();
-	unsigned nb_mcount=mcount.size();
 	unsigned max_key_bkmer=pow(4,bwsize);
 	unsigned max_key_mkmer=pow(4,mwsize);
 
@@ -311,13 +313,13 @@ void Duster::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize,
     //Compute kmer background probabilities
     for(unsigned k=0; k<max_key_bkmer;k++)
     {
-    	bprob[k]=(double)(bcount[k]+0.0001)/nb_bcount; //use pseudo count!!
+    	bprob[k]=(double)(bcount[k]+0.0001)/nb_bkmer; //use pseudo count!!
     }
 
     //Compute kmer model probabilities
     for(unsigned k=0; k<max_key_mkmer;k++)
     {
-    	mprob[k]=(double)(mcount[k]+0.0001)/nb_mcount; //use pseudo count!!
+    	mprob[k]=(double)(mcount[k]+0.0001)/nb_mkmer; //use pseudo count!!
     }
 
     //Compute kmer background independance and conditional probabilities
@@ -723,7 +725,7 @@ void Duster::matchKmers(const SDGBioSeq& sequence,
 
   const char* seq=str.c_str();
 
-  unsigned last_pos=end-step_q;
+  unsigned last_pos=end-kmer_size;
   if(end<=kmer_size) return;
 
   unsigned key_d=0;
@@ -899,7 +901,7 @@ void Duster::get_sequences(const std::vector< std::pair<unsigned,unsigned> >& fr
 	  SDGBioSeq subseq=seq.subseq(frag[i].first,frag[i].second-frag[i].first+1);
 	  std::ostringstream name;
 	  name<<seq.getDE()<<":"<<frag[i].first<<".."<<frag[i].second;
-	  subseq.setDE(name.str());
+	  subseq.setDE((SDGString)name.str());
 	  out<<subseq;
     }
 }
