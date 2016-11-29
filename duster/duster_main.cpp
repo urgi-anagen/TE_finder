@@ -11,7 +11,7 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=10, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=0;
+unsigned kmer_size=16, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=2;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 
@@ -52,10 +52,10 @@ void show_parameter(SDGString filename1,SDGString filename2)
 	  <<"Query sequences: "<<filename1<<std::endl
 	  <<"Model sequences: "<<filename2<<std::endl
       <<"   -w, --kmer:\t kmer length (<16): "<<kmer_size<<std::endl
-      <<"   -S, --step_q:\t step on query sequence, default: "<<step_q<<std::endl
-      <<"   -k, --kmask:\t length of k-mer mask, default: "<<kmask<<std::endl
-      <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect, default: "<<kmer_dist<<std::endl
-      <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
+      <<"   -S, --step_q:\t step on query sequence: "<<step_q<<std::endl
+      <<"   -k, --kmask:\t length of k-mer mask: "<<kmask<<std::endl
+      <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: "<<kmer_dist<<std::endl
+      <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect: "
    	<<frag_connect_dist<<std::endl
       <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
       <<"   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
@@ -246,28 +246,28 @@ int main(int argc, char* argv[])
     if(stat_only)
     {
     	std::cout<<"\nCompute kmer stat only!"<<std::endl;
-    	for(unsigned bw=2; bw<=bkmer_size; bw++)
+    	for(unsigned bw=1; bw<=bkmer_size; bw++)
     	{
-        	std::vector<unsigned> kmer_count((unsigned)pow(4,kmer_size),0);
+        	std::vector<unsigned> kmer_count((unsigned)pow(4,kmer_size-kmask),0);
         	std::list< Info_kmer > list_infokmer;
         	Info_kmer kmer_threshold;
         	unsigned nb_kmer;
 
         	std::cout<<"\n======Compute kmer background probability for "<<bw-1<<" Markov's chain order======"<<std::endl;
-    	    Duster hsrch(kmer_size,bw,kmer_dist,min_size,frag_connect_dist, kmask);
-    		hsrch.kmer_analysis(filename2,kmer_size, bw, kmer_size/2, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
+    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,frag_connect_dist, min_size, step_q );
+    		hsrch.kmer_analysis(filename2,kmer_size,kmask, bw, kmer_size/2, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
     	}
     	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
     	exit( EXIT_SUCCESS );
     }
 
-    Duster hsrch(kmer_size,step_q, bkmer_size,kmer_dist,frag_connect_dist, min_size,kmask);
+    Duster hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
-		hsrch.load(filename2,kmer_size, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,kmask,valid_idx_file, first_iter);
+		hsrch.load(filename2,kmer_size, kmask, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file, first_iter);
 
 		std::ofstream out;
 		std::stringstream out_name;

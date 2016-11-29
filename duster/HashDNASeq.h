@@ -25,8 +25,8 @@ struct HashDNASeq // Compute hashing value of a word
 			lb=hb=0;
 		}
 
-	  if(w>16)
-	throw SDGException(NULL,"HashDNASeq: Word size must be <= 16 !!");
+	  if(word_size-(hb-lb)>16)
+	throw SDGException(NULL,"HashDNASeq: Effective word size must be <= 16 !!");
 	};
 
 	unsigned getEffectiveKmerSize(void){return word_size-(hb-lb);};
@@ -37,7 +37,8 @@ struct HashDNASeq // Compute hashing value of a word
 		unsigned h=0;
 		for(unsigned i=0;i<word_size && *p!='\0';i++)
 		{
-		  if(i>lb && i<=hb) continue;
+		  if(i>=lb && i<hb)
+			  {p++;continue;}
 		  h<<=2;
 		  unsigned val_nuc=0;
 		  switch(*p)
@@ -71,7 +72,8 @@ struct HashDNASeq // Compute hashing value of a word
 			  {
 				  val_nuc=3;
 				  break;
-			  }		  	  default:
+			  }
+			  default:
 			  {
 				val_nuc=0;
 				break;
@@ -96,32 +98,39 @@ struct HashDNASeq // Compute hashing value of a word
 		unsigned val=0;
 		for(unsigned i=0;i<word_size;i++)
 		{
-		  val=key&maskw;
-		  key>>=2;
-		  switch(val)
-		  {
-			  case 1:
+			if(i>=lb && i<hb)
+				{
+					car='-';
+				}
+			else
+			{
+			  val=key&maskw;
+			  key>>=2;
+			  switch(val)
 			  {
-				  car='C';
-				  break;
-			  }
-			  case 2:
-			  {
-				  car='G';
-				  break;
-			  }
-			  case 3:
-			  {
-				  car='T';
-				  break;
-			  }
+				  case 1:
+				  {
+					  car='C';
+					  break;
+				  }
+				  case 2:
+				  {
+					  car='G';
+					  break;
+				  }
+				  case 3:
+				  {
+					  car='T';
+					  break;
+				  }
 
-			  default:
-			  {
-				car='A';
-				break;
+				  default:
+				  {
+					car='A';
+					break;
+				  }
 			  }
-		  }
+			}
 		  kmer.insert(kmer.begin(),car);
 		}
 
