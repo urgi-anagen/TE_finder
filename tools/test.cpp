@@ -2,7 +2,7 @@
  *
  * \file test.cpp
  *
- * \brief Tests for grouper
+ * \brief Tests for orienter
  *
  ***/
 

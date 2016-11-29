@@ -19,4 +19,7 @@ clean:
 	@find . -name '*~' -exec rm {} \;
 	@find . -name '*.bak' -exec rm {} \;
 	@find . -name '\#*\#' -exec rm {} \;
+	@find . -name '*.o' -exec rm {} \;
+	@find . -name '*.a' -exec rm {} \;
+	@find . -name '*.P' -exec rm {} \;
 	@if test -d bin; then rm -r bin; fi
