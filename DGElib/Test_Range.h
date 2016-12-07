@@ -26,7 +26,6 @@ class Test_Range: public CPPUNIT_NS::TestFixture
 	CPPUNIT_TEST( test_reverse );
 	CPPUNIT_TEST( test_overlap );
 	CPPUNIT_TEST( test_isContained );
-	CPPUNIT_TEST( test_diff );
 	CPPUNIT_TEST(test_diff_range1_start_changed_after_diff);
  	CPPUNIT_TEST_SUITE_END();
   
@@ -44,7 +43,6 @@ class Test_Range: public CPPUNIT_NS::TestFixture
 	 void test_reverse( void );
 	 void test_overlap( void );
 	 void test_isContained(void);
-	 void test_diff( void );
 	 void test_diff_range1_start_changed_after_diff(void);
 
 };
