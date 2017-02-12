@@ -1,15 +1,13 @@
 #include <SDGSubBioSeq.h>
 
 __SDGSubBioSeq::__SDGSubBioSeq(SDGBioSeq &seq, unsigned long d, 
-			   long lg, bool brin)
+		unsigned long lg)
 {
   debut.push_back(d);
 
-  if (lg == -1) lg = seq.length() - d;
+  if (lg == 0) lg = seq.length() - d;
 
   longueur.push_back(lg);
-
-  orientation = brin;
 
   bioseq = seq;
   molecule       = seq.getMO();
@@ -19,15 +17,14 @@ __SDGSubBioSeq::__SDGSubBioSeq(SDGBioSeq &seq, unsigned long d,
   identificateur = seq.getID();
 }
 __SDGSubBioSeq::__SDGSubBioSeq(const __SDGBioSeq &seq, unsigned long d, 
-			   long lg, bool brin)
+		unsigned long lg)
 {
   debut.push_back(d);
 
-  if (lg == -1) lg = seq.length() - d;
+  if (lg == 0) lg = seq.length() - d;
 
   longueur.push_back(lg);
 
-  orientation = brin;
 
   bioseq=seq;
 
@@ -49,8 +46,6 @@ __SDGSubBioSeq::__SDGSubBioSeq(const __SDGSubBioSeq &seq)
   identificateur = seq.identificateur;
   definition = seq.definition;
 
-  orientation = seq.orientation;
-
   debut = seq.debut;
   longueur = seq.longueur;
 
@@ -62,8 +57,6 @@ char __SDGSubBioSeq::charAt(unsigned long indice) const
   checkPos(indice);
 
   unsigned long lt = 0;
-  if (! orientation)
-    indice = length() - 1 - indice;
 
     for (size_t i=0; (i < longueur.size()) && (tmp == 0); i++)
     {
@@ -76,8 +69,6 @@ char __SDGSubBioSeq::charAt(unsigned long indice) const
       
     }
 
-  if (! orientation) tmp = __SDGBioSeq::complement(tmp);
-
     return tmp;
 } 
 
@@ -88,29 +79,9 @@ SDGString __SDGSubBioSeq::toString(unsigned long d, unsigned long lg) const
   for (size_t i=0; i < debut.size(); i++)
          sortie += bioseq.toString(debut[i],longueur[i]);
 
-  if (! orientation)
-    {
-      SDGBioSeq tmp=newSDGMemBioSeq(sortie,bioseq.getMO());
-      tmp=tmp.complement();
-      sortie = tmp.toString();
-    }
   return sortie.substr(d,lg);
 }
 
-SDGBioSeq __SDGSubBioSeq::fivePrime(unsigned long p, unsigned long lg)
-{
-  p= (orientation) ? debut[0]+p :    
-                     debut[debut.size() -1] + longueur[debut.size() -1] - p -lg;
-  return newSDGSubBioSeq(bioseq,p,lg,orientation);
-}
-SDGBioSeq __SDGSubBioSeq::threePrime(unsigned long p, unsigned long lg)
-{
-  p= (orientation) ? debut[debut.size() -1] + longueur[debut.size() -1] + p -1: 
-                     debut[0] - p -lg +1;
-
-
-  return newSDGSubBioSeq(bioseq,p,lg,orientation);
-}
 
 
 SDGBioSeq __SDGSubBioSeq::subseq(unsigned long d, unsigned long lg)  const
@@ -118,15 +89,10 @@ SDGBioSeq __SDGSubBioSeq::subseq(unsigned long d, unsigned long lg)  const
   unsigned long lt=0;
   char start=0;
 
-  checkPos(d);              // Verifie la validité de la position de depart
+  checkPos(d);              // Verifie la validite de la position de depart
 
-  if (lg == 0)             // Si lg = 0 (paramettre par defaut 
+  if (lg == 0)             // Si lg = 0 (parametre par defaut
     lg = length() - d;      //   |--> calcule lg pour le reste de la sequence
-
-  if (! orientation)
-    {
-      d = length() - d - lg;
-    }
 
   __SDGSubBioSeq tmp(*this);
 
@@ -136,44 +102,38 @@ SDGBioSeq __SDGSubBioSeq::subseq(unsigned long d, unsigned long lg)  const
   for (size_t i=0; i < longueur.size(); i++)
     {
       lt += longueur[i];
-
-      if (start )
-	if (lg >= lt)
-	  {
-	    tmp.debut.push_back(debut[i]);
-	    tmp.longueur.push_back(longueur[i]);	  
-	  }
-	else
-	  {
-	    start=0;
-	    tmp.debut.push_back(debut[i]);
-	    tmp.longueur.push_back(lg-lt+longueur[i]);	 
-
-	    break;
-
-	  }
+      if (start)
+		if (lg >= lt)
+		  {
+			tmp.debut.push_back(debut[i]);
+			tmp.longueur.push_back(longueur[i]);
+		  }
+		else
+		  {
+			start=0;
+			tmp.debut.push_back(debut[i]);
+			tmp.longueur.push_back(lg-lt+longueur[i]);
+			break;
+		  }
       else
-	if (d < lt)
-	  {
-	    start=1;
-	    tmp.debut.push_back(debut[i]+d);
-	    tmp.longueur.push_back(longueur[i]-d);
-	    
-	    if (tmp.longueur[0] > lg)
-	      {
-		tmp.longueur[0] = lg;
-		start=0;
-		break;
-	      }
-
-	    lt = tmp.longueur[0];
-	  }
+		if (d < lt)
+		  {
+			start=1;
+			tmp.debut.push_back(debut[i]+d);
+			tmp.longueur.push_back(longueur[i]-d);
+			if (tmp.longueur[0] > lg)
+			  {
+				tmp.longueur[0] = lg;
+				start=0;
+				break;
+			  }
+			lt = tmp.longueur[0];
+		  }
     }
 
   tmp.setDE(definition);
   tmp.setAC(access);
   tmp.setID(identificateur);
-  tmp.orientation = orientation;
 
   return SDGBioSeq(tmp);
       
@@ -182,7 +142,6 @@ SDGBioSeq __SDGSubBioSeq::subseq(unsigned long d, unsigned long lg)  const
 SDGBioSeq __SDGSubBioSeq::complement() const
 {
   __SDGSubBioSeq tmp(*this);
-  tmp.orientation=!orientation;
   return SDGBioSeq(tmp);
 }
   
@@ -277,29 +236,19 @@ void __SDGSubBioSeq::setDE(const SDGString new_DE)
 unsigned long __SDGSubBioSeq::posInRef(unsigned long indice) const
 {
   long tmp = 0;
-  long signe = (indice < 0) ? -1:1;
-  indice *= signe;
   checkPos(indice);
   
 
   unsigned long lt = 0;
-  if (! orientation)
-    indice = length() - 1 - indice;
 
-    for (size_t i=0; (i < longueur.size()) && (tmp == 0); i++)
+  for (size_t i=0; (i < longueur.size()) && (tmp == 0); i++)
     {
       if ( (indice >=lt) && (indice < lt+longueur[i]) )
-	{
-	  tmp = debut[i]+indice - lt;
-	}
-
+		{
+		  tmp = debut[i]+indice - lt;
+		}
       lt+=longueur[i];      
-      
     }
-
-  tmp *= signe;
-  if (! orientation) tmp = -tmp;
-
     return tmp;
 }
 SDGBioSeq __SDGSubBioSeq::getBioseq() const

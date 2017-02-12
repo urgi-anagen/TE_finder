@@ -30,17 +30,14 @@ class __SDGSubBioSeq : public __SDGBioSeq
  
   std::vector<unsigned long> debut, longueur;
   
-  // Vrai si brin watson
-
-  bool orientation;
 
   public:
 
   __SDGSubBioSeq(SDGBioSeq &seq, unsigned long d, 
-	       long lg=-1, bool brin=true);
+		  unsigned long lg=0);
   
   __SDGSubBioSeq(const __SDGBioSeq &seq, unsigned long d, 
-	       long lg=-1, bool brin=true);
+		  unsigned long lg=0);
   
   __SDGSubBioSeq(const __SDGSubBioSeq &seq);
 
@@ -99,24 +96,19 @@ class __SDGSubBioSeq : public __SDGBioSeq
   virtual void setID(const SDGString new_ID);
   virtual void setDE(const SDGString new_DE);
 
-	// Permet d'acceder aux annotation d'une sequence
-
-  virtual SDGBioSeq fivePrime(unsigned long pos, unsigned long lg);
-  virtual SDGBioSeq threePrime(unsigned long pos, unsigned long lg);
-
 
 };
 
 inline SDGBioSeq newSDGSubBioSeq(SDGBioSeq &seq, unsigned long d, 
-				 long lg=-1, bool brin=1)
+		unsigned long lg=0)
 {
-  return SDGBioSeq(__SDGSubBioSeq(seq,d,lg,brin));
+  return SDGBioSeq(__SDGSubBioSeq(seq,d,lg));
 };
 
 inline SDGBioSeq newSDGSubBioSeq(const __SDGBioSeq &seq, unsigned long d, 
-				 long lg=-1, bool brin=1)
+		unsigned long lg=0)
 {
-  return SDGBioSeq(__SDGSubBioSeq(seq,d,lg,brin));
+  return SDGBioSeq(__SDGSubBioSeq(seq,d,lg));
 };
 
 
