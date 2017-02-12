@@ -19,7 +19,7 @@ SDGFastaOstream &SDGFastaOstream::operator << (SDGBioSeq p)
 
   if (!DE.length()) 
     {
-      DE += "Sequence length = " + p.length();
+      DE += "Sequence length = " + SDGString(p.length());
     }
 
   if (AC.length())

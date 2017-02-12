@@ -32,7 +32,5 @@ clean:
 	@rm -f *.so.*
 
 test: libsdg.a  test.o
-	$(CXX)  $(CXXFLAG)  $(INCLUDE) test.o -L. -lsdg -lstdc++ -lutil -o $@
-
-test2: libsdg.a  test2.o
 	$(CXX)  $(CXXFLAG)  $(INCLUDE) test.o -L. -lsdg -lstdc++ -o $@
+
