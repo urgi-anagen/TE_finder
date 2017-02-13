@@ -37,7 +37,7 @@ void RangePair::set( SDGString line )
 	e_value = atof(tokens[6]);
 	score = atoi(tokens[7]);
 	identity = atof(tokens[8]);
-	length = std::max(abs(first.getEnd()-first.getStart())+1,abs(second.getEnd()-second.getStart())+1);
+	length = std::max(std::abs((double)(first.getEnd())-first.getStart())+1,std::abs((double)(second.getEnd())-second.getStart())+1);
 }
 
 bool operator==( const RangePair &rp1, const RangePair &rp2 )
@@ -200,7 +200,7 @@ void RangePair::readtxt(std::istream& in)
   char buff[1024];
 
   SDGString qname,sname;
-  unsigned long qstart,qend,sstart,send;
+  long qstart,qend,sstart,send;
 
   in.getline(buff,1023,'\t');
   qname=buff;
@@ -233,7 +233,7 @@ void RangePair::readtxt(std::istream& in)
   first.set(qname,0,qstart,qend);
   second.set(sname,0,sstart,send);
 
-  length=std::max(abs(qend-qstart)+1,abs(send-sstart)+1);
+  length=std::max(std::abs(qend-qstart)+1,std::abs(send-sstart)+1);
 
   setStrand();
 }

@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------
 void Lalign::align()
 { 
-  register  int  i, j;			/* row and column indices */
+  int  i, j;			/* row and column indices */
   
   reset_align();
 
@@ -160,8 +160,8 @@ void Lalign::getAlignedStr(char A[], char B[], int M, int N, int S[], SDGString&
 
   char ALINE[51], BLINE[51];
 
-  register char *a, *b;
-  register int   i,  j, op;
+  char *a, *b;
+  int   i,  j, op;
 
   i = j = op = 0;
   a = ALINE;
@@ -208,9 +208,9 @@ void Lalign::display(char A[], char B[], int M, int N, int S[], int AP,int BP)
   /* Alignment display routine */
   char ALINE[51], BLINE[51], CLINE[51];
 
-  register char *a, *b, *c;
-  register int   i,  j, op;
-           int   lines, ap, bp;
+  char *a, *b, *c;
+  int   i,  j, op;
+  int   lines, ap, bp;
 
   i = j = op = lines = 0;
   ap = AP;
@@ -265,15 +265,15 @@ void Lalign::display(char A[], char B[], int M, int N, int S[], int AP,int BP)
 /* A big pass to compute n best classes */
 void Lalign::big_pass()
 { 
-  register  int  i, j;			/* row and column indices */
-  register  int  c;			/* best score at current point */
-  register  int  f;			/* best score ending with insertion */
-  register  int  d;			/* best score ending with deletion */
-  register  int  p;			/* best score at (i-1, j-1) */
-  register  int  ci, cj;		/* end-point associated with c */ 
-  register  int  di, dj;		/* end-point associated with d */
-  register  int  fi, fj;		/* end-point associated with f */
-  register  int  pi, pj;		/* end-point associated with p */
+  int  i, j;			/* row and column indices */
+  int  c;			/* best score at current point */
+  int  f;			/* best score ending with insertion */
+  int  d;			/* best score ending with deletion */
+  int  p;			/* best score at (i-1, j-1) */
+  int  ci, cj;		/* end-point associated with c */
+  int  di, dj;		/* end-point associated with d */
+  int  fi, fj;		/* end-point associated with f */
+  int  pi, pj;		/* end-point associated with p */
   int  *va;				/* pointer to v(A[i], B[j]) */
 	
 	/* Compute the matrix and save the top K best scores in LIST
@@ -346,15 +346,15 @@ void Lalign::big_pass()
 /* Determine the left and top boundaries of the recomputed area */
 void Lalign::locate()
 { 
-  register  int  i, j;			/* row and column indices */
-  register  int  c;			/* best score at current point */
-  register  int  f;			/* best score ending with insertion */
-  register  int  d;			/* best score ending with deletion */
-  register  int  p;			/* best score at (i-1, j-1) */
-  register  int  ci, cj;		/* end-point associated with c */ 
-  register  int  di, dj;		/* end-point associated with d */
-  register  int  fi, fj;		/* end-point associated with f */
-  register  int  pi, pj;		/* end-point associated with p */
+  int  i, j;			/* row and column indices */
+  int  c;			/* best score at current point */
+  int  f;			/* best score ending with insertion */
+  int  d;			/* best score ending with deletion */
+  int  p;			/* best score at (i-1, j-1) */
+  int  ci, cj;		/* end-point associated with c */
+  int  di, dj;		/* end-point associated with d */
+  int  fi, fj;		/* end-point associated with f */
+  int  pi, pj;		/* end-point associated with p */
   short  cflag, rflag;			/* for recomputation */
   int  *va;				/* pointer to v(A[i], B[j]) */
   int  limit;				/* the bound on j */
@@ -568,15 +568,15 @@ void Lalign::locate()
 //--------------------------------------------------------------------------
 /* recompute the area on forward pass */
 void Lalign::small_pass(int count)
-{ register  int  i, j;			/* row and column indices */
-  register  int  c;			/* best score at current point */
-  register  int  f;			/* best score ending with insertion */
-  register  int  d;			/* best score ending with deletion */
-  register  int  p;			/* best score at (i-1, j-1) */
-  register  int  ci, cj;		/* end-point associated with c */ 
-  register  int  di, dj;		/* end-point associated with d */
-  register  int  fi, fj;		/* end-point associated with f */
-  register  int  pi, pj;		/* end-point associated with p */
+{ int  i, j;			/* row and column indices */
+  int  c;			/* best score at current point */
+  int  f;			/* best score ending with insertion */
+  int  d;			/* best score ending with deletion */
+  int  p;			/* best score at (i-1, j-1) */
+  int  ci, cj;		/* end-point associated with c */
+  int  di, dj;		/* end-point associated with d */
+  int  fi, fj;		/* end-point associated with f */
+  int  pi, pj;		/* end-point associated with p */
   int  *va;				/* pointer to v(A[i], B[j]) */
   int  limit;				/* lower bound on j */
 
@@ -645,7 +645,7 @@ void Lalign::small_pass(int count)
 int Lalign::addnode(int c, int ci, int cj, int i, int j, int K, int cost)
 { 
   short found;				/* 1 if the node is in LIST */
-  register int d;
+  int d;
 
   found = 0;
   if ( most != 0 && most->STARI == ci && most->STARJ == cj )
@@ -719,7 +719,7 @@ Lalign::vertexptr Lalign::findmax()
 int Lalign::no_cross()
 { 
   vertexptr  cur;
-  register int i;
+  int i;
 
       for ( i = 0; i < numnode; i++ )
 	{ cur = LIST[i];
@@ -747,8 +747,8 @@ int Lalign::diff(char *A, char *B, int M, int N, int tb, int te)
   int   midi, midj, type;	/* Midpoint, type, and cost */
   int midc;
 
-{ register int   i, j;
-  register int c, e, d, s;
+{ int   i, j;
+  int c, e, d, s;
            int t, *va;
 
 /* Boundary cases: M <= 1 or N == 0 */
