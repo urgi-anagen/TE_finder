@@ -78,12 +78,12 @@ void RangeMap::view(void)
       for(std::list<RangeSeq>::iterator i=c->second.begin();
 	  i!=c->second.end();i++)
 	{
-	  ulong is=(*i).getStart();
-	  ulong ie=(*i).getEnd();
+	  long is=(*i).getStart();
+	  long ie=(*i).getEnd();
 	  long long dist=(is<ie?is:ie)-prev;
 	  std::cout<<"#"<<++count<<"\t"
 	      <<(*i)
-	      <<"\tlen="<<(unsigned)abs(ie-is+1)<<"\t"
+	      <<"\tlen="<<(unsigned)std::abs(ie-is+1)<<"\t"
 	      <<"dist="<<dist;
 	  if(is<ie)
 	    std::cout<<"\t+";
@@ -125,8 +125,8 @@ void RangeMap::view(void)
 //   while(!sl.isNil(n))
 //     {
 //       std::cout<<"dist="<<n.key<<"\n\t"
-// 	  <<n.value.first<<"\tlen="<<abs(n.value.first.getStart()-n.value.first.getEnd()+1)
-// 	  <<"\n\t"<<n.value.second<<"\tlen="<<abs(n.value.second.getStart()-n.value.second.getEnd()+1)<<std::endl;
+// 	  <<n.value.first<<"\tlen="<<std::abs(n.value.first.getStart()-n.value.first.getEnd()+1)
+// 	  <<"\n\t"<<n.value.second<<"\tlen="<<std::abs(n.value.second.getStart()-n.value.second.getEnd()+1)<<std::endl;
 
 //       std::cout<<"region:"<<"\t"
 // 	  <<n.value.first.getName()<<"\t"
@@ -144,9 +144,9 @@ void RangeMap::cut(unsigned int length, unsigned int over )
       for(std::list<RangeSeq>::iterator i=c->second.begin();
 	  i!=c->second.end();i++)
 	{
-	  ulong is=(*i).getStart();
-	  ulong ie=(*i).getEnd();
-	  if((unsigned)abs(ie-is+1)>length)
+	  long is=(*i).getStart();
+	  long ie=(*i).getEnd();
+	  if((unsigned)std::abs(ie-is+1)>length)
 	    {
 	      (*i).setStart(is+length-over);
 	      RangeSeq new_range((*i).getName(),(*i).getChr(),
@@ -220,8 +220,8 @@ void RangeMap::writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const
 		  count_skip++;
 		  continue;
 		}
-	      ulong is=i->getStart();
-	      ulong ie=i->getEnd();
+	      long is=i->getStart();
+	      long ie=i->getEnd();
 	      if(is<=ie)
 		{
 		  if(is>=chr_len)
@@ -303,13 +303,13 @@ void RangeMap::writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, in
 		  count_skip++;
 		  continue;
 		}
-	      ulong is=i->getStart();
-	      ulong ie=i->getEnd();
+	      long is=i->getStart();
+	      long ie=i->getEnd();
 	      countTreated ++;
 	      if(verbose>0)
 	      {
 	    	  std::cout<<"   working on range "<<countTreated<<"/"<<countRange
-	    	  <<" length="<<(long)abs(is-ie)+1<<std::endl;
+	    	  <<" length="<<(long)std::abs(is-ie)+1<<std::endl;
 	    	  std::cout<<*i<<std::endl<<std::flush;
 	      }
 	      SDGBioSeq s=newSDGMemBioSeq("");
@@ -663,10 +663,10 @@ void RangeMap::entropfilt(const SDGString& db, double thres)
 		  count_skip++;
 		  continue;
 		}
-	      ulong is=i->getStart();
-	      ulong ie=i->getEnd();
+	      long is=i->getStart();
+	      long ie=i->getEnd();
 	      std::cout<<"   working on range "<<++countTreated<<"/"<<countRange
-		  <<" length="<<(long)abs(is-ie)+1<<std::endl;
+		  <<" length="<<(long)std::abs(is-ie)+1<<std::endl;
 	      std::cout<<*i<<std::endl<<std::flush;
 	      SDGBioSeq s=newSDGMemBioSeq("");
 	      if(is<=ie)
