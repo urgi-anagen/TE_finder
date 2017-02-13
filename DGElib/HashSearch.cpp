@@ -328,8 +328,8 @@ void HashSearch::diagSearch(void)
 	      RangeAlign r1(nbseqQ ,start,end+word_size-1);
 	      
 	      unsigned rstart,rend;
-	      rstart=abs(diag-len+start);
-	      rend=abs(diag-len+end+word_size-1);
+	      rstart=(unsigned)std::abs((double)diag-len+start);
+	      rend=(unsigned)std::abs((double)diag-len+end+word_size-1);
 	      
 	      
 	      RangeAlign r2(numSeq,rstart+1,rend+1);
@@ -350,8 +350,8 @@ void HashSearch::diagSearch(void)
 	  RangeAlign r1(nbseqQ ,start,end+word_size-1);
 	  
 	  unsigned rstart,rend;
-	  rstart=abs(diag-len+start);
-	  rend=abs(diag-len+end+word_size-1);
+	  rstart=(unsigned)std::abs((double)diag-len+start);
+	  rend=(unsigned)std::abs((double)diag-len+end+word_size-1);
 	  
 	  
 	  RangeAlign r2(numSeq,rstart+1,rend+1);

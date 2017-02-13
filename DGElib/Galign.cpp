@@ -89,10 +89,10 @@ int Galign::diff2(char *A,char *B,int M,int N,int tb,int te,int sc,int sr,int ec
   int midc;
   int  ss,cc;
 
-{ register int   i, j;
-  register int c, e, d, s;
-           int t, *va;
-	   int  g, temp;
+{ int   i, j;
+  int c, e, d, s;
+  int t, *va;
+  int  g, temp;
 
 /* Boundary cases: M <= 1 or N == 0 */
 
@@ -286,9 +286,9 @@ void Galign::display(char A[], char B[], int M, int N, int S[], int AP,int BP)
   /* Alignment display routine */
   char ALINE[51], BLINE[51], CLINE[51];
 
-  register char *a, *b, *c;
-  register int   i,  j, op;
-           int   lines, ap, bp;
+  char *a, *b, *c;
+  int   i,  j, op;
+  int   lines, ap, bp;
 
   i = j = op = lines = 0;
   ap = AP;
@@ -387,8 +387,8 @@ void Galign::getAlignedStr(char A[], char B[], int M, int N, int S[])
   alignedStr1="";
   alignedStr2="";
 
-  register char *a, *b;
-  register int   i,  j, op;
+  char *a, *b;
+  int   i,  j, op;
 
   i = j = op = 0;
   a = ALINE;
@@ -400,7 +400,8 @@ void Galign::getAlignedStr(char A[], char B[], int M, int N, int S[])
 		  op = *S++;
 		  *a = A[++i];
 		  *b = B[++j];
-		  *a++; *b++; // gcc says value not used! true?
+		  //*a++; *b++; // gcc says value not used
+		  a++; b++;
         }
       else
         { if (op == 0)
