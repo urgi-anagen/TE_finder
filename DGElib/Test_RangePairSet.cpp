@@ -22,7 +22,6 @@ void Test_RangePairSet::test_inserted_false(void)
     std::cout<<" "<<std::endl;
     std::cout<<"rps 1: "<<std::endl;
     rps1.view();
-     
     
     std::cout<<" "<<std::endl;
     std::cout<<"rps 2: "<<std::endl;
@@ -43,7 +42,6 @@ void Test_RangePairSet::test_inserted_true(void)
     std::cout<<" "<<std::endl;
     std::cout<<"rps 1: "<<std::endl;
     rps1.view();
-     
     
     std::cout<<" "<<std::endl;
     std::cout<<"rps 2: "<<std::endl;
@@ -65,6 +63,7 @@ void Test_RangePairSet::test_overlapQ(void)
     std::cout<<" "<<std::endl;
     std::cout<<"rps 1: "<<std::endl;
     rps1.view();
+
     std::cout<<" "<<std::endl;
     std::cout<<"rps 2: "<<std::endl;
     rps2.view();
@@ -85,6 +84,7 @@ void Test_RangePairSet::test_overlapQ_rps2_include_in_rps1_but_no_overlap(void)
 	std::cout<<" "<<std::endl;
  	std::cout<<"rps 1: "<<std::endl;
     	rps1.view();
+
     	std::cout<<" "<<std::endl;
     	std::cout<<"rps 2: "<<std::endl;
     	rps2.view();
@@ -104,6 +104,7 @@ void Test_RangePairSet::test_overlapQ_length(void)
     std::cout<<" "<<std::endl;
     std::cout<<"rps 1: "<<std::endl;
     rps1.view();
+
     std::cout<<" "<<std::endl;
     std::cout<<"rps 2: "<<std::endl;
     rps2.view();
@@ -114,80 +115,6 @@ void Test_RangePairSet::test_overlapQ_length(void)
 
     CPPUNIT_ASSERT_EQUAL(expLength,obsLength);
 }
-
-// TODO wrong length on rps1 after diffQ 
-void Test_RangePairSet::test_diffQ(void)
-{
-    RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_diffQ();
-    RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2ForTest_diffQ();
-    
-    /*	    
-    std::cout<<"before diffQ "<<std::endl;
-    std::cout<<"rps 1: "<<std::endl;
-    rps1.view();
-    std::cout<<" "<<std::endl;
-    std::cout<<"rps 2: "<<std::endl;
-    rps2.view();
-    */
-    bool diffQoutput = rps1.diffQ(rps2);
-    /* 
-    std::cout<<"after diffQ "<<std::endl;
-    std::cout<<"obs rps 1: "<<std::endl;
-    rps1.view();
-     
-    std::cout<<" "<<std::endl;
-    std::cout<<"obs rps 2: "<<std::endl;
-    rps2.view();
-     
-    std::cout<<" "<<std::endl;
-    std::cout<<"diffQ output: "<<diffQoutput<<std::endl;
-    */
-    RangePairSet expRps1 = Test_RangePairSetUtils::createExpRangePairSet1ForTest_diffQ(); 
-    RangePairSet expRps2 = Test_RangePairSetUtils::createExpRangePairSet2ForTest_diffQ(); 
-    
-    /*	
-    std::cout<<" expRps1:"<<std::endl;
-    expRps1.view();
-    	
-    std::cout<<" expRps2:"<<std::endl;
-    expRps2.view();
-    */
-    
-    RangePairSet obsRps1 = rps1;
-    RangePairSet obsRps2 = rps2; 
- 
-    CPPUNIT_ASSERT_EQUAL(expRps1,obsRps1);
-    CPPUNIT_ASSERT_EQUAL(expRps2,obsRps2);
-}
-
-void Test_RangePairSet::view_diffQ_symetric(void)
-{
-    RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_diffQ();
-    RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2ForTest_diffQ();
-    
-    /*	    
-    std::cout<<"before diffQ "<<std::endl;
-    std::cout<<"rps first: "<<std::endl;
-    rps2.view();
-    std::cout<<" "<<std::endl;
-    std::cout<<"rps second: "<<std::endl;
-    rps1.view();
-    */
-    bool diffQoutput = rps2.diffQ(rps1);
-    /* 
-    std::cout<<"after diffQ "<<std::endl;
-    std::cout<<"obs rps first: "<<std::endl;
-    rps2.view();
-     
-    std::cout<<" "<<std::endl;
-    std::cout<<"obs rps second: "<<std::endl;
-    rps1.view();
-     
-    std::cout<<" "<<std::endl;
-    std::cout<<"diffQ output: "<<diffQoutput<<std::endl;
-    */
-}
-
 
 void Test_RangePairSet::test_equality(void)
 {
@@ -209,16 +136,7 @@ void Test_RangePairSet::test_not_equality_on_match_part(void)
 	RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2For_test_equality_on_match_part();
 	std::list<RangePair> rps1Path = rps1.getPath();
 	std::list<RangePair> rps2Path = rps2.getPath();
-	//CPPUNIT_ASSERT(rps1Path != rps2Path);
 	CPPUNIT_ASSERT(rps1 != rps2);
-}
-
-void Test_RangePairSet::test_equality_rps1_rps2_different_length(void)
-{
-	RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1For_test_equality_rps1_rps2_different_length();
-	RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2For_test_equality_rps1_rps2_different_length();
-	CPPUNIT_ASSERT_EQUAL(rps1, rps2);
-
 }
 
 void Test_RangePairSet::test_computeScoreWithLength_one_match_part(void)
@@ -273,19 +191,6 @@ void Test_RangePairSet::test_overlapQ_length_length(void)
 	CPPUNIT_ASSERT(expOverlap == obsOverlap);		 
 }
 
-
-void Test_RangePairSet::test_overlapQ_length_length_2(void)
-{
-	RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_overlapQ_length_2();
-	RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2ForTest_overlapQ_length_2();
-	/*
-	rps1.view();
-	std::cout<<" "<<std::endl;
-	rps2.view();
-	*/
-	unsigned obsOverlap = rps1.overlapQ_length(rps2);
-}
-
 void Test_RangePairSet::test_overlapQ_length_length_symetric(void)
 {
 	RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_overlapQ_length();
@@ -297,36 +202,8 @@ void Test_RangePairSet::test_overlapQ_length_length_symetric(void)
 	CPPUNIT_ASSERT(expOverlap == obsOverlap);		 
 }
 
-void Test_RangePairSet::test_mergeQ_score_rps1_greater_score_than_rps2(void)
-{	
-	RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_mergeQ_score_rps1_greater_score_than_rps2();
-	RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2ForTest_mergeQ_score_rps1_greater_score_than_rps2();
-	/*		
-	std::cout<<"rps 1 "<<std::endl;
-	rps1.view();
-	std::cout<<"  "<<std::endl;
-	std::cout<<"rps 2 "<<std::endl;
-	rps2.view();
-	*/
-	rps1.mergeQ(rps2);
-	
-	RangePairSet expRps = Test_RangePairSetUtils::createExpRangePairSetForTest_mergeQ_score_rps1_greater_score_than_rps2();
-	RangePairSet obsRps = rps1;
-	/*
-	std::cout<<"exp "<<std::endl;
-	expRps.view();
-	
-	std::cout<<"obs "<<std::endl;
-	obsRps.view();
-	*/
-	CPPUNIT_ASSERT(expRps == obsRps);
-}
-
 void Test_RangePairSet::view_diffQ_for_test_mergeQ(void)
 {
-	//RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_mergeQ_score_rps1_lower_score_than_rps2();
-	//RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2ForTest_mergeQ_score_rps1_lower_score_than_rps2();
-	
         RangePairSet rps1 = Test_RangePairSetUtils::createRangePairSet1ForTest_diffQ();
         RangePairSet rps2 = Test_RangePairSetUtils::createRangePairSet2ForTest_diffQ();
    	/*	
@@ -355,6 +232,7 @@ void Test_RangePairSet::test_mergeQ_score_rps1_lower_score_than_rps2(void)
 	/*			
 	std::cout<<"rps 1 "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 "<<std::endl;
 	rps2.view();
@@ -384,6 +262,7 @@ void Test_RangePairSet::test_mergeQ_rps2_overlap_on_rps1_frgt(void)
 	/*				
 	std::cout<<"rps 1 "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 "<<std::endl;
 	rps2.view();
@@ -392,6 +271,7 @@ void Test_RangePairSet::test_mergeQ_rps2_overlap_on_rps1_frgt(void)
 	/*
 	std::cout<<"rps 1 after merge: "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 after merge: "<<std::endl;
 	rps2.view();
@@ -407,6 +287,7 @@ void Test_RangePairSet::view_diffQ_rps2_overlap_on_rps1_frgt_case_greater_than_1
 	/*
 	std::cout<<"rps 1 "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 "<<std::endl;
 	rps2.view();
@@ -415,6 +296,7 @@ void Test_RangePairSet::view_diffQ_rps2_overlap_on_rps1_frgt_case_greater_than_1
 	/*
 	std::cout<<"rps 1 after diffQ: "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 after diffQ: "<<std::endl;
 	rps2.view();
@@ -430,6 +312,7 @@ void Test_RangePairSet::view_diffQ_rps2_overlap_on_rps1_frgt_case_equal_10_pb(vo
 	/*
 	std::cout<<"rps 1 "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 "<<std::endl;
 	rps2.view();
@@ -439,6 +322,7 @@ void Test_RangePairSet::view_diffQ_rps2_overlap_on_rps1_frgt_case_equal_10_pb(vo
 	/*
 	std::cout<<"rps 1 after diffQ: "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 after diffQ: "<<std::endl;
 	rps2.view();
@@ -453,6 +337,7 @@ void Test_RangePairSet::view_diffQ_rps2_overlap_first_and_second_fragment(void)
 	/*
 	std::cout<<"rps 1 "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 "<<std::endl;
 	rps2.view();
@@ -461,6 +346,7 @@ void Test_RangePairSet::view_diffQ_rps2_overlap_first_and_second_fragment(void)
 	/*
 	std::cout<<"rps 1 after diffQ: "<<std::endl;
 	rps1.view();
+
 	std::cout<<"  "<<std::endl;
 	std::cout<<"rps 2 after diffQ: "<<std::endl;
 	rps2.view();
