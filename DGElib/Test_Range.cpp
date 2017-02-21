@@ -117,37 +117,6 @@ void Test_Range::test_isContained( void )
 	CPPUNIT_ASSERT( obs );
 }
 
-
-void Test_Range::test_diff(void)
-{
-	Range range1 = Range(109951, 110569);
-	Range range2 = Range(109985, 110398);
-        /*	
-	std::cout<<" "<<std::endl;
-	std::cout<<"before diff "<<std::endl;
-    	std::cout<<"range 1: "<<std::endl;
-    	range1.view();
-     	std::cout<<"range 2: "<<std::endl;
-    	range2.view();
-	*/
-	Range obsOutRange = range1.diff(range2);
-	/*
-	std::cout<<"after diff "<<std::endl;
-    	std::cout<<"range 1: "<<std::endl;
-    	range1.view();
-     	std::cout<<"range 2: "<<std::endl;
-    	range2.view();
-     	std::cout<<"outRange: "<<std::endl;
-    	obsOutRange.view();
-	*/
-	Range expRange1 = Range(109951, 109984);
-	Range expOutRange = Range(110398, 110569);
-	
-	
-	CPPUNIT_ASSERT (expRange1 == range1);		
-	CPPUNIT_ASSERT (expOutRange == obsOutRange);		
-}
-
 void Test_Range::test_diff_range1_start_changed_after_diff(void)
 {
 	Range range1 = Range(150, 300);
@@ -157,6 +126,7 @@ void Test_Range::test_diff_range1_start_changed_after_diff(void)
 	std::cout<<"before diff "<<std::endl;
     	std::cout<<"range 1: "<<std::endl;
     	range1.view();
+
      	std::cout<<"range 2: "<<std::endl;
     	range2.view();
 	*/
@@ -166,6 +136,7 @@ void Test_Range::test_diff_range1_start_changed_after_diff(void)
     	std::cout<<"range 1: "<<std::endl;
     	range1.view();
      	std::cout<<"range 2: "<<std::endl;
+
     	range2.view();
      	std::cout<<"outRange: "<<std::endl;
     	obsOutRange.view();
@@ -174,5 +145,3 @@ void Test_Range::test_diff_range1_start_changed_after_diff(void)
 		
 	CPPUNIT_ASSERT (expRange1 == range1);		
 }
-
-
