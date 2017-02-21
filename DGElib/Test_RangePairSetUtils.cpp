@@ -2,7 +2,6 @@
 #include "SDGString.h"
 #include "RangePairSet.h"
 
-// TODO duplication with Test_BLRMatchMapUtils
 void Test_RangePairSetUtils::viewRangePairSetList(std::list<RangePairSet> rpsList){
     for(std::list<RangePairSet>::iterator lrp_it=rpsList.begin(); lrp_it!=rpsList.end();lrp_it++){
             lrp_it->view(); 
@@ -124,7 +123,6 @@ RangePairSet Test_RangePairSetUtils::createRangePairSet1ForTest_inserted_true(vo
 
   return rangePairSet1;
 }
-
 
 RangePairSet Test_RangePairSetUtils::createRangePairSet2ForTest_inserted_true(void)
 {
@@ -940,7 +938,6 @@ RangePairSet Test_RangePairSetUtils::createRangePairSet1ForTest_mergeQ_score_rps
 
 }
 
-
 RangePairSet Test_RangePairSetUtils::createRangePairSet2ForTest_mergeQ_score_rps1_lower_score_than_rps2(void)
 {
      // match 
@@ -969,7 +966,6 @@ RangePairSet Test_RangePairSetUtils::createRangePairSet2ForTest_mergeQ_score_rps
   return rangePairSet1;
 
 }
-
 
 RangePairSet Test_RangePairSetUtils::createExpRangePairSetForTest_mergeQ_score_rps1_lower_score_than_rps2(void)
 {
@@ -1254,7 +1250,6 @@ RangePairSet Test_RangePairSetUtils::generateOutputs_for_test_orientSubjects_on_
 	return createRangePairSet(lPath);
 }
 
-
 RangePairSet Test_RangePairSetUtils::generateInputs_for_test_orientSubjects_path_size_is_1()
 {
  	SDGString str1 ="1\t1\t500\t-1\t0\t0\t0\t401\t0\t0\t401\n";
@@ -1277,7 +1272,6 @@ RangePairSet Test_RangePairSetUtils::generateOutputs_for_test_orientSubjects_pat
 
 	return createRangePairSet(lPath);
 }
-
 
 RangePairSet Test_RangePairSetUtils::generateInputs_for_test_orientSubjects_orient_more_than_1_fragment()
 {
@@ -1317,7 +1311,6 @@ RangePairSet Test_RangePairSetUtils::generateOutputs_for_test_orientSubjects_ori
 	return createRangePairSet(lPath);
 }
 
-
 RangePairSet Test_RangePairSetUtils::generateInputs_for_test_orientSubjects_no_fragments_to_orient()
 {
 	SDGString str1 = "1\t1\t900\t-1\t0\t0\t0\t900\t0\t0\t900\n";
@@ -1338,7 +1331,6 @@ RangePairSet Test_RangePairSetUtils::generateInputs_for_test_orientSubjects_no_f
 	return createRangePairSet(lPath);
 }
 
-
 RangePairSet Test_RangePairSetUtils::generateOutputs_for_test_orientSubjects_no_fragments_to_orient()
 {
 	SDGString str1 = "1\t1\t900\t-1\t0\t0\t0\t900\t0\t0\t900\n";
@@ -1358,9 +1350,6 @@ RangePairSet Test_RangePairSetUtils::generateOutputs_for_test_orientSubjects_no_
 
 	return createRangePairSet(lPath);
 }
-
-
-
 
 RangePairSet Test_RangePairSetUtils::createRangePairSet(std::list<SDGString> inputList)
 {
@@ -1412,5 +1401,3 @@ RangePairSet Test_RangePairSetUtils::createRangePairSet(std::list<SDGString> inp
 	}
 	return currentRps;
 }
-
-
