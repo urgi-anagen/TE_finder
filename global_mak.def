@@ -13,10 +13,10 @@ CC = gcc
 #CXXFLAG = -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 #CXXFLAG = -m32 -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
-CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+#CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 ## MacOS
-#CXXFLAG = -O3 -std=c++11 -pthread -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+CXXFLAG = -Wall -std=c++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 LDFLAG =
 
@@ -42,7 +42,7 @@ OBJ_LIB=$(SDG_LIB)/libsdg.a $(DGE_LIB)/libDGE.a  $(BLR_LIB)/libBLR.a
 
 INCLUDE = -I. -I$(SDG_HEADERS) -I$(DGE_HEADERS) -I$(BLR_HEADERS) 
 LIB = -L. -L$(SDG_LIB) -L$(DGE_LIB) -L$(BLR_LIB) 
-LINK = -lBLR -lDGE -lsdg -lstdc++ -lm -lcppunit -pthread
+LINK = -lBLR -lDGE -lsdg -lstdc++ -lm -lcppunit
 
 TAR = tar
 LN = ln -f
@@ -62,6 +62,6 @@ SOURCES = *.cpp
 	    -e '/^$$/ d' -e 's/$$/ :/' < $*.d >> $*.P; \
 	rm -f $*.d
 
-	$(CXX) -c $(CXXFLAG) $(INCLUDE) -o $@ $<
+	$(CXX) -c $(CXXFLAG) $(INCLUDE) -pthread -o $@ $<
 
 -include $(SOURCES:%.cpp=$(DEPDIR)/%.P)
