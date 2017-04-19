@@ -5,40 +5,32 @@
 
 struct HashDNASeq // Compute hashing value of a word
 {
-	unsigned word_size;
-	unsigned msk;
-	unsigned lb;
-	unsigned hb;
-	HashDNASeq(unsigned w,unsigned m=0): word_size(w), msk(m)
-	{
-		unsigned halfword=word_size/2;
-		unsigned halfkmsk=msk/2;
-		if(msk!=0 && halfkmsk==0)
-			halfkmsk=1;
-		if(halfword>halfkmsk)
-		{
-			lb=halfword-halfkmsk;
-			hb=halfword+halfkmsk;
-		}
-		else
-		{
-			lb=hb=0;
-		}
+	unsigned kmer_size;
+	unsigned hole_period;
+	unsigned effectiveKmerSize;
 
-	  if(word_size-(hb-lb)>16)
+	HashDNASeq(unsigned w,unsigned p=100): kmer_size(w), hole_period(p)
+	{
+		effectiveKmerSize=0;
+		for(unsigned i=1;i<=kmer_size;i++)
+		{
+			if(i%hole_period!=0)
+				effectiveKmerSize++;
+		}
+	  if(effectiveKmerSize>16)
 	throw SDGException(NULL,"HashDNASeq: Effective word size must be <= 16 !!");
 	};
 
-	unsigned getEffectiveKmerSize(void){return word_size-(hb-lb);};
+	unsigned getEffectiveKmerSize(void){return effectiveKmerSize;};
 
 	unsigned hash(const char* p)
 	{
 
 		unsigned h=0;
-		for(unsigned i=0;i<word_size && *p!='\0';i++)
+		for(unsigned i=1;i<=kmer_size && *p!='\0';i++)
 		{
-		  if(i>=lb && i<hb)
-			  {p++;continue;}
+			if(i%hole_period==0)
+			  {p++;i++; continue;}
 		  h<<=2;
 		  unsigned val_nuc=0;
 		  switch(*p)
@@ -96,9 +88,9 @@ struct HashDNASeq // Compute hashing value of a word
 		std::string kmer;
 
 		unsigned val=0;
-		for(unsigned i=0;i<word_size;i++)
+		for(unsigned i=1;i<=kmer_size;i++)
 		{
-			if(i>=lb && i<hb)
+			if(i%hole_period==0)
 				{
 					car='-';
 				}

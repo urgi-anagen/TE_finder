@@ -16,7 +16,7 @@ void Duster::load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask
   if(!valid_idx_file)
     {
 	  //Count kmers and filters
-	  std::vector<unsigned> kmer_count((unsigned)pow(4,kmer_size-kmask),0);
+	  std::vector<unsigned> kmer_count((unsigned)pow(4,hseq.getEffectiveKmerSize()),0);
 	  unsigned nb_kmer=0;
 	  std::list< Info_kmer > list_infokmer;
 	  Info_kmer kmer_threshold;

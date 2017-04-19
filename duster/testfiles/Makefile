@@ -8,7 +8,7 @@ BASE = ../..
 
 OBJ = Test_Duster.o
 
-OBJ_DEP = ../Duster.o
+OBJ_DEP = ../Duster.o 
 
 TARGET = test_u 
 
@@ -20,7 +20,7 @@ clean:
 	@find . -name '*~' -exec rm {} \;
 	@rm -f $(TARGET)
 
-test_u: $(OBJ) $(OBJ_DEP) Test_Duster.h 
+test_u: $(OBJ) $(OBJ_DEP) Test_Duster.h ../HashDNASeq.h
 	$(CXX) $(CXXFLAG) $(INCLUDE) $(LIB) -lcppunit $(OBJ_DEP) $(OBJ) test_u.cpp -o $@ $(LINK)
 
 
