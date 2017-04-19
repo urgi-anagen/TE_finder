@@ -185,138 +185,52 @@ struct ALG
    char	   **rect;	/* pointer to 2-D alignment matrix */
            } *group;    /* sequence groups */
 
-int main(argc, argv) int argc; char *argv[];
-{ int   M;        			/* Sequence length */
-  int  ms;				/* User-supplied weights      */
-  FILE *Ap, *Sp, *ckopen();
-  char *ckalloc();			/* space-allocating function  */
-  char  alph[129], *s;			/* alphabet */
-  int  size;				/* size of alphabet */
-  int   total;			        /* Total of sequence lengths */
-  int   number;                         /* The number of sequences   */
-  char  *sequence;			/* Storing all sequences     */
-  int   symbol, prev;			/* The next character         */
-  int  i, j;				/* index variables	      */
-  short  heading;			/* 1: heading; 0: sequence    */
 
-	if ( argc != 6 )
-	   fatalf("The proper form of command is: \n%s file gap-size(>0) mismatch(<0 /match=10) gap-open(>=0) gap-extend(>=0)", argv[0]);
-	/* determine number of sequences and total lengths */
-	j = maxlen = 0;
-	Ap = ckopen(argv[1], "r");
-	prev = '\n';
-	for (total = 3, number = 0; ( symbol = getc(Ap)) != EOF ; total++ )
-	  { if ( symbol == '>' && prev == '\n' )
-	      number++;
-	    prev = symbol;
-	  }
-	if ( number == 0 )
-	   fatal("There are no sequences or sequences are in wrong format");
-	total  += number * 20;
-	/* allocate space for sequences */
-	sequence = ( char * ) ckalloc( total * sizeof(char));
-	segment = ( struct SEG * ) ckalloc( number * sizeof(struct SEG));
-	/* read the sequences into sequence */
-	M = 0;
-	Ap = ckopen(argv[1], "r");
-	number = -1;
-        heading = 0;
-	prev = '\n';
-	for ( i = 0; ( symbol = getc(Ap)) != EOF ; )
-	  { if ( symbol != '\n' )
-	       sequence[++i] = symbol;
-	    if ( symbol == '>' && prev == '\n' )
-	      { heading = 1;
-		if ( number >= 0 )
-		  { segment[number].length = i - j - 1;
-		    if ( maxlen < i - j - 1 )
-		       maxlen = i - j - 1;
-		    if ( i - j - 1 > M ) M = i - j -1;
-		  }
-		number++;
-		j = i;
-		segment[number].name = &(sequence[i]);
-		segment[number].list = NULL;
-	      }
-	    if ( heading && symbol == '\n' )
-	      { heading = 0;
-		segment[number].len = i - j;
-		segment[number].seq = &(sequence[i]);
-		j = i;
-	      }
-	    prev = symbol;
-	  }
-	segment[number].length = i - j;
-	if ( maxlen < i - j )
-	    maxlen = i - j;
-        if ( i - j > M ) M = i - j;
-	seg_num = ++number;
- (void)	fclose(Ap);
-        edge_num = 0;
-
-	(void) sscanf(argv[2],"%d", &gaplen);
-	if ( gaplen < 1 )
-	  fatal("The minimum length for constant-cost insertion is a positive integer");
-
-	(void) sscanf(argv[argc-2],"%d", &q);
-	if ( q < 0 )
-	   fatal("The gap-open penalty is a nonnegative integer");
-
-	(void) sscanf(argv[argc-1],"%d", &r);
-	if ( r < 0 )
-	   fatal("The gap-extend penalty is a nonnegative integer");
-
-	pay = q + r * gaplen;
-	qr = q + r;
-	/* check if the argument represents a negative integer */
-	s = argv[argc-3];
-	if ( *s == '-' ) s++;
-	for ( ; *s >= '0' && *s <= '9' ; s++ );
-	if ( *s == '\0' )
-	  { (void) sscanf(argv[argc-3],"%d", &ms);
-	    if ( ms >= 0 )
-	       fatal("The mismatch weight is a negative integer");
-	    match = 10;
-	    mismh = ms;
-	    /* set match and mismatch weights */
-	    for ( i = 0; i < 128 ; i++ )
-	      for ( j = 0; j < 128 ; j++ )
-	         if (i == j )
-	            v[i][j] = 10;
-	         else
-	            v[i][j] = mismh;
-	  }
-	else
-	  { /* read a file containing alphabet and substitution weights */
-	    Sp = ckopen(argv[argc-3], "r");
-	    (void) fscanf(Sp, "%s", alph);
-	    size = strlen(alph);
-	    match = mismh = 0;
-	    for ( i = 0; i < 128 ; i++ )
-	      for ( j = 0; j < 128 ; j++ )
-                  v[i][j] = 0;
-	    for ( i = 0; i < size ; i++ )
-	      for ( j = 0; j <= i ; j++ )
-		{ (void) fscanf(Sp, "%d", &ms);
-		  v[alph[i]][alph[j]] = v[alph[j]][alph[i]] = ms;
-		  if ( ms > match ) match = ms;
-		  if ( ms < mismh ) mismh = ms;
-		}
-	  }
-	for ( i = 0; i < 128 ; i++ )
-	    v['-'][i] = v[i]['-'] = - r;
-	v['-']['-'] = 0;
-        Pairwise(total);
-        Multiple();
-        /* Show(); */
-	FlatFormat();
-	/* InterFormat(); */
-	return 0;
-}
 
 static int *CC, *DD;			/* saving matrix scores */
 static int *RR, *SS;		 	/* saving start-points */
 static int  *S;				/* saving operations for diff */
+
+/* lib.c - library of C procedures. */
+
+/* fatal - print message and die */
+void fatal(msg)
+char *msg;
+{
+	fprintf(stderr, "%s\n", msg);
+	exit(1);
+}
+
+/* fatalf - format message, print it, and die */
+void fatalf(msg, val)
+char *msg, *val;
+{
+	fprintf(stderr, msg, val);
+	putc('\n', stderr);
+	exit(1);
+}
+
+/* ckopen - open file; check for success */
+FILE *ckopen(name, mode)
+char *name, *mode;
+{
+	FILE *fopen(), *fp;
+
+	if ((fp = fopen(name, mode)) == NULL)
+		fatalf("Cannot open %s.", name);
+	return(fp);
+}
+
+/* ckalloc - allocate space; check for success */
+char *ckalloc(amount)
+int amount;
+{
+	char *p;
+
+	if ((p = malloc( (unsigned) amount)) == NULL)
+		fatal("Ran out of memory.");
+	return(p);
+}
 
 /* The following definitions are for function diff() */
 
@@ -351,53 +265,10 @@ static int  last;				/* Last script op appended */
 { last = *sapp++ = 0; 			\
 }
 
-/* Perform pair-wise comparisons of sequences. */
-Pairwise(total)
-int  total;		/* total sequence length */
-{ int   i, j;		/* row and column indices  */
-  char *A, *B;          /* pointers to sequences */
-  int  M, N;		/* sequence lengths */
-  overptr node1;	/* pointer to overlap */
-  char *ckalloc();		/* space-allocating function */
 
-	/* allocate space for all vectors */
-	j = (total + 1) * sizeof(int);
-	CC = ( int * ) ckalloc(j);
-	DD = ( int * ) ckalloc(j);
-	RR = ( int * ) ckalloc(j);
-	SS = ( int * ) ckalloc(j);
-	S = ( int * ) ckalloc(2 * j);
-	for ( i = 0; i < seg_num - 1 ; i++ )
-	 { A = segment[i].seq;
-	   M = segment[i].length;
-	   for ( j = i+1; j < seg_num ; j++ )
-	    { B = segment[j].seq;
-	      N = segment[j].length;
-	      node1 = ( overptr ) ckalloc( (int ) sizeof(over));
-	      SCORE = - ( 2 * q + (M + N) * r + 1000);
-	      if ( M <= N )
-	       { big_pass(A,B,M,N);
-	         node1->id1 = i;
-	         node1->id2 = j;
-	         node1->score = SCORE;
-	         node1->next = segment[i].list;
-                 segment[i].list = node1;
-	       }
-	      else
-	       { big_pass(B,A,N,M);
-	         node1->id1 = j;
-	         node1->id2 = i;
-	         node1->score = SCORE;
-	         node1->next = segment[j].list;
-                 segment[j].list = node1;
-	       }
-	      edge_num++;
-	    }
-         }
-}
 
 /* find best overlap score between two sequences */
-big_pass(A,B,M,N) char A[],B[]; int M,N;
+void big_pass(A,B,M,N) char A[],B[]; int M,N;
 { register  int  i, j;			/* row and column indices */
   register  int  c;			/* best score at current point */
   register  int  f;			/* best score ending with insertion */
@@ -472,73 +343,9 @@ big_pass(A,B,M,N) char A[],B[]; int M,N;
 	   STARJ = 0;
 }
 
-/* Construct mutiple alignments */
-Multiple()
-{ char *ckalloc();	/* space-allocating function */
-  int   i, j, k, t;	/* index variables */
-  overptr  node1;	/* temporary pointer */
-  int   sorted;		/* boolean variable */
-  char  *a, *b;		/* temporary pointers */
-  int   head1, head2;	/* ids of first sequences in alignments */
-  struct ALG *pa, *pb;	/* pointers to group elements */
-
-	group = ( struct ALG * ) ckalloc( seg_num * sizeof(struct ALG));
-	for ( i = 0; i < seg_num; i++ )
-	 { group[i].row[0] = ( char * ) ckalloc( 4 * maxlen * sizeof(char));
-	   group[i].row[1] = ( char * ) ckalloc( 4 * maxlen * sizeof(char));
-	   group[i].len[0] = group[i].len[1] = 4 * maxlen; 
-	   group[i].flag = 1;
-	   group[i].next = -1;
-	   group[i].head = i;
-	   group[i].num = 1;
-	   group[i].length = k = segment[i].length;
-	   group[i].pos = 0;
-	   group[i].rect = ( char ** ) ckalloc( sizeof(char *));
-	   group[i].rect[0] = a = group[i].row[1];
-	   a[0] = ' ';
-	   for ( b = segment[i].seq, j = 1; j <= k; j++ )
-	      a[j] = b[j];
-	   a[j] = ' ';
-	 }
-	edge = ( overptr * ) ckalloc( edge_num * sizeof(overptr) );
-	for ( j = 0, i = 0; i < seg_num; i++ )
-	  for ( node1 = segment[i].list; node1 != NULL; node1 = node1->next )
-	      edge[j++] = node1;
-	edge_num = j;
-	for ( i = edge_num - 1; i > 0; i-- )
-	 { sorted = 1;
-	   for ( j = 0; j < i; j++ )
-	     if ( edge[j]->score < edge[j+1]->score )
-	      { node1 = edge[j];
-	        edge[j] = edge[j+1];
-	        edge[j+1] = node1;
-		sorted = 0;
-	      }
-	   if ( sorted )
-	     break;
-	 }
-	for ( k = 0; k < edge_num; k++ )
-	 { head1 = group[edge[k]->id1].head;
-	   head2 = group[edge[k]->id2].head;
-	   if ( head1 != head2 )
-	    {  if ( group[head1].length > group[head2].length )
-		{ t = head1;
-		  head1 = head2;
-		  head2 = t;
-		}
-	       pa = &group[head1];
-	       pb = &group[head2];
-	       sapp = S;
-	       last = 0;
-	       diff(pa->rect,pb->rect,pa->length,pb->length,q,q,
-	                             pa->num,pb->num,0,0,0,0,0,0);
-	       Merge(head1, head2, S);
-	    }
-	 }
-}
 
 /* Merge two sequence alignment according to script S */
-Merge(head1, head2, S)
+void Merge(head1, head2, S)
 int	head1, head2;	/* ids of first sequences in two alignments */
 int	S[];		/* script */
 {  char	 **rect1, **rect2;	/* pointers to two input alignments */
@@ -626,6 +433,117 @@ int	S[];		/* script */
 	group[head1].length = k - 1;
 	group[head1].rect = rect;
 }
+
+/* Perform pair-wise comparisons of sequences. */
+void Pairwise(total)
+int  total;		/* total sequence length */
+{ int   i, j;		/* row and column indices  */
+  char *A, *B;          /* pointers to sequences */
+  int  M, N;		/* sequence lengths */
+  overptr node1;	/* pointer to overlap */
+  char *ckalloc();		/* space-allocating function */
+
+	/* allocate space for all vectors */
+	j = (total + 1) * sizeof(int);
+	CC = ( int * ) ckalloc(j);
+	DD = ( int * ) ckalloc(j);
+	RR = ( int * ) ckalloc(j);
+	SS = ( int * ) ckalloc(j);
+	S = ( int * ) ckalloc(2 * j);
+	for ( i = 0; i < seg_num - 1 ; i++ )
+	 { A = segment[i].seq;
+	   M = segment[i].length;
+	   for ( j = i+1; j < seg_num ; j++ )
+	    { B = segment[j].seq;
+	      N = segment[j].length;
+	      node1 = ( overptr ) ckalloc( (int ) sizeof(over));
+	      SCORE = - ( 2 * q + (M + N) * r + 1000);
+	      if ( M <= N )
+	       { pass(A,B,M,N);
+	         node1->id1 = i;
+	         node1->id2 = j;
+	         node1->score = SCORE;
+	         node1->next = segment[i].list;
+                 segment[i].list = node1;
+	       }
+	      else
+	       { big_pass(B,A,N,M);
+	         node1->id1 = j;
+	         node1->id2 = i;
+	         node1->score = SCORE;
+	         node1->next = segment[j].list;
+                 segment[j].list = node1;
+	       }
+	      edge_num++;
+	    }
+         }
+}
+
+/* Construct mutiple alignments */
+void Multiple(void)
+{ char *ckalloc();	/* space-allocating function */
+  int   i, j, k, t;	/* index variables */
+  overptr  node1;	/* temporary pointer */
+  int   sorted;		/* boolean variable */
+  char  *a, *b;		/* temporary pointers */
+  int   head1, head2;	/* ids of first sequences in alignments */
+  struct ALG *pa, *pb;	/* pointers to group elements */
+
+	group = ( struct ALG * ) ckalloc( seg_num * sizeof(struct ALG));
+	for ( i = 0; i < seg_num; i++ )
+	 { group[i].row[0] = ( char * ) ckalloc( 4 * maxlen * sizeof(char));
+	   group[i].row[1] = ( char * ) ckalloc( 4 * maxlen * sizeof(char));
+	   group[i].len[0] = group[i].len[1] = 4 * maxlen;
+	   group[i].flag = 1;
+	   group[i].next = -1;
+	   group[i].head = i;
+	   group[i].num = 1;
+	   group[i].length = k = segment[i].length;
+	   group[i].pos = 0;
+	   group[i].rect = ( char ** ) ckalloc( sizeof(char *));
+	   group[i].rect[0] = a = group[i].row[1];
+	   a[0] = ' ';
+	   for ( b = segment[i].seq, j = 1; j <= k; j++ )
+	      a[j] = b[j];
+	   a[j] = ' ';
+	 }
+	edge = ( overptr * ) ckalloc( edge_num * sizeof(overptr) );
+	for ( j = 0, i = 0; i < seg_num; i++ )
+	  for ( node1 = segment[i].list; node1 != NULL; node1 = node1->next )
+	      edge[j++] = node1;
+	edge_num = j;
+	for ( i = edge_num - 1; i > 0; i-- )
+	 { sorted = 1;
+	   for ( j = 0; j < i; j++ )
+	     if ( edge[j]->score < edge[j+1]->score )
+	      { node1 = edge[j];
+	        edge[j] = edge[j+1];
+	        edge[j+1] = node1;
+		sorted = 0;
+	      }
+	   if ( sorted )
+	     break;
+	 }
+	for ( k = 0; k < edge_num; k++ )
+	 { head1 = group[edge[k]->id1].head;
+	   head2 = group[edge[k]->id2].head;
+	   if ( head1 != head2 )
+	    {  if ( group[head1].length > group[head2].length )
+		{ t = head1;
+		  head1 = head2;
+		  head2 = t;
+		}
+	       pa = &group[head1];
+	       pb = &group[head2];
+	       sapp = S;
+	       last = 0;
+	       diff(pa->rect,pb->rect,pa->length,pb->length,q,q,
+	                             pa->num,pb->num,0,0,0,0,0,0);
+	       Merge(head1, head2, S);
+	    }
+	 }
+}
+
 
 /* diff(A,B,M,N,tb,te,U,W,mm,nn,sc,sr,ec,er) returns the score of an optimum conversion
    between A[0..U-1][mm+1..mm+M] and B[0..W-1][nn+1..nn+N] that begins(ends) with
@@ -834,7 +752,7 @@ int tb, te, U, W, mm, nn, sc, sr, ec, er;
   type = 1;
   for (j = 0; j <= N; j++)
     if ((c = CC[j] + RR[j]) >= midc)
-      if (c > midc || CC[j] != DD[j] && RR[j] == SS[j])
+      if (c > midc || (CC[j] != DD[j] && RR[j] == SS[j]))
         { midc = c;
           midj = j;
         }
@@ -872,7 +790,7 @@ int tb, te, U, W, mm, nn, sc, sr, ec, er;
 
 /* Alignment display routine */
 
-Show()
+void Show(void)
 { int   i, j, k, h, n;
   int  head;
   int  length;
@@ -926,7 +844,7 @@ Show()
 
 /* Display output in a flat format */
 
-FlatFormat()
+void FlatFormat(void)
 { int  i, j, k, h;
   int  head;
   int  length;
@@ -964,7 +882,7 @@ FlatFormat()
 
 /* Display alignment in an interleaved format */
 
-InterFormat()
+void InterFormat(void)
 { int   i, j, k, h;
   int  head;
   int  length;
@@ -1009,43 +927,134 @@ InterFormat()
 	 }
 }
 
-/* lib.c - library of C procedures. */
 
-/* fatal - print message and die */
-fatal(msg)
-char *msg;
-{
-	fprintf(stderr, "%s\n", msg);
-	exit(1);
-}
 
-/* fatalf - format message, print it, and die */
-fatalf(msg, val)
-char *msg, *val;
-{
-	fprintf(stderr, msg, val);
-	putc('\n', stderr);
-	exit(1);
-}
-	
-/* ckopen - open file; check for success */
-FILE *ckopen(name, mode)
-char *name, *mode;
-{
-	FILE *fopen(), *fp;
+//-------------------------------------------------------------------------------
+int main(argc, argv) int argc; char *argv[];
+{ int   M;        			/* Sequence length */
+  int  ms;				/* User-supplied weights      */
+  FILE *Ap, *Sp, *ckopen();
+  char *ckalloc();			/* space-allocating function  */
+  char  alph[129], *s;			/* alphabet */
+  int  size;				/* size of alphabet */
+  int   total;			        /* Total of sequence lengths */
+  int   number;                         /* The number of sequences   */
+  char  *sequence;			/* Storing all sequences     */
+  int   symbol, prev;			/* The next character         */
+  int  i, j;				/* index variables	      */
+  short  heading;			/* 1: heading; 0: sequence    */
 
-	if ((fp = fopen(name, mode)) == NULL)
-		fatalf("Cannot open %s.", name);
-	return(fp);
-}
+	if ( argc != 6 )
+	   fatalf("The proper form of command is: \n%s file gap-size(>0) mismatch(<0 /match=10) gap-open(>=0) gap-extend(>=0)", argv[0]);
+	/* determine number of sequences and total lengths */
+	j = maxlen = 0;
+	Ap = ckopen(argv[1], "r");
+	prev = '\n';
+	for (total = 3, number = 0; ( symbol = getc(Ap)) != EOF ; total++ )
+	  { if ( symbol == '>' && prev == '\n' )
+	      number++;
+	    prev = symbol;
+	  }
+	if ( number == 0 )
+	   fatal("There are no sequences or sequences are in wrong format");
+	total  += number * 20;
+	/* allocate space for sequences */
+	sequence = ( char * ) ckalloc( total * sizeof(char));
+	segment = ( struct SEG * ) ckalloc( number * sizeof(struct SEG));
+	/* read the sequences into sequence */
+	M = 0;
+	Ap = ckopen(argv[1], "r");
+	number = -1;
+        heading = 0;
+	prev = '\n';
+	for ( i = 0; ( symbol = getc(Ap)) != EOF ; )
+	  { if ( symbol != '\n' )
+	       sequence[++i] = symbol;
+	    if ( symbol == '>' && prev == '\n' )
+	      { heading = 1;
+		if ( number >= 0 )
+		  { segment[number].length = i - j - 1;
+		    if ( maxlen < i - j - 1 )
+		       maxlen = i - j - 1;
+		    if ( i - j - 1 > M ) M = i - j -1;
+		  }
+		number++;
+		j = i;
+		segment[number].name = &(sequence[i]);
+		segment[number].list = NULL;
+	      }
+	    if ( heading && symbol == '\n' )
+	      { heading = 0;
+		segment[number].len = i - j;
+		segment[number].seq = &(sequence[i]);
+		j = i;
+	      }
+	    prev = symbol;
+	  }
+	segment[number].length = i - j;
+	if ( maxlen < i - j )
+	    maxlen = i - j;
+        if ( i - j > M ) M = i - j;
+	seg_num = ++number;
+ (void)	fclose(Ap);
+        edge_num = 0;
 
-/* ckalloc - allocate space; check for success */
-char *ckalloc(amount)
-int amount;
-{
-	char *p;
+	(void) sscanf(argv[2],"%d", &gaplen);
+	if ( gaplen < 1 )
+	  fatal("The minimum length for constant-cost insertion is a positive integer");
 
-	if ((p = malloc( (unsigned) amount)) == NULL)
-		fatal("Ran out of memory.");
-	return(p);
+	(void) sscanf(argv[argc-2],"%d", &q);
+	if ( q < 0 )
+	   fatal("The gap-open penalty is a nonnegative integer");
+
+	(void) sscanf(argv[argc-1],"%d", &r);
+	if ( r < 0 )
+	   fatal("The gap-extend penalty is a nonnegative integer");
+
+	pay = q + r * gaplen;
+	qr = q + r;
+	/* check if the argument represents a negative integer */
+	s = argv[argc-3];
+	if ( *s == '-' ) s++;
+	for ( ; *s >= '0' && *s <= '9' ; s++ );
+	if ( *s == '\0' )
+	  { (void) sscanf(argv[argc-3],"%d", &ms);
+	    if ( ms >= 0 )
+	       fatal("The mismatch weight is a negative integer");
+	    match = 10;
+	    mismh = ms;
+	    /* set match and mismatch weights */
+	    for ( i = 0; i < 128 ; i++ )
+	      for ( j = 0; j < 128 ; j++ )
+	         if (i == j )
+	            v[i][j] = 10;
+	         else
+	            v[i][j] = mismh;
+	  }
+	else
+	  { /* read a file containing alphabet and substitution weights */
+	    Sp = ckopen(argv[argc-3], "r");
+	    (void) fscanf(Sp, "%s", alph);
+	    size = strlen(alph);
+	    match = mismh = 0;
+	    for ( i = 0; i < 128 ; i++ )
+	      for ( j = 0; j < 128 ; j++ )
+                  v[i][j] = 0;
+	    for ( i = 0; i < size ; i++ )
+	      for ( j = 0; j <= i ; j++ )
+		{ (void) fscanf(Sp, "%d", &ms);
+		  v[alph[i]][alph[j]] = v[alph[j]][alph[i]] = ms;
+		  if ( ms > match ) match = ms;
+		  if ( ms < mismh ) mismh = ms;
+		}
+	  }
+	for ( i = 0; i < 128 ; i++ )
+	    v['-'][i] = v[i]['-'] = - r;
+	v['-']['-'] = 0;
+        Pairwise(total);
+        Multiple();
+        /* Show(); */
+	FlatFormat();
+	/* InterFormat(); */
+	return 0;
 }

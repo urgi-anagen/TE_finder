@@ -7,8 +7,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test_Duster);
 void Test_Duster::test_hashSeqCount( void )
 {
 	unsigned word_len=2;
-	unsigned word_dist=1;
-	Duster hsrch(word_len,word_dist);
+	Duster hsrch(word_len);
 
 	SDGBioSeq seq=newSDGMemBioSeq("ATATTTATTTTAGCGTTTACGCT");
 	std::vector<unsigned> word_count;
@@ -46,10 +45,9 @@ void Test_Duster::test_hashSeqCount( void )
 void Test_Duster::test_reverse_hash( void )
 {
 	unsigned word_len=4;
-	unsigned word_dist=1;
-	Duster hsrch(word_len,word_dist);
+	Duster hsrch(word_len);
 
-	unsigned key=hsrch.hseq.hash2("ATGC");
+	unsigned key=hsrch.hseq.hash("ATGC");
 	std::string kmer=hsrch.hseq.reverse_hash(key);
 
 	CPPUNIT_ASSERT_EQUAL(std::string("ATGC"),kmer);

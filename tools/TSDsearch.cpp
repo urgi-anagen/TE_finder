@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
 		   && (unsigned)al.getStartSeq2()==1)
 		  {
 		    SDGString desc="LTR-TE";
-		    desc+=" TE-size="+SDGString(abs(i->getRangeS().getStart()-i->getRangeQ().getEnd())+1);
+		    desc+=" TE-size="+SDGString(std::fabs((int)(i->getRangeS().getStart())-i->getRangeQ().getEnd())+1);
 		    desc+=" LTR-size="+SDGString(i->getRangeQ().getLength());
 		    desc+=" TSD-size="+SDGString(s1.subseq(al.getStartSeq1()-1).length());
 		    out3<<s.getDE()<<" len="<<s.length();
@@ -239,7 +239,7 @@ int main(int argc, char* argv[])
 		   && (unsigned)al.getStartSeq2()==1)
 		  {
 		    SDGString desc="TIR-TE";
-		    desc+=" TE-size="+SDGString(abs(i->getRangeS().getStart()-i->getRangeQ().getStart())+1);
+		    desc+=" TE-size="+SDGString(std::fabs((int)(i->getRangeS().getStart())-i->getRangeQ().getStart())+1);
 		    desc+=" TIR-size="+SDGString(i->getRangeQ().getLength());
 		    desc+=" TSD-size="+SDGString(s1.subseq(al.getStartSeq1()-1).length());
 		    out3<<s.getDE()<<" len="<<s.length();

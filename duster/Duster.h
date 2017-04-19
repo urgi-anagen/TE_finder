@@ -167,7 +167,7 @@ class Duster
 
  public:
 
-  Duster(unsigned w=10, unsigned msk=0, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20,unsigned step=1):
+  Duster(unsigned w=10, unsigned msk=100, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20,unsigned step=1):
     hseq(w,msk),
     bhseq(bw),
     mhseq(w/2),
@@ -187,6 +187,7 @@ class Duster
       max_key=(unsigned)pow(4,hseq.getEffectiveKmerSize());
     };
 
+  unsigned getEffectiveKmerSize() {return hseq.getEffectiveKmerSize();};
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		  unsigned min_count,
 		  bool & valid_idx_file, bool first_iter);
