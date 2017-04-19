@@ -413,7 +413,7 @@ void BLRBlasterParameter::parseOptArg(int numarg, char* tabarg[])
 	  case 'S':
 	    {
 	      sensitivity_lvl=atoi(optarg);
-	      if(sensitivity_lvl<0 or sensitivity_lvl>4)
+	      if(sensitivity_lvl>4)
 		throw SDGException(NULL,"parse error: sensitivity value must be between 0 and 4",-1);
 	      break;
 	    }

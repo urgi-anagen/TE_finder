@@ -11,7 +11,7 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=16, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=2;
+unsigned kmer_size=16, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=100;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 
@@ -26,7 +26,7 @@ void help(void)
       <<"   -h, --help:\n\t this help"<<std::endl
       <<"   -w, --kmer:\n\t kmer length (<16), default: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
-      <<"   -k, --kmask:\n\t length of k-mer mask, default: "<<kmask<<std::endl
+      <<"   -k, --kmask:\n\t period of k-mer mask, default: "<<kmask<<std::endl
       <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
 	<<kmer_dist<<std::endl
     <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
@@ -248,13 +248,14 @@ int main(int argc, char* argv[])
     	std::cout<<"\nCompute kmer stat only!"<<std::endl;
     	for(unsigned bw=1; bw<=bkmer_size; bw++)
     	{
-        	std::vector<unsigned> kmer_count((unsigned)pow(4,kmer_size-kmask),0);
+    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,frag_connect_dist, min_size, step_q );
+        	std::vector<unsigned> kmer_count((unsigned)pow(4,hsrch.getEffectiveKmerSize()),0);
         	std::list< Info_kmer > list_infokmer;
         	Info_kmer kmer_threshold;
         	unsigned nb_kmer;
 
         	std::cout<<"\n======Compute kmer background probability for "<<bw-1<<" Markov's chain order======"<<std::endl;
-    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,frag_connect_dist, min_size, step_q );
+
     		hsrch.kmer_analysis(filename2,kmer_size,kmask, bw, kmer_size/2, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
     	}
     	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
