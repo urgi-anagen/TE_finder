@@ -11,7 +11,7 @@ void Test_Duster::test_hashSeqCount( void )
 
 	SDGBioSeq seq=newSDGMemBioSeq("ATATTTATTTTAGCGTTTACGCT");
 	std::vector<unsigned> word_count;
-	word_count.resize((unsigned)pow(4,word_len));
+	word_count.resize((unsigned)pow(4,word_len)); 
 
 	hsrch.hashSeqCount(seq,word_len,word_count);
 
@@ -29,7 +29,7 @@ void Test_Duster::test_hashSeqCount( void )
     std::ostringstream ostr_exp;
     ostr_exp
 		<<"[1]=1\n"
-		<<"[2]=1\n"
+		<<"[2]=1\n" 
 		<<"[3]=3\n"
 		<<"[6]=2\n"
 		<<"[7]=1\n"
@@ -38,19 +38,87 @@ void Test_Duster::test_hashSeqCount( void )
 		<<"[12]=4\n"
 		<<"[15]=7"<<std::endl;
 
-
+ 
 	CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
 }
+//------------------------------------------------------------------------------------------------------------
+void Test_Duster::test_hashSeqCountwHole( void )
+{
+    unsigned word_len=3;
+    unsigned kmask=2;
+    Duster hsrch(word_len,kmask);
+
+    SDGBioSeq seq=newSDGMemBioSeq("CTCTAT");
+    std::vector<unsigned> word_count;
+    word_count.resize((unsigned)pow(4,hsrch.getEffectiveKmerSize()));
+ 
+    hsrch.hashSeqCount(seq,word_len,word_count);
+
+    std::ostringstream ostr_obs;
+    unsigned size=word_count.size();
+    for(unsigned i=0; i<size; ++i)
+        {
+            if(word_count[i]!=0) 
+                ostr_obs<<"["<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
+        }
+
+    //std::cout<<"\n"<<ostr_obs.str()<<std::endl;
+
+    /* To display all kmers
+    word_len=3;
+    kmask=100;
+    Duster hsrch2(word_len,kmask);
+
+    std::vector<unsigned> word_count2;
+    word_count2.resize((unsigned)pow(4,hsrch2.getEffectiveKmerSize()));
+
+    hsrch2.hashSeqCount(seq,word_len,word_count2);
+
+    std::ostringstream ostr_obs2;
+    unsigned size2=word_count2.size();
+    for(unsigned i=0; i<size2; ++i)
+        {
+            if(word_count2[i]!=0)
+                ostr_obs2<<"["<<hsrch2.hseq.reverse_hash(i)<<"]="<<word_count2[i]<<std::endl;
+        }
+
+    std::cout<<"\n"<<ostr_obs2.str()<<std::endl; 
+    */
+
+    std::ostringstream ostr_exp;
+    ostr_exp
+        <<"[C-A]=1\n"
+        <<"[C-C]=1\n"
+        <<"[T-T]=2"
+        <<std::endl;
+
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+} 
 //------------------------------------------------------------------------------------------------------------
 void Test_Duster::test_reverse_hash( void )
 {
 	unsigned word_len=4;
-	Duster hsrch(word_len);
+	Duster hsrch(word_len); 
 
-	unsigned key=hsrch.hseq.hash("ATGC");
+	unsigned key=hsrch.hseq.hash("TTGC");  
 	std::string kmer=hsrch.hseq.reverse_hash(key);
-
-	CPPUNIT_ASSERT_EQUAL(std::string("ATGC"),kmer);
+ 
+	CPPUNIT_ASSERT_EQUAL(std::string("TTGC"),kmer);
+}
+//------------------------------------------------------------------------------------------------------------
+void Test_Duster::test_reverse_hashwHole( void )
+{
+    unsigned word_len=10;
+    unsigned kmask=2; 
+    Duster hsrch(word_len,kmask); 
+ 
+    unsigned key=hsrch.hseq.hash("CGTGAGTGGGG"); 
+    unsigned key2=hsrch.hseq.hash("CCTCACTCGCG"); 
+    std::string kmer=hsrch.hseq.reverse_hash(key);
+    
+    CPPUNIT_ASSERT_EQUAL(key,key2);
+    CPPUNIT_ASSERT_EQUAL(std::string("C-T-A-T-G-"),kmer);
 }
 //------------------------------------------------------------------------------------------------------------
 void Test_Duster::test_diagSearch( void )

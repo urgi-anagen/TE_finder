@@ -18,7 +18,9 @@ class Test_Duster : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(Test_Duster);
 	
 	CPPUNIT_TEST( test_hashSeqCount );
+	CPPUNIT_TEST( test_hashSeqCountwHole );
 	CPPUNIT_TEST( test_reverse_hash );
+	CPPUNIT_TEST( test_reverse_hashwHole );
 	CPPUNIT_TEST( test_diagSearch );
 	CPPUNIT_TEST( test_fragMerge );
 
@@ -37,7 +39,9 @@ public:
 
 protected:
 	void test_hashSeqCount(void);
+	void test_hashSeqCountwHole(void);
 	void test_reverse_hash(void);
+	void test_reverse_hashwHole(void);
 	void test_diagSearch( void );
 	void test_fragMerge( void );
 
