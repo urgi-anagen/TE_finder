@@ -11,7 +11,8 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=16, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100, min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=100;
+unsigned kmer_size=16, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
+min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=100, verbosity=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 
@@ -44,7 +45,8 @@ void help(void)
       <<"   -o, --file_out:\n\t filename for output,"<<std::endl
       <<"   -c, --chunk_size:\n\t sequence chunk size in kb,"<<" default: None"<<std::endl
       <<"   -n, --nb_iter:\n\t number of iteration. A value of 0 make iteration stop if coverage variation is less than 1%."<<" default:"<<nb_iter<<std::endl
-      <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl;
+      <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
+  	  <<"   -v, --verbosity:\n\t verbosity level, default:"<<verbosity<<std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
 {
@@ -64,7 +66,8 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
       <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
       <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
-      <<"   -n, --nb_iter:\t number of iteration: "<<nb_iter<<std::endl;
+      <<"   -n, --nb_iter:\t number of iteration: "<<nb_iter<<std::endl
+  	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
 };
 
 int main(int argc, char* argv[])
@@ -100,12 +103,13 @@ int main(int argc, char* argv[])
 		  {"chunk_size",required_argument, 0, 'c'},
 		  {"nb_iter",required_argument, 0, 'n'},
 		  {"analysis",no_argument, 0, 'a'},
+		  {"verbosity",no_argument, 0, 'v'},
 		  {0, 0, 0, 0}
 		};
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:a",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:av:",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -187,6 +191,11 @@ int main(int argc, char* argv[])
 		  case 'a':
 			{
 			  stat_only=true;
+			  break;
+			}
+		  case 'v':
+			{
+			  verbosity=atoi(optarg);
 			  break;
 			}
 		  case '?':
@@ -279,6 +288,18 @@ int main(int argc, char* argv[])
 
 		out.open(out_name.str());
 
+		std::ofstream fragout;
+		if(verbosity>0)
+		{
+			std::stringstream fragout_name;
+			if(outfilename!="")
+				fragout_name<<outfilename<<"."<<iter<<".frag.bed";
+			else
+				fragout_name<<filename1<<"."<<iter<<".duster.frag.bed";
+
+			fragout.open(fragout_name.str());
+		}
+
 		SDGFastaOstream seqout;
 		std::stringstream seqout_name;
 		if(outfilename!="")
@@ -337,9 +358,12 @@ int main(int argc, char* argv[])
 				hsrch.fragMerge(frag,(kmer_dist+1)*kmer_size,fmerged);
 			}
 			genome_coverage+=hsrch.compute_coverage(fmerged);
+			if(verbosity>0) hsrch.writeBED(s.getDE(),frag,fragout);
 			hsrch.writeBED(s.getDE(),fmerged,out);
 			hsrch.get_sequences(fmerged,s,seqout);
 		  }
+		out.close();
+		if(verbosity>0) fragout.close();
 		seqout.close();
 		std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
 				<<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
