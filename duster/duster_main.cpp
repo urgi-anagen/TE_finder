@@ -383,9 +383,9 @@ int main(int argc, char* argv[])
 
 	exit( EXIT_SUCCESS );
   }
-	catch( SDGException* e )
+	catch( SDGException e )
 	{
-		std::cout<<"******Exception catched: "<<e->message<<" ******"<<std::endl;
+		std::cout<<"******Exception catched: "<<e.message<<" ******"<<std::endl;
 		exit( EXIT_FAILURE );
 	}
 	catch(...)
