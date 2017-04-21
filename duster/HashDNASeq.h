@@ -20,8 +20,8 @@ struct HashDNASeq // Compute hashing value of a word
 			if(i%hole_period!=0)
 				effectiveKmerSize++;
 		}
-	  if(effectiveKmerSize>16)
-	throw SDGException(NULL,"HashDNASeq: Effective word size must be <= 16 !!");
+	  if(effectiveKmerSize>15)
+	throw SDGException(NULL,"HashDNASeq: Effective word size must be < 16 !!");
 	};
 
 	unsigned getEffectiveKmerSize(void){return effectiveKmerSize;};
