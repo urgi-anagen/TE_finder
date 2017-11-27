@@ -43,7 +43,7 @@ class RangeMap
   void save(const SDGString& filename);
   void saveSet(const SDGString& filename);
   void view(void);
-  //void viewDist(void);
+  unsigned size(void);
   void cut(unsigned int length, unsigned int over);
   void sort(void);
   void diff( RangeMap& m, int verbose=0 );
@@ -60,12 +60,6 @@ class RangeMap
 		      unsigned len=100);
   void writeFlank3Seq(const SDGString& outfname,const SDGBioSeqDB& db,
 		      unsigned len=100);
-/*   void extend(const SDGBioSeqDB& dbref, const SDGBioSeqDB& db, */
-/* 	      Galign& al,  */
-/* 	      int step_outside=500,int sim_rep=5,int z_thres=5); */
-/*   void join(const SDGBioSeqDB& dbref,const SDGBioSeqDB& db,  */
-/* 	    Galign& al, */
-/* 	    int max_dist=20000); */
   void entropfilt(const SDGString& db, double thres) ;
 };
 #endif

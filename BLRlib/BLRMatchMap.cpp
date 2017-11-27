@@ -594,17 +594,23 @@
     }
   else // no join
     {
+	  int count=0;
+	  if(verbose>0)
+	  			std::cout<<"No join, considering ";
       for(MapAlign::iterator m=map_align.begin(); m!=map_align.end();m++)
 		{
 		  std::list<RangePairSet> path;
 		  for(std::list<RangePair>::iterator i=m->second.begin();
 			  i!=m->second.end();i++)
 			{
+			  count++;
 			  path.push_back(RangePairSet(*i));
 			}
 		  map_path[m->first]=path;
 		  m->second.clear();
 		}
+      if(verbose>0)
+      	  			std::cout<<count<<" matches"<<std::endl;
     }
   map_align.clear();
 }
