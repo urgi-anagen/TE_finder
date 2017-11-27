@@ -459,7 +459,9 @@ int  total;		/* total sequence length */
 	      node1 = ( overptr ) ckalloc( (int ) sizeof(over));
 	      SCORE = - ( 2 * q + (M + N) * r + 1000);
 	      if ( M <= N )
-	       { pass(A,B,M,N);
+	       {
+	    	 /* pass(A,B,M,N); */
+	    	 big_pass(A,B,M,N); /* change hq 27/11/2017 */
 	         node1->id1 = i;
 	         node1->id2 = j;
 	         node1->score = SCORE;
