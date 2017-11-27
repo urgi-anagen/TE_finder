@@ -61,7 +61,7 @@ TestTool hsearch "-o out ../DmelChr4.fa ../DmelChr4_refTEs.fa" out
 TestTool hrepeat "../DmelChr4_refTEs.fa" ../DmelChr4_refTEs.fa.hrepeat.set
 TestToolStdout ltrsearch "../DmelChr4_refTEs.fa"
 TestToolStdout fastlalign "../seq1.fa ../seq2.fa"
-
+TestToolStdout rpt_map "../seq12.fa 10 -8 4 2"
 
 #TestTool halign "../DmelChr4.fa ../DmelChr4_refTEs.fa"
 
