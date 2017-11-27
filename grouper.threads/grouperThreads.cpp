@@ -32,7 +32,7 @@ void loadFromAlignFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
 					std::cout<<"Fragments were connected."<<std::endl;
 		}
 	else //No fragment join
-	  match_map.mapPath(false, false, false, false, 0);
+	  match_map.mapPath(false, false, false, false, verbose);
 }
 //-------------------------------------------------------------------------------------------------------
 void loadFromPathFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
@@ -119,7 +119,7 @@ int main( int argc, char* argv[] )
 		else
 			loadFromPathFile(&para,match_map);
 
-		std::list<RangePairSet> rp_list = match_map.getRpsList();
+		std::list<RangePairSet> rp_list = match_map.getRpsListFromMapPath();
 		if(para.getVerbose()>0) std::cout<<"list size="<<rp_list.size()<<std::endl;
 
 		unsigned nb_sets=para.getNbThread();
