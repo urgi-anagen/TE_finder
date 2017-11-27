@@ -865,7 +865,7 @@ void Duster::fragMerge(std::vector< std::pair<unsigned,unsigned> >& frag,
       }
 }
 //-------------------------------------------------------------------------
-void Duster::writeBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out)
+void Duster::writeHitBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out)
 {
   unsigned size=frag.size();
   for(unsigned i=0; i<size; ++i)
@@ -878,6 +878,20 @@ void Duster::writeBED(SDGString qname, const std::vector< std::pair<unsigned,uns
 		 <<"\t"<<"+" //strand
 //		 <<"\t"<<frag[i].first //thickStart
 //		 <<"\t"<<frag[i].second //thickEnd
+		 <<std::endl;
+    }
+}//-------------------------------------------------------------------------
+void Duster::writeBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out)
+{
+  unsigned size=frag.size();
+  for(unsigned i=0; i<size; ++i)
+    {
+	  out<<qname<<"\t" // chromosome
+		 <<frag[i].first  //chrom start
+		 <<"\t"<<frag[i].second  //chrom end
+		 <<"\t"<<"duster" // name
+		 <<"\t"<<frag[i].second-frag[i].first //score
+		 <<"\t"<<"+" //strand
 		 <<std::endl;
     }
 }

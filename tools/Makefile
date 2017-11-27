@@ -12,6 +12,7 @@ TARGETS = cutterDB \
 			TSDsearch \
 			map2db \
 			mapdist \
+			mapsize \
 			map2flank53 \
 			map2flank5 \
 			map2flank3 \
@@ -23,7 +24,6 @@ TARGETS = cutterDB \
 			hrepeat \
 			halign \
 			hsearch \
-			rpt_map \
 			SWalign \
 			NWalign \
 			orienter \
@@ -33,6 +33,7 @@ TARGETS = cutterDB \
 			align2recon \
 			filterAlign \
 			tabnum2id
+#			rpt_map
 
 OBJTEST= Test_orienter.o
 
@@ -79,6 +80,9 @@ mapview:   mapview.o $(OBJ_LIB)
 
 mapdist:   mapdist.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   mapdist.o -o $@ $(LINK)
+	
+mapsize:   mapsize.o $(OBJ_LIB)
+	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   mapsize.o -o $@ $(LINK)
 
 mapOp:   mapOp.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   mapOp.o -o $@ $(LINK)
@@ -107,8 +111,8 @@ halign:   halign.o $(OBJ_LIB)
 hsearch:   hsearch.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   hsearch.o -o $@ $(LINK)
 
-rpt_map:   rpt_map.o $(OBJ_LIB)
-	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   rpt_map.o -o $@ $(LINK)
+#rpt_map:   rpt_map.o $(OBJ_LIB)
+#	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   rpt_map.o -o $@ $(LINK)
 
 SWalign:   SWalign.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   SWalign.o -o $@ $(LINK)

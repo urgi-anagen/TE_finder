@@ -95,47 +95,22 @@ void RangeMap::view(void)
 	}
     }
 }
-// //-------------------------------------------------------------------
-// void RangeMap::viewDist(void)
-// {
-//   SkipList< std::pair<RangeSeq,RangeSeq> > sl;
-//   std::pair<RangeSeq,RangeSeq> range_pair;
-
-//   for(RangeMap::iterator c=begin(); c!=end();c++)
-//     {
-//       std::list<RangeSeq>::iterator begin=c->second.begin();
-//       range_pair.first=*begin;
-//       ulong s=(*begin).getStart();
-//       ulong e=(*begin).getEnd();
-//       ulong prev=(s>e?s:e);
-//       begin++;
-//       for(std::list<RangeSeq>::iterator i=begin;
-// 	  i!=c->second.end();i++)
-// 	{
-// 	  range_pair.second=(*i);
-// 	  ulong is=(*i).getStart();
-// 	  ulong ie=(*i).getEnd();
-// 	  long dist=(is<ie?is:ie)-prev;
-// 	  sl.insert(dist,range_pair);
-// 	  range_pair.first=(*i);
-// 	  prev=(is>ie?is:ie);
-// 	}
-//     }
-//   SkipList< std::pair<RangeSeq,RangeSeq> >::Node n=sl.first();
-//   while(!sl.isNil(n))
-//     {
-//       std::cout<<"dist="<<n.key<<"\n\t"
-// 	  <<n.value.first<<"\tlen="<<std::abs(n.value.first.getStart()-n.value.first.getEnd()+1)
-// 	  <<"\n\t"<<n.value.second<<"\tlen="<<std::abs(n.value.second.getStart()-n.value.second.getEnd()+1)<<std::endl;
-
-//       std::cout<<"region:"<<"\t"
-// 	  <<n.value.first.getName()<<"\t"
-// 	  <<n.value.first.getChr()<<"\t"
-// 	  <<std::min(n.value.first.getMin(),n.value.second.getMin())<<"\t"
-// 	  <<std::max(n.value.first.getMax(),n.value.second.getMax())<<std::endl;
-//       n=sl.next(n);
-//     }
-// }
+//-------------------------------------------------------------------
+unsigned RangeMap::size(void)
+{
+  unsigned size=0;
+  for(RangeMap::iterator c=begin(); c!=end();c++)
+    {
+      for(std::list<RangeSeq>::iterator i=c->second.begin();
+	  i!=c->second.end();i++)
+		{
+		  long is=(*i).getStart();
+		  long ie=(*i).getEnd();
+		  size+=(unsigned)std::abs(ie-is+1);
+		}
+    }
+  return size;
+}
 //-------------------------------------------------------------------
 void RangeMap::cut(unsigned int length, unsigned int over )
 {
