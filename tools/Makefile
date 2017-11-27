@@ -32,8 +32,8 @@ TARGETS = cutterDB \
 			align2piler \
 			align2recon \
 			filterAlign \
-			tabnum2id
-#			rpt_map
+			tabnum2id \
+			rpt_map
 
 OBJTEST= Test_orienter.o
 
@@ -111,8 +111,9 @@ halign:   halign.o $(OBJ_LIB)
 hsearch:   hsearch.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   hsearch.o -o $@ $(LINK)
 
-#rpt_map:   rpt_map.o $(OBJ_LIB)
+rpt_map:   rpt_map.o $(OBJ_LIB)
 #	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   rpt_map.o -o $@ $(LINK)
+	$(CXX)  $(INCLUDE) $(LIB)   rpt_map.o -o $@ $(LINK)
 
 SWalign:   SWalign.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   SWalign.o -o $@ $(LINK)
