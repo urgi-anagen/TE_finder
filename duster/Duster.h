@@ -1,5 +1,5 @@
-#ifndef HASHSEARCH_H
-#define HASHSEARCH_H
+#ifndef DUSTER_H
+#define DUSTER_H
 
 #include <SDGMemBioSeq.h>
 #include <SDGFastaIstream.h>
@@ -52,6 +52,7 @@ class Duster
 {
 	friend class Test_Duster;
 
+protected:
 
   struct KmerSpos //Store a kmer position in a sequence
     {

@@ -2,7 +2,7 @@
 # Makefile for TE_finder
 #
 
-TARGETS = SDGlib DGElib BLRlib blaster grouper.threads matcher tools hasher duster
+TARGETS = SDGlib DGElib BLRlib blaster grouper.threads matcher tools hasher2 duster
 
 all: $(TARGETS)
 	for i in $(TARGETS); do cd $$i; $(MAKE); cd ..; done
