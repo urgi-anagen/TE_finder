@@ -58,6 +58,8 @@ void help(void)
       <<gap_extend<<std::endl
       <<"   -O, --overlap:\n\t authorized overlap percentage (<1.0), default: "
       <<overlap<<std::endl
+      <<"   -E, --extension:\n\t boundaries alignment extension (>0), default: "
+	  <<ext_len<<std::endl
   	  <<"   -v, --verbosity:\n\t verbosity level, default:"<<verbosity<<std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
@@ -83,6 +85,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -g, --gapopen:\n\t gap open penalty (>0): "<<gap_open<<std::endl
       <<"   -e, --gapextend:\n\t gap extend penalty (>0): "<<gap_extend<<std::endl
       <<"   -O, --overlap:\n\t authorized overlap percentage (<1.0): "<<overlap<<std::endl
+      <<"   -E, --extension:\n\t boundaries alignment extension (>0): "<<ext_len<<std::endl
   	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
 };
 
@@ -123,13 +126,14 @@ int main(int argc, char* argv[])
 		  {"gapopen",required_argument, 0, 'g'},
 		  {"gapextend",required_argument, 0, 'e'},
 		  {"overlap",required_argument, 0, 'O'},
+		  {"extension",required_argument, 0, 'E'},
 		  {"verbosity",no_argument, 0, 'v'},
 		  {0, 0, 0, 0}
 		};
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:aM:i:g:e:O:v:",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:aM:i:g:e:O:E:v:",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -233,6 +237,11 @@ int main(int argc, char* argv[])
 		      overlap=atoi(optarg);
 		      break;
 		    }
+		  case 'E':
+		    {
+		      ext_len=atoi(optarg);
+		      break;
+		    }
 		  case 'v':
 			{
 			  verbosity=atoi(optarg);
@@ -311,7 +320,7 @@ int main(int argc, char* argv[])
     	exit( EXIT_SUCCESS );
     }
 
-    Hasher hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
+    Hasher hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q,ext_len);
     bool valid_idx_file=true;
 
 	hsrch.load(filename2,kmer_size, kmask, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file);
@@ -391,8 +400,11 @@ int main(int argc, char* argv[])
 		hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true);
 //	 	std::cout<<"Aligned fragments:"<<std::endl;
 //	 	hsrch.print(s,min_size,std::cout);
-		hsrch.extend(s,comp_s, min_size);
-		std::cout<<"Extended fragments:"<<std::endl;
+		if(ext_len>0)
+		{
+			hsrch.extend(s,comp_s, min_size, verbosity);
+			std::cout<<"Extended fragments:"<<std::endl;
+		}
 		hsrch.print(s,min_size,std::cout);
 		hsrch.write_align(s,min_size,out);
 		std::cout<<"ok!\n"<<std::endl;
