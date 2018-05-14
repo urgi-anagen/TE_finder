@@ -65,7 +65,7 @@ class Hasher : public Duster
   void write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out);
   void print_frag(const SDGBioSeq& sequence, std::ostream& out=std::cout);
   void print(const SDGBioSeq& sequence, unsigned min_size=6,std::ostream& out=std::cout);
-  void extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, unsigned min_size=6);
+  void extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, unsigned min_size=6, unsigned verbose=0);
 
   struct comp {
     int operator () (const std::pair<unsigned,RangePair> & a, const std::pair<unsigned,RangePair> & b)
