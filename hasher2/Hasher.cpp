@@ -372,7 +372,7 @@ void Hasher::write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostre
     }
 }
 //-------------------------------------------------------------------------
-void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, unsigned min_size)
+void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, unsigned min_size, unsigned verbose)
 {
   FastExtAlign fastExtAlign;
   FastExtAlign rfastExtAlign;
@@ -394,20 +394,32 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 			 && i->getRangeS().getLength()>min_size)
 			{
 	 	      std::cout<<"."<<std::flush;
+	 	     if(verbose>0)
+	 	     {
+	 	    	 std::cout<<"Query length:"<<sequence.length()<<std::endl;
+	 	    	 std::cout<<"Subject length:"<<sseq.length()<<std::endl;
+	 	    	 std::cout<<*i<<std::endl;
+	 	     }
 			  if(i->getRangeQ().isPlusStrand()
 			 && i->getRangeS().isPlusStrand())
 				{
 				  fastExtAlign.setStart(i->getRangeQ().getEnd(),
 							i->getRangeS().getEnd(),extend_len);
 				  fastExtAlign.extend_dir(i->getScore());
-				  //std::cout<<"extended end by "<<fastExtAlign.getEndSeq1()-i->getRangeQ().getEnd()<<std::endl;
+				  if(verbose>0)
+				  {
+					  std::cout<<"extended end by "<<fastExtAlign.getEndSeq1()-i->getRangeQ().getEnd()<<std::endl;
+				  }
 				  i->getRangeQ().setEnd(fastExtAlign.getEndSeq1());
 				  i->getRangeS().setEnd(fastExtAlign.getEndSeq2());
 
 				  fastExtAlign.setStart(i->getRangeQ().getStart(),
 							i->getRangeS().getStart(),extend_len);
 				  fastExtAlign.extend_rev(i->getScore());
-				  //std::cout<<"extended start by "<<i->getRangeQ().getStart()-fastExtAlign.getEndSeq1()<<std::endl;
+				  if(verbose>0)
+				  {
+					  std::cout<<"extended start by "<<i->getRangeQ().getStart()-fastExtAlign.getEndSeq1()<<std::endl;
+				  }
 				  i->getRangeQ().setStart(fastExtAlign.getEndSeq1());
 				  i->getRangeS().setStart(fastExtAlign.getEndSeq2());
 				}
@@ -419,6 +431,10 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 				  rfastExtAlign.setStart(qe,i->getRangeS().getEnd(),
 							extend_len);
 				  rfastExtAlign.extend_dir(i->getScore());
+				  if(verbose>0)
+				  {
+					  std::cout<<"extended end by "<<rfastExtAlign.getEndSeq1()-i->getRangeQ().getEnd()<<std::endl;
+				  }
 				  i->getRangeQ().setEnd(seqlen
 							-rfastExtAlign.getEndSeq1()+1);
 				  i->getRangeS().setEnd(rfastExtAlign.getEndSeq2());
@@ -426,6 +442,10 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 				  rfastExtAlign.setStart(qs,i->getRangeS().getStart(),
 							extend_len);
 				  rfastExtAlign.extend_rev(i->getScore());
+				  if(verbose>0)
+				  {
+					  std::cout<<"extended start by "<<i->getRangeQ().getStart()-rfastExtAlign.getEndSeq1()<<std::endl;
+				  }
 				  i->getRangeQ().setStart(seqlen
 							  -rfastExtAlign.getEndSeq1()+1);
 				  i->getRangeS().setStart(rfastExtAlign.getEndSeq2());
