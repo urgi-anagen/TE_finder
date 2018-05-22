@@ -397,9 +397,11 @@ int main(int argc, char* argv[])
 			std::cout<<"---reverse strand---"<<std::endl;
 			hsrch.search(comp_s,1,s.length(),numseq,repeat);
 		}
+		std::cout<<"Found fragments:"<<std::endl;
+	 	hsrch.print_frag(s,std::cout);
 		hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true);
-//	 	std::cout<<"Aligned fragments:"<<std::endl;
-//	 	hsrch.print(s,min_size,std::cout);
+	 	std::cout<<"Aligned fragments:"<<std::endl;
+	 	hsrch.print(s,min_size,std::cout);
 		if(ext_len>0)
 		{
 			hsrch.extend(s,comp_s, min_size, verbosity);
