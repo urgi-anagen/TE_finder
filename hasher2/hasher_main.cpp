@@ -14,7 +14,7 @@
 double match=1,mismh=0.8,gap_extend=0.4,gap_open=1.6,
   filter_cutoff=0.0;
 int ext_len=-1;
-unsigned kmer_size=15, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
+unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
 min_size=20, chunk_size_kb=0, min_count=0, kmask=100, verbosity=0, overlap=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;

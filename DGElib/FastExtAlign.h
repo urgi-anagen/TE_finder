@@ -161,6 +161,9 @@ public:
  int getEndSeq1(void){return endi;};
  int getEndSeq2(void){return endj;};
 
+ long getExtLenSeq1(void){return std::abs((long)starti-endi);};
+ long getExtLenSeq2(void){return std::abs((long)startj-endj);};
+     
  int getGapOpen(void){return q;};
  int getGapExtend(void){return r;};
 
