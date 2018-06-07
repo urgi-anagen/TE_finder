@@ -15,7 +15,7 @@ double match=1,mismh=0.8,gap_extend=0.4,gap_open=1.6,
   filter_cutoff=0.0;
 int ext_len=-1;
 unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
-min_size=20, chunk_size_kb=0, min_count=0, kmask=100, verbosity=0, overlap=0;
+min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=100, verbosity=0, overlap=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 
@@ -335,7 +335,7 @@ int main(int argc, char* argv[])
 	out.open(out_name.str());
 
 	std::ofstream fragout;
-	if(verbosity>0)
+	if(verbosity>1)
 	{
 		std::stringstream fragout_name;
 		if(outfilename!="")
@@ -362,6 +362,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
+	min_frag_size=min_size;
 	unsigned numseq=0;
 	while(in)
 	  {
@@ -380,39 +381,149 @@ int main(int argc, char* argv[])
 			{
 				std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,start,start+chunk_size-1,numseq,repeat);
+				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
+			 	if(verbosity>1){
+			 		std::cout<<"Found fragments:"<<std::endl;
+			 		hsrch.print_frag(s,std::cout);
+			 	}
+
+				hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+
+			 	if(verbosity>1){
+			 		std::cout<<"Aligned fragments:"<<std::endl;
+			 		hsrch.print(s,min_size,std::cout);
+			 	}
+
+				if(ext_len>0)
+				{
+					hsrch.extend(s,comp_s, min_size, verbosity);
+					std::cout<<"Extended fragments:"<<std::endl;
+				}
+				hsrch.print(s,min_size,std::cout);
+				hsrch.write_align(s,min_size,out);
+
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,start+chunk_size-1,numseq,repeat);
+				hsrch.search(comp_s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
+			 	if(verbosity>1){
+			 		std::cout<<"Found fragments:"<<std::endl;
+			 		hsrch.print_frag(s,std::cout);
+			 	}
+
+				hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+
+			 	if(verbosity>1){
+			 		std::cout<<"Aligned fragments:"<<std::endl;
+			 		hsrch.print(s,min_size,std::cout);
+			 	}
+
+				if(ext_len>0)
+				{
+					hsrch.extend(s,comp_s, min_size, verbosity);
+					std::cout<<"Extended fragments:"<<std::endl;
+				}
+				hsrch.print(s,min_size,std::cout);
+				hsrch.write_align(s,min_size,out);
+
 				start=start+chunk_size;
 			}
 			std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 			std::cout<<"---direct strand---"<<std::endl;
-			hsrch.search(s,start,s.length(),numseq,repeat);
+			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
+		 	if(verbosity>1){
+		 		std::cout<<"Found fragments:"<<std::endl;
+		 		hsrch.print_frag(s,std::cout);
+		 	}
+
+			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+
+		 	if(verbosity>1){
+		 		std::cout<<"Aligned fragments:"<<std::endl;
+		 		hsrch.print(s,min_size,std::cout);
+		 	}
+
+			if(ext_len>0)
+			{
+				hsrch.extend(s,comp_s, min_size, verbosity);
+				std::cout<<"Extended fragments:"<<std::endl;
+			}
+			hsrch.print(s,min_size,std::cout);
+			hsrch.write_align(s,min_size,out);
+
 			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,start,s.length(),numseq,repeat);
+			hsrch.search(comp_s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
+			if(verbosity>1){
+		 		std::cout<<"Found fragments:"<<std::endl;
+		 		hsrch.print_frag(s,std::cout);
+		 	}
+
+			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+
+		 	if(verbosity>1){
+		 		std::cout<<"Aligned fragments:"<<std::endl;
+		 		hsrch.print(s,min_size,std::cout);
+		 	}
+
+			if(ext_len>0)
+			{
+				hsrch.extend(s,comp_s, min_size, verbosity);
+				std::cout<<"Extended fragments:"<<std::endl;
+			}
+			hsrch.print(s,min_size,std::cout);
+			hsrch.write_align(s,min_size,out);
+
 		}else
 		{
 			std::cout<<"---direct strand---"<<std::endl;
-			hsrch.search(s,1,s.length(),numseq,repeat);
+			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
+		 	if(verbosity>1){
+		 		std::cout<<"Found fragments:"<<std::endl;
+		 		hsrch.print_frag(s,std::cout);
+		 	}
+
+			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+		 	if(verbosity>1){
+		 		std::cout<<"Aligned fragments:"<<std::endl;
+		 		hsrch.print(s,min_size,std::cout);
+		 	}
+
+			if(ext_len>0)
+			{
+				hsrch.extend(s,comp_s, min_size, verbosity);
+				std::cout<<"Extended fragments:"<<std::endl;
+			}
+			hsrch.print(s,min_size,std::cout);
+			hsrch.write_align(s,min_size,out);
+
 			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,1,s.length(),numseq,repeat);
+			hsrch.search(comp_s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
+		 	if(verbosity>1){
+		 		std::cout<<"Found fragments:"<<std::endl;
+		 		hsrch.print_frag(s,std::cout);
+		 	}
+
+			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+
+		 	if(verbosity>1){
+		 		std::cout<<"Aligned fragments:"<<std::endl;
+		 		hsrch.print(s,min_size,std::cout);
+		 	}
+
+			if(ext_len>0)
+			{
+				hsrch.extend(s,comp_s, min_size, verbosity);
+				std::cout<<"Extended fragments:"<<std::endl;
+			}
+			hsrch.print(s,min_size,std::cout);
+			hsrch.write_align(s,min_size,out);
 		}
-		std::cout<<"Found fragments:"<<std::endl;
-	 	hsrch.print_frag(s,std::cout);
-		hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true);
-	 	std::cout<<"Aligned fragments:"<<std::endl;
-	 	hsrch.print(s,min_size,std::cout);
-		if(ext_len>0)
-		{
-			hsrch.extend(s,comp_s, min_size, verbosity);
-			std::cout<<"Extended fragments:"<<std::endl;
-		}
-		hsrch.print(s,min_size,std::cout);
-		hsrch.write_align(s,min_size,out);
+
+
+
+
 		std::cout<<"ok!\n"<<std::endl;
 	  }
 	out.close();
-	if(verbosity>0) fragout.close();
+	if(verbosity>1) fragout.close();
 //	seqout.close();
 
 
