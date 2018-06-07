@@ -31,7 +31,7 @@ class Hasher : public Duster
 			    unsigned start, unsigned end, unsigned numseq, bool repeat,
 				std::vector< Diag >& diag_map, std::vector< Diag >& diag_map_comp);
 	void diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map, std::vector< Diag >& diag_map_comp,
-	  		unsigned connect_dist, unsigned kmer_size);
+	  		unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size, unsigned verbose);
 
 	int extend_len;
 
@@ -58,9 +58,10 @@ class Hasher : public Duster
 		  Duster::load(filenameS,kmer_size, kmask, bkmer_size,mkmer_size , count_cutoff, diversity_cutoff, min_count,valid_idx_file, true);
 		  subject_db.load(filenameS);
 	  };
-  void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, bool repeat);
+  void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist, unsigned min_frag_size,
+		  bool repeat, unsigned verbose);
   void fragAlign(double match,double mism, double gopen,
-		 double gext, unsigned over, bool join);
+		 double gext, unsigned over, bool join, unsigned verbose);
   void write(const SDGBioSeq& sequence, unsigned min_size=6,std::ostream& out=std::cout);
   void write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out);
   void print_frag(const SDGBioSeq& sequence, std::ostream& out=std::cout);
