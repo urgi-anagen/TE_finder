@@ -115,14 +115,14 @@ void Duster::kmer_counts(const SDGString& filenameS, unsigned kmer_size, unsigne
 	  SDGBioSeq sS;
 	  if(inS)
 		inS>>sS;
-	  std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::endl;
+	  std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::flush;
 	  nb_kmer+=hashSeqCount(sS,kmer_size, wcount);
 	  nb_bkmer+=hashSeqBackgroundCount(sS,bkmer_size, bcount);
 	  nb_mkmer+=hashSeqModelCount(sS,mkmer_size, mcount);
 	  nb_nuc+=hashSeqNucCount(sS, ncount);
 	}
   inS.close();
-  std::cout<<nb_kmer<<std::endl;
+  std::cout<<"\nNumber of kmers="<<nb_kmer<<std::endl;
 }
 //-------------------------------------------------------------------------
 //

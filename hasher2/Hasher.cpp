@@ -1,57 +1,9 @@
 #include "Hasher.h"
-/*
-  unsigned size=diag_map.size();
-  if(size>=2)
-    {
-      sort(diag_map.begin(),diag_map.end());
 
-      unsigned start=0;
-      unsigned end=0;
-      int diag=0;
-
-      Diag& prev_d=diag_map[0];
-      //std::cout<<prev_d<<std::endl;
-      for( unsigned i=1; i<size; ++i)
-		{
-		  Diag& curr_d=diag_map[i];
-	      //std::cout<<curr_d<<std::endl;
-		  if(prev_d.diag==curr_d.diag // Same diagonal
-			 && prev_d.wpos.numSeq==curr_d.wpos.numSeq // Same sequence
-			 && prev_d.wpos.pos+connect_dist>=curr_d.wpos.pos) // hits overlaps or close enough to be joined
-				{
-				  if(start!=0) // already extending a diagonal
-					{
-				      //std::cout<<"Extend "<<prev_d<<std::endl;
-					  end=curr_d.wpos.pos;
-					}
-				  else //create a diagonal
-					{
-					  //std::cout<<"Create "<<prev_d<<".."<<curr_d<<std::endl;
-					  diag=prev_d.diag;
-					  start=prev_d.wpos.pos;
-					  end=curr_d.wpos.pos;
-					}
-				}
-			  else // too far to be joined
-				  if(start!=0) // Create a diagonal
-					{
-					  //std::cout<<"Diagonal found is "<<diag+start+1<<"-"<<diag+end+kmer_size<<std::endl;
-					  frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
-					  start=0;
-					}
-		  prev_d=curr_d;
-		}
-      if(start!=0)  //End of hits list
-		{
-		  	  //std::cout<<"Diagonal found is "<<diag+start+1<<"-"<<diag+end+kmer_size<<std::endl;
-			  frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
-		}
-    }
-  */
 //-------------------------------------------------------------------------
 // Search for diagonal of word matches
 void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map,std::vector< Diag >& diag_map_comp,
-  		unsigned connect_dist, unsigned kmer_size)
+  		unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size, unsigned verbose)
 {
   std::vector< std::pair<unsigned,RangePair> > frag;
   unsigned count=0;
@@ -99,11 +51,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 					  rp.setLength(r1.getLength());
 					  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
 					  start=0;
-					  if(numSeq==0)
-					  {
-						  std::cout<<"record hit dir "<<diag<<" "<<start<<" "<<end<<std::endl;
-						  rp.writetxt(std::cout);
-					  }
 					}
 		  prev_d=curr_d;
       } //end for
@@ -118,11 +65,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 		  rp.setIdentity(1.00);
 		  rp.setLength(r1.getLength());
 		  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
-		  if(numSeq==0)
-		  {
-			  std::cout<<"record end hit dir "<<diag<<" "<<start<<" "<<end<<std::endl;
-			  rp.writetxt(std::cout);
-		  }
 		}
     } //end size>2, diag_map loop
 
@@ -169,11 +111,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 
 					  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
 					  start=0;
-					  if(numSeq==0)
-					  {
-						  std::cout<<"record hit rev "<<diag<<" "<<start<<" "<<end<<std::endl;
-						  rp.writetxt(std::cout);
-					  }
 					}
 		  prev_d=curr_d;
 		} //end for
@@ -191,11 +128,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 		  rp.setLength(r1.getLength());
 
 		  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
-		  if(numSeq==0)
-		  {
-			  std::cout<<"end record hit rev "<<diag<<" "<<start<<" "<<end<<std::endl;
-			  rp.writetxt(std::cout);
-		  }
 		}
     } //end size>2, diag_map_comp loop
 
@@ -215,6 +147,10 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 
       al_list.insert(al_list.begin(),rangePair);
     }
+  if(verbose>0)
+  {
+	  std::cout<<"Fragments number founds:"<<count<<std::endl;
+  }
 }
 //-------------------------------------------------------------------------
 // Search for alignments with word matches
@@ -254,7 +190,8 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
     }
 }
 //-------------------------------------------------------------------------
-void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, bool repeat)
+void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
+		unsigned min_frag_size, bool repeat, unsigned verbose)
 {
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
@@ -271,7 +208,7 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
-	diagSearch(sequence, diag_map, diag_map_comp,(wdist+1)*kmer_size,kmer_size);
+	diagSearch(sequence, diag_map, diag_map_comp,connect_dist,kmer_size,min_frag_size, verbose);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
 	std::cout<<map_align.size()<<" fragments found";
@@ -280,18 +217,23 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 }
 //-------------------------------------------------------------------------
 void Hasher::fragAlign(double match,double mism, double gopen,
-			   double gext, unsigned over, bool join)
+			   double gext, unsigned over, bool join, unsigned verbose)
 {
-  std::cout<<"fragment connexion ..."<<std::flush;
+
   map_path.clear();
+
   if(join)
     {
+	  unsigned count=0;
+	  std::cout<<"fragment connexion ..."<<std::flush;
       for(MapAlign::iterator m=map_align.begin(); m!=map_align.end();m++)
 		{
+    	  if(verbose>0){ std::cout<<count++<<" "<<std::flush;}
 		  FragAlign fragAlign(mism,gopen,gext,over);
 		  map_path[m->first]=fragAlign.join(m->second);
 		  m->second.clear();
 		}
+      std::cout<<std::endl;
     }
   else
     {
@@ -311,6 +253,7 @@ void Hasher::fragAlign(double match,double mism, double gopen,
   std::cout<<"ok"<<std::endl;
 }
 //-------------------------------------------------------------------------
+// Print fragments found before fragment alignments
 void Hasher::print_frag(const SDGBioSeq& sequence, std::ostream& out)
 {
   SDGString qname=sequence.getDE();
@@ -332,6 +275,7 @@ void Hasher::print_frag(const SDGBioSeq& sequence, std::ostream& out)
     }
 }
 //-------------------------------------------------------------------------
+// Print aligned fragments
 void Hasher::print(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out)
 {
   SDGString qname=sequence.getDE();
@@ -360,6 +304,7 @@ void Hasher::print(const SDGBioSeq& sequence, unsigned min_size,std::ostream& ou
     }
 }
 //-------------------------------------------------------------------------
+// Write aligned fragments
 void Hasher::write(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out)
 {
   SDGString qname=sequence.getDE();
@@ -385,6 +330,7 @@ void Hasher::write(const SDGBioSeq& sequence, unsigned min_size,std::ostream& ou
     }
 }
 //-------------------------------------------------------------------------
+// Write aligned fragments in .align format
 void Hasher::write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out)
 {
   SDGString qname=sequence.getDE();
@@ -431,7 +377,7 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 		  <<"\tquery number:"<<iter_hash->first.first<<std::flush;
 	    }
       SDGBioSeq sseq=subject_db[iter_hash->first.second-1];
-      std::cout<<"subject:"<<sseq.getDE()<<std::endl;
+      std::cout<<"\tsubject:"<<sseq.getDE()<<std::endl;
       fastExtAlign.setSeq2(sseq);
       rfastExtAlign.setSeq2(sseq);
       for(std::list<RangePairSet>::iterator i=iter_hash->second.begin();
@@ -461,7 +407,7 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 				  if(verbose>0)
 				  {
 					  std::cout<<"extended end by "<<fastExtAlign.getEndSeq1()-i->getRangeQ().getEnd()
-					  <<"- score:"<<score
+					  <<" - score:"<<score
 					  <<"="<<fastExtAlign.getExtLenSeq1()
 					  <<"/"<<fastExtAlign.getExtLenSeq2()<<std::endl;
 				  }
@@ -474,7 +420,7 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 				  if(verbose>0)
 				  {
 					  std::cout<<"extended start by "<<i->getRangeQ().getStart()-fastExtAlign.getEndSeq1()
-						<<"- score:"<<score
+						<<" - score:"<<score
 						<<"="<<fastExtAlign.getExtLenSeq1()
 						<<"/"<<fastExtAlign.getExtLenSeq2()<<std::endl;
 				  }
@@ -493,7 +439,7 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 				  if(verbose>0)
 				  {
 					  std::cout<<"extended end by "<<rfastExtAlign.getExtLenSeq1()
-						<<"- score:"<<score
+						<<" - score:"<<score
 					  	<<"="<<rfastExtAlign.getExtLenSeq1()
 					  	<<"/"<<rfastExtAlign.getExtLenSeq2()<<std::endl;
 				  }
@@ -507,7 +453,7 @@ void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, u
 				  if(verbose>0)
 				  {
 					  std::cout<<"extended start by "<<rfastExtAlign.getExtLenSeq1()
-						<<"- score:"<<score
+						<<" - score:"<<score
 						<<"="<<rfastExtAlign.getExtLenSeq1()
 						<<"/"<<rfastExtAlign.getExtLenSeq2()<<std::endl;
 				  }
