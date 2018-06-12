@@ -1,5 +1,5 @@
 #
-#  Makefile for Blaster
+#  Makefile for Duster
 #
 
 include ../global_mak.def
