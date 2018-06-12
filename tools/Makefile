@@ -47,6 +47,7 @@ clean:
 	@echo "clean the directory '"`pwd`"'"
 	@find . -name '*.[oa]' -exec rm {} \;
 	@find . -name '*~' -exec rm {} \;
+	@rm -f $(TARGETS)
 
 cutterDB:   cutterDB.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG)   $(INCLUDE) $(LIB)   cutterDB.o -o $@ $(LINK)

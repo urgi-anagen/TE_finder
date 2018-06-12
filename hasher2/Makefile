@@ -1,5 +1,5 @@
 #
-#  Makefile for Blaster
+#  Makefile for Hasher
 #
 
 include ../global_mak.def
