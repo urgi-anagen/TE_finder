@@ -11,7 +11,7 @@
 #include "Hasher.h"
 
 
-double match=1,mismh=0.8,gap_extend=0.4,gap_open=1.6,
+double mismh=4,gap_extend=0,gap_open=1,
   filter_cutoff=0.0;
 int ext_len=-1;
 unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
@@ -48,8 +48,6 @@ void help(void)
       <<"   -o, --file_out:\n\t filename for output,"<<std::endl
       <<"   -c, --chunk_size:\n\t sequence chunk size in kb,"<<" default: None"<<std::endl
       <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
-      <<"   -M, --match:\n\t match bonus (>0), default: "
-      <<match<<std::endl
       <<"   -i, --mismatch:\n\t mismatch penalty (>0), default: "
       <<mismh<<std::endl
       <<"   -g, --gapopen:\n\t gap open penalty (>0), default: "
@@ -80,7 +78,6 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
       <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
       <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
-      <<"   -M, --match:\n\t match bonus (>0): "<<match<<std::endl
       <<"   -i, --mismatch:\n\t mismatch penalty (>0): "<<mismh<<std::endl
       <<"   -g, --gapopen:\n\t gap open penalty (>0): "<<gap_open<<std::endl
       <<"   -e, --gapextend:\n\t gap extend penalty (>0): "<<gap_extend<<std::endl
@@ -121,7 +118,6 @@ int main(int argc, char* argv[])
 		  {"file_out",required_argument, 0, 'o'},
 		  {"chunk_size",required_argument, 0, 'c'},
 		  {"analysis",no_argument, 0, 'a'},
-		  {"match",required_argument, 0, 'M'},
 		  {"mismatch",required_argument, 0, 'i'},
 		  {"gapopen",required_argument, 0, 'g'},
 		  {"gapextend",required_argument, 0, 'e'},
@@ -212,11 +208,6 @@ int main(int argc, char* argv[])
 			  stat_only=true;
 			  break;
 			}
-		  case 'M':
-		    {
-		      match=atof(optarg);
-		      break;
-		    }
 		  case 'i':
 		    {
 		      mismh=atof(optarg);
@@ -387,7 +378,7 @@ int main(int argc, char* argv[])
 			 		hsrch.print_frag(s,std::cout);
 			 	}
 
-				hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
 
 			 	if(verbosity>1){
 			 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -409,7 +400,7 @@ int main(int argc, char* argv[])
 			 		hsrch.print_frag(s,std::cout);
 			 	}
 
-				hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
 
 			 	if(verbosity>1){
 			 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -434,7 +425,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
 
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -456,7 +447,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
 
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -480,7 +471,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
 		 		hsrch.print(s,min_size,std::cout);
@@ -501,7 +492,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(match,mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
 
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
