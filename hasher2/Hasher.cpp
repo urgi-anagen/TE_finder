@@ -16,6 +16,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
       unsigned start=0;
       unsigned end=0;
       unsigned numSeq=0;
+      unsigned score=0;
       int diag=0;
 
       Diag& prev_d=diag_map[0];
@@ -29,6 +30,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 				  if(start!=0) //extending
 					{
 					  end=curr_d.wpos.pos;
+					  score++;
 					}
 				  else //first hit (2 kmers found at correct distance)
 					{
@@ -36,6 +38,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 					  start=prev_d.wpos.pos;
 					  end=curr_d.wpos.pos;
 					  numSeq=prev_d.wpos.numSeq;
+					  score=1;
 					}
 			  	}
 			  else //stop extension if distance between kmer too long
@@ -46,7 +49,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 
 					  RangePair rp(r1,r2);
 					  rp.setId(++count);
-					  rp.setScore(r1.getLength());
+					  rp.setScore(score);
 					  rp.setIdentity(1.00);
 					  rp.setLength(r1.getLength());
 					  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
@@ -61,7 +64,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 
 		  RangePair rp(r1,r2);
 		  rp.setId(++count);
-		  rp.setScore(r1.getLength());
+		  rp.setScore(score);
 		  rp.setIdentity(1.00);
 		  rp.setLength(r1.getLength());
 		  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
@@ -76,6 +79,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
       unsigned start=0;
       unsigned end=0;
       unsigned numSeq=0;
+      unsigned score=0;
       int diag=0;
 
       Diag& prev_d=diag_map_comp[0];
@@ -88,6 +92,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 				  if(start!=0) //extending
 					{
 					  end=curr_d.wpos.pos;
+					  score++;
 					}
 				  else //first hit (2 kmers found at correct distance)
 					{
@@ -95,6 +100,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 					  start=prev_d.wpos.pos;
 					  end=curr_d.wpos.pos;
 					  numSeq=prev_d.wpos.numSeq;
+					  score=1;
 					}
 			  else //stop extension if distance between kmer too long
 				  if(start!=0) // Record hit
@@ -105,7 +111,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 
 					  RangePair rp(r1,r2);
 					  rp.setId(++count);
-					  rp.setScore(r1.getLength());
+					  rp.setScore(score);
 					  rp.setIdentity(1.00);
 					  rp.setLength(r1.getLength());
 
@@ -123,7 +129,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 
 		  RangePair rp(r1,r2);
 		  rp.setId(++count);
-		  rp.setScore(r1.getLength());
+		  rp.setScore(score);
 		  rp.setIdentity(1.00);
 		  rp.setLength(r1.getLength());
 
@@ -216,7 +222,7 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
-void Hasher::fragAlign(double match,double mism, double gopen,
+void Hasher::fragAlign(double mism, double gopen,
 			   double gext, unsigned over, bool join, unsigned verbose)
 {
 
@@ -344,7 +350,7 @@ void Hasher::write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostre
 		  if(i->getRangeQ().getLength()>min_size
 			 && i->getRangeS().getLength()>min_size)
 			{
-			 out<<i->getId()<<qname<<"\t"
+			 out<<qname<<"\t"
 			 <<i->getRangeQ().getStart()<<"\t"<<i->getRangeQ().getEnd()
 			 <<"\t"
 			 <<sname<<"\t"

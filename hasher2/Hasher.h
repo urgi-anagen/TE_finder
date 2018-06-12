@@ -60,7 +60,7 @@ class Hasher : public Duster
 	  };
   void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist, unsigned min_frag_size,
 		  bool repeat, unsigned verbose);
-  void fragAlign(double match,double mism, double gopen,
+  void fragAlign(double mism, double gopen,
 		 double gext, unsigned over, bool join, unsigned verbose);
   void write(const SDGBioSeq& sequence, unsigned min_size=6,std::ostream& out=std::cout);
   void write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out);
