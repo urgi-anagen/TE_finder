@@ -16,7 +16,7 @@ int ext_len=-1;
 unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
-bool repeat=false, stat_only=false;
+bool repeat=false, stat_only=false, join=false;
 
 SDGString outfilename="";
 
@@ -45,8 +45,9 @@ void help(void)
     <<"   -b, --background_kmer_size:\n\t kmer size to compute kmer background probability, default: "
 	<<bkmer_size<<std::endl
       <<"   -o, --file_out:\n\t filename for output,"<<std::endl
-      <<"   -c, --chunk_size:\n\t sequence chunk size in kb,"<<" default: None"<<std::endl
+      <<"   -c, --chunk_size:\n\t sequence chunk size in kb, default: None"<<std::endl
       <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
+      <<"   -j, --join:\n\t join fragments, default: None"<<std::endl
       <<"   -i, --mismatch:\n\t mismatch penalty (>0), default: "
       <<mismh<<std::endl
       <<"   -g, --gapopen:\n\t gap open penalty (>0), default: "
@@ -77,6 +78,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
       <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
       <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
+	  <<"   -j, --join:\n\t join fragments, default: None "<<std::endl
       <<"   -i, --mismatch:\n\t mismatch penalty (>0): "<<mismh<<std::endl
       <<"   -g, --gapopen:\n\t gap open penalty (>0): "<<gap_open<<std::endl
       <<"   -e, --gapextend:\n\t gap extend penalty (>0): "<<gap_extend<<std::endl
@@ -117,6 +119,7 @@ int main(int argc, char* argv[])
 		  {"file_out",required_argument, 0, 'o'},
 		  {"chunk_size",required_argument, 0, 'c'},
 		  {"analysis",no_argument, 0, 'a'},
+		  {"join",required_argument, 0, 'j'},
 		  {"mismatch",required_argument, 0, 'i'},
 		  {"gapopen",required_argument, 0, 'g'},
 		  {"gapextend",required_argument, 0, 'e'},
@@ -128,7 +131,7 @@ int main(int argc, char* argv[])
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:aM:i:g:e:O:E:v:",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:aM:ji:g:e:O:E:v:",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -207,6 +210,11 @@ int main(int argc, char* argv[])
 			  stat_only=true;
 			  break;
 			}
+		  case 'j':
+		    {
+		      join=true;
+		      break;
+		    }
 		  case 'i':
 		    {
 		      mismh=atof(optarg);
@@ -377,7 +385,7 @@ int main(int argc, char* argv[])
 			 		hsrch.print_frag(s,std::cout);
 			 	}
 
-				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
+				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
 
 			 	if(verbosity>1){
 			 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -399,7 +407,7 @@ int main(int argc, char* argv[])
 			 		hsrch.print_frag(s,std::cout);
 			 	}
 
-				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
+				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
 
 			 	if(verbosity>1){
 			 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -424,7 +432,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
 
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -446,7 +454,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
 
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
@@ -470,7 +478,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
 		 		hsrch.print(s,min_size,std::cout);
@@ -491,7 +499,7 @@ int main(int argc, char* argv[])
 		 		hsrch.print_frag(s,std::cout);
 		 	}
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,true,verbosity);
+			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
 
 		 	if(verbosity>1){
 		 		std::cout<<"Aligned fragments:"<<std::endl;
