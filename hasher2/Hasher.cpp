@@ -5,7 +5,7 @@
 void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map,std::vector< Diag >& diag_map_comp,
   		unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size, unsigned verbose)
 {
-  std::vector< std::pair<unsigned,RangePair> > frag;
+  frag.clear();
   unsigned count=0;
   unsigned size=diag_map.size();
   unsigned len=sequence.length();
@@ -44,30 +44,36 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 			  else //stop extension if distance between kmer too long
 				  if(start!=0)
 					{
-					  RangeAlign r1(nbseqQ,diag+start+1,diag+end+kmer_size);
-					  RangeAlign r2(numSeq,start+1,end+kmer_size);
+					  if(end+kmer_size-start-1>=min_frag_size)
+					  {
+						  RangeAlign r1(nbseqQ,diag+start+1,diag+end+kmer_size);
+						  RangeAlign r2(numSeq,start+1,end+kmer_size);
 
-					  RangePair rp(r1,r2);
-					  rp.setId(++count);
-					  rp.setScore(score);
-					  rp.setIdentity(1.00);
-					  rp.setLength(r1.getLength());
-					  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
+						  RangePair rp(r1,r2);
+						  rp.setId(++count);
+						  rp.setScore(score);
+						  rp.setIdentity(double(score)*kmer_size/r1.getLength());
+						  rp.setLength(r1.getLength());
+						  frag.push_back(rp);
+					  }
 					  start=0;
 					}
 		  prev_d=curr_d;
       } //end for
       if(start!=0) // Record hit at the end of the loop
 		{
-		  RangeAlign r1(nbseqQ,diag+start+1,diag+end+kmer_size);
-		  RangeAlign r2(numSeq,start+1,end+kmer_size);
+		  if(end+kmer_size-start-1>=min_frag_size)
+		  {
+			  RangeAlign r1(nbseqQ,diag+start+1,diag+end+kmer_size);
+			  RangeAlign r2(numSeq,start+1,end+kmer_size);
 
-		  RangePair rp(r1,r2);
-		  rp.setId(++count);
-		  rp.setScore(score);
-		  rp.setIdentity(1.00);
-		  rp.setLength(r1.getLength());
-		  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
+			  RangePair rp(r1,r2);
+			  rp.setId(++count);
+			  rp.setScore(score);
+			  rp.setIdentity(double(score)*kmer_size/r1.getLength());
+			  rp.setLength(r1.getLength());
+			  frag.push_back(rp);
+		  }
 		}
     } //end size>2, diag_map loop
 
@@ -105,54 +111,45 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map
 			  else //stop extension if distance between kmer too long
 				  if(start!=0) // Record hit
 					{
-					  RangeAlign r1(nbseqQ,len-(diag+start),
-							len-(diag+end)-kmer_size+1);
-					  RangeAlign r2(numSeq,start+1,end+kmer_size);
+					  if(end+kmer_size-start-1>=min_frag_size)
+					  {
+						  RangeAlign r1(nbseqQ,len-(diag+start),
+								len-(diag+end)-kmer_size+1);
+						  RangeAlign r2(numSeq,start+1,end+kmer_size);
 
-					  RangePair rp(r1,r2);
-					  rp.setId(++count);
-					  rp.setScore(score);
-					  rp.setIdentity(1.00);
-					  rp.setLength(r1.getLength());
+						  RangePair rp(r1,r2);
+						  rp.setId(++count);
+						  rp.setScore(score);
+						  rp.setIdentity(double(score)*kmer_size/r1.getLength());
+						  rp.setLength(r1.getLength());
 
-					  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
+						  frag.push_back(rp);
+					  }
 					  start=0;
 					}
 		  prev_d=curr_d;
 		} //end for
       if(start!=0) // Record hit at the end of the loop
 		{
-		  RangeAlign r1(nbseqQ,len-(diag+start),
-					len-(diag+end)-kmer_size+1);
-		  RangeAlign r2(numSeq,start+1,end+kmer_size);
+		  if(end+kmer_size-start-1>=min_frag_size)
+		  {
+			  RangeAlign r1(nbseqQ,len-(diag+start),
+						len-(diag+end)-kmer_size+1);
+			  RangeAlign r2(numSeq,start+1,end+kmer_size);
 
 
-		  RangePair rp(r1,r2);
-		  rp.setId(++count);
-		  rp.setScore(score);
-		  rp.setIdentity(1.00);
-		  rp.setLength(r1.getLength());
+			  RangePair rp(r1,r2);
+			  rp.setId(++count);
+			  rp.setScore(score);
+			  rp.setIdentity(double(score)*kmer_size/r1.getLength());
+			  rp.setLength(r1.getLength());
 
-		  frag.push_back(std::pair<unsigned,RangePair>(rp.getScore(),rp));
+			  frag.push_back(rp);
+		  }
 		}
     } //end size>2, diag_map_comp loop
 
-  unsigned count2=0;
-  map_align.clear();
 
-  sort(frag.begin(),frag.end(),comp());
-
-  for(std::vector< std::pair<unsigned,RangePair> >::reverse_iterator i=frag.rbegin();
-      i!=frag.rend() && count2<nfrag;i++)
-    {
-      count2++;
-      RangePair rangePair(i->second);
-      std::list<RangePair>& al_list
-	=map_align[Key(rangePair.getRangeQ().getNumChr(),
-		       rangePair.getRangeS().getNumChr())];
-
-      al_list.insert(al_list.begin(),rangePair);
-    }
   if(verbose>0)
   {
 	  std::cout<<"Fragments number founds:"<<count<<std::endl;
@@ -214,269 +211,32 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
-	diagSearch(sequence, diag_map, diag_map_comp,connect_dist,kmer_size,min_frag_size, verbose);
+	diagSearch(sequence, diag_map, diag_map_comp, connect_dist, kmer_size, min_frag_size, verbose);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
-	std::cout<<map_align.size()<<" fragments found";
+	std::cout<<frag.size()<<" fragments found";
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
-void Hasher::fragAlign(double mism, double gopen,
-			   double gext, unsigned over, bool join, unsigned verbose)
-{
-
-  map_path.clear();
-
-  if(join)
-    {
-	  unsigned count=0;
-	  std::cout<<"fragment connexion ..."<<std::flush;
-      for(MapAlign::iterator m=map_align.begin(); m!=map_align.end();m++)
-		{
-    	  if(verbose>0){ std::cout<<count++<<" "<<std::flush;}
-		  FragAlign fragAlign(mism,gopen,gext,over);
-		  map_path[m->first]=fragAlign.join(m->second);
-		  m->second.clear();
-		}
-      std::cout<<std::endl;
-    }
-  else
-    {
-      for(MapAlign::iterator m=map_align.begin(); m!=map_align.end();m++)
-		{
-		  std::list<RangePairSet> path;
-		  for(std::list<RangePair>::iterator i=m->second.begin();
-			  i!=m->second.end();i++)
-			{
-			  path.push_back(RangePairSet(*i));
-			}
-		  map_path[m->first]=path;
-		  m->second.clear();
-		}
-    }
-  map_align.clear();
-  std::cout<<"ok"<<std::endl;
-}
-//-------------------------------------------------------------------------
-// Print fragments found before fragment alignments
-void Hasher::print_frag(const SDGBioSeq& sequence, std::ostream& out)
-{
-  SDGString qname=sequence.getDE();
-  for(MapAlign::iterator iter_hash=map_align.begin();iter_hash!=map_align.end();
-      iter_hash++)
-    {
-      SDGString sname=subject_db[iter_hash->first.second-1].getDE();
-      for(std::list<RangePair>::iterator i=iter_hash->second.begin();
-	  i!=iter_hash->second.end();i++)
-		{
-		  out<<qname<<"\t"
-			 <<i->getRangeQ().getStart()<<".."<<i->getRangeQ().getEnd()
-			 <<"\t"
-			 <<sname<<"\t"
-			 <<i->getRangeS().getStart()<<".."<<i->getRangeS().getEnd()
-			 <<"\t"
-			 <<i->getScore()<<std::endl;
-		}
-    }
-}
-//-------------------------------------------------------------------------
-// Print aligned fragments
-void Hasher::print(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out)
-{
-  SDGString qname=sequence.getDE();
-
-  for(MapPath::iterator iter_hash=map_path.begin();iter_hash!=map_path.end();
-      iter_hash++)
-    {
-
-      SDGString sname=subject_db[iter_hash->first.second-1].getDE();
-      for(std::list<RangePairSet>::iterator i=iter_hash->second.begin();
-	  i!=iter_hash->second.end();i++)
-		{
-		  if(i->getRangeQ().getLength()>min_size
-			 && i->getRangeS().getLength()>min_size)
-			{
-			  out<<qname<<"\t"
-			 <<i->getRangeQ().getStart()<<".."<<i->getRangeQ().getEnd()
-			 <<"\t"
-			 <<sname
-			 <<"\t"
-			 <<i->getRangeS().getStart()<<".."<<i->getRangeS().getEnd()
-			 <<"\t"
-			 <<i->getScore()<<std::endl;
-			}
-		}
-    }
-}
-//-------------------------------------------------------------------------
-// Write aligned fragments
-void Hasher::write(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out)
-{
-  SDGString qname=sequence.getDE();
-  for(MapPath::iterator iter_hash=map_path.begin();iter_hash!=map_path.end();
-      iter_hash++)
-    {
-      SDGString sname=subject_db[iter_hash->first.second-1].getDE();
-      for(std::list<RangePairSet>::iterator i=iter_hash->second.begin();
-	  i!=iter_hash->second.end();i++)
-		{
-		  if(i->getRangeQ().getLength()>min_size
-			 && i->getRangeS().getLength()>min_size)
-			{
-			  out<<qname<<"\t"
-			 <<i->getRangeQ().getStart()<<"\t"<<i->getRangeQ().getEnd()
-			 <<"\t"
-			 <<sname<<"\t"
-			 <<i->getRangeS().getStart()<<"\t"<<i->getRangeS().getEnd()
-			 <<"\t"
-			 <<i->getScore()<<std::endl;
-			}
-		}
-    }
-}
-//-------------------------------------------------------------------------
 // Write aligned fragments in .align format
-void Hasher::write_align(const SDGBioSeq& sequence, unsigned min_size,std::ostream& out)
+void Hasher::write_align(const SDGBioSeq& sequence, std::ostream& out)
 {
   SDGString qname=sequence.getDE();
-  for(MapPath::iterator iter_hash=map_path.begin();iter_hash!=map_path.end();
-      iter_hash++)
+  for(std::list< RangePair >::iterator i=frag.begin();i!=frag.end();
+      i++)
     {
-      SDGString sname=subject_db[iter_hash->first.second-1].getDE();
-      for(std::list<RangePairSet>::iterator i=iter_hash->second.begin();
-	  i!=iter_hash->second.end();i++)
-		{
-		  if(i->getRangeQ().getLength()>min_size
-			 && i->getRangeS().getLength()>min_size)
-			{
-			 out<<qname<<"\t"
-			 <<i->getRangeQ().getStart()<<"\t"<<i->getRangeQ().getEnd()
-			 <<"\t"
-			 <<sname<<"\t"
-			 <<i->getRangeS().getStart()<<"\t"<<i->getRangeS().getEnd()
-			 <<"\t"<<i->getE_value()
-			 <<"\t"<<i->getScore()
-			 <<"\t"<<i->getIdentity()
-			 <<std::endl;
-			}
-		}
+		  SDGString sname=subject_db[i->getRangeS().getNumChr()-1].getDE();
+		 out<<qname<<"\t"
+		 <<i->getRangeQ().getStart()<<"\t"<<i->getRangeQ().getEnd()
+		 <<"\t"
+		 <<sname<<"\t"
+		 <<i->getRangeS().getStart()<<"\t"<<i->getRangeS().getEnd()
+		 <<"\t"<<i->getE_value()
+		 <<"\t"<<i->getScore()
+		 <<"\t"<<i->getIdentity()
+		 <<std::endl;
     }
-}
-//-------------------------------------------------------------------------
-void Hasher::extend(const SDGBioSeq& sequence, const SDGBioSeq& comp_sequence, unsigned min_size, unsigned verbose)
-{
-  FastExtAlign fastExtAlign;
-  FastExtAlign rfastExtAlign;
-  unsigned seqlen=sequence.length();
-  unsigned id=0;
-
-  fastExtAlign.setSeq1(sequence);
-  rfastExtAlign.setSeq1(comp_sequence);
-  std::cout<<"start extensions "<<std::flush;
-  for(MapPath::iterator iter_hash=map_path.begin();iter_hash!=map_path.end();
-      iter_hash++)
-    {
-	  if(verbose>0)
-	    {
-		  std::cout<<"\nsubject number:"<<iter_hash->first.second
-		  <<"\tquery number:"<<iter_hash->first.first<<std::flush;
-	    }
-      SDGBioSeq sseq=subject_db[iter_hash->first.second-1];
-      std::cout<<"\tsubject:"<<sseq.getDE()<<std::endl;
-      fastExtAlign.setSeq2(sseq);
-      rfastExtAlign.setSeq2(sseq);
-      for(std::list<RangePairSet>::iterator i=iter_hash->second.begin();
-	  i!=iter_hash->second.end();i++)
-		{
-    	  if(verbose>0)
-    	  	{
-    		  std::cout<<"Range pair to extend:"<<std::endl;
-    		  i->write(std::cout,++id,sequence.getDE(), sseq.getDE());
-    	  	}
-		  if(i->getRangeQ().getLength()>min_size
-			 && i->getRangeS().getLength()>min_size)
-			{
-				 std::cout<<"."<<std::flush;
-				 if(verbose>0)
-				 {
-					 std::cout<<"Query length:"<<sequence.length()
-					 <<"Subject length:"<<sseq.length()<<std::endl;
-				 }
-
-				 //Match on direct strand
-				if(i->getRangeQ().isPlusStrand() && i->getRangeS().isPlusStrand())
-				{
-				  fastExtAlign.setStart(i->getRangeQ().getEnd(),
-							i->getRangeS().getEnd(),extend_len);
-				  int score=fastExtAlign.extend_dir(i->getScore());
-				  if(verbose>0)
-				  {
-					  std::cout<<"extended end by "<<fastExtAlign.getEndSeq1()-i->getRangeQ().getEnd()
-					  <<" - score:"<<score
-					  <<"="<<fastExtAlign.getExtLenSeq1()
-					  <<"/"<<fastExtAlign.getExtLenSeq2()<<std::endl;
-				  }
-				  i->getRangeQ().setEnd(fastExtAlign.getEndSeq1());
-				  i->getRangeS().setEnd(fastExtAlign.getEndSeq2());
-
-				  fastExtAlign.setStart(i->getRangeQ().getStart(),
-							i->getRangeS().getStart(),extend_len);
-				  score=fastExtAlign.extend_rev(i->getScore());
-				  if(verbose>0)
-				  {
-					  std::cout<<"extended start by "<<i->getRangeQ().getStart()-fastExtAlign.getEndSeq1()
-						<<" - score:"<<score
-						<<"="<<fastExtAlign.getExtLenSeq1()
-						<<"/"<<fastExtAlign.getExtLenSeq2()<<std::endl;
-				  }
-				  i->getRangeQ().setStart(fastExtAlign.getEndSeq1());
-				  i->getRangeS().setStart(fastExtAlign.getEndSeq2());
-				}
-
-				//Match on reverse strand
-				if( !i->getRangeQ().isPlusStrand() && i->getRangeS().isPlusStrand())
-				{
-				  unsigned qs=seqlen-i->getRangeQ().getStart()+1;
-				  unsigned qe=seqlen-i->getRangeQ().getEnd()+1;
-				  rfastExtAlign.setStart(qe,i->getRangeS().getEnd(),
-							extend_len);
-				  int score=rfastExtAlign.extend_dir(i->getScore());
-				  if(verbose>0)
-				  {
-					  std::cout<<"extended end by "<<rfastExtAlign.getExtLenSeq1()
-						<<" - score:"<<score
-					  	<<"="<<rfastExtAlign.getExtLenSeq1()
-					  	<<"/"<<rfastExtAlign.getExtLenSeq2()<<std::endl;
-				  }
-				  i->getRangeQ().setEnd(seqlen
-							-rfastExtAlign.getEndSeq1()+1);
-				  i->getRangeS().setEnd(rfastExtAlign.getEndSeq2());
-
-				  rfastExtAlign.setStart(qs,i->getRangeS().getStart(),
-							extend_len);
-				  score=rfastExtAlign.extend_rev(i->getScore());
-				  if(verbose>0)
-				  {
-					  std::cout<<"extended start by "<<rfastExtAlign.getExtLenSeq1()
-						<<" - score:"<<score
-						<<"="<<rfastExtAlign.getExtLenSeq1()
-						<<"/"<<rfastExtAlign.getExtLenSeq2()<<std::endl;
-				  }
-				  i->getRangeQ().setStart(seqlen
-							  -rfastExtAlign.getEndSeq1()+1);
-				  i->getRangeS().setStart(rfastExtAlign.getEndSeq2());
-
-				}
-				if(verbose>0)
-				 {
-					std::cout<<"new coordinates:"<<std::endl;
-					i->write(std::cout,id,sequence.getDE(), sseq.getDE());
-				 }
-			}
-		}
-    }
-  std::cout<<"ok"<<std::endl;
 }
 
 
