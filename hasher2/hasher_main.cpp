@@ -11,12 +11,11 @@
 #include "Hasher.h"
 
 
-double mismh=4,gap_extend=0,gap_open=1,filter_cutoff=0.0;
-int ext_len=-1;
+double filter_cutoff=0.0;
 unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
-bool repeat=false, stat_only=false, join=false;
+bool repeat=false, stat_only=false;
 
 SDGString outfilename="";
 
@@ -47,17 +46,6 @@ void help(void)
       <<"   -o, --file_out:\n\t filename for output,"<<std::endl
       <<"   -c, --chunk_size:\n\t sequence chunk size in kb, default: None"<<std::endl
       <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
-      <<"   -j, --join:\n\t join fragments, default: None"<<std::endl
-      <<"   -i, --mismatch:\n\t mismatch penalty (>0), default: "
-      <<mismh<<std::endl
-      <<"   -g, --gapopen:\n\t gap open penalty (>0), default: "
-      <<gap_open<<std::endl
-      <<"   -e, --gapextend:\n\t gap extend penalty (>0), default: "
-      <<gap_extend<<std::endl
-      <<"   -O, --overlap:\n\t authorized overlap percentage (<1.0), default: "
-      <<overlap<<std::endl
-      <<"   -E, --extension:\n\t boundaries alignment extension (>0), default: "
-	  <<ext_len<<std::endl
   	  <<"   -v, --verbosity:\n\t verbosity level, default:"<<verbosity<<std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
@@ -78,12 +66,6 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
       <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
       <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
-	  <<"   -j, --join:\n\t join fragments, default: None "<<std::endl
-      <<"   -i, --mismatch:\n\t mismatch penalty (>0): "<<mismh<<std::endl
-      <<"   -g, --gapopen:\n\t gap open penalty (>0): "<<gap_open<<std::endl
-      <<"   -e, --gapextend:\n\t gap extend penalty (>0): "<<gap_extend<<std::endl
-      <<"   -O, --overlap:\n\t authorized overlap percentage (<1.0): "<<overlap<<std::endl
-      <<"   -E, --extension:\n\t boundaries alignment extension (>0): "<<ext_len<<std::endl
   	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
 };
 
@@ -119,19 +101,13 @@ int main(int argc, char* argv[])
 		  {"file_out",required_argument, 0, 'o'},
 		  {"chunk_size",required_argument, 0, 'c'},
 		  {"analysis",no_argument, 0, 'a'},
-		  {"join",required_argument, 0, 'j'},
-		  {"mismatch",required_argument, 0, 'i'},
-		  {"gapopen",required_argument, 0, 'g'},
-		  {"gapextend",required_argument, 0, 'e'},
-		  {"overlap",required_argument, 0, 'O'},
-		  {"extension",required_argument, 0, 'E'},
 		  {"verbosity",no_argument, 0, 'v'},
 		  {0, 0, 0, 0}
 		};
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:aM:ji:g:e:O:E:v:",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:av:",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -210,36 +186,7 @@ int main(int argc, char* argv[])
 			  stat_only=true;
 			  break;
 			}
-		  case 'j':
-		    {
-		      join=true;
-		      break;
-		    }
-		  case 'i':
-		    {
-		      mismh=atof(optarg);
-		      break;
-		    }
-		  case 'g':
-		    {
-		      gap_open=atof(optarg);
-		      break;
-		    }
-		  case 'e':
-		    {
-		      gap_extend=atof(optarg);
-		      break;
-		    }
-		  case 'O':
-		    {
-		      overlap=atoi(optarg);
-		      break;
-		    }
-		  case 'E':
-		    {
-		      ext_len=atoi(optarg);
-		      break;
-		    }
+
 		  case 'v':
 			{
 			  verbosity=atoi(optarg);
@@ -318,7 +265,7 @@ int main(int argc, char* argv[])
     	exit( EXIT_SUCCESS );
     }
 
-    Hasher hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q,ext_len);
+    Hasher hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
     bool valid_idx_file=true;
 
 	hsrch.load(filename2,kmer_size, kmask, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file);
@@ -326,30 +273,18 @@ int main(int argc, char* argv[])
 	std::ofstream out;
 	std::stringstream out_name;
 	if(outfilename!="")
-		out_name<<outfilename<<".bed";
+		out_name<<outfilename<<".align";
 	else
-		out_name<<filename1<<".hasher.bed";
+		out_name<<filename1<<".hasher.align";
 
 	out.open(out_name.str());
-
-	std::ofstream fragout;
-	if(verbosity>1)
-	{
-		std::stringstream fragout_name;
-		if(outfilename!="")
-			fragout_name<<outfilename<<".frag.bed";
-		else
-			fragout_name<<filename1<<".hasher.frag.bed";
-
-		fragout.open(fragout_name.str());
-	}
 
 //	SDGFastaOstream seqout;
 //	std::stringstream seqout_name;
 //	if(outfilename!="")
 //		seqout_name<<outfilename<<".fa";
 //	else
-//		seqout_name<<filename1<<".hasher.bed.fa";
+//		seqout_name<<filename1<<".hasher.align.fa";
 //
 //	seqout.open(seqout_name.str());
 
@@ -379,140 +314,36 @@ int main(int argc, char* argv[])
 			{
 				std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
-			 	if(verbosity>1){
-			 		std::cout<<"Found fragments:"<<std::endl;
-			 		hsrch.print_frag(s,std::cout);
-			 	}
-
-				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
-
-			 	if(verbosity>1){
-			 		std::cout<<"Aligned fragments:"<<std::endl;
-			 		hsrch.print(s,min_size,std::cout);
-			 	}
-
-				if(ext_len>0)
-				{
-					hsrch.extend(s,comp_s, min_size, verbosity);
-					std::cout<<"Extended fragments:"<<std::endl;
-				}
-				hsrch.print(s,min_size,std::cout);
-				hsrch.write_align(s,min_size,out);
+				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
+			 	hsrch.write_align(s,out);
 
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
-			 	if(verbosity>1){
-			 		std::cout<<"Found fragments:"<<std::endl;
-			 		hsrch.print_frag(s,std::cout);
-			 	}
-
-				hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
-
-			 	if(verbosity>1){
-			 		std::cout<<"Aligned fragments:"<<std::endl;
-			 		hsrch.print(s,min_size,std::cout);
-			 	}
-
-				if(ext_len>0)
-				{
-					hsrch.extend(s,comp_s, min_size, verbosity);
-					std::cout<<"Extended fragments:"<<std::endl;
-				}
-				hsrch.print(s,min_size,std::cout);
-				hsrch.write_align(s,min_size,out);
+				hsrch.search(comp_s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
+			 	hsrch.write_align(s,out);
 
 				start=start+chunk_size;
 			}
 			std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 			std::cout<<"---direct strand---"<<std::endl;
-			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
-		 	if(verbosity>1){
-		 		std::cout<<"Found fragments:"<<std::endl;
-		 		hsrch.print_frag(s,std::cout);
-		 	}
-
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
-
-		 	if(verbosity>1){
-		 		std::cout<<"Aligned fragments:"<<std::endl;
-		 		hsrch.print(s,min_size,std::cout);
-		 	}
-
-			if(ext_len>0)
-			{
-				hsrch.extend(s,comp_s, min_size, verbosity);
-				std::cout<<"Extended fragments:"<<std::endl;
-			}
-			hsrch.print(s,min_size,std::cout);
-			hsrch.write_align(s,min_size,out);
+			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
+		 	hsrch.write_align(s,out);
 
 			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
-			if(verbosity>1){
-		 		std::cout<<"Found fragments:"<<std::endl;
-		 		hsrch.print_frag(s,std::cout);
-		 	}
+			hsrch.search(comp_s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
+		 	hsrch.write_align(s,out);
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
-
-		 	if(verbosity>1){
-		 		std::cout<<"Aligned fragments:"<<std::endl;
-		 		hsrch.print(s,min_size,std::cout);
-		 	}
-
-			if(ext_len>0)
-			{
-				hsrch.extend(s,comp_s, min_size, verbosity);
-				std::cout<<"Extended fragments:"<<std::endl;
-			}
-			hsrch.print(s,min_size,std::cout);
-			hsrch.write_align(s,min_size,out);
 
 		}else
 		{
 			std::cout<<"---direct strand---"<<std::endl;
-			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
-		 	if(verbosity>1){
-		 		std::cout<<"Found fragments:"<<std::endl;
-		 		hsrch.print_frag(s,std::cout);
-		 	}
+			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
+		 	hsrch.write_align(s,out);
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
-		 	if(verbosity>1){
-		 		std::cout<<"Aligned fragments:"<<std::endl;
-		 		hsrch.print(s,min_size,std::cout);
-		 	}
-
-			if(ext_len>0)
-			{
-				hsrch.extend(s,comp_s, min_size, verbosity);
-				std::cout<<"Extended fragments:"<<std::endl;
-			}
-			hsrch.print(s,min_size,std::cout);
-			hsrch.write_align(s,min_size,out);
 
 			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat,verbosity);
-		 	if(verbosity>1){
-		 		std::cout<<"Found fragments:"<<std::endl;
-		 		hsrch.print_frag(s,std::cout);
-		 	}
+			hsrch.search(comp_s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
+		 	hsrch.write_align(s,out);
 
-			hsrch.fragAlign(mismh,gap_open,gap_extend,overlap,join,verbosity);
-
-		 	if(verbosity>1){
-		 		std::cout<<"Aligned fragments:"<<std::endl;
-		 		hsrch.print(s,min_size,std::cout);
-		 	}
-
-			if(ext_len>0)
-			{
-				hsrch.extend(s,comp_s, min_size, verbosity);
-				std::cout<<"Extended fragments:"<<std::endl;
-			}
-			hsrch.print(s,min_size,std::cout);
-			hsrch.write_align(s,min_size,out);
 		}
 
 
@@ -521,7 +352,6 @@ int main(int argc, char* argv[])
 		std::cout<<"ok!\n"<<std::endl;
 	  }
 	out.close();
-	if(verbosity>1) fragout.close();
 //	seqout.close();
 
 
