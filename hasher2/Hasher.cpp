@@ -18,7 +18,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 		  SDGString sname=subject_db[iter_seq->front().wpos.numSeq-1].getDE();
 		  unsigned start=0;
 		  unsigned end=0;
-		  unsigned numSeq=0;
 		  unsigned score=0;
 		  int diag=0;
 
@@ -42,7 +41,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 						  diag=prev_d.diag;
 						  start=prev_d.wpos.pos;
 						  end=curr_d.wpos.pos;
-						  numSeq=prev_d.wpos.numSeq;
 						  score=1;
 						}
 					}
@@ -93,7 +91,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 
 		  unsigned start=0;
 		  unsigned end=0;
-		  unsigned numSeq=0;
 		  unsigned score=0;
 		  int diag=0;
 
@@ -116,7 +113,6 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 						  diag=prev_d.diag;
 						  start=prev_d.wpos.pos;
 						  end=curr_d.wpos.pos;
-						  numSeq=prev_d.wpos.numSeq;
 						  score=1;
 						}
 				  else //stop extension if distance between kmer too long

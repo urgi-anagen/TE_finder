@@ -279,14 +279,6 @@ int main(int argc, char* argv[])
 
 	out.open(out_name.str());
 
-//	SDGFastaOstream seqout;
-//	std::stringstream seqout_name;
-//	if(outfilename!="")
-//		seqout_name<<outfilename<<".fa";
-//	else
-//		seqout_name<<filename1<<".hasher.align.fa";
-//
-//	seqout.open(seqout_name.str());
 
 	SDGFastaIstream in(filename1);
 	if(!in)
@@ -304,7 +296,6 @@ int main(int argc, char* argv[])
 		  in>>s;
 		numseq++;
 		std::cout<<s.getDE()<<" len:"<<s.length()<<" read!"<<std::endl;
-		SDGBioSeq comp_s=s.complement();
 		if(chunk_size_kb!=0)
 		{
 			unsigned start=1;
@@ -313,36 +304,19 @@ int main(int argc, char* argv[])
 			for(unsigned i=1;i<nb_chunk;i++)
 			{
 				std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
-				std::cout<<"---direct strand---"<<std::endl;
 				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
-				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 
 				start=start+chunk_size;
 			}
 			std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
-			std::cout<<"---direct strand---"<<std::endl;
 			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
-			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
-
-
 		}else
 		{
-			std::cout<<"---direct strand---"<<std::endl;
 			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
-			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
-
 		}
-
-
-
-
 		std::cout<<"ok!\n"<<std::endl;
 	  }
 	out.close();
-//	seqout.close();
 
 
 
