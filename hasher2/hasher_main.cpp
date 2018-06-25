@@ -314,35 +314,25 @@ int main(int argc, char* argv[])
 			{
 				std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
-			 	hsrch.write_align(s,out);
-
+				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
-			 	hsrch.write_align(s,out);
+				hsrch.search(comp_s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 
 				start=start+chunk_size;
 			}
 			std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 			std::cout<<"---direct strand---"<<std::endl;
-			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
-		 	hsrch.write_align(s,out);
-
+			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
-		 	hsrch.write_align(s,out);
+			hsrch.search(comp_s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 
 
 		}else
 		{
 			std::cout<<"---direct strand---"<<std::endl;
-			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
-		 	hsrch.write_align(s,out);
-
-
+			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 			std::cout<<"---reverse strand---"<<std::endl;
-			hsrch.search(comp_s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, verbosity);
-		 	hsrch.write_align(s,out);
+			hsrch.search(comp_s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
 
 		}
 
