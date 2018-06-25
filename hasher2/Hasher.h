@@ -27,13 +27,12 @@ class Hasher : public Duster
 	friend class Test_Hasher;
 	void matchKmers(const SDGBioSeq& sequence,
 			    unsigned start, unsigned end, unsigned numseq, bool repeat,
-				std::vector< Diag >& diag_map, std::vector< Diag >& diag_map_comp);
-	void diagSearch(const SDGBioSeq& sequence, std::vector< Diag >& diag_map, std::vector< Diag >& diag_map_comp,
-	  		unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,  unsigned verbose);
+				std::vector< std::list<Diag> >& diag_map, std::vector< std::list<Diag> >& diag_map_comp);
+	void diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> >& diag_map, std::vector< std::list<Diag> >& diag_map_comp,
+	  		unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size, std::ostream& out, unsigned verbose);
 
 
 	SDGBioSeqDB subject_db;
-	std::list< RangePair > frag;
 
 
 
@@ -49,8 +48,7 @@ class Hasher : public Duster
 		  subject_db.load(filenameS);
 	  };
   void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist, unsigned min_frag_size,
-		  bool repeat, unsigned verbose);
-  void write_align(const SDGBioSeq& sequence, std::ostream& out);
+		  bool repeat, std::ostream& out, unsigned verbose);
 
 };
 
