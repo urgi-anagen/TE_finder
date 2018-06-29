@@ -56,7 +56,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 							 <<start+1<<"\t"<<end+kmer_size
 							 <<"\t0.0"
 							 <<"\t"<<score
-							 <<"\t"<<(double(score)*kmer_size/(end+kmer_size-start+1))*100
+							 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
 							 <<std::endl;
 						  }
 						  start=0;
@@ -74,7 +74,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 					 <<start+1<<"\t"<<end+kmer_size
 					 <<"\t0.0"
 					 <<"\t"<<score
-					 <<"\t"<<(double(score)*kmer_size/(end+kmer_size-start+1))*100
+					 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
 					 <<std::endl;
 			  }
 			}
@@ -127,7 +127,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 							 <<start+1<<"\t"<<end+kmer_size
 							 <<"\t0.0"
 							 <<"\t"<<score
-							 <<"\t"<<(double(score)*kmer_size/(end+kmer_size-start+1))*100
+							 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
 							 <<std::endl;
 						  }
 						  start=0;
@@ -145,7 +145,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 					 <<start+1<<"\t"<<end+kmer_size
 					 <<"\t0.0"
 					 <<"\t"<<score
-					 <<"\t"<<(double(score)*kmer_size/(end+kmer_size-start+1))*100
+					 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
 					 <<std::endl;
 			  }
 			}
