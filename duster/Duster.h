@@ -57,9 +57,9 @@ protected:
   struct KmerSpos //Store a kmer position in a sequence
     {
       unsigned pos;
-      unsigned short numSeq;
+      unsigned numSeq;
 
-      KmerSpos(unsigned p=0, unsigned short n=0): pos(p), numSeq(n) {};
+      KmerSpos(unsigned p=0, unsigned n=0): pos(p), numSeq(n) {};
 
       friend int operator< (const KmerSpos& w1, const KmerSpos& w2)
       {

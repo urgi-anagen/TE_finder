@@ -495,17 +495,17 @@ void Duster::kmer_filter(const std::list< Info_kmer >& list_infokmer, const Info
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->count>kmer_threshold.count)
+    	if(i->count>=kmer_threshold.count)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->entropy>kmer_threshold.entropy)
+    	if(i->entropy>=kmer_threshold.entropy)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->diversity<kmer_threshold.diversity)
+    	if(i->diversity<=kmer_threshold.diversity)
     	{
     		wcount[k]=0;
     		nb_removed++;
@@ -535,9 +535,9 @@ bool Duster::read_idx(const SDGString& filename, double count_cutoff , double di
   if(val!=min_count) return false;
   double fval;
   in>>fval;
-  if(val!=count_cutoff) return false;
+  if(fval!=count_cutoff) return false;
   in>>fval;
-  if(val!=diversity_cutoff) return false;
+  if(fval!=diversity_cutoff) return false;
 
   std::cout<<"Read existing idx file:"<<filename+".kidx"<<std::endl;
   in>>val;
@@ -736,6 +736,7 @@ void Duster::matchKmers(const SDGBioSeq& sequence,
       std::vector<KmerSpos>::iterator end_d=hash2wpos[key_d+1];
       for(std::vector<KmerSpos>::iterator j=begin_d;j!=end_d;j++)
       {
+    	  // Attention cas j->numSeq==0 à traiter (no kmer hit!)
     	  if(!(repeat && numseq==j->numSeq && i==j->pos))
     			  diag_map.push_back(Diag(i-j->pos,j->pos,j->numSeq));
       }
