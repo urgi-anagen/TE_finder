@@ -4,7 +4,6 @@
 #include <SDGMemBioSeq.h>
 #include <SDGSubBioSeq.h>
 #include <SDGFastaIstream.h>
-#include <SDGBioSeqDB.h>
 #include <fstream>
 #include <string>
 #include <cmath>
@@ -32,7 +31,7 @@ class Hasher : public Duster
 	  		unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size, std::ostream& out, unsigned verbose);
 
 
-	SDGBioSeqDB subject_db;
+	std::vector<std::string> subject_names;
 
 
 
@@ -45,7 +44,19 @@ class Hasher : public Duster
 		  unsigned min_count, bool & valid_idx_file)
 	  {
 		  Duster::load(filenameS,kmer_size, kmask, bkmer_size,mkmer_size , count_cutoff, diversity_cutoff, min_count,valid_idx_file, true);
-		  subject_db.load(filenameS);
+		  std::string line;
+		   std::ifstream myfile (filenameS);
+		   if (myfile.is_open())
+		    {
+		      while ( getline (myfile,line) )
+		      {
+		    	  if(line[0]=='>')
+					{
+					  subject_names.push_back(line.substr(1));
+					}
+		      }
+		      myfile.close();
+		    }
 	  };
   void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist, unsigned min_frag_size,
 		  bool repeat, std::ostream& out, unsigned verbose);
