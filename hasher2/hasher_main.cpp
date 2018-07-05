@@ -12,7 +12,7 @@
 
 
 double filter_cutoff=0.0;
-unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
+unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
@@ -26,13 +26,11 @@ void help(void)
       <<" [<options>] <fasta query sequence> [<fasta sequence model>]. Note: without sequence model, duster will perform its own repeat search."<<std::endl
       <<" options:"<<std::endl
       <<"   -h, --help:\n\t this help"<<std::endl
-      <<"   -w, --kmer:\n\t kmer length (<16), default: "<<kmer_size<<std::endl
+      <<"   -w, --kmer:\n\t kmer length, default: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
       <<"   -k, --kmask:\n\t period of k-mer mask, default: "<<kmask<<std::endl
       <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
 	<<kmer_dist<<std::endl
-    <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
-	<<frag_connect_dist<<std::endl
     <<"   -s, --min_size:\n\t min size range to report, default: "
 	<<min_size<<std::endl
     <<"   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
@@ -53,12 +51,10 @@ void show_parameter(SDGString filename1,SDGString filename2)
   std::cout<<"\nRun with parameters:\n"
 	  <<"Query sequences: "<<filename1<<std::endl
 	  <<"Model sequences: "<<filename2<<std::endl
-      <<"   -w, --kmer:\t kmer length (<16): "<<kmer_size<<std::endl
+      <<"   -w, --kmer:\t kmer length: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\t step on query sequence: "<<step_q<<std::endl
       <<"   -k, --kmask:\t length of k-mer mask: "<<kmask<<std::endl
       <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: "<<kmer_dist<<std::endl
-      <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect: "
-   	<<frag_connect_dist<<std::endl
       <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
       <<"   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
       <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability: "<<diversity_cutoff<<std::endl
@@ -92,7 +88,6 @@ int main(int argc, char* argv[])
 		  {"step_q",required_argument, 0, 'S'},
 		  {"kmask",required_argument, 0, 'k'},
 		  {"kmer_dist",required_argument, 0, 'd'},
-		  {"frag_connect_dist",required_argument, 0, 'f'},
 		  {"min_size",required_argument, 0, 's'},
 		  {"filter_cutoff",required_argument, 0, 'C'},
 		  {"min_count",required_argument, 0, 'm'},
@@ -107,7 +102,7 @@ int main(int argc, char* argv[])
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:av:",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:d:s:C:D:m:b:o:c:av:",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -139,11 +134,6 @@ int main(int argc, char* argv[])
 		  case 'd':
 			{
 				kmer_dist=atoi(optarg);
-			  break;
-			}
-		  case 'f':
-			{
-				frag_connect_dist=atoi(optarg);
 			  break;
 			}
 		  case 's':
@@ -251,7 +241,7 @@ int main(int argc, char* argv[])
     	std::cout<<"\nCompute kmer stat only!"<<std::endl;
     	for(unsigned bw=1; bw<=bkmer_size; bw++)
     	{
-    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,frag_connect_dist, min_size, step_q );
+    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,0, min_size, step_q );
         	std::vector<unsigned> kmer_count((unsigned)pow(4,hsrch.getEffectiveKmerSize()),0);
         	std::list< Info_kmer > list_infokmer;
         	Info_kmer kmer_threshold;
@@ -265,7 +255,7 @@ int main(int argc, char* argv[])
     	exit( EXIT_SUCCESS );
     }
 
-    Hasher hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
+    Hasher hsrch(kmer_size, kmask, bkmer_size,kmer_dist,0, min_size,step_q);
     bool valid_idx_file=true;
 
 	hsrch.load(filename2,kmer_size, kmask, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file);
@@ -304,15 +294,15 @@ int main(int argc, char* argv[])
 			for(unsigned i=1;i<nb_chunk;i++)
 			{
 				std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
-				hsrch.search(s,start,start+chunk_size-1,numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
+				hsrch.search(s,start,start+chunk_size-1,numseq,(kmer_dist+1)*kmer_size, min_frag_size, repeat, out, verbosity);
 
 				start=start+chunk_size;
 			}
 			std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
-			hsrch.search(s,start,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
+			hsrch.search(s,start,s.length(),numseq,(kmer_dist+1)*kmer_size, min_frag_size, repeat, out, verbosity);
 		}else
 		{
-			hsrch.search(s,1,s.length(),numseq,frag_connect_dist, min_frag_size, repeat, out, verbosity);
+			hsrch.search(s,1,s.length(),numseq,(kmer_dist+1)*kmer_size, min_frag_size, repeat, out, verbosity);
 		}
 		std::cout<<"ok!\n"<<std::endl;
 	  }
