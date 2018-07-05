@@ -31,6 +31,4 @@ clean:
 	@find . -name 'core' -exec rm {} \;
 	@rm -f *.so.*
 
-test: libsdg.a  test.o
-	$(CXX)  $(CXXFLAG)  $(INCLUDE) test.o -L. -lsdg -lstdc++ -o $@
 
