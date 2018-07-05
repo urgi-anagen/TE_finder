@@ -5,19 +5,36 @@
 
 SDGFastaIstream& SDGFastaIstream::operator>>(SDGBioSeq &p)
 {
-  char buff[1024];
-  do{
-    getline(buff,1024);
-  }while((*this) && *buff!='>');
-  buff[1023]='\0';
-  SDGString titre=SDGString(buff).substr(1);
-  titre=titre.trimR();
-  std::ostringstream buffstr;
-  while ( (*this) && peek()!='>')
-    { 
-      getline(buff,1024);
-      buffstr<<buff;
-    }
+    SDGString titre;
+    std::string line;
+    std::ostringstream buffstr;
+    bool found=false;
+    if (this->is_open())
+      {
+        while ( *this )
+        {
+            if(peek()=='>')
+            {
+                if(!found)
+                {
+                    if(std::getline(*this,line))
+                    {
+                        titre=SDGString(line).substr(1);
+                        titre=titre.trimR();
+                    }
+                    found=true;
+                }
+                else
+                    break;
+            }
+            else
+            {
+                if(std::getline(*this,line))
+                    buffstr<<line;
+            }          
+          }         
+        }
+
   p=newSDGMemBioSeq(buffstr.str());
   p.setDE(titre);
 
@@ -25,7 +42,3 @@ SDGFastaIstream& SDGFastaIstream::operator>>(SDGBioSeq &p)
 }
 
 SDGFastaIstream SDGFastaCin(0);
-
-
-
-

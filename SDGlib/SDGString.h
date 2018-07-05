@@ -259,11 +259,6 @@ class SDGString: public std::string
 	return std::operator+((std::string)*this,std::string(s));
       };
 
-//    SDGString  operator+(const char c) const
-//      {
-//	return std::operator+((std::string)*this,SDGString(c));
-//      };
-
     SDGString  operator+(const std::string& s) const
       {
 	return std::operator+((std::string)*this,s);
