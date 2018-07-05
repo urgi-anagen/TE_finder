@@ -26,14 +26,16 @@ SDGString __SDGFastaBioSeq::litSeq(unsigned long from, unsigned long lg) const
       buffstr.setf(std::ios_base::uppercase);
       unsigned long count=0;
       unsigned long len=lg<buffseq_size?buffseq_size:lg;
-      char buff[1024];
-      do
-	{ 
-	  file.getline(buff,1024);
-	  count+=file.gcount()-1;
-	  buffstr<<buff;
- 	}  while (file && (count < len) && file.peek()!='>');
-
+      std::string line;
+      while (file )
+    	{ 
+    	  if(std::getline(file,line))
+    	  {
+    	   count+=file.gcount()-1;
+    	   buffstr<<line;
+    	  }
+    	  if((count < len) && file.peek()!='>') break;
+     	}
       file.close();
       ((__SDGFastaBioSeq*)this)->buffseq=buffstr.str();
 
@@ -74,22 +76,24 @@ __SDGFastaBioSeq::__SDGFastaBioSeq(SDGString fich, unsigned long decalage,
   forme =1;
   file.seekg(decalage);
 
-  char buff[1024];
-  file.getline(buff,1024);
-  buff[1023]='\0';
-  SDGString titre=SDGString(buff).substr(1);
-  titre=titre.trimR();
-  offset_sequence=file.tellg();
-
-  file.getline(buff,1024);
-  npl=file.gcount()-1;
-
-  longueur=npl;      
-  while (file && file.peek()!='>')
+  std::string line;
+  SDGString titre;
+  if(std::getline(file,line))
+    {
+        titre=SDGString(line).substr(1);
+        titre=titre.trimR();
+        offset_sequence=file.tellg();
+    }
+  if(std::getline(file,line))
+  {
+    npl=file.gcount()-1;
+    longueur=npl;     
+    while (file)
     { 
-      file.getline(buff,1024);
-      longueur+=strlen(buff);
-    }  
+        if(std::getline(file,line) && file.peek()!='>')
+            longueur+=line.size();
+    } 
+  }  
   file.close();
   setDE(titre);
 
