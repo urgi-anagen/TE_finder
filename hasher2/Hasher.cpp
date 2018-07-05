@@ -15,7 +15,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 	  if(size>2)
 		{
 		  iter_seq->sort();
-		  SDGString sname=subject_db[iter_seq->front().wpos.numSeq-1].getDE();
+		  SDGString sname=subject_names[iter_seq->front().wpos.numSeq-1];
 		  unsigned start=0;
 		  unsigned end=0;
 		  unsigned score=0;
@@ -49,6 +49,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 						{
 						  if(end+kmer_size-start-1>=min_frag_size)
 						  {
+							 count++;
 							 out<<qname<<"\t"
 							 <<diag+start+1<<"\t"<<diag+end+kmer_size
 							 <<"\t"
@@ -67,15 +68,16 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 			{
 			  if(end+kmer_size-start-1>=min_frag_size)
 			  {
-					 out<<qname<<"\t"
-					 <<diag+start+1<<"\t"<<diag+end+kmer_size
-					 <<"\t"
-					 <<sname<<"\t"
-					 <<start+1<<"\t"<<end+kmer_size
-					 <<"\t0.0"
-					 <<"\t"<<score
-					 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
-					 <<std::endl;
+				 count++;
+				 out<<qname<<"\t"
+				 <<diag+start+1<<"\t"<<diag+end+kmer_size
+				 <<"\t"
+				 <<sname<<"\t"
+				 <<start+1<<"\t"<<end+kmer_size
+				 <<"\t0.0"
+				 <<"\t"<<score
+				 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
+				 <<std::endl;
 			  }
 			}
 		} //end size>2, diag_map loop
@@ -87,7 +89,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 	  if(size>2)
 		{
 		  iter_seq->sort();
-		  SDGString sname=subject_db[iter_seq->front().wpos.numSeq-1].getDE();
+		  SDGString sname=subject_names[iter_seq->front().wpos.numSeq-1];
 
 		  unsigned start=0;
 		  unsigned end=0;
@@ -120,6 +122,7 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 						{
 						  if(end+kmer_size-start-1>=min_frag_size)
 						  {
+							 count++;
 							 out<<qname<<"\t"
 							 <<len-(diag+start)<<"\t"<<len-(diag+end)-kmer_size+1
 							 <<"\t"
@@ -138,15 +141,16 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 			{
 			  if(end+kmer_size-start-1>=min_frag_size)
 			  {
-					 out<<qname<<"\t"
-					 <<len-(diag+start)<<"\t"<<len-(diag+end)-kmer_size+1
-					 <<"\t"
-					 <<sname<<"\t"
-					 <<start+1<<"\t"<<end+kmer_size
-					 <<"\t0.0"
-					 <<"\t"<<score
-					 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
-					 <<std::endl;
+				 count++;
+				 out<<qname<<"\t"
+				 <<len-(diag+start)<<"\t"<<len-(diag+end)-kmer_size+1
+				 <<"\t"
+				 <<sname<<"\t"
+				 <<start+1<<"\t"<<end+kmer_size
+				 <<"\t0.0"
+				 <<"\t"<<score
+				 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
+				 <<std::endl;
 			  }
 			}
 		} //end size>2, diag_map_comp loop
@@ -173,26 +177,38 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
   std::string str_comp=comp_sequence.toString();
   const char* seq_comp=str_comp.c_str();
 
-  unsigned key_d=0,key_c=0;
+  unsigned key_d=0,key_c=0,dirhit=0,comphit=0;
   for(unsigned i=start;i<=last_pos;i+=step_q)
     {
       key_d=hseq(seq);
       seq+=step_q;
-
       std::vector<KmerSpos>::iterator begin_d=hash2wpos[key_d];
       std::vector<KmerSpos>::iterator end_d=hash2wpos[key_d+1];
       for(std::vector<KmerSpos>::iterator j=begin_d;j!=end_d;j++)
-	  diag_map[j->numSeq].push_back(Diag(i-j->pos,j->pos,j->numSeq));
+      {
+    	  if(j->numSeq!=0)
+    		{
+        	  dirhit++;
+        	  diag_map[j->numSeq].push_back(Diag(i-j->pos,j->pos,j->numSeq));
+    		}
+      }
 
       key_c=hseq(seq_comp);
       seq_comp+=step_q;
-
       std::vector<KmerSpos>::iterator begin_c=hash2wpos[key_c];
       std::vector<KmerSpos>::iterator end_c=hash2wpos[key_c+1];
       for(std::vector<KmerSpos>::iterator j=begin_c;j!=end_c;j++)
-	  diag_map_comp[j->numSeq].push_back(Diag(i-j->pos,j->pos,j->numSeq));
+      {
+    	  if(j->numSeq!=0)
+    		{
+    		  comphit++;
+    		  diag_map_comp[j->numSeq].push_back(Diag(i-j->pos,j->pos,j->numSeq));
+    		}
+      }
 
     }
+	std::cout<<dirhit<<" direct hits found / ";
+	std::cout<<comphit<<" reverse hits found"<<std::endl;;
 }
 //-------------------------------------------------------------------------
 void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
@@ -203,12 +219,9 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 	std::cout<<"hashing query sequence..."<<std::flush;
 
 	std::vector< std::list<Diag> > diag_map, diag_map_comp;
-	diag_map.resize(subject_db.size()+1);
-	diag_map_comp.resize(subject_db.size()+1);
+	diag_map.resize(subject_names.size()+1);
+	diag_map_comp.resize(subject_names.size()+1);
 	matchKmers(sequence, start, end, numseq, repeat, diag_map, diag_map_comp);
-	std::cout<<"ok"<<std::endl;
-	std::cout<<diag_map.size()<<" direct hits found / ";
-	std::cout<<diag_map_comp.size()<<" reverse hits found";
 
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
