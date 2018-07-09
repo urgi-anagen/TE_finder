@@ -13,8 +13,7 @@ OBJ = SDGString.o \
       SDGFastaIstream.o \
       SDGFastaOstream.o \
       SDGError.o \
-      SDGBitStr.o \
-      test.o
+      SDGBitStr.o
 
 all:  libsdg.a 
 
