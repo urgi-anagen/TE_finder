@@ -158,8 +158,7 @@ void Duster::kmer_count_percentiles(const std::list< Info_kmer >& list_infokmer,
 	for(std::vector<unsigned>::iterator it=distr.begin(); it!=distr.end(); it++)
 	{
 		if(*it>kmer_threshold.count)
-			break;
-		count++;
+			count++;
 	}
     std::cout<<"=>cut-off="<<cutoff<<". Kmers occuring more than "<<kmer_threshold.count
 	       <<" will be removed! Will remove "<<count<<" kmers."<<std::endl;
@@ -197,8 +196,7 @@ void Duster::kmer_entropy_percentiles(const std::list< Info_kmer >& list_infokme
 	for(std::vector<double>::iterator it=distr.begin(); it!=distr.end(); it++)
 	{
 		if(*it>kmer_threshold.entropy)
-			break;
-		count++;
+			count++;
 	}
     std::cout<<"=>cut-off="<<cutoff_entropy<<". Kmers with entropy greater than "<<kmer_threshold.entropy
 	       <<" will be removed! Will remove "<<count<<" kmers."<<std::endl;
@@ -234,7 +232,7 @@ void Duster::kmer_diversity_percentiles(const std::list< Info_kmer >& list_infok
 	unsigned count=0;
 	for(std::vector<double>::iterator it=distr.begin(); it!=distr.end(); it++)
 	{
-		if(*it>kmer_threshold.diversity)
+		if(*it>=kmer_threshold.diversity)
 			break;
 		count++;
 	}
@@ -490,27 +488,27 @@ void Duster::kmer_filter(const std::list< Info_kmer >& list_infokmer, const Info
     	unsigned k=i->hash_key;
     	if(wcount[k]==0) continue;
     	nb_kmer++;
-    	if(i->count<=min_count*(i->expected_count))
+    	if(i->count<min_count*(i->expected_count))
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->count>=kmer_threshold.count)
+    	if(i->count>kmer_threshold.count)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->entropy>=kmer_threshold.entropy)
+    	if(i->entropy>kmer_threshold.entropy)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->diversity<=kmer_threshold.diversity)
+    	if(i->diversity<kmer_threshold.diversity)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(!first_iter && i->good_kmer<=0.0)
+    	if(!first_iter && i->good_kmer<0.0)
     	{
     		wcount[k]=0;
     		nb_removed++;
