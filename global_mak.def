@@ -6,20 +6,14 @@ VERSION = "2.27"
 
 OS := $(shell uname)
 
-#MacOS
+
 CXX = clang
-
-
 #CXX = gcc
 
-## Linux
 #CXXFLAG = -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 #CXXFLAG = -m32 -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
-
-## MacOS
-#CXXFLAG = -Wall -ggdb -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 LDFLAG =
 
