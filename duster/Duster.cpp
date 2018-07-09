@@ -275,7 +275,7 @@ void Duster::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_infokm
 			break;
 		count++;
 	}
-	std::cout<<"Kmers with poor model probability will be removed! Will remove "<<count<<" kmers."<<std::endl;
+	std::cout<<"Kmers with poor model probability will be removed (if not one iteration)! Will remove "<<count<<" kmers."<<std::endl;
 
 }
 //-------------------------------------------------------------------------
