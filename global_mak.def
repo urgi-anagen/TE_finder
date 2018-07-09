@@ -6,14 +6,15 @@ VERSION = "2.27"
 
 OS := $(shell uname)
 
-
-CXX = clang
+#Compiler call
+CXX = $(CC)
 #CXX = gcc
 
-#CXXFLAG = -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
-#CXXFLAG = -m32 -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
-
-CXXFLAG = -ggdb -Wall -pthread -std=gnu++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+#Compiler parameters
+#CXXFLAG = -Wall -std=gnu++11 -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANTT
+#CXXFLAG = -Wall -pthread -std=c++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+#CXXFLAG = -O3 -Wall -pthread -std=c++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
+CXXFLAG = -ggdb -Wall -pthread -std=c++11  -DVERSION=$(VERSION) -DOS=$(OS) -D_REENTRANT
 
 LDFLAG =
 
@@ -28,14 +29,7 @@ DGE_HEADERS= $(BASE)/DGElib
 BLR_LIB = $(BASE)/BLRlib
 BLR_HEADERS= $(BASE)/BLRlib
 
-#THREADPOOL_LIB = $(BASE)/threadpool-0.2/lib
-#THREADPOOL_HEADERS= $(BASE)/threadpool-0.2/include/
-
 OBJ_LIB=$(SDG_LIB)/libsdg.a $(DGE_LIB)/libDGE.a  $(BLR_LIB)/libBLR.a
-
-#INCLUDE = -I. -I$(SDG_HEADERS) -I$(DGE_HEADERS) -I$(BLR_HEADERS) -I$(THREADPOOL_HEADERS)
-#LIB = -L. -L$(SDG_LIB) -L$(DGE_LIB) -L$(BLR_LIB) -L$(THREADPOOL_LIB)
-#LINK = -lBLR -lDGE -lsdg -lstdc++ -lm -lcppunit -lthreadpool -pthread
 
 INCLUDE = -I. -I$(SDG_HEADERS) -I$(DGE_HEADERS) -I$(BLR_HEADERS) 
 LIB = -L. -L$(SDG_LIB) -L$(DGE_LIB) -L$(BLR_LIB) 
@@ -44,7 +38,6 @@ LINK = -lBLR -lDGE -lsdg -lstdc++ -lm -lcppunit
 TAR = tar
 LN = ln -f
 AR = ar
-RANLIB = ranlib
 
 OBJ = 
 
