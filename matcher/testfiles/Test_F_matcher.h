@@ -8,7 +8,6 @@ class Test_F_matcher: public CPPUNIT_NS::TestFixture
 {
 	CPPUNIT_TEST_SUITE(Test_F_matcher);
 	CPPUNIT_TEST(test_runAsScript);
-	CPPUNIT_TEST(test_runAsScript_small_data);
  	CPPUNIT_TEST_SUITE_END();
 
 	public:
@@ -17,7 +16,6 @@ class Test_F_matcher: public CPPUNIT_NS::TestFixture
 
 	protected:
 		void test_runAsScript(void);
-		void test_runAsScript_small_data(void);
 };
 
 #endif
