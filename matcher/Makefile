@@ -22,5 +22,3 @@ clean:
 $(TARGET): matcher.o $(OBJ_LIB)
 	$(CXX) $(CXXFLAG) $(INCLUDE) $(INCLUDE_PVM) $(LIB) matcher.o -o $@ $(LINK)
 
-test: $(TARGET)
-	$(CXX) $(CXXFLAG) $(INCLUDE) $(LIB) Test_F_matcher.cpp test.cpp -o $@ $(LINK) -lcppunit

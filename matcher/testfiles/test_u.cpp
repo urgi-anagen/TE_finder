@@ -1,8 +1,8 @@
 /****
  *
- * \file test.cpp
+ * \file test_u.cpp
  *
- * \brief Tests for grouper
+ * \brief Tests for matcher
  *
  ***/
 
