@@ -34,6 +34,7 @@ clean:
 
 test_u: ../../DGElib/libDGE.a ../libBLR.a $(OBJTEST) test_u.o 
 	$(CXX) $(CXXFLAG) $(INCLUDE) $(LIB) $(OBJTEST) test_u.cpp -o $@ $(LINK) -lcppunit
+	./test_u
 
 
 
