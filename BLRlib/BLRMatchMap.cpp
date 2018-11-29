@@ -1,9 +1,9 @@
 
-	/**
-	 *
-	 * BLRMatchMap.cpp
-	 *
-	 **/
+/**
+ *
+ * BLRMatchMap.cpp
+ *
+ **/
 #include <stdlib.h>
 #include <regex.h>
 #include <fstream>
@@ -337,7 +337,8 @@
 		i!=rp_list.end();i++)
 		  {
 			if(verbose>0)
-			  std::cout<<"Add "<<numQ2name(i->getRangeQ().getNumChr())<<"-"<<numS2name(i->getRangeS().getNumChr())<<"-"<<i->getScore()<<std::endl<<std::flush;
+				std::cout<<"Add "<<numQ2name(i->getRangeQ().getNumChr())<<"-"<<numS2name(i->getRangeS().getNumChr())
+			<<"-"<<i->getScore()<<std::endl<<std::flush;
 			add_clean_path_all_S( rp_list, i, verbose-1 );
 			if(verbose>0)
 			{
@@ -406,93 +407,93 @@
 
 	}
 
-	//----------------------------------------------------------------------------
-	bool BLRMatchMap::isOverlapFound_in_add_split_path(std::list<RangePairSet>::iterator iter, MapPath mapPath, double idTolerance, unsigned lenFilter)
+//----------------------------------------------------------------------------
+bool BLRMatchMap::isOverlapFound_in_add_split_path(std::list<RangePairSet>::iterator iter, MapPath mapPath, double idTolerance, unsigned lenFilter)
+{
+
+    bool found_over=false;
+    std::list<RangePairSet> lrp;
+    
+    lrp.push_back(*iter);
+  for(MapPath::iterator m=mapPath.begin(); m!=mapPath.end() ;m++)
+    {
+
+      if(m->first.first==iter->getRangeQ().getNumChr())
 	{
 
-	    bool found_over=false;
-	    std::list<RangePairSet> lrp;
-	    
-	    lrp.push_back(*iter);
-	  for(MapPath::iterator m=mapPath.begin(); m!=mapPath.end() ;m++)
-	    {
-
-	      if(m->first.first==iter->getRangeQ().getNumChr())
+	  for(std::list<RangePairSet>::iterator lrp_it=lrp.begin();
+	      lrp_it!=lrp.end();
+	      lrp_it++)
+	    for(std::list<RangePairSet>::iterator iter_list=m->second.begin();
+	      iter_list!=m->second.end() ;iter_list++)
+	      if(lrp_it->overlapQ(*iter_list))
 		{
+		  if(lrp_it->getLength()>=100 &&
+		     lrp_it->inserted(*iter_list) &&
+		     fabs(iter_list->getIdentity()
+			  -lrp_it->getIdentity())<=idTolerance)
+		    continue;
+		  std::list<RangePairSet> lrp2;
 
-		  for(std::list<RangePairSet>::iterator lrp_it=lrp.begin();
-		      lrp_it!=lrp.end();
-		      lrp_it++)
-		    for(std::list<RangePairSet>::iterator iter_list=m->second.begin();
-		      iter_list!=m->second.end() ;iter_list++)
-		      if(lrp_it->overlapQ(*iter_list))
-			{
-			  if(lrp_it->getLength()>=100 &&
-			     lrp_it->inserted(*iter_list) &&
-			     fabs(iter_list->getIdentity()
-				  -lrp_it->getIdentity())<=idTolerance)
-			    continue;
-			  std::list<RangePairSet> lrp2;
+		  if(lrp_it->split(*iter_list,lrp2))
+		    {
+		      found_over=true;
+		      for(std::list<RangePairSet>::iterator lrp2_it
+			    =lrp2.begin();lrp2_it!=lrp2.end(); lrp2_it++)
+			if(lrp2_it->getRangeQ().getLength()
+			   >lenFilter)
+			  lrp.push_back(*lrp2_it);
+		    }
 
-			  if(lrp_it->split(*iter_list,lrp2))
-			    {
-			      found_over=true;
-			      for(std::list<RangePairSet>::iterator lrp2_it
-				    =lrp2.begin();lrp2_it!=lrp2.end(); lrp2_it++)
-				if(lrp2_it->getRangeQ().getLength()
-				   >lenFilter)
-				  lrp.push_back(*lrp2_it);
-			    }
-
-			}
 		}
-	    }
-		return found_over; 
 	}
+    }
+	return found_over; 
+}
 
-	//----------------------------------------------------------------------------
-	void BLRMatchMap::split_path(void)
-	// split nested path
-	{
-	  std::list<RangePairSet> rp_list;
-	  for(MapPath::iterator m=path_begin(); m!=path_end();m++)
-	  {
-			while(!m->second.empty())
-			{
-				RangePairSet rp=m->second.back();
-				m->second.pop_back();
-				rp_list.push_back(rp);
-			}
-	  }
-	  map_path.clear();
-	  // score no longer valid after split of RangePairSet by method
-	  // split
-	  rp_list.sort(RangePair::lessIdentity);
-	  for(std::list<RangePairSet>::iterator i=rp_list.begin();
-		  i!=rp_list.end();i++)
-		add_split_path(rp_list, i);
-	}
-	//----------------------------------------------------------------------------
-	void BLRMatchMap::insert_path_static(MapPath mapPath, RangePairSet& rangePair)
-	//insert a RangePairSet in map_path at the right place
-	{
-	  std::list<RangePairSet>& al_list
-	    =mapPath[Key(rangePair.getRangeQ().getNumChr(),
-			  rangePair.getRangeS().getNumChr())];
+//----------------------------------------------------------------------------
+void BLRMatchMap::split_path(void)
+// split nested path
+{
+  std::list<RangePairSet> rp_list;
+  for(MapPath::iterator m=path_begin(); m!=path_end();m++)
+  {
+		while(!m->second.empty())
+		{
+			RangePairSet rp=m->second.back();
+			m->second.pop_back();
+			rp_list.push_back(rp);
+		}
+  }
+  map_path.clear();
+  // score no longer valid after split of RangePairSet by method
+  // split
+  rp_list.sort(RangePair::lessIdentity);
+  for(std::list<RangePairSet>::iterator i=rp_list.begin();
+	  i!=rp_list.end();i++)
+	add_split_path(rp_list, i);
+}
+//----------------------------------------------------------------------------
+void BLRMatchMap::insert_path_static(MapPath mapPath, RangePairSet& rangePair)
+//insert a RangePairSet in map_path at the right place
+{
+  std::list<RangePairSet>& al_list
+    =mapPath[Key(rangePair.getRangeQ().getNumChr(),
+		  rangePair.getRangeS().getNumChr())];
 
-	  std::list<RangePairSet>::iterator r=std::lower_bound(al_list.begin(),
-							       al_list.end(),rangePair);
-	  if( rangePair.getRangeQ().getMin() != r->getRangeQ().getMin()
-	      || rangePair.getRangeQ().getMax() != r->getRangeQ().getMax()
-	      || rangePair.getRangeS().getMin() != r->getRangeS().getMin()
-	      || rangePair.getRangeS().getMax() != r->getRangeS().getMax()
-	      || rangePair.getE_value() != r->getE_value()
-	      || rangePair.getScore() != r->getScore()
-	      || rangePair.getIdentity() != r->getIdentity() )
-	    al_list.insert(r,rangePair);
-	}
-	//----------------------------------------------------------------------------
-	void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, bool merged, int verbose)
+  std::list<RangePairSet>::iterator r=std::lower_bound(al_list.begin(),
+						       al_list.end(),rangePair);
+  if( rangePair.getRangeQ().getMin() != r->getRangeQ().getMin()
+      || rangePair.getRangeQ().getMax() != r->getRangeQ().getMax()
+      || rangePair.getRangeS().getMin() != r->getRangeS().getMin()
+      || rangePair.getRangeS().getMax() != r->getRangeS().getMax()
+      || rangePair.getE_value() != r->getE_value()
+      || rangePair.getScore() != r->getScore()
+      || rangePair.getIdentity() != r->getIdentity() )
+    al_list.insert(r,rangePair);
+}
+//----------------------------------------------------------------------------
+void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, bool merged, int verbose)
 {
   map_path.clear();
 
@@ -523,36 +524,36 @@
       }
       if (merged)
       {
-	if (verbose>0)
-       		std::cout<<"Compute score with length."<<std::endl;
-      	computeScoreWithLength();
+		if (verbose>0)
+			std::cout<<"Compute score with length."<<std::endl;
+		computeScoreWithLength();
 	
-	// prepare rpsList for merge
-	unsigned long id = 1;
-	rpsList.clear();
-	for( MapPath::iterator m=path_begin(); m!=path_end(); m++ )
-	{
-		while(!m->second.empty())
+		// prepare rpsList for merge
+		unsigned long id = 1;
+		rpsList.clear();
+		for( MapPath::iterator m=path_begin(); m!=path_end(); m++ )
 		{
-			  RangePairSet rp=m->second.front();
-			  m->second.pop_front();
-			  rp.setId(id);
-			  rpsList.push_back(rp);
-			  id++;
-		 }
-	}
-	map_path.clear();
- 	// merge
-	if (verbose>0)
-       		std::cout<<"Merge on query."<<std::endl;
+			while(!m->second.empty())
+			{
+				  RangePairSet rp=m->second.front();
+				  m->second.pop_front();
+				  rp.setId(id);
+				  rpsList.push_back(rp);
+				  id++;
+			 }
+		}
+		map_path.clear();
+	 	// merge
+		if (verbose>0)
+	       		std::cout<<"Merge on query."<<std::endl;
      	merge(verbose-1);	
       	if (verbose>0){
-      		std::cout<<"Write merged matches in BED format."<<std::endl;
+			std::cout<<"Write merged matches in BED format."<<std::endl;
 		SDGString filename = para->getPrefixFileName() + ".merged.bed";
 		std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
 		SDGString color= "0,255,0";
-     		writeBED(filename, copy_list, color, verbose-1);
-      	}
+		writeBED(filename, copy_list, color, verbose-1);
+	      	}
       }
       if( ( clean_before | clean_after ) & ( verbose > 0 ) )
     	  std::cout<<"Clean the connections..."<<std::endl<<std::flush;

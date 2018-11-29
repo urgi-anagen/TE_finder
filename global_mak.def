@@ -7,7 +7,7 @@ VERSION = "2.27"
 OS := $(shell uname)
 
 #Compiler call
-CXX = $(CC)
+#CXX = $(CC)
 #CXX = gcc
 
 #Compiler parameters
