@@ -11,6 +11,7 @@
 #include "BLRMatchMap.h"
 #include <SDGError.h>
 #include "BLRMatchMapLoader.h"
+
 // TODO CLEAN CODE (methods for test and comments ...)
 //----------------------------------------------------------------------------
 void BLRMatchMap::insert(RangePair& rangePair)
@@ -512,15 +513,15 @@ void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, boo
 		  map_path[m->first]=fragAlign.join(m->second);
 		  m->second.clear();
 		}
-		if(verbose>0){
-		std::cout<<"After join:\nnb of matches: "<<getNbMatchesInMapPath()<<std::endl;
-		std::cout<<"nb of paths: "<<getNbDistinctPaths()<<std::endl;
+		if (verbose > 0) {
+			std::cout << "After join:\nnb of matches: " << getNbMatchesInMapPath() << std::endl;
+			std::cout << "nb of paths: " << getNbDistinctPaths() << std::endl;
 
-		std::cout<<"Write joined matches in BED format."<<std::endl;
-		SDGString filename = para->getPrefixFileName() + ".joined.bed";
-		std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
-		SDGString color = "253,63,146";
-		writeBED(filename, copy_list, color, verbose-1);
+			std::cout << "Write joined matches in BED format." << std::endl;
+			SDGString filename = para->getPrefixFileName() + ".joined.bed";
+			std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
+			SDGString color = "253,63,146";
+			writeBED(filename, copy_list, color, verbose - 1);
 		}
 		if (merged)
 		{
@@ -543,6 +544,7 @@ void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, boo
 				 }
 			}
 			map_path.clear();
+
 		 	// merge
 			if (verbose>0)
 		       		std::cout<<"Merge on query."<<std::endl;
@@ -668,150 +670,6 @@ std::list<RangePairSet> BLRMatchMap::copyRpsListFromMapPath(void)
 	return copy_rps_list;
 	
 }
-//----------------------------------------------------------------------------
-//void BLRMatchMap::join(void* arg)
-//{
-//	  JoinArg *p=(JoinArg*)arg;
-//	  pthread_mutex_t m_lock;
-//	  pthread_mutex_init(&m_lock, NULL);
-//
-//	  FragAlignThreads fragAlign(p->para->getDist_pen(),0,p->para->getGap_pen(),
-//	  	  	  			      p->para->getOverlap());
-//	  for(std::list<MapAlign::iterator>::iterator i=p->l.begin();i!=p->l.end();i++)
-//	  {
-//		  std::cout<<"thread "<< pthread_self()<<" working on ("<<(*i)->first.first<<","<<(*i)->first.second<<")"<<std::endl;
-//		  std::list<RangePairSet> lpath;
-//		  fragAlign.join((*i)->second,lpath);
-//		  pthread_mutex_lock(&m_lock);
-//		  std::cout<<"thread "<< pthread_self()<<" finished ("<<(*i)->first.first<<","<<(*i)->first.second<<")"<<std::endl;
-//		  p->p_map_path->operator []((*i)->first)=lpath;
-//		  (*i)->second.clear();
-//		  pthread_mutex_unlock(&m_lock);
-//
-//	  }
-//};
-//----------------------------------------------------------------------------
-//void BLRMatchMap::mapPathWithThreads(bool joining, bool clean_before, bool clean_after, bool merged, int verbose)
-//{
-//  map_path.clear();
-//
-//  if(joining)
-//    {
-//      if(verbose>0)
-//    	  std::cout<<"nb threads="<<para->getNbThread()<<std::endl;
-//	  ThreadPool tp(para->getNbThread());
-//      int ret = tp.initialize_threadpool();
-//      if (ret == -1)
-//      {
-//    	 std::cerr << "Failed to initialize thread pool!" << endl;
-//    	 exit(0);
-//      }
-//      if(verbose>0)
-//    	  std::cout<<"Join parameters: dist_pen="<<para->getDist_pen()
-//    	  <<" gap_pen="<<para->getGap_pen()
-//    	  <<" overlap="<<para->getOverlap()<<std::endl<<std::flush;
-//
-//      vector<JoinArg*> vja(map_align.size());
-//	  //unsigned count=0, nb_tasks=0, nb_count=map_align.size()/para->getNbThread();
-//	  unsigned count=0, nb_tasks=0, nb_count=50;
-//	  std::list<MapAlign::iterator> lm;
-//      for(MapAlign::iterator m=map_align.begin(); m!=map_align.end();m++)
-//	  {
-//		  lm.push_back(m);
-//		  count+=m->second.size();
-//		  //count++;
-//		  std::cout<<"count="<<count<<"/"<<nb_count<<std::endl;
-//		  if(count>=nb_count)
-//		  {
-//			  JoinArg *ja=new JoinArg();
-//			  vja.push_back(ja);
-//			  ja->l=lm;
-//			  ja->para=para;
-//			  ja->p_map_path=&map_path;
-//			  Task* t = new Task(&join, (void*) ja);
-//			  tp.add_task(t);
-//			  nb_tasks++;
-//			  std::cout<<nb_tasks<<" task(s) submitted"<<std::endl;
-//			  count=0;
-//			  lm.clear();
-//		  }
-//	  }
-//	  if(!lm.empty())
-//	  {
-//		  JoinArg *ja=new JoinArg();
-//		  vja.push_back(ja);
-//		  ja->l=lm;
-//		  ja->para=para;
-//		  ja->p_map_path=&map_path;
-//		  Task* t = new Task(&join, (void*) ja);
-//		  tp.add_task(t);
-//		  std::cout<<"Last tasks submitted"<<std::endl;
-//	  }
-//
-//	 //wait thread to finish
-//	 sleep(2);
-//	 tp.destroy_threadpool();
-//	 for(vector<JoinArg*>::iterator i=vja.begin();i!=vja.end();i++)
-//		 delete *i;
-//
-//      if(verbose>0)
-//      {
-//		std::cout<<"nb of matches: "<<getNbMatchesInMapPath()<<std::endl;
-//		std::cout<<"nb of paths: "<<getNbDistinctPaths()<<std::endl;
-//      }
-//
-//
-//
-//      if (merged)
-//      {
-//      	if (verbose>0)
-//       		std::cout<<"Compute score with length."<<std::endl;
-//      	computeScoreWithLength();
-//
-//      	if (verbose>0)
-//       		std::cout<<"Merge on query."<<std::endl;
-//     	 merge();
-//      }
-//      if( ( clean_before | clean_after ) & ( verbose > 0 ) )
-//    	  std::cout<<"Clean the connections..."<<std::endl<<std::flush;
-//      if(clean_before)
-//	clean_path(true,verbose-1); // clean when same subject
-//      if(clean_after)
-//	clean_path(false,verbose-1); // clean with all subjects
-//      if( ( clean_before | clean_after ) & ( verbose > 0 ) )
-//      {
-//    	  std::cout<<"nb of matches: "<<getNbMatchesInMapPath()<<std::endl;
-//    	  std::cout<<"nb of paths: "<<getNbDistinctPaths()<<std::endl;
-//    	  std::cout<<"Connections were cleaned when necessary."<<std::endl;
-//      }
-//
-//      if(clean_before || clean_after)
-//	{
-//	  if(verbose>0)
-//	    std::cout<<"Split the connections..."<<std::endl<<std::flush;
-//      	  split_path();
-//	  if(verbose>0){
-//	    std::cout<<"nb of matches: "<<getNbMatchesInMapPath()<<std::endl;
-//	    std::cout<<"nb of paths: "<<getNbDistinctPaths()<<std::endl;
-//	    std::cout<<"Connections were splitted when necessary."<<std::endl;}
-//	}
-//    }
-//  else
-//    {
-//      for(MapAlign::iterator m=map_align.begin(); m!=map_align.end();m++)
-//	{
-//	  std::list<RangePairSet> path;
-//	  for(std::list<RangePair>::iterator i=m->second.begin();
-//	      i!=m->second.end();i++)
-//	    {
-//	      path.push_back(RangePairSet(*i));
-//	    }
-//	  map_path[m->first]=path;
-//	  m->second.clear();
-//	}
-//    }
-//  map_align.clear();
-//}
 //---------------------------------------------------------------------------
 void BLRMatchMap::selectQregex(SDGString regex)
 {
@@ -1361,11 +1219,27 @@ std::list<RangePairSet> BLRMatchMap::mergeOnCluster(std::list<RangePairSet> rpsL
 	return mergedRpsList;
 }
 //---------------------------------------------------------------------------
-Graph <unsigned long> BLRMatchMap::clusterizeOverlapingRps(const std::list<RangePairSet>& rpsList, int verbose)
+Graph <unsigned long> BLRMatchMap::clusterizeOverlapingRps(std::list<RangePairSet>& rpsList, int verbose)
 {
 	Graph<unsigned long> graph;
-	
-  	for(std::list<RangePairSet>::const_iterator lrp_it1=rpsList.begin(); lrp_it1!=rpsList.end();lrp_it1++){
+
+	rpsList.sort(RangePair::less);
+
+	for(std::list<RangePairSet>::const_iterator lrp_it1=rpsList.begin(); lrp_it1!=rpsList.end();lrp_it1++){
+		RangePairSet rps1 = *lrp_it1;
+		graph.add_node(rps1.getId());
+		std::list<RangePairSet>::const_iterator lrp_it2=lrp_it1;
+		while(lrp_it2!=rpsList.end()){
+			RangePairSet rps2 = *lrp_it2++;
+			if(!rps1.overlapQ(rps2))
+				break;
+			graph.add_node(rps2.getId());
+			if (rps1 != rps2 && rps1.overlapQ_length(rps2) >= merge_overlap){
+				graph.add_edge(rps1.getId(),rps2.getId());
+			}
+		}
+
+/*  	for(std::list<RangePairSet>::const_iterator lrp_it1=rpsList.begin(); lrp_it1!=rpsList.end();lrp_it1++){
 		RangePairSet rps1 = *lrp_it1;
 		graph.add_node(rps1.getId());
   		for(std::list<RangePairSet>::const_iterator lrp_it2=rpsList.begin(); lrp_it2!=rpsList.end();lrp_it2++){
@@ -1374,7 +1248,8 @@ Graph <unsigned long> BLRMatchMap::clusterizeOverlapingRps(const std::list<Range
 			if (rps1 != rps2 && rps1.first.getNumChr() == rps2.first.getNumChr() && rps1.overlapQ_length(rps2) >= merge_overlap){
 				graph.add_edge(rps1.getId(),rps2.getId());
 			}
-		}
+		}*/
+
 	}
 	return graph;
 }
