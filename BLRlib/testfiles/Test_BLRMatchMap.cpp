@@ -90,12 +90,13 @@ void Test_BLRMatchMap::test_mapPath(void){
 		exp<<"1\tchunk1\t100\t500\trefTE_1\t1\t400\t0\t401\t100\n";
 		exp<<"1\tchunk1\t600\t1000\trefTE_1\t500\t900\t0\t401\t100\n";
 		exp<<"1\tchunk1\t1001\t2000\trefTE_1\t2000\t3000\t0\t1000\t100\n";
-		exp<<"2\tchunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1001\t80\n";
-		exp<<"2\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t401\t90\n";
-		exp<<"3\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t1001\t100\n";
+		exp<<"2\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t1001\t100\n";
+		exp<<"3\tchunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1001\t80\n";
+		exp<<"3\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t401\t90\n";
 		exp<<"[1\tchunk1\t100\t2000\trefTE_1\t1\t3000\t0\t1802\t100]\n";
-		exp<<"[2\tchunk1\t10000\t11500\trefTE_2\t1\t1500\t0\t1402\t82.8602]\n";
-		exp<<"[3\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t1001\t100]\n";
+		exp<<"[2\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t1001\t100]\n";
+		exp<<"[3\tchunk1\t10000\t11500\trefTE_2\t1\t1500\t0\t1402\t82.8602]\n";
+
 
 
 		CPPUNIT_ASSERT_EQUAL(exp.str(), obs.str());

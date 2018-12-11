@@ -174,7 +174,7 @@ class BLRMatchMap
 
   void merge(int verbose=0);
   std::list<RangePairSet> mergeOnCluster(std::list<RangePairSet> rpsList, Graph<unsigned long>& graph, int verbose=0);
-  Graph <unsigned long> clusterizeOverlapingRps(const std::list<RangePairSet>& rpsList,int verbose=0);
+  Graph <unsigned long> clusterizeOverlapingRps(std::list<RangePairSet>& rpsList,int verbose=0);
 
   void loadPath(SDGString filename, int verbose=0);
   // for unit test purpose
