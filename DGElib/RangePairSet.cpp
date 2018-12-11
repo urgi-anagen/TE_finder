@@ -363,7 +363,7 @@ bool RangePairSet::inserted(const RangePairSet& r)
 unsigned RangePairSet::overlapQ_length(const RangePairSet& r) const
 {
 	unsigned overlap=0;
-	if(getRangeQ().getNumChr()!=r.getRangeQ().getNumChr()) return false;
+	if(getRangeQ().getNumChr()!=r.getRangeQ().getNumChr()) return 0;
 	for(std::list<RangePair>::const_iterator i=path.begin();
 	i!=path.end();i++)
 	{
