@@ -8,7 +8,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "HashAlignClone.h"
+#include "../HashAlignClone.h"
 #include "SDGBioSeqDB.h"
 
 class Test_HashAlignClone: public CPPUNIT_NS::TestFixture

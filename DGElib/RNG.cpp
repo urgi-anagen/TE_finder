@@ -15,7 +15,6 @@ License along with this library; if not, write to the Free Software
 Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 #ifdef __GNUG__
-#pragma implementation
 #endif
 #include <assert.h>
 #include <RNG.h>
@@ -39,7 +38,7 @@ RNG::RNG()
   if (!initialized)
   {
 
-	assert (sizeof(double) == 2 * sizeof(_G_uint32_t)); 
+	assert (sizeof(double) == 2 * sizeof(__uint32_t));
 
 	//
 	//	The following is a hack that I attribute to

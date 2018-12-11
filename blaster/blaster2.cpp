@@ -3,7 +3,6 @@
  */
 
 #include <string>
-
 #include "BLRBlaster.h"
 #include "BLRBlasterParameter.h"
 

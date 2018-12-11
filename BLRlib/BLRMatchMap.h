@@ -51,6 +51,7 @@ class BLRMatchMap
   std::map<long,std::string> num2nameQ,num2nameS;
   BLRBioSeqDB subjectCut_db,queryCut_db;
   SDGBioSeqDB query_db,subject_db;
+  unsigned merge_overlap;
   bool same_db;
   RpsList rpsList;
 
@@ -74,12 +75,14 @@ class BLRMatchMap
   {
 	  para=new BLRJoinParameter();
 	  same_db=false;
+    merge_overlap=200;
   };
 
   BLRMatchMap(BLRJoinParameter *p) :
   para(p)
   {
 	  same_db=false;
+    merge_overlap=200;
 	  if(para->getQuery()!="<not set>")
 		  query_db.load(para->getQuery());
 	  if(para->getBank()!="<not set>")
@@ -101,7 +104,8 @@ class BLRMatchMap
 	  queryCut_db=m.queryCut_db;
 	  query_db=m.query_db;
 	  subject_db=m.subject_db;
-  	  same_db=m.same_db;
+  	same_db=m.same_db;
+    merge_overlap=m.merge_overlap;
   }
 
   MapAlign::iterator begin(){ return map_align.begin();};

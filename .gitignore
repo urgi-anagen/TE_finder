@@ -46,3 +46,21 @@ CMakeLists\.txt
 TE_finder\.sublime-project
 
 TE_finder\.sublime-workspace
+
+*.28
+
+matcher/testfiles/dummy
+
+matcher/testfiles/test\.align\.clean_match\.bed
+
+matcher/testfiles/test\.align\.clean_match\.fa
+
+matcher/testfiles/test\.align\.clean_match\.map
+
+matcher/testfiles/test\.align\.clean_match\.param
+
+matcher/testfiles/test\.align\.clean_match\.path
+
+matcher/testfiles/test\.align\.clean_match\.path\.attr
+
+matcher/testfiles/test\.align\.clean_match\.tab

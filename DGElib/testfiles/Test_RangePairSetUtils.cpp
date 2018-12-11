@@ -1,6 +1,6 @@
 #include "Test_RangePairSetUtils.h"
 #include "SDGString.h"
-#include "RangePairSet.h"
+#include "../RangePairSet.h"
 
 void Test_RangePairSetUtils::viewRangePairSetList(std::list<RangePairSet> rpsList){
     for(std::list<RangePairSet>::iterator lrp_it=rpsList.begin(); lrp_it!=rpsList.end();lrp_it++){

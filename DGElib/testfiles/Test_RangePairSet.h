@@ -8,7 +8,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "RangePairSet.h"
+#include "../RangePairSet.h"
 
 /**
  * \class Test_RangePairSet.h

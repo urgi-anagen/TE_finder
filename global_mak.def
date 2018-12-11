@@ -2,7 +2,7 @@
 # Global definitions and rules for TE_finder
 #
 
-VERSION = "2.27"
+VERSION = "2.28"
 
 OS := $(shell uname)
 
