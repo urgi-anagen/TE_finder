@@ -3,7 +3,7 @@
  */
 
 #include <sstream>
-#include <BLRWUBlast.h>
+#include "BLRWUBlast.h"
 
 void BLRWUBlast::blast( int verbose )
 {

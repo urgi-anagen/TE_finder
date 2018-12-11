@@ -26,14 +26,14 @@ void BLRMatchMapLoader::readAlign(BLRMatchMap& blrmm, std::istream& input_align,
    std::map<long,std::string> num2nameS = blrmm.getNum2NameS();	
 
    if(blrmm.getParameter()->getBank()==blrmm.getParameter()->getQuery() &&
-      blrmm.getParameter()->getBank()!="<not set>")
+	  blrmm.getParameter()->getBank()!="<not set>")
 	blrmm.setSameDb(true);
 
 	//Check format
 	std::string str;
 	char buff[1024];
 	input_align.getline(buff,1023,'\n');
-  	str=buff;
+	str=buff;
 	size_t n = std::count(str.begin(), str.end(), '\t');
 	if (n!=8)
 	{
@@ -41,57 +41,103 @@ void BLRMatchMapLoader::readAlign(BLRMatchMap& blrmm, std::istream& input_align,
 		<<"! not an *align* formated file"<<std::endl;
 		exit(0);
 	}
-	input_align.seekg(0, std::ios::beg);
-	
-    while(input_align)
-    {
-      RangePair rp;
-      rp.readtxt(input_align);
-      if(input_align)
-      {
+
+	//Read the first used to test the file format
+	std::istringstream is(str);
+	RangePair rp;
+	rp.readtxt(is);
+	if(blrmm.getParameter()->getEvalFilter()>rp.getE_value()
+		&& blrmm.getParameter()->getIdFilter()<rp.getIdentity()
+		&& blrmm.getParameter()->getLenFilter()<rp.getLength())
+	{
+		std::map<std::string,long>::iterator it
+		=name2numQ.find(rp.getRangeQ().getNameSeq());
+		if(it==name2numQ.end())
+		{
+			name2numQ[rp.getRangeQ().getNameSeq()]=++countseqQ;
+			num2nameQ[countseqQ]=rp.getRangeQ().getNameSeq();
+			rp.getRangeQ().setNumChr(countseqQ);
+		}
+		else
+			rp.getRangeQ().setNumChr(it->second);
+
+		if(blrmm.isSameDb())
+		{
+			it=name2numQ.find(rp.getRangeS().getNameSeq());
+			if(it==name2numQ.end())
+			{
+				name2numQ[rp.getRangeS().getNameSeq()]=++countseqQ;
+				num2nameQ[countseqQ]=rp.getRangeS().getNameSeq();
+				rp.getRangeS().setNumChr(countseqQ);
+			}
+			else
+				rp.getRangeS().setNumChr(it->second);
+		}
+		else
+		{
+			it=name2numS.find(rp.getRangeS().getNameSeq());
+			if(it==name2numS.end())
+			{
+				name2numS[rp.getRangeS().getNameSeq()]=++countseqS;
+				num2nameS[countseqS]=rp.getRangeS().getNameSeq();
+				rp.getRangeS().setNumChr(countseqS);
+			}
+			else
+				rp.getRangeS().setNumChr(it->second);
+		}
+		blrmm.insert(rp);
+	}
+	   
+	// read the others
+	while(input_align)
+	{
+	  RangePair rp;
+	  rp.readtxt(input_align);
+	  if(input_align)
+	  {
 	  if(blrmm.getParameter()->getEvalFilter()<rp.getE_value()
-	     || blrmm.getParameter()->getIdFilter()>rp.getIdentity()
-	     || blrmm.getParameter()->getLenFilter()>rp.getLength())
-	    continue;
+		 || blrmm.getParameter()->getIdFilter()>rp.getIdentity()
+		 || blrmm.getParameter()->getLenFilter()>rp.getLength())
+		continue;
 	   
 	  std::map<std::string,long>::iterator it
-	    =name2numQ.find(rp.getRangeQ().getNameSeq());
+		=name2numQ.find(rp.getRangeQ().getNameSeq());
 	  if(it==name2numQ.end())
-	    {
-	      name2numQ[rp.getRangeQ().getNameSeq()]=++countseqQ;
-	      num2nameQ[countseqQ]=rp.getRangeQ().getNameSeq();
-	      rp.getRangeQ().setNumChr(countseqQ);
-	    }
+		{
+		  name2numQ[rp.getRangeQ().getNameSeq()]=++countseqQ;
+		  num2nameQ[countseqQ]=rp.getRangeQ().getNameSeq();
+		  rp.getRangeQ().setNumChr(countseqQ);
+		}
 	  else
-	      rp.getRangeQ().setNumChr(it->second);
+		  rp.getRangeQ().setNumChr(it->second);
 
 	  if(blrmm.isSameDb())
-	    {
-	      it=name2numQ.find(rp.getRangeS().getNameSeq());
-	      if(it==name2numQ.end())
+		{
+		  it=name2numQ.find(rp.getRangeS().getNameSeq());
+		  if(it==name2numQ.end())
 		{
 		  name2numQ[rp.getRangeS().getNameSeq()]=++countseqQ;
 		  num2nameQ[countseqQ]=rp.getRangeS().getNameSeq();
 		  rp.getRangeS().setNumChr(countseqQ);
 		}
-	      else
+		  else
 		rp.getRangeS().setNumChr(it->second);
-	    }
+		}
 	  else
-	    {
-	      it=name2numS.find(rp.getRangeS().getNameSeq());
-	      if(it==name2numS.end())
+		{
+		  it=name2numS.find(rp.getRangeS().getNameSeq());
+		  if(it==name2numS.end())
 		{
 		  name2numS[rp.getRangeS().getNameSeq()]=++countseqS;
 		  num2nameS[countseqS]=rp.getRangeS().getNameSeq();
 		  rp.getRangeS().setNumChr(countseqS);
 		}
-	      else
+		  else
 		rp.getRangeS().setNumChr(it->second);
-	    }
+		}
 	  blrmm.insert(rp);
 	}
-      }
+	  }
 
    blrmm.setName2NumQ(name2numQ);
    blrmm.setName2NumS(name2numS);

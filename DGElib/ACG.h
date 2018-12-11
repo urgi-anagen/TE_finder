@@ -21,7 +21,6 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include <RNG.h>
 #include <math.h>
 #ifdef __GNUG__
-#pragma interface
 #endif
 
 //
@@ -42,27 +41,27 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 class ACG : public RNG {
 
-    _G_uint32_t initialSeed;	// used to reset generator
+    __uint32_t initialSeed;	// used to reset generator
     int initialTableEntry;
 
-    _G_uint32_t *state;
-    _G_uint32_t *auxState;
+    __uint32_t *state;
+    __uint32_t *auxState;
     short stateSize;
     short auxSize;
-    _G_uint32_t lcgRecurr;
+    __uint32_t lcgRecurr;
     short j;
     short k;
 
 protected:
 
 public:
-    ACG(_G_uint32_t seed = 0, int size = 55);
+    ACG(__uint32_t seed = 0, int size = 55);
     virtual ~ACG();
-    void setSeed(_G_uint32_t seed=0, int size=55);
+    void setSeed(__uint32_t seed=0, int size=55);
     //
     // Return a long-words word of random bits
     //
-    virtual _G_uint32_t asLong();
+    virtual __uint32_t asLong();
     virtual void reset();
 };
 

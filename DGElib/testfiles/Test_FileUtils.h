@@ -12,7 +12,7 @@ using namespace std;
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "FileUtils.h"
+#include "../FileUtils.h"
 
 /**
  * \class Test_FileUtils

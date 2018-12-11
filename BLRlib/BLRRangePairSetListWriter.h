@@ -17,11 +17,11 @@ public:
 	virtual ~BLRRangePairSetListWriter();
 
 	void writePath(const BLRRangePairSetList& rpsList,
-			const SDGBioSeqDB& query_db, const SDGBioSeqDB& subject_db,
+			const SDGBioSeqDB& query_db, const std::map<long,std::string>& subject_names,
 			std::ostream& out);
 
 	void writeGFF3(const BLRRangePairSetList& rpsList,
-			const SDGBioSeqDB& query_db, const SDGBioSeqDB& subject_db,
+			const SDGBioSeqDB& query_db, const std::map<long,std::string>& subject_names,
 			std::ostream& out, const std::string& source);
 };
 

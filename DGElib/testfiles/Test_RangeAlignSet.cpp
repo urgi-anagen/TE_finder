@@ -14,19 +14,19 @@ void Test_RangeAlignSet::test_reset( void )
 {
 	RangeAlign ra_1 = RangeAlign();
 	std::list<Range> lRanges_1;
-	lRanges_1.push_back( Range( 1, 100 ) );
-	lRanges_1.push_back( Range( 101, 200 ) );
-	RangeAlignSet ras_1 = RangeAlignSet( &ra_1, lRanges_1 );
+	lRanges_1.push_back(Range(1, 100));
+	lRanges_1.push_back(Range(101, 200));
+	RangeAlignSet ras_1 = RangeAlignSet(ra_1, lRanges_1);
 	ras_1.sortUsingStrand();
-	ras_1.setIncluded( true );
+	ras_1.setIncluded(true);
 
-  RangeAlignSet ras_2 = RangeAlignSet();
+	RangeAlignSet ras_2 = RangeAlignSet();
 
-  ras_1.reset();
+	ras_1.reset();
 
-  bool exp = true;
-  bool obs = ( ras_1 == ras_2 );
-  CPPUNIT_ASSERT_EQUAL( exp, obs );
+	bool exp = true;
+	bool obs = (ras_1 == ras_2);
+	CPPUNIT_ASSERT_EQUAL(exp, obs);
 }
 
 void Test_RangeAlignSet::test_operator_equal_true( void )
@@ -35,21 +35,21 @@ void Test_RangeAlignSet::test_operator_equal_true( void )
 	std::list<Range> lRanges_1;
 	lRanges_1.push_back( Range( 1, 100 ) );
 	lRanges_1.push_back( Range( 101, 200 ) );
-	RangeAlignSet ras_1 = RangeAlignSet( &ra_1, lRanges_1 );
-  ras_1.sortUsingStrand();
-  ras_1.setIncluded( true );
+	RangeAlignSet ras_1 = RangeAlignSet( ra_1, lRanges_1 );
+	ras_1.sortUsingStrand();
+	ras_1.setIncluded( true );
 
-  RangeAlign ra_2 = RangeAlign();
-  std::list<Range> lRanges_2;
-  lRanges_2.push_back( Range( 1, 100 ) );
-  lRanges_2.push_back( Range( 101, 200 ) );
-  RangeAlignSet ras_2 = RangeAlignSet( &ra_2, lRanges_2 );
-  ras_2.sortUsingStrand();
-  ras_2.setIncluded( true );
+	RangeAlign ra_2 = RangeAlign();
+	std::list<Range> lRanges_2;
+	lRanges_2.push_back( Range( 1, 100 ) );
+	lRanges_2.push_back( Range( 101, 200 ) );
+	RangeAlignSet ras_2 = RangeAlignSet( ra_2, lRanges_2 );
+	ras_2.sortUsingStrand();
+	ras_2.setIncluded( true );
 
-  bool exp = true;
-  bool obs = ( ras_1 == ras_2 );
-  CPPUNIT_ASSERT_EQUAL( exp, obs );
+	bool exp = true;
+	bool obs = ( ras_1 == ras_2 );
+	CPPUNIT_ASSERT_EQUAL( exp, obs );
 }
 
 void Test_RangeAlignSet::test_operator_equal_false_coordinates( void )

@@ -75,19 +75,18 @@ class RangeAlignSet : public RangeAlign
    */
   friend bool operator==( const RangeAlignSet& ras1, const RangeAlignSet& ras2 )
   {
-	  if( ras1.range_set.size() != ras2.range_set.size() )
+	  if (ras1.range_set.size() != ras2.range_set.size())
 		  return false;
 	  std::list<Range>::const_iterator it1 = ras1.range_set.begin();
-    std::list<Range>::const_iterator it2 = ras2.range_set.begin();
-    while( *it1 == *it2 )
-    {
-    	it1 ++;
-    	it2 ++;
-    }
-    if( it1 != ras1.range_set.end() )
-    	return false;
-	  if( ras1.included != ras2.included )
-	  	return false;
+	  std::list<Range>::const_iterator it2 = ras2.range_set.begin();
+	  while (*it1 == *it2 && it1!=ras1.range_set.end() && it2!=ras2.range_set.end()) {
+		  it1++;
+		  it2++;
+	  }
+	  if (it1 != ras1.range_set.end() || it2 != ras2.range_set.end())
+		  return false;
+	  if (ras1.included != ras2.included)
+		  return false;
 	  return true;
   };
 

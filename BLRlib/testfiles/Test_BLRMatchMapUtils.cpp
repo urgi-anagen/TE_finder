@@ -294,54 +294,54 @@ BLRMatchMap::MapAlign Test_BLRMatchMapUtils::createExpMapAlign_for_clean_conflic
   SDGString line1 = " \t109601\t109708\t \t3239\t3338\t3e-28\t108\t81.8182";
   RangePair rangePair1 = RangePair(line1);
   rangePair1.getRangeQ().setNumChr(1);
-  rangePair1.getRangeQ().setNameSeq("");
+  rangePair1.getRangeQ().setNameSeq("chunk682");
   rangePair1.getRangeS().setNumChr(1);
-  rangePair1.getRangeS().setNameSeq("");
+  rangePair1.getRangeS().setNameSeq("refTE_251");
 
   matchMap.insert(rangePair1);
  
   SDGString line2 = " \t109527\t109818\t \t3005\t3316\t0\t292\t82.8467";
   RangePair rangePair2 = RangePair(line2);
   rangePair2.getRangeQ().setNumChr(1);
-  rangePair2.getRangeQ().setNameSeq("");
+  rangePair2.getRangeQ().setNameSeq("chunk682");
   rangePair2.getRangeS().setNumChr(1);
-  rangePair2.getRangeS().setNameSeq("");
+  rangePair2.getRangeS().setNameSeq("refTE_251");
 
   matchMap.insert(rangePair2);
  
   SDGString line3 = " \t105091\t105206\t \t3351\t3238\t0\t116\t76.1062";
   RangePair rangePair3 = RangePair(line3);
   rangePair3.getRangeQ().setNumChr(1);
-  rangePair3.getRangeQ().setNameSeq("");
+  rangePair3.getRangeQ().setNameSeq("chunk682");
   rangePair3.getRangeS().setNumChr(1);
-  rangePair3.getRangeS().setNameSeq("");
+  rangePair3.getRangeS().setNameSeq("refTE_251");
 
   matchMap.insert(rangePair3);
 
   SDGString line4 = " \t105085\t105353\t \t3202\t2921\t0\t269\t84.8361";
   RangePair rangePair4 = RangePair(line4);
   rangePair4.getRangeQ().setNumChr(1);
-  rangePair4.getRangeQ().setNameSeq("");
+  rangePair4.getRangeQ().setNameSeq("chunk682");
   rangePair4.getRangeS().setNumChr(1);
-  rangePair4.getRangeS().setNameSeq("");
+  rangePair4.getRangeS().setNameSeq("refTE_251");
 
   matchMap.insert(rangePair4);
 
   SDGString line5 = " \t109951\t110569\t \t119\t689\t9.4e-19\t619\t77.768";
   RangePair rangePair5 = RangePair(line5);
   rangePair5.getRangeQ().setNumChr(1);
-  rangePair5.getRangeQ().setNameSeq("");
+  rangePair5.getRangeQ().setNameSeq("chunk682");
   rangePair5.getRangeS().setNumChr(2);
-  rangePair5.getRangeS().setNameSeq("");
+  rangePair5.getRangeS().setNameSeq("refTE_266");
 
   matchMap.insert(rangePair5);
 
   SDGString line6 = " \t110570\t110878\t \t2830\t2532\t0\t309\t77.2076";
   RangePair rangePair6 = RangePair(line6);
   rangePair6.getRangeQ().setNumChr(1);
-  rangePair6.getRangeQ().setNameSeq("");
+  rangePair6.getRangeQ().setNameSeq("chunk682");
   rangePair6.getRangeS().setNumChr(3);
-  rangePair6.getRangeS().setNameSeq("");
+  rangePair6.getRangeS().setNameSeq("refTE_230");
   matchMap.insert(rangePair6);
 
   return matchMap.getMapAlign();

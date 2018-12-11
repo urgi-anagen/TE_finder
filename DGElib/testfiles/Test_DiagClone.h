@@ -8,7 +8,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "DiagClone.h"
+#include "../DiagClone.h"
 
 /**
  * \class Test_Range

@@ -3,7 +3,7 @@
  */
 
 #include <sstream>
-#include <BLRNCBIBlastPlus.h>
+#include "BLRNCBIBlastPlus.h"
 
 void BLRNCBIBlastPlus::blast( int verbose )
 {
