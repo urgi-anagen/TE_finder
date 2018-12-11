@@ -18,8 +18,8 @@
 class BLRMatchMapWriter
 {
 	public:
-  		void writePath(const RpsList& rpsList, std::map<long,std::string> num2nameQ, std::map<long,std::string> num2nameS,std::ostream& out);
-  		void writeGFF3(const RpsList& rpsList, std::map<long,std::string> num2nameQ, std::map<long,std::string> num2nameS,std::ostream& out, const std::string& source);
+  		void writePath(const RpsList& rpsList, const std::map<long,std::string>& num2nameQ, const std::map<long,std::string>& num2nameS,std::ostream& out);
+  		void writeGFF3(const RpsList& rpsList, const std::map<long,std::string>& num2nameQ, const std::map<long,std::string>& num2nameS,std::ostream& out, const std::string& source);
 
 };
 

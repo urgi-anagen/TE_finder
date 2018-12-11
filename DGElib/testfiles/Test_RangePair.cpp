@@ -5,10 +5,10 @@
 #include <iostream>
 
 #include "Test_RangePair.h"
-#include "RangePair.h"
-#include "RangeAlign.h"
+#include "../RangePair.h"
+#include "../RangeAlign.h"
 #include "SDGString.h"
-#include "FileUtils.h"
+#include "../FileUtils.h"
 #include <stdlib.h>
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Test_RangePair );

@@ -12,7 +12,7 @@
 #include <SDGString.h>
 #include <utility>
 #include <map>
-#include "RangePairSet.h"
+#include "../RangePairSet.h"
 
 class Test_RangePairSetUtils
 {

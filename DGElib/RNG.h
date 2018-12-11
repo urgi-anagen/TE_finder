@@ -18,21 +18,20 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #ifndef _RNG_h
 #define _RNG_h 1
 #ifdef __GNUG__
-#pragma interface
 #endif
 
 #include <assert.h>
 #include <math.h>
-#include <_G_config.h>
+
 
 union PrivateRNGSingleType {		   	// used to access floats as unsigneds
     float s;
-    _G_uint32_t u;
+    __uint32_t u;
 };
 
 union PrivateRNGDoubleType {		   	// used to access doubles as unsigneds
     double d;
-    _G_uint32_t u[2];
+    __uint32_t u[2];
 };
 
 //
@@ -47,7 +46,7 @@ public:
     //
     // Return a long-words word of random bits
     //
-    virtual _G_uint32_t asLong() = 0;
+    virtual __uint32_t asLong() = 0;
     virtual void reset() = 0;
     //
     // Return random bits converted to either a float or a double

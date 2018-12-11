@@ -1,6 +1,6 @@
 #include "Test_RangePairSet.h"
 #include "Test_RangePairSetUtils.h"
-#include "RangePairSet.h"
+#include "../RangePairSet.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Test_RangePairSet );

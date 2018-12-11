@@ -236,7 +236,7 @@ void BLRGroup::mergeMembersInGroups( int verbose )
 	if( verbose > 0 )
 		std::cout<<"Members in groups were merged."<<std::endl;
 }
-//------------------------------------------------------------------------------------------------------------
+/*//------------------------------------------------------------------------------------------------------------
 void BLRGroup::writePath(const SDGString& filename,std::list<RangePairSet> l, int verbose)
 {
   if(verbose>0)
@@ -256,7 +256,7 @@ void BLRGroup::writePath(const SDGString& filename,std::list<RangePairSet> l, in
     
   if(verbose>0)
     std::cout<<" done"<<std::endl;
-}
+}*/
 //------------------------------------------------------------------------------------------------------------
 void BLRGroup::show_group( std::ostream& out )
 {

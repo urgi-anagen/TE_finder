@@ -17,8 +17,8 @@ OBJ =   ../BLRBioSeqDB.o \
 
 OBJTEST= Test_BLRMatchMapUtils.o \
 	 Test_BLRMatchMapLoadUtils.o \
-	 Test_BLRMatchMap.o
-	 #Test_BLRMatchMapLoad.o \
+	 Test_BLRMatchMap.o \
+	 Test_BLRMatchMapLoad.o 
 
 TARGET = test_u
 

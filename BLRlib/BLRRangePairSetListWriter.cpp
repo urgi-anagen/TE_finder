@@ -21,7 +21,7 @@ BLRRangePairSetListWriter::~BLRRangePairSetListWriter()
 
 //---------------------------------------------------------------------------------------
 void BLRRangePairSetListWriter::writePath(const BLRRangePairSetList& rpsList,
-		const SDGBioSeqDB& query_db, const SDGBioSeqDB& subject_db,
+		const SDGBioSeqDB& query_db, const std::map<long,std::string>& subject_names,
 		std::ostream& out)
 {
 	unsigned path_id=0;
@@ -30,12 +30,12 @@ void BLRRangePairSetListWriter::writePath(const BLRRangePairSetList& rpsList,
 			iter_list++)
 		{
 		  unsigned id = ++path_id;
-		  iter_list->write(out,id,query_db[iter_list->getNumQuery()-1].getDE(),subject_db[iter_list->getNumSubject()-1].getDE());
+		  iter_list->write(out,id,query_db[iter_list->getNumQuery()-1].getDE(),subject_names);
 		}
 }
 //---------------------------------------------------------------------------------------
 void BLRRangePairSetListWriter::writeGFF3(const BLRRangePairSetList& rpsList,
-		const SDGBioSeqDB& query_db, const SDGBioSeqDB& subject_db,
+		const SDGBioSeqDB& query_db, const std::map<long,std::string>& subject_names,
 		std::ostream& out, const std::string& source)
 {
 	unsigned path_id=0;
@@ -44,7 +44,7 @@ void BLRRangePairSetListWriter::writeGFF3(const BLRRangePairSetList& rpsList,
 			iter_list++)
 		{
 		  unsigned id = ++path_id;
-		  iter_list->writeGFF3(out,id,query_db[iter_list->getNumQuery()-1].getDE(),subject_db[iter_list->getNumSubject()-1].getDE(),source);
+		  iter_list->writeGFF3(out,id,query_db[iter_list->getNumQuery()-1].getDE(),subject_names,source);
 		}
 }
 

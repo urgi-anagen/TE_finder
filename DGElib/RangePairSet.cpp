@@ -111,7 +111,7 @@ void RangePairSet::addPath(const RangePair& rp)
 }
 
 void RangePairSet::write(std::ostream& out, unsigned id,
-		const std::string& nameQ, const std::string& nameS)  const
+		const std::string& nameQ, const std::map<long,std::string>& nameS)  const
 {
 	
 	for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
@@ -119,7 +119,7 @@ void RangePairSet::write(std::ostream& out, unsigned id,
 		out<<id<<"\t"<<nameQ
 		<<"\t"<<i->getRangeQ().getStart()
 		<<"\t"<<i->getRangeQ().getEnd()
-		<<"\t"<<nameS
+		<<"\t"<<nameS.at(i->getRangeS().getNumChr())
 		<<"\t"<<i->getRangeS().getStart()
 		<<"\t"<<i->getRangeS().getEnd()
 		<<"\t"<<i->getE_value()
@@ -130,7 +130,7 @@ void RangePairSet::write(std::ostream& out, unsigned id,
 }
 
 void RangePairSet::writePath(std::ostream& out, unsigned id,
-		const std::string& nameQ, const std::string& nameS)  const
+		const std::string& nameQ, const std::map<long,std::string>& nameS)  const
 {
 
 	for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
@@ -138,7 +138,7 @@ void RangePairSet::writePath(std::ostream& out, unsigned id,
 		out<<id<<"\t"<<nameQ
 		<<"\t"<<i->getRangeQ().getStart()
 		<<"\t"<<i->getRangeQ().getEnd()
-		<<"\t"<<nameS
+		<<"\t"<<nameS.at(i->getRangeS().getNumChr())
 		<<"\t"<<i->getRangeS().getStart()
 		<<"\t"<<i->getRangeS().getEnd()
 		<<"\t"<<i->getE_value()
@@ -149,7 +149,7 @@ void RangePairSet::writePath(std::ostream& out, unsigned id,
 }
 
 void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
-		const std::string& nameQ, const std::string& nameS, const std::string& source) const
+		const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& source) const
 {
 	out<<nameQ
 	<<"\t"<<source
@@ -160,10 +160,16 @@ void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
 	if(isPlusStrand()) out<<"+";
 	else out<<"-";
 	out<<"\t."
-	<<"\tID="<<id
-	<<";Name="<<nameS
-	<<";Target="<<nameS<<" "<<getRangeS().getMin()<<" "<<getRangeS().getMax()
-	<<";Note=e-value:"<<getE_value()
+	<<"\tID="<<id;
+	if(getRangeS().getNumChr()!=-1){
+        out<<";Name="<<nameS.at(getRangeS().getNumChr())
+        <<";Target="<<nameS.at(getRangeS().getNumChr())<<" "<<getRangeS().getMin()<<" "<<getRangeS().getMax();
+	}
+	else{
+        out<<";Name="<<"Multiple";
+	}
+
+	out<<";Note=e-value:"<<getE_value()
 	<<",identity:"<<getIdentity()
 	<<std::endl;
 
@@ -171,6 +177,7 @@ void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
 	for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
 	{
 		count++;
+		std::string subjectname=nameS.at(i->getRangeS().getNumChr());
 		out<<nameQ
 		<<"\t"<<source
 		<<"\t"<<"match_part"
@@ -182,23 +189,29 @@ void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
 		out<<"\t."
 		<<"\tID="<<id<<"."<<count
 		<<";Parent="<<id
-		<<";Name="<<nameS<<"."<<count
-		<<";Target="<<nameS<<" "<<getRangeS().getMin()<<" "<<getRangeS().getMax()
+		<<";Name="<<subjectname<<"."<<count
+		<<";Target="<<subjectname<<" "<<getRangeS().getMin()<<" "<<getRangeS().getMax()
 		<<";Note=e-value:"<<getE_value()
 		<<",identity:"<<getIdentity()
 		<<std::endl;
 	}
 }
 
-void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const std::string& nameS, const std::string& color) const
+void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& color) const
 {
 	
 	ulong referenceMin = getRangeQ().getMin();
 	out<<nameQ
 	<<"\t"<<referenceMin
-	<<"\t"<<getRangeQ().getMax()
-	<<"\t"<<nameS
-	<<"\t"<<getScore()<<"\t";
+	<<"\t"<<getRangeQ().getMax()<<"\t";
+    int count=0;
+	for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
+	{
+		if(++count>1){out<<",";};
+		out<<nameS.at(i->getRangeS().getNumChr());
+	}
+
+	out<<"\t"<<getScore()<<"\t";
 	if(isPlusStrand()) out<<"+";
 	else out<<"-";
 	out<<"\t"<<getRangeQ().getMin()
@@ -228,13 +241,19 @@ void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const s
 }
 
 void RangePairSet::writeRpsAttr(std::ostream& out, unsigned id,
-		const std::string& nameQ, const std::string& nameS) const
+		const std::string& nameQ, const std::map<long,std::string>& nameS) const
 {
 	out<<"["<<id<<"\t"<<nameQ
 	<<"\t"<<getRangeQ().getStart()
-	<<"\t"<<getRangeQ().getEnd()
-	<<"\t"<<nameS
-	<<"\t"<<getRangeS().getStart()
+	<<"\t"<<getRangeQ().getEnd();
+	if(getRangeS().getNumChr()!=-1){
+        out<<"\t"<<nameS.at(getRangeS().getNumChr());
+	}
+	else{
+        out<<"\t-1";
+	}
+
+	out<<"\t"<<getRangeS().getStart()
 	<<"\t"<<getRangeS().getEnd()
 	<<"\t"<<getE_value()
 	<<"\t"<<getScore()
