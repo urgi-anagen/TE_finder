@@ -1,6 +1,20 @@
+Dependencies
+============
+
+* cmake
+
+
+Compilation
+===========
+
+type 'cmake'
+
+
 blaster:
 ========
 
 set environment variable in .bashrc:
 
 	BLASTER_BANK_DIRS=/usr/bioinfo/db/blasterdb
+
+
