@@ -11,6 +11,7 @@
 #include <utility>
 #include <list>
 #include <vector>
+#include <map>
 #include "RangeAlignSet.h"
 #include "RangePair.h"
 
@@ -115,14 +116,14 @@ class RangePairSet: public RangePair
   void addPath(const RangePair& rp);
 
   void write( std::ostream& out, unsigned id,
-  		const std::string& nameQ, const std::string& nameS ) const;
+  		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;
   void writePath( std::ostream& out, unsigned id,
-  		const std::string& nameQ, const std::string& nameS ) const;
+  		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;
   void writeGFF3( std::ostream& out, unsigned id,
-  		const std::string& nameQ, const std::string& nameS, const std::string& source ) const;
-  void writeBED( std::ostream& out, const std::string& nameQ, const std::string& nameS, const std::string& color) const;
+  		const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& source ) const;
+  void writeBED( std::ostream& out, const std::string& nameQ,  const std::map<long,std::string>& nameS, const std::string& color) const;
 
-  void writeRpsAttr(std::ostream& out, unsigned id, const std::string& nameQ, const std::string& nameS) const;
+  void writeRpsAttr(std::ostream& out, unsigned id, const std::string& nameQ, const std::map<long,std::string>& nameS) const;
 
   bool diffQ( const RangePairSet& r );
 

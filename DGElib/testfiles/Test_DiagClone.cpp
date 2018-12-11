@@ -1,5 +1,5 @@
 #include "Test_DiagClone.h"
-#include "Range.h"
+#include "../Range.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Test_DiagClone );
 

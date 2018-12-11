@@ -8,7 +8,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "Range.h"
+#include "../Range.h"
 
 /**
  * \class Test_Range

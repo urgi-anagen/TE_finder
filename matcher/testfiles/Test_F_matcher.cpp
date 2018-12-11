@@ -33,7 +33,7 @@ void Test_F_matcher::test_runAsScript( void ){
 	SDGString outParamFileName = "input.align.clean_match.param";
 	SDGString outMapFileName = "input.align.clean_match.map";
 
-	SDGString cmd = "./matcher -m " + inputFileName + " -j -x";
+	SDGString cmd = "../matcher"+SDGString(VERSION)+" -m " + inputFileName + " -j -x";
 	std::system(cmd);
 
 	bool obs = FileUtils::areTwoFilesIdentical(expFileName, obsFileName);

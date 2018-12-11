@@ -8,7 +8,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "RangeAlignSet.h"
+#include "../RangeAlignSet.h"
 
 /**
  * \class Test_RangeAlignSet
