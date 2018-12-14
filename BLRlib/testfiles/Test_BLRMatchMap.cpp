@@ -26,7 +26,7 @@ void Test_BLRMatchMap::test_clean_conflicts(void){
 	BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
 	BLRMatchMap matchMap(&para);
 		 
-	matchMap.load(0);     
+	matchMap.loadAlign(0);
 	
 	BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
 	
@@ -108,7 +108,7 @@ void Test_BLRMatchMap::view_add_clean_path_all_S(void){
  
 		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
 		BLRMatchMap matchMap(&para);
-		matchMap.load(0);     
+		matchMap.loadAlign(0);
 		std::list<RangePairSet> rpList = Test_BLRMatchMapUtils::createRpList_for_test_add_clean_path_all_S();
 		
 			 
@@ -142,7 +142,7 @@ void Test_BLRMatchMap::view_split_path(void){
 		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
 		BLRMatchMap matchMap(&para);
 		 
-		matchMap.load(0);     
+		matchMap.loadAlign(0);
 		BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
 	
 		matchMap.mapPathJoinAndComputeScoreWithLengthOnly(joiningParameter, cleanBefore, cleanAfter, verboseParameter);
@@ -591,97 +591,6 @@ void Test_BLRMatchMap::test_merge_all_included(void)
 	 //expFile<<exp.str();
 	 
 	 CPPUNIT_ASSERT_EQUAL(exp.str(), obs.str());
-}
-
-void Test_BLRMatchMap::test_clusterizeOverlapingRps(void)
-{
-	 std::ostringstream inputData;
-	 inputData<<"10\t1\t10\t400\t1\t3351\t3238\t0\t116\t76.1062\t116\n";
-	 inputData<<"10\t1\t700\t1000\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
-	 inputData<<"20\t1\t20\t100\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
-	 inputData<<"30\t1\t600\t900\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
-	 inputData<<"40\t1\t800\t1200\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
-
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
-	 BLRMatchMap matchMap(&para);
-		
-	 std::istringstream inputDataStream(inputData.str());
-	 matchMap.readPath(inputDataStream, 0);
-
-	 // the score is the length 
-	 std::list<RangePairSet> rpsList = matchMap.getRpsList();
-	 matchMap.computeScoreWithLength(rpsList);
-
-	 Graph <unsigned long> graph = matchMap.clusterizeOverlapingRps(rpsList,0); 
-		 
-	 std::ostringstream obs;
-	 graph.toStream(obs);
-		
-	 std::ostringstream exp;
-	 exp<<"node:0 ->10 next: 2(30) 3(40)\n";
-	 exp<<"node:1 ->20 next:\n";
-	 exp<<"node:2 ->30 next: 0(10)\n";
-	 exp<<"node:3 ->40 next: 0(10)\n";
- 
-		
-	 //std::ofstream obsFile("obsFile");
-	 //obsFile<<obs.str();
-
-	 //std::ofstream expFile("expFile");
-	 //expFile<<exp.str();
-	 
-	 CPPUNIT_ASSERT_EQUAL(exp.str(),obs.str());
-}
-
-void Test_BLRMatchMap::test_mergeOnCluster(void)
-{
-	 std::ostringstream inputData;
-	 inputData<<"10\t1\t10\t400\t1\t3351\t3238\t0\t116\t76.1062\t116\n";
-	 inputData<<"10\t1\t700\t1000\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
-	 inputData<<"20\t1\t20\t100\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
-	 inputData<<"30\t1\t600\t900\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
-	 inputData<<"40\t1\t800\t1200\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
-
-	
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
-	 BLRMatchMap matchMap(&para);
-		
-	 std::istringstream inputDataStream(inputData.str());
-	 matchMap.readPath(inputDataStream, 0);
-
-	 // rpsList is, for the test a cluster 
-	 std::list<RangePairSet> rpsList = matchMap.getRpsList();
-	 // the score is the length 
-	 matchMap.computeScoreWithLength(rpsList);
-
-	 Graph<unsigned long> graph;
-	 graph.add_edge(10,30);
-	 graph.add_edge(10,40);
-	 graph.add_node(20);
-
-	 std::list<RangePairSet> mergedRpsList = matchMap.mergeOnCluster(rpsList, graph, 0);
-		
-	 std::ostringstream obs;
-	 std::list<RangePairSet> rps_list = matchMap.getRpsListFromMapPath();
-	 matchMap.writeRpsList(mergedRpsList, obs);
-	 matchMap.writeRpsListAttribute(mergedRpsList, obs);
-	
-	 std::ostringstream exp;
-	 exp<<"1\t1\t10\t400\t1\t3351\t3238\t0\t391\t76.1062\n";
-	 exp<<"1\t1\t600\t699\t1\t3202\t3109\t0\t100\t84.8361\n";
-	 exp<<"1\t1\t700\t1000\t1\t3338\t3239\t3e-28\t301\t81.8182\n";
-	 exp<<"1\t1\t1001\t1200\t1\t3061\t2921\t0\t200\t84.8361\n";
-	 exp<<"2\t1\t20\t100\t1\t3239\t3338\t3e-28\t81\t81.8182\n";
-	 exp<<"[1\t1\t10\t1200\t-1\t0\t0\t0\t992\t0]\n";
-	 exp<<"[2\t1\t20\t100\t1\t3239\t3338\t3e-28\t81\t81.8182]\n";
-	 
-	 //std::ofstream obsFile("obsFile");
-	 //obsFile<<obs.str();
-
-	 //std::ofstream expFile("expFile");
-	 //expFile<<exp.str();
-	
-	 CPPUNIT_ASSERT_EQUAL(exp.str(),obs.str());
 }
 
 void Test_BLRMatchMap::test_writeBED(void)
