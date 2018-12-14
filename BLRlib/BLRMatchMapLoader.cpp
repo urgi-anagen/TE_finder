@@ -37,7 +37,8 @@ void BLRMatchMapLoader::readAlign(BLRMatchMap& blrmm, std::istream& input_align,
 	size_t n = std::count(str.begin(), str.end(), '\t');
 	if (n!=8)
 	{
-		std::cout<<"BLRMatchMap ERROR: Number of columns is:"<<n+1
+		std::cout<<"BLRMatchMap ERROR: Number of columns is:"<<n+1<<std::endl
+		<<"first line:\n"<<str<<std::endl
 		<<"! not an *align* formated file"<<std::endl;
 		exit(0);
 	}

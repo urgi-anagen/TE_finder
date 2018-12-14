@@ -1,18 +1,18 @@
-#include "Test_F_matcher.h"
+#include "Test_matcher.h"
 #include "SDGString.h"
 #include "FileUtils.h"
 
-CPPUNIT_TEST_SUITE_REGISTRATION( Test_F_matcher );
+CPPUNIT_TEST_SUITE_REGISTRATION( Test_matcher );
 
-void Test_F_matcher::setUp()
+void Test_matcher::setUp()
 {
 }
 
-void Test_F_matcher::tearDown()
+void Test_matcher::tearDown()
 {
 }
 
-void Test_F_matcher::test_runAsScript( void ){
+void Test_matcher::test_runAsScript( void ){
 	SDGString inputFileName = "input.align";
 	std::ofstream inputFileStream;
 	FileUtils::openFile(inputFileName, inputFileStream);
@@ -33,16 +33,19 @@ void Test_F_matcher::test_runAsScript( void ){
 	SDGString outParamFileName = "input.align.clean_match.param";
 	SDGString outMapFileName = "input.align.clean_match.map";
 
-	SDGString cmd = "../matcher"+SDGString(VERSION)+" -m " + inputFileName + " -j -x";
+	SDGString cmd = "../matcher"+SDGString(VERSION)+" -m " + inputFileName + " -j -x -v 1";
 	std::system(cmd);
 
 	bool obs = FileUtils::areTwoFilesIdentical(expFileName, obsFileName);
 	bool exp = true;
 
 	CPPUNIT_ASSERT_EQUAL(exp, obs);
-	FileUtils::removeFile(inputFileName);
-	FileUtils::removeFile(expFileName);
-	FileUtils::removeFile(obsFileName);
-	FileUtils::removeFile(outParamFileName);
-	FileUtils::removeFile(outMapFileName);
+	if(obs){
+		FileUtils::removeFile(inputFileName);
+		FileUtils::removeFile(expFileName);
+		FileUtils::removeFile(obsFileName);
+		FileUtils::removeFile(outParamFileName);
+		FileUtils::removeFile(outMapFileName);
+	}
+
 }

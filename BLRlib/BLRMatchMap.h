@@ -124,18 +124,18 @@ class BLRMatchMap
   unsigned getNbQseq(void) { return num2nameQ.size();};
   unsigned getNbSseq(void);
   void readAlign(std::istringstream& streamName, int verbose=0);
-  void load(int verbose=0){ load(para->getMatchFileName(),verbose);};
+  void load(int verbose=0){ loadAlign(para->getMatchFileName(), verbose);};
+  void loadAlign(SDGString filename, int verbose = 0);
+
   void readPath(std::istringstream& streamName, int verbose=0);
   void loadPath(int verbose=0){ loadPath(para->getPath_filename(),verbose);};
-  void load(SDGString filename, int verbose=0);
+
   void clear(void){map_align.clear();map_path.clear();};
   void mapPath(bool joining=true, bool clean_before=false, bool clean_after=false, bool merged=false, int verbose=0);
   void mapPathJoinOnlyForTest(bool joining=true, bool clean_before=false, bool clean_after=false, int verbose=0);
-  //void mapPathWithThreads(bool joining=true, bool clean_before=false, bool clean_after=false, bool merged=false, int verbose=0);
   void clean_conflicts(void);
   void clean_path(bool same_S=true, int verbose=0);
   void split_path(void);
-  //void clean_self(void);
   void select(bool subject=true, bool clean_before=false, bool clean_after=false);
   void selectQregex(SDGString regex);
   void writePath(const SDGString& filename, std::list<RangePairSet>& rps_list, int verbose=0);
@@ -173,8 +173,6 @@ class BLRMatchMap
   void add_split_path(std::list<RangePairSet>& rp_list, std::list<RangePairSet>::iterator iter);
 
   void merge(int verbose=0);
-  std::list<RangePairSet> mergeOnCluster(std::list<RangePairSet> rpsList, Graph<unsigned long>& graph, int verbose=0);
-  Graph <unsigned long> clusterizeOverlapingRps(std::list<RangePairSet>& rpsList,int verbose=0);
 
   void loadPath(SDGString filename, int verbose=0);
   // for unit test purpose
@@ -195,8 +193,6 @@ class BLRMatchMap
   BLRJoinParameter* getParameter(){return para;};
   
   void mapPathJoinAndComputeScoreWithLengthOnly(bool joining, bool clean_before, bool clean_after, int verbose);
-  // TODO remove	
-  void viewMapPath();
 };
 
 #endif

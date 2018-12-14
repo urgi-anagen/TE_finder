@@ -20,7 +20,7 @@ void loadFromAlignFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
 
 
 	if(verbose>0) std::cout<<"Load the matches..."<<std::endl<<std::flush;
-	match_map.load( para->getMatchFileName(), verbose );
+    match_map.loadAlign(para->getMatchFileName(), verbose);
 	if(verbose>0) std::cout<<"Matches were loaded."<<std::endl;
 
 	if( para->getJoin_frag() ) //Join fragments

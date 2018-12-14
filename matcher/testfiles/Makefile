@@ -6,7 +6,7 @@ include ../../global_mak.def
 
 BASE = ../..
 
-OBJ = Test_F_matcher.o
+OBJ = Test_matcher.o
 
 OBJ_DEP = 
 
@@ -20,7 +20,7 @@ clean:
 	@find . -name '*~' -exec rm {} \;
 	@rm -f $(TARGET)
 
-test_u: $(OBJ) $(OBJ_DEP) Test_F_matcher.h
+test_u: $(OBJ) $(OBJ_DEP) Test_matcher.h
 	ln -sf ../matcher$(VERSION) matcher
 	$(CXX) $(CXXFLAG) $(INCLUDE) $(LIB) -lcppunit $(OBJ_DEP) $(OBJ) test_u.cpp -o $@ $(LINK)
 	./test_u
