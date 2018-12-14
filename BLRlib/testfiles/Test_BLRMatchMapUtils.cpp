@@ -357,7 +357,7 @@ std::list<RangePairSet> Test_BLRMatchMapUtils::createRpList_for_test_add_clean_p
     int verboseParameter = 0;
     SDGString match_file = "match.align";
     writeInputFile();
-    matchMap.load(0);     
+    matchMap.loadAlign(0);
     BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
     matchMap.mapPathJoinOnlyForTest(joiningParameter, cleanBefore, cleanAfter, verboseParameter);
     BLRMatchMap::MapPath map_path = matchMap.getMapPath(); 
@@ -616,7 +616,7 @@ BLRMatchMap::MapPath Test_BLRMatchMapUtils::createMapPath_afterJoin(void){
     BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
     BLRMatchMap matchMap(&para);
      
-    matchMap.load(0);     
+    matchMap.loadAlign(0);
     BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
     matchMap.mapPathJoinOnlyForTest(joiningParameter, cleanBefore, cleanAfter, verboseParameter);
     FileUtils::removeFile(match_file);
@@ -991,7 +991,7 @@ std::list<RangePairSet> Test_BLRMatchMapUtils::createInputRpsListFor_test_add_sp
     BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
     BLRMatchMap matchMap(&para);
      
-    matchMap.load(0);     
+    matchMap.loadAlign(0);
     BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
     matchMap.mapPathJoinAndComputeScoreWithLengthOnly(joiningParameter, cleanBefore, cleanAfter, verboseParameter);
     return matchMap.getRpsList();
