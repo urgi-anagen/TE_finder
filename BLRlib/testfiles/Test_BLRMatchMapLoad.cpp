@@ -136,7 +136,7 @@ void Test_BLRMatchMapLoad::test_load(void)
 	obs<<inputData.str();
 	obs.close();
 
-  	matchMap.load(0);   
+  	matchMap.loadAlign(0);
 
    	std::ostringstream sout_obs;
    	matchMap.writeMapAlign(sout_obs);

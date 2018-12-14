@@ -12,7 +12,7 @@
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/BriefTestProgressListener.h>
-#include "Test_F_matcher.h"
+#include "Test_matcher.h"
 
 int main( int argc, char *argv[] )
 {
