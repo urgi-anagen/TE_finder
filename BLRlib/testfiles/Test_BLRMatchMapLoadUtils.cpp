@@ -3,7 +3,7 @@
 #include "Test_BLRMatchMapUtils.h"
 #include "SDGString.h"
 #include "FileUtils.h"
-#include "BLRMatcherParameter.h"
+#include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
 #include "Range.h"
 #include "RangePair.h"
@@ -21,8 +21,8 @@ void Test_BLRMatchMapLoadUtils::viewNum2Name(std::map<long,std::string> mapToVie
     		std::cout << it->first << " => " << it->second << '\n';
 }
 
-BLRMatcherParameter Test_BLRMatchMapLoadUtils::createParameter(void){
-  BLRMatcherParameter para;
+BLRMatcherThreadsParameter Test_BLRMatchMapLoadUtils::createParameter(void){
+  BLRMatcherThreadsParameter para;
   para.setLenFilter(0);
   para.setEvalFilter(10);
   para.setIdFilter(0);
@@ -100,7 +100,7 @@ BLRMatchMap::MapAlign Test_BLRMatchMapLoadUtils::createExpMapAlign_for_test_load
 {
   SDGString match_file = "match.align";
   Test_BLRMatchMapUtils::writeInputFile();
-  BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+  BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
   BLRMatchMap matchMap(&para);
   matchMap.clear();
 

@@ -15,7 +15,7 @@
 #include <iterator>
 #include <iomanip>
 #include <BlastMatch.h>
-#include <BLRBlasterParameter.h>
+#include "../blaster/BLRBlasterParameter.h"
 
 class BLRMatchList 
 {

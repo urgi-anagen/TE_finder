@@ -12,7 +12,7 @@
 #include <SDGString.h>
 #include <utility>
 #include <map>
-#include <BLRGrouperParameter.h>
+#include "../../grouper.threads/BLRGrouperParameter.h"
 #include "BLRMemIdx.h"
 
 class Test_BLRGroupUtils

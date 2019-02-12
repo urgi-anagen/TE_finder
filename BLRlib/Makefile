@@ -7,7 +7,7 @@ include ../global_mak.def
 OBJ =   BLRBioSeqDB.o \
 	BLRJoinParameter.o \
 	BLRBlasterParameter.o \
-	BLRMatcherParameter.o \
+	BLRMatcherThreadsParameter.o \
 	BLRGrouperParameter.o \
 	BLRMatchList.o \
 	BLRMatchMap.o \

@@ -19,7 +19,7 @@ class Test_BLRMatchMapLoadUtils
 		static std::map<long, std::string> generateNum2NameS(void);
 		static void viewName2Num(std::map<std::string,long> mapToView);
 		static void viewNum2Name(std::map<long,std::string> mapToView);
-		static BLRMatcherParameter createParameter(void);
+		static BLRMatcherThreadsParameter createParameter(void);
 		static std::list<RangePairSet> createRpsList(std::list<SDGString> inputList);
 		static std::list<SDGString> generateExp_for_test_loadPath_rpsList(void);
 		static void write_input_file_for_test_loadPath_rpsList(SDGString fileName);
