@@ -16,7 +16,7 @@
 #include "Reference.h"
 #include "SDGString.h"
 #include "BlastMatch.h"
-#include "BLRGrouperParameter.h"
+#include "../../grouper.threads/BLRGrouperParameter.h"
 #include "BLRBioSeqDB.h"
 #include "BLRMatchMap.h"
 #include "RangeSeq.h"
