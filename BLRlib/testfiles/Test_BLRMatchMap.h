@@ -7,7 +7,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "RangePair.h"
-#include "BLRMatcherParameter.h"
+#include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
 #include "Graph.h"
 
@@ -20,8 +20,6 @@ class Test_BLRMatchMap: public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST(view_add_clean_path_all_S);
   CPPUNIT_TEST(view_split_path);
   CPPUNIT_TEST(test_isOverlapFound_in_add_split_path);
-  // CPPUNIT_TEST(test_mapPath_comparaison_diagnostic_compare_rangePairSetList_list_comparaison_key_1_2);
-  // CPPUNIT_TEST(test_mapPath_comparaison_diagnostic_compare_rangePairSetList_list_comparaison_key_1_3);
   CPPUNIT_TEST(test_reComputeScoreWithLength_on_a_match_with_one_match_part);
   CPPUNIT_TEST(test_reComputeScoreWithLength_on_a_match_with_two_match_part);
   CPPUNIT_TEST(test_merge_on_two_queries);
@@ -46,10 +44,7 @@ class Test_BLRMatchMap: public CPPUNIT_NS::TestFixture
     void test_mapPath(void);
     void view_add_clean_path_all_S(void);
     void view_split_path(void);
-    
-    void test_extractRangePairSetListFromMapPath(void);
     void test_isOverlapFound_in_add_split_path(void);
-    void test_isOverlapFound_in_add_clean_path_all_S(void);
     void test_reComputeScoreWithLength_on_a_match_with_one_match_part(void);
     void test_reComputeScoreWithLength_on_a_match_with_two_match_part(void);
     void test_merge_on_two_queries(void);

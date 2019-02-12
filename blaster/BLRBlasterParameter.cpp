@@ -5,7 +5,7 @@
  ***/
 
 #include <sys/stat.h>
-#include <BLRBlasterParameter.h>
+#include "BLRBlasterParameter.h"
 #include <SDGFastaIstream.h>
 #include <unistd.h> //getopt
 #include <sstream>

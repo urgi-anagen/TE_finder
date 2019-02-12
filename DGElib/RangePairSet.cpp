@@ -252,7 +252,6 @@ void RangePairSet::writeRpsAttr(std::ostream& out, unsigned id,
 	else{
         out<<"\t-1";
 	}
-
 	out<<"\t"<<getRangeS().getStart()
 	<<"\t"<<getRangeS().getEnd()
 	<<"\t"<<getE_value()
@@ -327,36 +326,40 @@ bool RangePairSet::split(const RangePairSet& r, std::list<RangePairSet>& lrp )
 }
 
 
-bool RangePairSet::inserted(const RangePairSet& r)
-{
-  std::list<RangePair> r_path=r.path;
-  r_path.sort(RangePair::less);
-  path.sort(RangePair::less);
-  std::list<RangePair>::iterator prev_i,i=path.begin();
-  std::list<RangePair>::iterator j=r_path.begin();
-  if(j->getRangeQ().getMin()<i->getRangeQ().getMax()){
-    return false;
-  }
-  while(i!=path.end() && j->getRangeQ().getMax()>i->getRangeQ().getMin()) i++;
-  if(i==path.end()){
-    return false;
-  }
-  prev_i=i;
-  prev_i--;
-  if(prev_i==path.end())
-{
+bool RangePairSet::inserted(const RangePairSet &r) {
+	//Test if range is inserted with no overlap
+	std::list<RangePair> r_path = r.path;
+	r_path.sort(RangePair::less);
+	path.sort(RangePair::less);
+	std::list<RangePair>::iterator prev_i, i = path.begin();
+	std::list<RangePair>::iterator j = r_path.begin();
+	if (j->getRangeQ().getMin() < i->getRangeQ().getMax()) {
+		// range is after current range
+		return false;
+	}
 
-    return false;
-}
-  while( j->getRangeQ().getMax()<i->getRangeQ().getMin()
-	 && j->getRangeQ().getMin()>prev_i->getRangeQ().getMax()
-	 && j!=r_path.end()) j++;
-  if(j==r_path.end())
-{
-    return true;
-}
+	//Find range to be tested: range may overlap
+	while (i != path.end() && j->getRangeQ().getMax() > i->getRangeQ().getMin()) i++;
+	if (i == path.end()) {
+		return false;
+	}
+	prev_i = i;
+	prev_i--;
+	if (prev_i == path.end()) {
 
-  return false;
+		return false;
+	}
+
+	//Test if range is inserted with no overlap
+	while (j->getRangeQ().getMax() < i->getRangeQ().getMin()
+		   && j->getRangeQ().getMin() > prev_i->getRangeQ().getMax()
+		   && j != r_path.end())
+		j++;
+	if (j == r_path.end()) {
+		return true;
+	}
+
+	return false;
 }
 
 

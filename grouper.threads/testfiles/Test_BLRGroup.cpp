@@ -2,7 +2,7 @@
 #include "Test_BLRGroupUtils.h"
 #include "../BLRGroupThreads.h"
 #include "../BLRMemIdxBin.h"
-#include "BLRGrouperParameter.h"
+#include "../BLRGrouperParameter.h"
 #include "SDGString.h"
 #include "FileUtils.h"
 
@@ -79,6 +79,7 @@ void Test_BLRGroup::test_mergeWithExtGroup(void)
 
 
 	gr.mergeWithExtGroup(gr_it, ext_gr_it, ext_gr);
+
 
 	//Expectation. Note insertion order is important
     BLRGroup gr_exp(para_ptr,&mm2,3);

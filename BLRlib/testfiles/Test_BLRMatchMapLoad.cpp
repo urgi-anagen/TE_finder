@@ -1,8 +1,8 @@
 #include "Test_BLRMatchMapLoad.h"
 #include "SDGString.h"
 #include "FileUtils.h"
-#include "BLRMatcherParameter.h"
-#include "BLRGrouperParameter.h"
+#include "../../matcher/BLRMatcherParameter.h"
+#include "../../grouper.threads/BLRGrouperParameter.h"
 #include "BLRMatchMap.h"
 #include "Range.h"
 #include "RangePair.h"
@@ -22,7 +22,7 @@ void Test_BLRMatchMapLoad::tearDown()
 
 void Test_BLRMatchMapLoad::test_readAlign()
 {
-   BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+   BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
    BLRMatchMap matchMap(&para);
  
    std::ostringstream inputData;
@@ -69,7 +69,7 @@ void Test_BLRMatchMapLoad::test_readPath()
    inputData<<"11\t4\t110567\t110878\t6\t2833\t2532\t0\t312\t77.2076\t312\n";
    inputData<<"12\t4\t109527\t109818\t4\t3005\t3316\t0\t292\t82.8467\t292\n";
    
-   BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+   BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
    BLRMatchMap matchMap(&para);
  
    std::istringstream inputDataStream(inputData.str());
@@ -120,7 +120,7 @@ void Test_BLRMatchMapLoad::test_load(void)
  	SDGString match_file = "match.align";
 
 
-  	BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+  	BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
    	BLRMatchMap matchMap(&para);
  
 	std::ostringstream inputData;
@@ -136,7 +136,7 @@ void Test_BLRMatchMapLoad::test_load(void)
 	obs<<inputData.str();
 	obs.close();
 
-  	matchMap.loadAlign(0);
+  	matchMap.loadAlign(match_file,0);
 
    	std::ostringstream sout_obs;
    	matchMap.writeMapAlign(sout_obs);
@@ -177,7 +177,7 @@ void Test_BLRMatchMapLoad::test_loadPath(void)
 	obs<<inputData.str();
 	obs.close();
 
-	BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
 	BLRMatchMap matchMap(&para);
 
 	matchMap.loadPath(path_file);
@@ -231,7 +231,7 @@ void Test_BLRMatchMapLoad::test_loadPath_name2Num_and_num2Name(void)
 	SDGString pathFileName = "input.path";	
 	Test_BLRMatchMapLoadUtils::write_input_file_for_test_loadPath_name2Num_and_num2Name(pathFileName);
 
-	BLRMatcherParameter para = Test_BLRMatchMapLoadUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapLoadUtils::createParameter();
 	BLRMatchMap matchMap(&para);
  
 	matchMap.loadPath(pathFileName, 0);
@@ -259,7 +259,7 @@ void Test_BLRMatchMapLoad::test_loadPath_rpsList(void)
 	SDGString pathFileName = "input.path";	
 	Test_BLRMatchMapLoadUtils::write_input_file_for_test_loadPath_rpsList(pathFileName);
 
-	BLRMatcherParameter para = Test_BLRMatchMapLoadUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapLoadUtils::createParameter();
 	BLRMatchMap matchMap(&para);
  
 	matchMap.loadPath(pathFileName, 0);
@@ -285,7 +285,7 @@ void Test_BLRMatchMapLoad::test_loadPath_with_join_end_of_file(void)
 	SDGString pathFileName = "input.path";	
 	Test_BLRMatchMapLoadUtils::write_input_file_for_test_loadPath_with_join_end_of_file(pathFileName);
 
-	BLRMatcherParameter para = Test_BLRMatchMapLoadUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapLoadUtils::createParameter();
 	BLRMatchMap matchMap(&para);
  
 	matchMap.loadPath(pathFileName, 0);
@@ -326,7 +326,7 @@ void Test_BLRMatchMapLoad::test_loadPath_with_join_begin_of_file(void)
 	SDGString pathFileName = "input.path";	
 	Test_BLRMatchMapLoadUtils::write_input_file_for_test_loadPath_with_join_begin_of_file(pathFileName);
 
-	BLRMatcherParameter para = Test_BLRMatchMapLoadUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapLoadUtils::createParameter();
 	BLRMatchMap matchMap(&para);
  
 	matchMap.loadPath(pathFileName, 0);
@@ -366,7 +366,7 @@ void Test_BLRMatchMapLoad::test_loadPath_with_join_middle_of_file(void)
 	SDGString pathFileName = "input.path";	
 	Test_BLRMatchMapLoadUtils::write_input_file_for_test_loadPath_with_join_middle_of_file(pathFileName);
 
-	BLRMatcherParameter para = Test_BLRMatchMapLoadUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapLoadUtils::createParameter();
 	BLRMatchMap matchMap(&para);
  
 	matchMap.loadPath(pathFileName, 0);

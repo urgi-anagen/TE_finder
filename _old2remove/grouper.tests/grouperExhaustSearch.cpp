@@ -8,7 +8,7 @@
 #include "Reference.h"
 #include "SDGString.h"
 #include "BlastMatch.h"
-#include "BLRGrouperParameter.h"
+#include "../../grouper.threads/BLRGrouperParameter.h"
 #include "BLRGroupExhaustSearch.h"
 
 int main( int argc, char* argv[] )

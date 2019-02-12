@@ -4,9 +4,9 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-class Test_matcher: public CPPUNIT_NS::TestFixture
+class Test_matcherThreads: public CPPUNIT_NS::TestFixture
 {
-	CPPUNIT_TEST_SUITE(Test_matcher);
+	CPPUNIT_TEST_SUITE(Test_matcherThreads);
 	CPPUNIT_TEST(test_runAsScript);
  	CPPUNIT_TEST_SUITE_END();
 

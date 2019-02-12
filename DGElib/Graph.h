@@ -28,9 +28,9 @@ class Graph
 		Node(unsigned num, T val) : num_node(num), value(val) {};
 
 		void view(void) {
-			std::cout << "node:" << num_node << " ->" << value << " next:";
+			std::cout << "node #" << num_node << "=" << value << " next:";
 			for (typename std::list<Node *>::iterator i = list_next.begin(); i != list_next.end(); i++)
-				std::cout << " " << (*i)->num_node << "(" << (*i)->value << ")";
+				std::cout << "#" << (*i)->num_node << "(=" << (*i)->value << ")|";
 			std::cout << std::endl;
 		};
 
@@ -115,7 +115,7 @@ public:
 		if (i == map_node.end()) {
 			pnode = new Node(vec_node.size(), val);
 			vec_node.push_back(pnode);
-			map_node[val] = pnode;
+			map_node[val]=pnode;
 		} else
 			pnode = i->second;
 
@@ -125,7 +125,6 @@ public:
 	void add_edge(const T &val1, const T &val2) {
 		Node *pnode1, *pnode2;
 		pnode1 = add_node(val1);
-
 		pnode2 = add_node(val2);
 
 		typename std::list<Node *>::iterator j;
