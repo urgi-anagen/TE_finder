@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "Test_BLRGroupUtils.h"
-#include "BLRGrouperParameter.h"
+#include "../../../grouper.threads/BLRGrouperParameter.h"
 #include "FileUtils.h"
 #include "Range.h"
 #include "RangeAlignSet.h"

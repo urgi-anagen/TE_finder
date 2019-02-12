@@ -1,7 +1,7 @@
 #include "Test_BLRMatchMap.h"
 #include "SDGString.h"
 #include "FileUtils.h"
-#include "BLRMatcherParameter.h"
+#include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
 #include "Range.h"
 #include "RangePair.h"
@@ -23,10 +23,10 @@ void Test_BLRMatchMap::test_clean_conflicts(void){
 	SDGString match_file = "match.align";
 	Test_BLRMatchMapUtils::writeInputFile();
 	
-	BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
 	BLRMatchMap matchMap(&para);
 		 
-	matchMap.loadAlign(0);
+	matchMap.loadAlign(match_file);
 	
 	BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
 	
@@ -51,7 +51,7 @@ void Test_BLRMatchMap::test_clean_conflicts(void){
 	bool obsComparaison = (expMapAlign == obsMapAlign);
 	
 	CPPUNIT_ASSERT_EQUAL(expComparaison, obsComparaison);
-	
+
 	FileUtils::removeFile(match_file);
 }
 
@@ -70,7 +70,7 @@ void Test_BLRMatchMap::test_mapPath(void){
 		inputData<<"chunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1000\t80.00\n";
 		inputData<<"chunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t400\t90.00\n";
 
-		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+		BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 		BLRMatchMap matchMap(&para);
 
 		std::istringstream inputDataStream(inputData.str());
@@ -90,44 +90,44 @@ void Test_BLRMatchMap::test_mapPath(void){
 		exp<<"1\tchunk1\t100\t500\trefTE_1\t1\t400\t0\t401\t100\n";
 		exp<<"1\tchunk1\t600\t1000\trefTE_1\t500\t900\t0\t401\t100\n";
 		exp<<"1\tchunk1\t1001\t2000\trefTE_1\t2000\t3000\t0\t1000\t100\n";
-		exp<<"2\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t1001\t100\n";
-		exp<<"3\tchunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1001\t80\n";
-		exp<<"3\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t401\t90\n";
-		exp<<"[1\tchunk1\t100\t2000\trefTE_1\t1\t3000\t0\t1802\t100]\n";
-		exp<<"[2\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t1001\t100]\n";
-		exp<<"[3\tchunk1\t10000\t11500\trefTE_2\t1\t1500\t0\t1402\t82.8602]\n";
-
-
+		exp<<"1\tchunk1\t2001\t2500\trefTE_2\t2001\t2500\t0\t500\t100\n";
+		exp<<"2\tchunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1001\t80\n";
+		exp<<"2\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t401\t90\n";
+		exp<<"[1\tchunk1\t100\t2500\t-1\t0\t0\t0\t2302\t0]\n";
+		exp<<"[2\tchunk1\t10000\t11500\trefTE_2\t1\t1500\t0\t1402\t82.8602]\n";
 
 		CPPUNIT_ASSERT_EQUAL(exp.str(), obs.str());
 }
 
 void Test_BLRMatchMap::view_add_clean_path_all_S(void){
-		SDGString match_file = "match.align";
-		Test_BLRMatchMapUtils::writeInputFile();
- 
-		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
-		BLRMatchMap matchMap(&para);
-		matchMap.loadAlign(0);
-		std::list<RangePairSet> rpList = Test_BLRMatchMapUtils::createRpList_for_test_add_clean_path_all_S();
-		
-			 
-		//std::cout<<"add_clean_path_all_S Input "<<std::endl;
-		//for(std::list<RangePairSet>::iterator i=rpList.begin();
-		//   i!=rpList.end();i++){
-		//    i->view();
-		//}
-		
-	 for(std::list<RangePairSet>::iterator i=rpList.begin();
-			 i!=rpList.end();i++){
-				matchMap.add_clean_path_all_S(rpList, i, 1);
-		}
-		
-		//BLRMatchMap::MapPath obsMapPath = matchMap.getMapPath(); 
-		//std::cout<<"add_clean_path_all_S Output "<<std::endl;
-		//Test_BLRMatchMapUtils::viewMapPath(obsMapPath);
-			
-		FileUtils::removeFile(match_file);
+
+
+	BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
+	BLRMatchMap matchMap(&para);
+
+/*	std::ostringstream inputData;
+	inputData << "chunk682\t105085\t105353\trefTE_251\t3202\t2921\t0\t269\t84.836100\n";
+	inputData << "chunk682\t105091\t105206\trefTE_251\t3351\t3238\t0\t116\t76.106200\n";
+	inputData << "chunk682\t109527\t109818\trefTE_251\t3005\t3316\t0\t292\t82.846700\n";
+	inputData << "chunk682\t109601\t109708\trefTE_251\t3239\t3338\t3e-28\t108\t81.818200\n";
+	inputData << "chunk682\t109951\t110569\trefTE_266\t119\t689\t9.4e-19\t619\t77.768000\n";
+	inputData << "chunk682\t109985\t110398\trefTE_251\t2429\t2033\t0\t414\t77.860400\n";
+	inputData << "chunk682\t110567\t110878\trefTE_230\t2833\t2532\t0\t312\t77.207600\n";
+
+	std::istringstream inputDataStream(inputData.str());
+	matchMap.readAlign(inputDataStream);*/
+
+	std::list<RangePairSet> rpList = Test_BLRMatchMapUtils::createRpList_for_test_add_clean_path_all_S();
+
+	for (std::list<RangePairSet>::iterator i = rpList.begin();
+		 i != rpList.end(); i++) {
+		matchMap.add_clean_path_all_S(rpList, i, 1);
+	}
+
+	BLRMatchMap::MapPath obsMapPath = matchMap.getMapPath();
+	//std::cout<<"add_clean_path_all_S Output "<<std::endl;
+	//Test_BLRMatchMapUtils::viewMapPath(obsMapPath);
+	
 }
 
 void Test_BLRMatchMap::view_split_path(void){
@@ -139,10 +139,10 @@ void Test_BLRMatchMap::view_split_path(void){
 		SDGString match_file = "match.align";
 		Test_BLRMatchMapUtils::writeInputFile();
 		
-		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+		BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 		BLRMatchMap matchMap(&para);
 		 
-		matchMap.loadAlign(0);
+		matchMap.loadAlign(match_file,0);
 		BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
 	
 		matchMap.mapPathJoinAndComputeScoreWithLengthOnly(joiningParameter, cleanBefore, cleanAfter, verboseParameter);
@@ -194,7 +194,7 @@ void Test_BLRMatchMap::test_isOverlapFound_in_add_split_path(void){
 		bool obsOverlap = false;
 		
 		 for (std::list<RangePairSet>::iterator lrp_it=rp_list.begin(); lrp_it!=rp_list.end(); lrp_it++){
-				obsOverlap = BLRMatchMap::isOverlapFound_in_add_split_path(rp_list.begin(), mapPath, idTolerance, lenFilter);
+				obsOverlap = Test_BLRMatchMapUtils::isOverlapFound_in_add_split_path(rp_list.begin(), mapPath, idTolerance, lenFilter);
 				if (obsOverlap){
 						break;
 				}
@@ -237,7 +237,7 @@ void Test_BLRMatchMap::test_reComputeScoreWithLength_on_a_match_with_one_match_p
 		std::list<RangePairSet> inRpsList = Test_BLRMatchMapUtils::createInputRpsList_for_test_reComputeScoreWithLength_on_a_match_with_one_match_part();   
 		std::list<RangePairSet> expRpsList = Test_BLRMatchMapUtils::createExpRpsList_for_test_reComputeScoreWithLength_on_a_match_with_one_match_part();  	
 		
-		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+		BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
 		BLRMatchMap matchMap(&para);
 			
 		//std::cout<<" "<<std::endl;    
@@ -271,7 +271,7 @@ void Test_BLRMatchMap::test_reComputeScoreWithLength_on_a_match_with_two_match_p
 		//Test_BLRMatchMapUtils::viewRangePairSetList(inRpsList);
 		
  
-		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter();
+		BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter();
 		BLRMatchMap matchMap(&para);
 	
 		matchMap.computeScoreWithLength(inRpsList);
@@ -302,7 +302,7 @@ void Test_BLRMatchMap::test_merge_on_two_queries(void)
 	 inputData<<"3\t2\t700\t900\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
 	 inputData<<"4\t2\t600\t1000\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
 
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -349,7 +349,7 @@ void Test_BLRMatchMap::test_merge_second_fragment_include(void)
 	 inputData<<"1\t1\t700\t900\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
 	 inputData<<"2\t1\t600\t1000\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
 
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -391,7 +391,7 @@ void Test_BLRMatchMap::test_merge_overlap_right_on_second_fragment(void)
 	 inputData<<"1\t1\t600\t900\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
 	 inputData<<"2\t1\t700\t1000\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
 		
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -432,7 +432,7 @@ void Test_BLRMatchMap::test_merge_overlap_left_on_second_fragment(void)
 	 inputData<<"1\t1\t600\t900\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
 	 inputData<<"2\t1\t500\t800\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
 	 
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -472,7 +472,7 @@ void Test_BLRMatchMap::test_merge_overlap_first_and_second_fragment(void)
 	 inputData<<"1\t1\t600\t900\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
 	 inputData<<"2\t1\t200\t900\t2\t3202\t2921\t0\t269\t84.8361\t269\n";
 		
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -517,7 +517,7 @@ void Test_BLRMatchMap::test_merge_on_mapPath_data(void)
 	inputData<<"3\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t400\t90.00\n";
 
 
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -562,7 +562,7 @@ void Test_BLRMatchMap::test_merge_all_included(void)
 	 inputData<<"1\t1\t800\t900\t1\t3239\t3338\t3e-28\t108\t81.8182\t108\n";
 	 inputData<<"2\t1\t5\t905\t1\t3202\t2921\t0\t269\t84.8361\t269\n";
 	 
-	 BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+	 BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 	 BLRMatchMap matchMap(&para);
 		
 	 std::istringstream inputDataStream(inputData.str());
@@ -600,7 +600,7 @@ void Test_BLRMatchMap::test_writeBED(void)
 	inputData<<"10\tCHR1v01212004\t800\t1000\tTNAT1A\t36\t523\t2e-128\t460\t81.56\n";
 	inputData<<"20\tCHR1v01212004\t1050\t2000\tTNAT1A\t580\t480\t7e-78\t87\t79.14\n";
 
-		BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+		BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
 		BLRMatchMap matchMap(&para);
 		
 		std::istringstream inputDataStream(inputData.str());

@@ -20,7 +20,7 @@
 #include "FragAlign.h"
 #include "RangeSeq.h"
 #include "BLRBioSeqDB.h"
-#include "BLRMatcherParameter.h"
+#include "../matcher/BLRMatcherParameter.h"
 #include "Graph.h"
 
 typedef std::list<RangePairSet> RpsList;
@@ -71,42 +71,38 @@ class BLRMatchMap
 
  public:
 
-  BLRMatchMap(void)
-  {
-	  para=new BLRJoinParameter();
-	  same_db=false;
-    merge_overlap=200;
-  };
+    BLRMatchMap(void) {
+        para = new BLRJoinParameter();
+        same_db = false;
+        merge_overlap = 200;
+    };
 
-  BLRMatchMap(BLRJoinParameter *p) :
-  para(p)
-  {
-	  same_db=false;
-    merge_overlap=200;
-	  if(para->getQuery()!="<not set>")
-		  query_db.load(para->getQuery());
-	  if(para->getBank()!="<not set>")
-		  subject_db.load(para->getBank());
-  };
+    BLRMatchMap(BLRJoinParameter *p) :
+            para(p) {
+        same_db = false;
+        merge_overlap = 200;
+        if (para->getQuery() != "<not set>")
+            query_db.load(para->getQuery());
+        if (para->getBank() != "<not set>")
+            subject_db.load(para->getBank());
+    };
 
-
-  BLRMatchMap(const BLRMatchMap& m)
-  {
-	  map_align=m.map_align;
-	  map_path=m.map_path;
-	  para=new BLRJoinParameter(*m.para);
-	  rpsList=m.rpsList;
-	  name2numQ=m.name2numQ;
-	  name2numS=m.name2numS;
-	  num2nameQ=m.num2nameQ;
-	  num2nameS=m.num2nameS;
-	  subjectCut_db=m.subjectCut_db;
-	  queryCut_db=m.queryCut_db;
-	  query_db=m.query_db;
-	  subject_db=m.subject_db;
-  	same_db=m.same_db;
-    merge_overlap=m.merge_overlap;
-  }
+    BLRMatchMap(const BLRMatchMap &m) {
+        map_align = m.map_align;
+        map_path = m.map_path;
+        para = new BLRJoinParameter(*m.para);
+        rpsList = m.rpsList;
+        name2numQ = m.name2numQ;
+        name2numS = m.name2numS;
+        num2nameQ = m.num2nameQ;
+        num2nameS = m.num2nameS;
+        subjectCut_db = m.subjectCut_db;
+        queryCut_db = m.queryCut_db;
+        query_db = m.query_db;
+        subject_db = m.subject_db;
+        same_db = m.same_db;
+        merge_overlap = m.merge_overlap;
+    }
 
   MapAlign::iterator begin(){ return map_align.begin();};
   MapAlign::iterator end(){ return map_align.end();};
@@ -161,13 +157,13 @@ class BLRMatchMap
         { rpsList = rpsListArg;}; 
   void setMapPath(MapPath& mapPathArg){map_path = mapPathArg;};
   MapAlign getMapAlign(void){return map_align;};
+
   void insert(RangePair& range);
   void insert(RangePairSet& range);
-  void insertRangePairSetIntoMapPath(RangePairSet rangePairSet, BLRMatchMap::MapPath mapPath);
   void add_clean_path_all_S(std::list<RangePairSet>& rp_list,
 			    std::list<RangePairSet>::iterator iter,
 			    int verbose=0);
-  static bool isOverlapFound_in_add_split_path(std::list<RangePairSet>::iterator iter, MapPath mapPath, double idTolerance, unsigned lenFilter);
+
   void computeScoreWithLength(std::list<RangePairSet>& rpsList);
   void computeScoreWithLength();
   void add_split_path(std::list<RangePairSet>& rp_list, std::list<RangePairSet>::iterator iter);

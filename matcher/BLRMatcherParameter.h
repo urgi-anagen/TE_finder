@@ -18,17 +18,17 @@
  * \class BLRMatcherParameter
  * \brief Parameters for the MATCHER program
  */
-class BLRMatcherParameter: public BLRJoinParameter
+class BLRMatcherThreadsParameter: public BLRJoinParameter
 {
  private:
   bool clean_before, clean_after, merge;
   int verbose;
  public:
   //! -Constructor
-  BLRMatcherParameter(void){reset();}; 
+  BLRMatcherThreadsParameter(void){reset();};
   
   //! -Destructor
-  virtual ~BLRMatcherParameter(void){};
+  virtual ~BLRMatcherThreadsParameter(void){};
 
   void reset(void)
     {

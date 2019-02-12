@@ -4,7 +4,7 @@
  *
  ***/
 
-#include <BLRGrouperParameter.h>
+#include "BLRGrouperParameter.h"
 #include <SDGFastaIstream.h>
 #include <unistd.h> //getopt
 #include <sstream>

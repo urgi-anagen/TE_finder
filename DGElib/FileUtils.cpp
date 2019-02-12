@@ -72,7 +72,7 @@ void FileUtils::removeFile( SDGString file )
 
 void FileUtils::openFile( SDGString file, std::ofstream &fileStream )
 {
-	fileStream.open( file.c_str() );
+	fileStream.open( file.c_str(), std::ofstream::out | std::ofstream::trunc );
 	if ( ! fileStream.is_open() )
 	{
 		std::cerr<<"ERROR: unable to open file '"<<file<<"'"<<std::endl;

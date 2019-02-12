@@ -87,6 +87,7 @@ class BLRJoinParameter
 
   void view(std::ostream& out) const;
 
+  void setAlignFile(SDGString filename) {match_filename=filename;};
 
   /*! Function to get file name which use as subject by blast*/
 

@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
    try{
      std::cout<<"Beginning Matcher (version "<<VERSION<<")"<<std::endl<<std::flush;
 
-     BLRMatcherParameter para;
+     BLRMatcherThreadsParameter para;
      para.parseOptArg(argc,argv);
      if(para.getVerbose()>0)
        para.view(std::cout);

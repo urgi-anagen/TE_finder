@@ -3,7 +3,7 @@
 #include "Test_BLRMatchMapUtils.h"
 #include "SDGString.h"
 #include "FileUtils.h"
-#include "BLRMatcherParameter.h"
+#include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
 #include "Range.h"
 #include "RangePair.h"
@@ -85,16 +85,16 @@ void Test_BLRMatchMapUtils::viewRangePairSetList(std::list<RangePairSet> rpsList
 void Test_BLRMatchMapUtils::writeInputFile(void)
 {
   SDGString inputFileName = "match.align";
-	std::ofstream inputFileStream;
-	FileUtils::openFile(inputFileName, inputFileStream);
-  	inputFileStream<<"chunk682\t105085\t105353\trefTE_251\t3202\t2921\t0\t269\t84.836100\n";
-  	inputFileStream<<"chunk682\t105091\t105206\trefTE_251\t3351\t3238\t0\t116\t76.106200\n";
-	inputFileStream<<"chunk682\t109527\t109818\trefTE_251\t3005\t3316\t0\t292\t82.846700\n";
-	inputFileStream<<"chunk682\t109601\t109708\trefTE_251\t3239\t3338\t3e-28\t108\t81.818200\n";
-	inputFileStream<<"chunk682\t109951\t110569\trefTE_266\t119\t689\t9.4e-19\t619\t77.768000\n";
-	inputFileStream<<"chunk682\t109985\t110398\trefTE_251\t2429\t2033\t0\t414\t77.860400\n";
-	inputFileStream<<"chunk682\t110567\t110878\trefTE_230\t2833\t2532\t0\t312\t77.207600\n";
-	inputFileStream.close();
+  std::ofstream inputFileStream;
+  FileUtils::openFile(inputFileName, inputFileStream);
+  inputFileStream << "chunk682\t105085\t105353\trefTE_251\t3202\t2921\t0\t269\t84.836100\n";
+  inputFileStream << "chunk682\t105091\t105206\trefTE_251\t3351\t3238\t0\t116\t76.106200\n";
+  inputFileStream << "chunk682\t109527\t109818\trefTE_251\t3005\t3316\t0\t292\t82.846700\n";
+  inputFileStream << "chunk682\t109601\t109708\trefTE_251\t3239\t3338\t3e-28\t108\t81.818200\n";
+  inputFileStream << "chunk682\t109951\t110569\trefTE_266\t119\t689\t9.4e-19\t619\t77.768000\n";
+  inputFileStream << "chunk682\t109985\t110398\trefTE_251\t2429\t2033\t0\t414\t77.860400\n";
+  inputFileStream << "chunk682\t110567\t110878\trefTE_230\t2833\t2532\t0\t312\t77.207600\n";
+  inputFileStream.close();
 }
 
 void Test_BLRMatchMapUtils::writeInputFileWithTwoMatchesToBeJoined(void)
@@ -107,12 +107,12 @@ void Test_BLRMatchMapUtils::writeInputFileWithTwoMatchesToBeJoined(void)
 	inputFileStream.close();
 }
 
-BLRMatcherParameter Test_BLRMatchMapUtils::createParameter(void){
-  return createParameter("match.align");
+BLRMatcherThreadsParameter Test_BLRMatchMapUtils::createParameter(void){
+  return createParameter("match.param");
 }
 
-BLRMatcherParameter Test_BLRMatchMapUtils::createParameter(SDGString inputFileName){
-  BLRMatcherParameter para;
+BLRMatcherThreadsParameter Test_BLRMatchMapUtils::createParameter(SDGString inputFileName){
+  BLRMatcherThreadsParameter para;
   para.setMatch_filename(inputFileName);    
   para.setJoin_frag(true);
   // Enable '-x' option
@@ -121,9 +121,9 @@ BLRMatcherParameter Test_BLRMatchMapUtils::createParameter(SDGString inputFileNa
   return para;
 }
 
-BLRMatcherParameter Test_BLRMatchMapUtils::createParameterWithThreads(){
-  BLRMatcherParameter para;
-  para.setMatch_filename("match.align");
+BLRMatcherThreadsParameter Test_BLRMatchMapUtils::createParameterWithThreads(){
+  BLRMatcherThreadsParameter para;
+  para.setMatch_filename("match.param");
   para.setJoin_frag(true);
   // Enable '-x' option
   para.setCleanBefore(false);
@@ -287,7 +287,7 @@ BLRMatchMap::MapPath Test_BLRMatchMapUtils::createExpMapPath_for_mapPath(void){
 BLRMatchMap::MapAlign Test_BLRMatchMapUtils::createExpMapAlign_for_clean_conflicts(void){
   SDGString match_file = "match.align";
   writeInputFile();
-  BLRMatcherParameter para = createParameter();
+  BLRMatcherThreadsParameter para = createParameter();
   BLRMatchMap matchMap(&para);
   matchMap.clear();
 
@@ -349,7 +349,7 @@ BLRMatchMap::MapAlign Test_BLRMatchMapUtils::createExpMapAlign_for_clean_conflic
 }
 
 std::list<RangePairSet> Test_BLRMatchMapUtils::createRpList_for_test_add_clean_path_all_S(void){
-    BLRMatcherParameter para = createParameter(); 
+    BLRMatcherThreadsParameter para = createParameter(); 
     BLRMatchMap matchMap(&para);
     bool joiningParameter = true;
     bool cleanBefore = false;
@@ -357,7 +357,7 @@ std::list<RangePairSet> Test_BLRMatchMapUtils::createRpList_for_test_add_clean_p
     int verboseParameter = 0;
     SDGString match_file = "match.align";
     writeInputFile();
-    matchMap.loadAlign(0);
+    matchMap.loadAlign(match_file,0);
     BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
     matchMap.mapPathJoinOnlyForTest(joiningParameter, cleanBefore, cleanAfter, verboseParameter);
     BLRMatchMap::MapPath map_path = matchMap.getMapPath(); 
@@ -378,7 +378,7 @@ std::list<RangePairSet> Test_BLRMatchMapUtils::createRpList_for_test_add_clean_p
 BLRMatchMap::MapAlign Test_BLRMatchMapUtils::createMapAlign_instance_for_test_mapAlign_Equality(void){
   SDGString match_file = "match.align";
   writeInputFile();
-  BLRMatcherParameter para = createParameter();
+  BLRMatcherThreadsParameter para = createParameter();
   BLRMatchMap matchMap(&para);
   matchMap.clear();
 
@@ -613,7 +613,7 @@ BLRMatchMap::MapPath Test_BLRMatchMapUtils::createMapPath_afterJoin(void){
     SDGString match_file = "match.align";
     Test_BLRMatchMapUtils::writeInputFile();
     
-    BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+    BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
     BLRMatchMap matchMap(&para);
      
     matchMap.loadAlign(0);
@@ -988,7 +988,7 @@ std::list<RangePairSet> Test_BLRMatchMapUtils::createInputRpsListFor_test_add_sp
     SDGString match_file = "match.align";
     Test_BLRMatchMapUtils::writeInputFile();
     
-    BLRMatcherParameter para = Test_BLRMatchMapUtils::createParameter(); 
+    BLRMatcherThreadsParameter para = Test_BLRMatchMapUtils::createParameter(); 
     BLRMatchMap matchMap(&para);
      
     matchMap.loadAlign(0);
@@ -1067,4 +1067,43 @@ BLRMatchMap::MapPath Test_BLRMatchMapUtils::createMapPath(std::list<SDGString> i
     	}
 
 	return mapPath;
+}
+//----------------------------------------------------------------------------
+bool Test_BLRMatchMapUtils::isOverlapFound_in_add_split_path(std::list<RangePairSet>::iterator iter, BLRMatchMap::MapPath mapPath,
+                                                   double idTolerance, unsigned lenFilter) {
+
+  bool found_over = false;
+  std::list<RangePairSet> lrp;
+
+  lrp.push_back(*iter);
+  for (BLRMatchMap::MapPath::iterator m = mapPath.begin(); m != mapPath.end(); m++) {
+
+    if (m->first.first == iter->getRangeQ().getNumChr()) {
+
+      for (std::list<RangePairSet>::iterator lrp_it = lrp.begin();
+           lrp_it != lrp.end();
+           lrp_it++)
+        for (std::list<RangePairSet>::iterator iter_list = m->second.begin();
+             iter_list != m->second.end(); iter_list++)
+          if (lrp_it->overlapQ(*iter_list)) {
+            if (lrp_it->getLength() >= 100 &&
+                lrp_it->inserted(*iter_list) &&
+                fabs(iter_list->getIdentity()
+                     - lrp_it->getIdentity()) <= idTolerance)
+              continue;
+            std::list<RangePairSet> lrp2;
+
+            if (lrp_it->split(*iter_list, lrp2)) {
+              found_over = true;
+              for (std::list<RangePairSet>::iterator lrp2_it
+                      = lrp2.begin(); lrp2_it != lrp2.end(); lrp2_it++)
+                if (lrp2_it->getRangeQ().getLength()
+                    > lenFilter)
+                  lrp.push_back(*lrp2_it);
+            }
+
+          }
+    }
+  }
+  return found_over;
 }

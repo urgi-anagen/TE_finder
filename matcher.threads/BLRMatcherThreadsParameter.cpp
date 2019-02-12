@@ -1,31 +1,27 @@
 /***
  *
- * BLRMatcherParameter.cpp
+ * BLRMatcherThreadsParameter.cpp
  *
  ***/
 
-#include <BLRMatcherParameter.h>
+#include "../matcher/BLRMatcherParameter.h"
 #include <SDGFastaIstream.h>
 #include <unistd.h> //getopt
 #include <sstream>
 //**************************************************************************
-void BLRMatcherParameter::write(const SDGString& filename) const
+void BLRMatcherThreadsParameter::write(const SDGString& filename) const
 {
   std::ofstream fout(filename);
   view(fout);
   fout.close();
 }
 //**************************************************************************
-void BLRMatcherParameter::view(std::ostream& out) const
+void BLRMatcherThreadsParameter::view(std::ostream& out) const
 {
   BLRJoinParameter::view(out);
   out<<"============================================="<<std::endl; 
   out<<"MATCHER parameter:"<<std::endl;
   out<<"-----------------"<<std::endl;
-  if(clean_before)
-    out<<"Filter conflicting subjects before joining"<<std::endl;
-  else
-    out<<"No Filtering of conflicting subjects before joining"<<std::endl;  
   if(clean_after)
     out<<"Filter conflicting subjects after joining"<<std::endl;
   else
@@ -37,17 +33,16 @@ void BLRMatcherParameter::view(std::ostream& out) const
   out<<"============================================="<<std::endl; 
 }
 //**************************************************************************
-void BLRMatcherParameter::help(void)
+void BLRMatcherThreadsParameter::help(void)
 {  
-  std::cout<<"usage: matcher [option]"<<std::endl;
+  std::cout<<"usage: matcher.threads [option]"<<std::endl;
   BLRJoinParameter::help();
-  std::cout<<"-a:\n\tall conflicting subject, default=FALSE"<<std::endl;
   std::cout<<"-x:\n\tclean conflicts after join, default=FALSE"<<std::endl;
   std::cout<<"-M:\n\tmerge (use it with clean after join option), default=FALSE"<<std::endl;
   std::cout<<"-v:\n\tverbose, default=0"<<std::endl;
 }
 //**************************************************************************
-void BLRMatcherParameter::parseOptArg(int numarg, char* tabarg[])
+void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 { 
   while(1)
     {
@@ -84,7 +79,7 @@ void BLRMatcherParameter::parseOptArg(int numarg, char* tabarg[])
 // 			 long_options, &option_index);
 
 	int c = getopt (numarg, tabarg, 
- 			     "hm:aMxs:q:I:E:L:ji:g:d:b:B:c:v:t:");
+ 			     "hm:Mxs:q:I:E:L:ji:g:d:b:B:c:v:t:");
 
 	/* Detect the end of the options. */
 	if (c == -1)
@@ -97,15 +92,8 @@ void BLRMatcherParameter::parseOptArg(int numarg, char* tabarg[])
 	      help();
 	      exit(EXIT_FAILURE);
 	    }
-	  case 'a':
-	    {
-	      clean_before=false;
-	      clean_after=false;
-	      break;
-	    }
 	  case 'x':
 	    {
-	      clean_before=false;
 	      clean_after=true;
 	      break;
 	    }
