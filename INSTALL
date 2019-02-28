@@ -1,14 +1,18 @@
 Dependencies
 ============
 
-* cmake
+* cmake : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
 
 
 Compilation
 ===========
 
-type 'cmake'
+<TE_finder-root-dir> is the root directory of TE-finder package
 
+1-go to the <TE_finder-root-dir>/build directory
+2-type 'cmake ../src'.
+4-type 'make install'
+5-binaries are in <TE_finder-root-dir>/bin
 
 blaster:
 ========
