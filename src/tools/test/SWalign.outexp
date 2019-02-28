@@ -1,0 +1,137 @@
+../seq1.fa: 1280
+../seq2.fa: 1240
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 1203
+      Match Percentage : 99%
+      Number of Matches : 1228
+      Number of Mismatches : 0
+      Total Length of Gaps : 10
+      Begins at (53, 1) and Ends at (1280, 1238)
+
+    0     .    :    .    :    .    :    .    :    .    :
+   53 CAAAGACCCTAGAATAACAAGATGCGTAACGCCATACGATTTTTTGGCAC
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+    1 CAAAGACCCTAGAATAACAAGATGCGTAACGCCATACGATTTTTTGGCAC
+
+   50     .    :    .    :    .    :    .    :    .    :
+  103 ACGATTTTTTGGCCGTGGCTCTAGAGGTGGCTCCAGGCTCTCTCGAATTT
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+   51 ACGATTTTTTGGCCGTGGCTCTAGAGGTGGCTCCAGGCTCTCTCGAATTT
+
+  100     .    :    .    :    .    :    .    :    .    :
+  153 TTGTTAGAGAGCGAGAGAGCGAAGAGCGCTACAGCGAACAGCTCTTTTCA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  101 TTGTTAGAGAGCGAGAGAGCGAAGAGCGCTACAGCGAACAGCTCTTTTCA
+
+  150     .    :    .    :    .    :    .    :    .    :
+  203 ACGCACAAAGTGATAGCAGACAACTGTATGTGTGCACACGTATGCTCATG
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  151 ACGCACAAAGTGATAGCAGACAACTGTATGTGTGCACACGTATGCTCATG
+
+  200     .    :    .    :    .    :    .    :    .    :
+  253 CATTGTAAATTTGACAAAATATGCCCTTCACCTTAGAAGTTCTTAGACTT
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  201 CATTGTAAATTTGACAAAATATGCCCTTCACCTTAGAAGTTCTTAGACTT
+
+  250     .    :    .    :    .    :    .    :    .    :
+  303 TAAATCTATATTATTTTTGATCAATTGGCACCATGCGAAAATTCTATTGG
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  251 TAAATCTATATTATTTTTGATCAATTGGCACCATGCGAAAATTCTATTGG
+
+  300     .    :    .    :    .    :    .    :    .    :
+  353 CACCATGCGATTCTTGTTTTGCATTGCCTTAACGTTATTATTATTTGAAA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  301 CACCATGCGATTCTTGTTTTGCATTGCCTTAACGTTATTATTATTTGAAA
+
+  350     .    :    .    :    .    :    .    :    .    :
+  403 ATAGATTAGAAATAGCCAAATCTATGTACATATTATCACAAAAATAAATT
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  351 ATAGATTAGAAATAGCCAAATCTATGTACATATTATCACAAAAATAAATT
+
+  400     .    :    .    :    .    :    .    :    .    :
+  453 TCAAAAATGACTTTATATAAGAATATTTGTCATTAGAGTATTCATCTTGC
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  401 TCAAAAATGACTTTATATAAGAATATTTGTCATTAGAGTATTCATCTTGC
+
+  450     .    :    .    :    .    :    .    :    .    :
+  503 GGCGTGTGAAAAATTAATAAGGCAATGATTGTTGAGTGCTTGTGTCCGCA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  451 GGCGTGTGAAAAATTAATAAGGCAATGATTGTTGAGTGCTTGTGTCCGCA
+
+  500     .    :    .    :    .    :    .    :    .    :
+  553 CTTCGTGCCTCAAGATATGAACAAAGCAAAGACACTAGAATAATTCTAGT
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  501 CTTCGTGCCTCAAGATATGAACAAAGCAAAGACACTAGAATAATTCTAGT
+
+  550     .    :    .    :    .    :    .    :    .    :
+  603 GTATTACTTTGATATTACTTTTGCAATAAACAGTTATCATATTTTTATGA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  551 GTATTACTTTGATATTACTTTTGCAATAAACAGTTATCATATTTTTATGA
+
+  600     .    :    .    :    .    :    .    :    .    :
+  653 AATTTATGAAATTACAGTAGTTATAATAATTTCTATTGTACTTCCTTTAA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  601 AATTTATGAAATTACAGTAGTTATAATAATTTCTATTGTACTTCCTTTAA
+
+  650     .    :    .    :    .    :    .    :    .    :
+  703 TTATTTAGTATATTTATTAAATCATTTGACTTAATATGATGTAACATTAA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  651 TTATTTAGTATATTTATTAAATCATTTGACTTAATATGATGTAACATTAA
+
+  700     .    :    .    :    .    :    .    :    .    :
+  753 CATTAAAAGTGTTTCAAAAAAAATATTTCGCTTTTAAAAAATTGTCAGAT
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  701 CATTAAAAGTGTTTCAAAAAAAATATTTCGCTTTTAAAAAATTGTCAGAT
+
+  750     .    :    .    :    .    :    .    :    .    :
+  803 GAGAGACAAATTAGAATTAAACATAAATATAAATGTGTAAACGGTAGCTA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  751 GAGAGACAAATTAGAATTAAACATAAATATAAATGTGTAAACGGTAGCTA
+
+  800     .    :    .    :    .    :    .    :    .    :
+  853 ATTCGAGCGGCGATTTTAACAAACAAATTTTAAAAAGCTTTAAAATTATA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  801 ATTCGAGCGGCGATTTTAACAAACAAATTTTAAAAAGCTTTAAAATTATA
+
+  850     .    :    .    :    .    :    .    :    .    :
+  903 ATAGTCAGGGCGCGAATTTTTAAAAATTTTTTTATTTTATCATATTGCTA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  851 ATAGTCAGGGCGCGAATTTTTAAAAATTTTTTTATTTTATCATATTGCTA
+
+  900     .    :    .    :    .    :    .    :    .    :
+  953 GGAAATTGGCAAAAACTACCCTAATATGTACCATGTAAATTCGTTTCTTC
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  901 GGAAATTGGCAAAAACTACCCTAATATGTACCATGTAAATTCGTTTCTTC
+
+  950     .    :    .    :    .    :    .    :    .    :
+ 1003 GATCAGAATTGATTTCGGCCCCGAAAATCGTCTTCTAGCACAACACGCAC
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+  951 GATCAGAATTGATTTCGGCCCCGAAAATCGTCTTCTAGCACAACACGCAC
+
+ 1000     .    :    .    :    .    :    .    :    .    :
+ 1053 ACTTATACGCGTTCTCGTCTCTTGTTTTTACTCACACAAGCAAGCAAATT
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1001 ACTTATACGCGTTCTCGTCTCTTGTTTTTACTCACACAAGCAAGCAAATT
+
+ 1050     .    :    .    :    .    :    .    :    .    :
+ 1103 ATATTTTTAGATTTCTTACGCTCTCAGCGGGAGTGAGCGGAAAGAGAGTA
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1051 ATATTTTTAGATTTCTTACGCTCTCAGCGGGAGTGAGCGGAAAGAGAGTA
+
+ 1100     .    :    .    :    .    :    .    :    .    :
+ 1153 ATTTTGGCCGTCACCAAAAAAGTGGCTGCATAGTGCCAAACCAATGTATG
+      ||||||||||||||||||||||||||||||||||||||||||||||||||
+ 1101 ATTTTGGCCGTCACCAAAAAAGTGGCTGCATAGTGCCAAACCAATGTATG
+
+ 1150     .    :    .    :    .    :    .    :    .    :
+ 1203 GCCGTTACGCATCTTGTTATTCTAGTGTCTTTGGTTTGTG          
+      ||||||||||||||||||||||||||||||||||||||||----------
+ 1151 GCCGTTACGCATCTTGTTATTCTAGTGTCTTTGGTTTGTGCCAATGTATG
+
+ 1200     .    :    .    :    .    :    .
+ 1243 GCCGTTACGCATCTTGTTATTCTAGTGTCTTTGGTTTG
+      ||||||||||||||||||||||||||||||||||||||
+ 1201 GCCGTTACGCATCTTGTTATTCTAGTGTCTTTGGTTTG
+*** not best on complement! ***
