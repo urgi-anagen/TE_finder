@@ -7,10 +7,6 @@ set(CMAKE_CXX_STANDARD 11)
 set (VERSION "2.28")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION=${VERSION} -pthread -Wall")
 
-#set cppunit dirs
-#set(CPPUNIT_INCLUDE_DIR "/usr/local/Cellar/cppunit/1.14.0/include")
-#set(CPPUNIT_LIBRARY DIR "/usr/local/Cellar/cppunit/1.14.0/lib")
-
 FIND_PATH(CPPUNIT_INCLUDE_DIR cppunit/Test.h)
 FIND_LIBRARY(CPPUNIT_LIBRARY NAMES cppunit)
 
@@ -56,7 +52,6 @@ add_subdirectory (blaster)
 add_subdirectory (matcher)
 add_subdirectory (grouper.threads)
 add_subdirectory (duster)
-add_subdirectory (hasher2)
 add_subdirectory (tools)
 
 # add the install targets
@@ -67,16 +62,3 @@ install (TARGETS matcher${VERSION} DESTINATION bin)
 install (TARGETS grouperThreads${VERSION} DESTINATION bin)
 install (TARGETS duster${VERSION} DESTINATION bin)
 
-#include(CTest)
-
-# does test
-#add_test (SDG test_SDG "Ok")
-
-# build a CPack driven installer package
-# run: cpack --config CPackConfig.cmake
-#include (InstallRequiredSystemLibraries)
-#set (CPACK_RESOURCE_FILE_LICENSE
-#        "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
-#set (CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
-#set (CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
-#include (CPack)
