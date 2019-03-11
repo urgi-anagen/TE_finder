@@ -7,7 +7,7 @@
  The results of BLASTER can be treated further by the MATCHER and GROUPER program, 
  but these two last programs can be also used in conjunction with other programs such as RepeatMasker, 
  CENSOR, BLAST, BLAT, ... if their outputs are correctly formated as a BLASTER output file (i.e. *.align).
- See the [documentation](Blaster_documentation.md)
+ See the [documentation](Documentation.md)
  for more details.
 
 The binaries are part of the [REPET package](http://urgi.versailles.inra.fr/Tools/REPET).
