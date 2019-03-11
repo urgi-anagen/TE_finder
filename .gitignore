@@ -34,7 +34,6 @@
 
 cmake-build-debug/
 
-CMakeLists\.txt
 
 TE_finder\.sublime-project
 
