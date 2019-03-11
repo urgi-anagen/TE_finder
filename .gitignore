@@ -23,14 +23,7 @@
 *.exe
 *.out
 *.app
-/hasher2/testfiles/DmelChr4.fa.hasher.align
-/hasher2/testfiles/TEsBuisine.fa.extracted.kidx
-/hasher2/testfiles/AlyrCrubTparAalpBrapAtha_TEannot2.gff3.fa.cleaned.kidx
-/hasher2/testfiles/duster-specific.fa.extracted
-/hasher2/testfiles/duster-specific.fa.extracted.hasher.align
-/hasher2/testfiles/AlyrCrubTparAalpBrapAtha_TEannot2.gff3.fa.cleaned
-/hasher2/testfiles/TEsBuisine.fa.kidx
-*.kidx
+
 /.buildpath
 /BLRlib/testfiles/test_u.dSYM
 /hasher2/testfiles/duster-specific.fa.hasher.align
