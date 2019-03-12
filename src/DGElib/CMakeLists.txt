@@ -23,7 +23,7 @@ add_library(
 
         DGElib
 
-        SHARED
+        STATIC
 
         ${source_files}
 

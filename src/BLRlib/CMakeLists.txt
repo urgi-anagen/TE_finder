@@ -22,7 +22,7 @@ file(
 add_library(
         BLRlib
 
-        SHARED
+        STATIC
 
         ${source_files}
         BLRMatchPath.cpp BLRMatchPath.h BLRMatchJoin.cpp BLRMatchJoin.h)
