@@ -9,7 +9,7 @@ void BLRMatchJoin::join(BLRMatchAlign &map_align, BLRMatchPath &map_path, int ve
     if (verbose > 0)
         std::cout << "Join parameters: dist_pen=" << para.getDist_pen()
                        << " gap_pen=" << para.getGap_pen()
-                       << " overlap=" << para.getOverlap() << std::__1::endl << std::__1::flush;
+                       << " overlap=" << para.getOverlap() << std::endl << std::flush;
 
     unsigned count = 0;
     for (BLRMatchAlign::MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++) {
@@ -27,8 +27,8 @@ void BLRMatchJoin::join(BLRMatchAlign &map_align, BLRMatchPath &map_path, int ve
     map_path.setNum2NameS(map_align.getNum2NameS());
 
     if (verbose > 0) {
-        std::cout << "After join:\nnb of matches: " << map_path.getNbMatchesInMapPath() << std::__1::endl;
-        std::cout << "nb of paths: " << map_path.getNbDistinctPaths() << std::__1::endl;
+        std::cout << "After join:\nnb of matches: " << map_path.getNbMatchesInMapPath() << std::endl;
+        std::cout << "nb of paths: " << map_path.getNbDistinctPaths() << std::endl;
     }
 }
 //------------------------------------------------------------------------------------------------------------

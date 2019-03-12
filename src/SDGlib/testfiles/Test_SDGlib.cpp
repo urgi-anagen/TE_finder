@@ -1,7 +1,7 @@
 #include <SDGMemBioSeq.h>
 #include <SDGFastaBioSeq.h>
 #include <SDGFastaIstream.h>
-
+#include <cstring>
 #include "Test_SDGlib.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_SDGlib);
@@ -10,7 +10,7 @@ void Test_SDGlib::test_SDGMemBioSeq( void )
 {
     char str[]="ATATTTATTTTAGCGTTTACGCT";
 
-    unsigned exp_len=strlen(str);
+    unsigned exp_len=std::strlen(str);
     
 	SDGBioSeq seq=newSDGMemBioSeq(str);
 	

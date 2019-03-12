@@ -10,7 +10,7 @@ Compilation
 <TE_finder-root-dir> is the root directory of TE-finder package
 
 1-go to the <TE_finder-root-dir> directory
-2-type 'cmake '.
+2-type 'cmake .'
 3-type 'make install'
 4-binaries are in <TE_finder-root-dir>/bin
 
