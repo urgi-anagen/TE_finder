@@ -23,7 +23,7 @@ add_library(
 
         SDGlib
 
-        SHARED
+        STATIC
 
         ${source_files}
 

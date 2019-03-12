@@ -19,6 +19,7 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #endif
 #include <ACG.h>
 #include <assert.h>
+#include <cstdint>
 
 //
 //	This is an extension of the older implementation of Algorithm M
@@ -122,7 +123,7 @@ static short randomStateTable[][3] = {
 //
 
 #define RANDOM_PERM_SIZE 64
-__uint32_t randomPermutations[RANDOM_PERM_SIZE] = {
+uint32_t randomPermutations[RANDOM_PERM_SIZE] = {
 0xffffffff, 0x00000000,  0x00000000,  0x00000000,  // 3210
 0x0000ffff, 0x00ff0000,  0x00000000,  0xff000000,  // 2310
 0xff0000ff, 0x0000ff00,  0x00000000,  0x00ff0000,  // 3120
@@ -148,7 +149,7 @@ __uint32_t randomPermutations[RANDOM_PERM_SIZE] = {
 //	SEED_TABLE_SIZE must be a power of 2
 //
 #define SEED_TABLE_SIZE 32
-static __uint32_t seedTable[SEED_TABLE_SIZE] = {
+static uint32_t seedTable[SEED_TABLE_SIZE] = {
 0xbdcc47e5, 0x54aea45d, 0xec0df859, 0xda84637b,
 0xc8c6cb4f, 0x35574b01, 0x28260b7d, 0x0d07fdbf,
 0x9faaeeb0, 0x613dd169, 0x5ce2d818, 0x85b9e706,
@@ -170,20 +171,20 @@ static __uint32_t seedTable[SEED_TABLE_SIZE] = {
 // LC_C = result of a long trial & error series = 3907864577
 //
 
-static const __uint32_t LC_A = 66049;
-static const __uint32_t LC_C = 3907864577U;
-static inline __uint32_t LCG(__uint32_t x)
+static const uint32_t LC_A = 66049;
+static const uint32_t LC_C = 3907864577U;
+static inline uint32_t LCG(uint32_t x)
 {
     return( x * LC_A + LC_C );
 }
 
 
-ACG::ACG(__uint32_t seed, int size)
+ACG::ACG(uint32_t seed, int size)
 {
   setSeed(seed,size);
 }
 
-void ACG::setSeed(__uint32_t seed, int size)
+void ACG::setSeed(uint32_t seed, int size)
 {
     int l;
     initialSeed = seed;
@@ -209,7 +210,7 @@ void ACG::setSeed(__uint32_t seed, int size)
     //	Allocate the state table & the auxillary table in a single malloc
     //
     
-    state = new __uint32_t[stateSize + auxSize];
+    state = new uint32_t[stateSize + auxSize];
     auxState = &state[stateSize];
 
     reset();
@@ -220,7 +221,7 @@ void ACG::setSeed(__uint32_t seed, int size)
 //
 void ACG::reset()
 {
-    __uint32_t u;
+    uint32_t u;
 
     if (initialSeed < SEED_TABLE_SIZE) {
 	u = seedTable[ initialSeed ];
@@ -250,7 +251,7 @@ void ACG::reset()
     
     lcgRecurr = u;
     
-    assert(sizeof(double) == 2 * sizeof(__int32_t));
+    assert(sizeof(double) == 2 * sizeof(int32_t));
 }
 
 ACG::~ACG()
@@ -264,15 +265,15 @@ ACG::~ACG()
 //	Returns 32 bits of random information.
 //
 
-__uint32_t ACG::asLong()
+uint32_t ACG::asLong()
 {
-    __uint32_t result = state[k] + state[j];
+    uint32_t result = state[k] + state[j];
     state[k] = result;
     j = (j <= 0) ? (stateSize-1) : (j-1);
     k = (k <= 0) ? (stateSize-1) : (k-1);
     
     short int auxIndex = (result >> 24) & (auxSize - 1);
-    __uint32_t auxACG = auxState[auxIndex];
+    uint32_t auxACG = auxState[auxIndex];
     auxState[auxIndex] = lcgRecurr = LCG(lcgRecurr);
     
     //
@@ -280,7 +281,7 @@ __uint32_t ACG::asLong()
     // do not want to run off the end of the permutation table.
     // This insures that we have always got four entries left.
     //
-    __uint32_t *perm = & randomPermutations[result & 0x3c];
+    uint32_t *perm = & randomPermutations[result & 0x3c];
     
     result =  *(perm++) & auxACG;
     result |= *(perm++) & ((auxACG << 24)
