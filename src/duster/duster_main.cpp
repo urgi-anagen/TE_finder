@@ -22,52 +22,55 @@ SDGString outfilename="";
 void help(void)
 {
   std::cerr<<"usage: duster"
-      <<" [<options>] <fasta query sequence> [<fasta sequence model>]. Note: without sequence model, duster will perform its own repeat search."<<std::endl
-      <<" options:"<<std::endl
-      <<"   -h, --help:\n\t this help"<<std::endl
-      <<"   -w, --kmer:\n\t kmer length (<16), default: "<<kmer_size<<std::endl
-      <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
-      <<"   -k, --kmask:\n\t period of k-mer mask, default: "<<kmask<<std::endl
-      <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
-	<<kmer_dist<<std::endl
-    <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
-	<<frag_connect_dist<<std::endl
-    <<"   -s, --min_size:\n\t min size range to report, default: "
-	<<min_size<<std::endl
-    <<"   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
-	<<count_cutoff<<std::endl
-    <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability (Value [0-1]), default: "
-    <<diversity_cutoff<<std::endl
-    <<"   -m, --min_count:\n\t filter kmer with counts less than this value, default: "
-	<<min_count<<std::endl
-    <<"   -b, --background_kmer_size:\n\t kmer size to compute kmer background probability, default: "
-	<<bkmer_size<<std::endl
-      <<"   -o, --file_out:\n\t filename for output,"<<std::endl
-      <<"   -c, --chunk_size:\n\t sequence chunk size in kb,"<<" default: None"<<std::endl
-      <<"   -n, --nb_iter:\n\t number of iteration. A value of 0 make iteration stop if coverage variation is less than 1%."<<" default:"<<nb_iter<<std::endl
-      <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
-  	  <<"   -v, --verbosity:\n\t verbosity level, default:"<<verbosity<<std::endl;
+          << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
+          << " options:" << std::endl
+          << "   -h, --help:\n\t this help" << std::endl
+          << "   -w, --kmer:\n\t kmer length (<16), default: " << kmer_size << std::endl
+          << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
+          << "   -k, --kmask:\n\t period of k-mer mask, default: " << kmask << std::endl
+          << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
+          << kmer_dist << std::endl
+          << "   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
+          << frag_connect_dist << std::endl
+          << "   -s, --min_size:\n\t min size range to report, default: "
+          << min_size << std::endl
+          << "   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
+          << count_cutoff << std::endl
+          << "   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability (Value [0-1]), default: "
+          << diversity_cutoff << std::endl
+          << "   -m, --min_count:\n\t filter kmer with counts less than this value, default: "
+          << min_count << std::endl
+          << "   -b, --background_kmer_size:\n\t kmer size to compute kmer background probability, default: "
+          << bkmer_size << std::endl
+          << "   -o, --file_out:\n\t filename for output," << std::endl
+          << "   -c, --chunk_size:\n\t sequence chunk size in kb," << " default: None" << std::endl
+          << "   -n, --nb_iter:\n\t number of iteration. A value of 0 make iteration stop if coverage variation is less than 1%."
+          << " default:" << nb_iter << std::endl
+          << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
+          << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
 {
   std::cout<<"\nRun with parameters:\n"
-	  <<"Query sequences: "<<filename1<<std::endl
-	  <<"Model sequences: "<<filename2<<std::endl
-      <<"   -w, --kmer:\t kmer length (<16): "<<kmer_size<<std::endl
-      <<"   -S, --step_q:\t step on query sequence: "<<step_q<<std::endl
-      <<"   -k, --kmask:\t length of k-mer mask: "<<kmask<<std::endl
-      <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: "<<kmer_dist<<std::endl
-      <<"   -f, --frag_connect_dist:\n\t max distance between two fragments to connect: "
-   	<<frag_connect_dist<<std::endl
-      <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
-      <<"   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
-      <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability: "<<diversity_cutoff<<std::endl
-      <<"   -m, --min_count:\t filter kmer with counts less than this value: "<<min_count<<std::endl
-      <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
-      <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
-      <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
-      <<"   -n, --nb_iter:\t number of iteration: "<<nb_iter<<std::endl
-  	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
+          << "Query sequences: " << filename1 << std::endl
+          << "Model sequences: " << filename2 << std::endl
+          << "   -w, --kmer:\t kmer length (<16): " << kmer_size << std::endl
+          << "   -S, --step_q:\t step on query sequence: " << step_q << std::endl
+          << "   -k, --kmask:\t length of k-mer mask: " << kmask << std::endl
+          << "   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: " << kmer_dist << std::endl
+          << "   -f, --frag_connect_dist:\n\t max distance between two fragments to connect: "
+          << frag_connect_dist << std::endl
+          << "   -s, --min_size:\t min size range to report: " << min_size << std::endl
+          << "   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: " << count_cutoff << std::endl
+          << "   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability: "
+          << diversity_cutoff << std::endl
+          << "   -m, --min_count:\t filter kmer with counts less than this value: " << min_count << std::endl
+          << "   -b, --background_kmer_size:\t kmer size to compute kmer background probability: " << bkmer_size
+          << std::endl
+          << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
+          << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
+          << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
+          << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
 };
 
 int main(int argc, char* argv[])
@@ -116,100 +119,81 @@ int main(int argc, char* argv[])
 		if (c == -1)
 		  break;
 
-		switch (c)
-		  {
-		  case 'h':
-			{
-			  help();
-			  return 0;
-			}
-		  case 'w':
-			{
-			  kmer_size=atoi(optarg);
-			  break;
-			}
-		  case 'S':
-			{
-			  step_q=atoi(optarg);
-			  break;
-			}
-		  case 'k':
-			{
-			  kmask=atoi(optarg);
-			  break;
-			}
-		  case 'd':
-			{
-				kmer_dist=atoi(optarg);
-			  break;
-			}
-		  case 'f':
-			{
-				frag_connect_dist=atoi(optarg);
-			  break;
-			}
-		  case 's':
-			{
-				min_size=atoi(optarg);
-			  break;
-			}
-		  case 'C':
-			{
-				count_cutoff=atof(optarg);
-			  break;
-			}
-		  case 'D':
-			{
-			  diversity_cutoff=atof(optarg);
-			  break;
-			}
-		  case 'm':
-			{
-				min_count=atoi(optarg);
-			  break;
-			}
-		  case 'b':
-			{
-				bkmer_size=atoi(optarg);
-				break;
-			}
-		  case 'o':
-			{
-			  outfilename=optarg;
-			  break;
-			}
-		  case 'c':
-			{
-			  chunk_size_kb=atoi(optarg);
-			  break;
-			}
-		  case 'n':
-			{
-			  nb_iter=atoi(optarg);
-			  break;
-			}
-		  case 'a':
-			{
-			  stat_only=true;
-			  break;
-			}
-		  case 'v':
-			{
-			  verbosity=atoi(optarg);
-			  break;
-			}
-		  case '?':
-		    {
-				help();
-				break;
-			}
-		    return 1;
-		  default:
-		  	{
-		  		abort();
-		  		break;
-		    }
-		  }
+          switch (c) {
+              case 'h': {
+                  help();
+                  return 0;
+              }
+              case 'w': {
+                  kmer_size = atoi(optarg);
+                  break;
+              }
+              case 'S': {
+                  step_q = atoi(optarg);
+                  break;
+              }
+              case 'k': {
+                  kmask = atoi(optarg);
+                  break;
+              }
+              case 'd': {
+                  kmer_dist = atoi(optarg);
+                  break;
+              }
+              case 'f': {
+                  frag_connect_dist = atoi(optarg);
+                  break;
+              }
+              case 's': {
+                  min_size = atoi(optarg);
+                  break;
+              }
+              case 'C': {
+                  count_cutoff = atof(optarg);
+                  break;
+              }
+              case 'D': {
+                  diversity_cutoff = atof(optarg);
+                  break;
+              }
+              case 'm': {
+                  min_count = atoi(optarg);
+                  break;
+              }
+              case 'b': {
+                  bkmer_size = atoi(optarg);
+                  break;
+              }
+              case 'o': {
+                  outfilename = optarg;
+                  break;
+              }
+              case 'c': {
+                  chunk_size_kb = atoi(optarg);
+                  break;
+              }
+              case 'n': {
+                  nb_iter = atoi(optarg);
+                  break;
+              }
+              case 'a': {
+                  stat_only = true;
+                  break;
+              }
+              case 'v': {
+                  verbosity = atoi(optarg);
+                  break;
+              }
+              case '?': {
+                  help();
+                  break;
+              }
+                  return 1;
+              default: {
+                  abort();
+                  break;
+              }
+          }
       }
 
     SDGString filename1,filename2;
@@ -252,24 +236,24 @@ int main(int argc, char* argv[])
     }
 
 
-    if(stat_only)
-    {
-    	std::cout<<"\nCompute kmer stat only!"<<std::endl;
-    	for(unsigned bw=1; bw<=bkmer_size; bw++)
-    	{
-    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,frag_connect_dist, min_size, step_q );
-        	std::vector<unsigned> kmer_count((unsigned)pow(4,hsrch.getEffectiveKmerSize()),0);
-        	std::list< Info_kmer > list_infokmer;
-        	Info_kmer kmer_threshold;
-        	unsigned nb_kmer;
+      if (stat_only) {
+          std::cout << "\nCompute kmer stat only!" << std::endl;
+          for (unsigned bw = 1; bw <= bkmer_size; bw++) {
+              Duster hsrch(kmer_size, kmask, bw, kmer_dist, frag_connect_dist, min_size, step_q);
+              std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
+              std::list<Info_kmer> list_infokmer;
+              Info_kmer kmer_threshold;
+              unsigned nb_kmer;
 
-        	std::cout<<"\n======Compute kmer background probability for "<<bw-1<<" Markov's chain order======"<<std::endl;
+              std::cout << "\n======Compute kmer background probability for " << bw - 1 << " Markov's chain order======"
+                        << std::endl;
 
-    		hsrch.kmer_analysis(filename2,kmer_size,kmask, bw, kmer_size/2, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
-    	}
-    	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
-    	exit( EXIT_SUCCESS );
-    }
+              hsrch.kmer_analysis(filename2, kmer_size, kmask, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
+                                  kmer_count, nb_kmer, list_infokmer, kmer_threshold);
+          }
+          std::cout << "\nEnd Duster (version " << VERSION << ")" << std::endl;
+          exit(EXIT_SUCCESS);
+      }
 
     Duster hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
     bool valid_idx_file=true;
