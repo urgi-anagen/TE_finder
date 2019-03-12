@@ -34,28 +34,28 @@ ENDIF (CPPUNIT_FOUND)
 
 include_directories(
         ${CPPUNIT_INCLUDE_DIR}
-        SDGlib
-        DGElib
-        BLRlib)
+        src/SDGlib
+        src/DGElib
+        src/BLRlib)
 
 link_directories(
         ${CPPUNIT_LIBRARY_DIR}
-        SDGlib
-        DGElib
-        BLRlib)
+        src/SDGlib
+        src/DGElib
+        src/BLRlib)
 
 
-add_subdirectory (SDGlib)
-add_subdirectory (DGElib)
-add_subdirectory (BLRlib)
-add_subdirectory (blaster)
-add_subdirectory (matcher)
-add_subdirectory (grouper.threads)
-add_subdirectory (duster)
-add_subdirectory (tools)
+add_subdirectory (src/SDGlib)
+add_subdirectory (src/DGElib)
+add_subdirectory (src/BLRlib)
+add_subdirectory (src/blaster)
+add_subdirectory (src/matcher)
+add_subdirectory (src/grouper.threads)
+add_subdirectory (src/duster)
+add_subdirectory (src/tools)
 
 # add the install targets
-set(CMAKE_INSTALL_PREFIX ../ CACHE PATH "Install here" FORCE)
+set(CMAKE_INSTALL_PREFIX . CACHE PATH "Install here" FORCE)
 
 install (TARGETS blaster${VERSION} DESTINATION bin)
 install (TARGETS matcher${VERSION} DESTINATION bin)
