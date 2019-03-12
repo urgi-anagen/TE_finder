@@ -34,3 +34,5 @@ target_link_libraries(
         DGElib
         BLRlib
 )
+
+install (TARGETS grouperThreads${VERSION} DESTINATION bin)

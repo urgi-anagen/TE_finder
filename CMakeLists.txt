@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-
 project(TE_finder)
-
 
 set(CMAKE_CXX_STANDARD 11)
 set (VERSION "2.28")
@@ -54,21 +52,3 @@ add_subdirectory (src/grouper.threads)
 add_subdirectory (src/duster)
 add_subdirectory (src/tools)
 
-# add the install targets
-set(CMAKE_INSTALL_PREFIX . CACHE PATH "Install here" FORCE)
-
-install (TARGETS blaster${VERSION} DESTINATION bin)
-install (TARGETS matcher${VERSION} DESTINATION bin)
-install (TARGETS grouperThreads${VERSION} DESTINATION bin)
-install (TARGETS duster${VERSION} DESTINATION bin)
-
-# CPack configuration
-#set(CPACK_PACKAGE_VERSION ${VERSION})
-#set(CPACK_GENERATOR "RPM")
-#set(CPACK_PACKAGE_NAME "TE_finder")
-#set(CPACK_PACKAGE_RELEASE 1)
-#set(CPACK_PACKAGE_CONTACT "Hadi Quesneville")
-#set(CPACK_PACKAGE_VENDOR "URGI")
-#set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-#set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_PROCESSOR}")
-#include(CPack)
