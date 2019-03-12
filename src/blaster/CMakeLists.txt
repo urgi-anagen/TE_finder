@@ -32,3 +32,5 @@ target_link_libraries(
         DGElib
         BLRlib
 )
+
+install (TARGETS blaster${VERSION} DESTINATION bin)

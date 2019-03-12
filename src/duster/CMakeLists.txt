@@ -33,3 +33,5 @@ target_link_libraries(
         DGElib
         BLRlib
 )
+
+install (TARGETS duster${VERSION} DESTINATION bin)
