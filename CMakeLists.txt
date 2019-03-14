@@ -54,3 +54,7 @@ add_subdirectory (src/grouper.threads)
 add_subdirectory (src/duster)
 add_subdirectory (src/tools)
 
+set(
+        CMAKE_RUNTIME_OUTPUT_DIRECTORY
+        ${CMAKE_HOME_DIRECTORY}/bin
+)
