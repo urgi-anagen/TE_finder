@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 set (VERSION "2.28")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION=${VERSION} -pthread -Wall")
 
+# Search for cppunit library
+
 FIND_PATH(CPPUNIT_INCLUDE_DIR cppunit/Test.h)
 FIND_LIBRARY(CPPUNIT_LIBRARY NAMES cppunit)
 
