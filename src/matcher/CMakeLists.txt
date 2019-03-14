@@ -34,4 +34,4 @@ target_link_libraries(
         BLRlib
 )
 
-install (TARGETS matcher${VERSION} DESTINATION bin)
+install (TARGETS matcher${VERSION} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

@@ -34,4 +34,4 @@ target_link_libraries(
         BLRlib
 )
 
-install (TARGETS duster${VERSION} DESTINATION bin)
+install (TARGETS duster${VERSION} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
