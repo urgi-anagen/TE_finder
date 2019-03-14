@@ -35,4 +35,4 @@ target_link_libraries(
         BLRlib
 )
 
-install (TARGETS grouperThreads${VERSION} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+install (TARGETS grouperThreads${VERSION} DESTINATION ${CMAKE_SOURCE_DIR}/bin)
