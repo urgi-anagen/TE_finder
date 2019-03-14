@@ -33,4 +33,4 @@ target_link_libraries(
         BLRlib
 )
 
-install (TARGETS blaster${VERSION} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+install (TARGETS blaster${VERSION} DESTINATION ${CMAKE_SOURCE_DIR}/bin)
