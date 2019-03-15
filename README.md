@@ -8,6 +8,5 @@
  but these two last programs can be also used in conjunction with other programs such as RepeatMasker, 
  CENSOR, BLAST, BLAT, ... if their outputs are correctly formated as a BLASTER output file (i.e. *.align).
  See the [documentation](Documentation.md)
- for more details.
 
 The binaries are part of the [REPET package](http://urgi.versailles.inra.fr/Tools/REPET).

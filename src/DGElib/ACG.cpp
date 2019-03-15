@@ -149,6 +149,7 @@ uint32_t randomPermutations[RANDOM_PERM_SIZE] = {
 //	SEED_TABLE_SIZE must be a power of 2
 //
 #define SEED_TABLE_SIZE 32
+
 static uint32_t seedTable[SEED_TABLE_SIZE] = {
 0xbdcc47e5, 0x54aea45d, 0xec0df859, 0xda84637b,
 0xc8c6cb4f, 0x35574b01, 0x28260b7d, 0x0d07fdbf,
@@ -177,7 +178,6 @@ static inline uint32_t LCG(uint32_t x)
 {
     return( x * LC_A + LC_C );
 }
-
 
 ACG::ACG(uint32_t seed, int size)
 {
@@ -209,7 +209,7 @@ void ACG::setSeed(uint32_t seed, int size)
     //
     //	Allocate the state table & the auxillary table in a single malloc
     //
-    
+
     state = new uint32_t[stateSize + auxSize];
     auxState = &state[stateSize];
 
@@ -250,7 +250,7 @@ void ACG::reset()
     }
     
     lcgRecurr = u;
-    
+
     assert(sizeof(double) == 2 * sizeof(int32_t));
 }
 
