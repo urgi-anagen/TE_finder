@@ -38,6 +38,7 @@ RNG::RNG()
   if (!initialized)
   {
 
+
 	assert (sizeof(double) == 2 * sizeof(uint32_t));
 
 	//

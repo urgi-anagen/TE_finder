@@ -27,12 +27,16 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 union PrivateRNGSingleType {		   	// used to access floats as unsigneds
     float s;
+
     uint32_t u;
+
 };
 
 union PrivateRNGDoubleType {		   	// used to access doubles as unsigneds
     double d;
+
     uint32_t u[2];
+
 };
 
 //
@@ -47,6 +51,7 @@ public:
     //
     // Return a long-words word of random bits
     //
+
     virtual uint32_t asLong() = 0;
     virtual void reset() = 0;
     //

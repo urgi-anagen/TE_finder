@@ -42,6 +42,7 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 class ACG : public RNG {
 
+
     uint32_t initialSeed;	// used to reset generator
     int initialTableEntry;
 
@@ -56,6 +57,7 @@ class ACG : public RNG {
 protected:
 
 public:
+
     ACG(uint32_t seed = 0, int size = 55);
     virtual ~ACG();
     void setSeed(uint32_t seed=0, int size=55);
