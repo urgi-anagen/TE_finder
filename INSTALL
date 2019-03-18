@@ -4,7 +4,7 @@ Dependencies
 * cmake : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
 example under Debian type 'sudo apt-get install cmake'
 
-* cppunit : The C++ library for unitary tests.
+* cppunit : The C++ library for unitary tests (the "dev"/"devel" version as it will be used for compilation).
 
 Compilation
 ===========
