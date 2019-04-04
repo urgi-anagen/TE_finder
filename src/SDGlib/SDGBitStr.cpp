@@ -148,52 +148,51 @@ void __SDGBitStr::set(int i, int l, unsigned long val)
 //---------------------------------------------------------------
 void recombine(SDGBitStr& parent1, SDGBitStr& parent2, SDGBitStr& child1, SDGBitStr& child2, int jcross)
 {
-  if(!parent1.getPointer()->byte) 
-    throw SDGBitStr::EmptyException(&parent1,"recombine():  empty parent1 object !!!") ;
-  if(!parent2.getPointer()->byte) 
-    throw SDGBitStr::EmptyException(&parent2,"recombine():  empty parent2 object !!!") ;
+    if (!parent1.getPointer()->byte)
+        throw SDGBitStr::EmptyException(&parent1, "recombine():  empty parent1 object !!!");
+    if (!parent2.getPointer()->byte)
+        throw SDGBitStr::EmptyException(&parent2, "recombine():  empty parent2 object !!!");
 
-  if(parent1.getPointer()->nb_bytes < parent2.getPointer()->nb_bytes)
-    parent1.resize(parent2.getPointer()->nb_bytes);
+    if (parent1.getPointer()->nb_bytes < parent2.getPointer()->nb_bytes)
+        parent1.resize(parent2.getPointer()->nb_bytes);
 
-  if(parent1.getPointer()->nb_bytes > parent2.getPointer()->nb_bytes)
-    parent2.resize(parent1.getPointer()->nb_bytes);
+    if (parent1.getPointer()->nb_bytes > parent2.getPointer()->nb_bytes)
+        parent2.resize(parent1.getPointer()->nb_bytes);
 
-    int nbbytes=parent1.getPointer()->nb_bytes;
+    int nbbytes = parent1.getPointer()->nb_bytes;
 
-    int k=(jcross/__SDGBitStr::NB_BIT);
-    if(k > nbbytes)
-      throw SDGBitStr::OutOfRangeException(&parent1,"recombine(): recombine point out of range !!");
- 
+    int k = (jcross / __SDGBitStr::NB_BIT);
+    if (k > nbbytes)
+        throw SDGBitStr::OutOfRangeException(&parent1, "recombine(): recombine point out of range !!");
+
 
     memmove(child1.getPointer()->byte,
-	    parent1.getPointer()->byte,k*sizeof(__SDGBitStr::BYTE));
+            parent1.getPointer()->byte, k * sizeof(__SDGBitStr::BYTE));
 
     memmove(child2.getPointer()->byte,
-	    parent2.getPointer()->byte,k*sizeof(__SDGBitStr::BYTE));
+            parent2.getPointer()->byte, k * sizeof(__SDGBitStr::BYTE));
 
-    if(jcross-(k * __SDGBitStr::NB_BIT)==0) k--;
-    else
-    {
+    if (jcross - (k * __SDGBitStr::NB_BIT) == 0) k--;
+    else {
         __SDGBitStr::BYTE mask = 1;
-	mask<<=(jcross-(k * __SDGBitStr::NB_BIT));
-	mask--;
-        child1.getPointer()->byte[k]=
-	  (parent1.getPointer()->byte[k]&mask)|
-	  (parent2.getPointer()->byte[k]&(~mask));
+        mask <<= (jcross - (k * __SDGBitStr::NB_BIT));
+        mask--;
+        child1.getPointer()->byte[k] =
+                (parent1.getPointer()->byte[k] & mask) |
+                (parent2.getPointer()->byte[k] & (~mask));
 
-        child2.getPointer()->byte[k]=
-	  (parent1.getPointer()->byte[k]&(~mask))|
-	  (parent2.getPointer()->byte[k]&mask);
+        child2.getPointer()->byte[k] =
+                (parent1.getPointer()->byte[k] & (~mask)) |
+                (parent2.getPointer()->byte[k] & mask);
     }
 
-    memmove(&child1.getPointer()->byte[k+1],
-	    &parent2.getPointer()->byte[k+1],
-	    (nbbytes-k-1)*sizeof(__SDGBitStr::BYTE));
+    memmove(&child1.getPointer()->byte[k + 1],
+            &parent2.getPointer()->byte[k + 1],
+            (nbbytes - k - 1) * sizeof(__SDGBitStr::BYTE));
 
-    memmove(&child2.getPointer()->byte[k+1],
-	    &parent1.getPointer()->byte[k+1],
-	    (nbbytes-k-1)*sizeof(__SDGBitStr::BYTE));
+    memmove(&child2.getPointer()->byte[k + 1],
+            &parent1.getPointer()->byte[k + 1],
+            (nbbytes - k - 1) * sizeof(__SDGBitStr::BYTE));
 }
 
 

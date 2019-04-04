@@ -1,3 +1,4 @@
+#include <cstring>
 #include "Duster.h"
 
 //-------------------------------------------------------------------------
@@ -600,7 +601,9 @@ unsigned Duster::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vector<
   unsigned nb_kmer=0;
   if(len<=wsize) return 0;
   unsigned last_pos=len-wsize;
-  const char* s=seq.toString().c_str();
+  std::size_t sz = std::strlen(seq.toString().c_str());
+  char *s = new char[sz];
+  std::strcpy(s, seq.toString().c_str());
   for(unsigned i=0;i<=last_pos;i++)
     {
 	  nb_kmer++;
@@ -613,71 +616,74 @@ unsigned Duster::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vector<
 // Count background kmers
 unsigned Duster::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
 {
-  unsigned len=seq.length();
-  unsigned nb_kmer=0;
-  if(len<=wsize) return 0;
-  unsigned last_pos=len-wsize;
-  const char* s=seq.toString().c_str();
-  for(unsigned i=0;i<=last_pos;i++)
-    {
-	  nb_kmer++;
-      wcount[bhseq(s)]++;
-      s++;
+    unsigned len = seq.length();
+    unsigned nb_kmer = 0;
+    if (len <= wsize) return 0;
+    unsigned last_pos = len - wsize;
+    std::size_t sz = std::strlen(seq.toString().c_str());
+    char *s = new char[sz];
+    std::strcpy(s, seq.toString().c_str());
+    for (unsigned i = 0; i <= last_pos; i++) {
+        nb_kmer++;
+        wcount[bhseq(s)]++;
+        s++;
     }
-  return nb_kmer;
+    return nb_kmer;
 }
 //-------------------------------------------------------------------------
 // Count background kmers
 unsigned Duster::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
 {
-  unsigned len=seq.length();
-  unsigned nb_kmer=0;
-  if(len<=wsize) return 0;
-  unsigned last_pos=len-wsize;
-  const char* s=seq.toString().c_str();
-  for(unsigned i=0;i<=last_pos;i++)
-    {
-	  nb_kmer++;
-      wcount[mhseq(s)]++;
-      s++;
+    unsigned len = seq.length();
+    unsigned nb_kmer = 0;
+    if (len <= wsize) return 0;
+    unsigned last_pos = len - wsize;
+    std::size_t sz = std::strlen(seq.toString().c_str());
+    char *s = new char[sz];
+    std::strcpy(s, seq.toString().c_str());
+    for (unsigned i = 0; i <= last_pos; i++) {
+        nb_kmer++;
+        wcount[mhseq(s)]++;
+        s++;
     }
-  return nb_kmer;
+    return nb_kmer;
 }
 //-------------------------------------------------------------------------
 // Count nucleotides
 unsigned Duster::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>& wcount)
 {
-  unsigned len=seq.length();
-  unsigned nb_kmer=0;
-  if(len<1) return 0;
-  const char* s=seq.toString().c_str();
-  for(unsigned i=0;i<len;i++)
-    {
-	  nb_kmer++;
-      wcount[nhseq(s)]++;
-      s++;
+    unsigned len = seq.length();
+    unsigned nb_kmer = 0;
+    if (len < 1) return 0;
+    std::size_t sz = std::strlen(seq.toString().c_str());
+    char *s = new char[sz];
+    std::strcpy(s, seq.toString().c_str());
+    for (unsigned i = 0; i < len; i++) {
+        nb_kmer++;
+        wcount[nhseq(s)]++;
+        s++;
     }
-  return nb_kmer;
+    return nb_kmer;
 }
 //-------------------------------------------------------------------------
 void Duster::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& wcount)
 {
-  nbseqS++;
-  unsigned len=seq.length();
-  if(len<=kmer_size) return;
-  unsigned last_pos=len-kmer_size;
-  unsigned key;
-  const char* s=seq.toString().c_str();
-  for(unsigned i=0;i<=last_pos;i++)
-    {
-      key=hseq(s);
+    nbseqS++;
+    unsigned len = seq.length();
+    if (len <= kmer_size) return;
+    unsigned last_pos = len - kmer_size;
+    unsigned key;
+    std::size_t sz = std::strlen(seq.toString().c_str());
+    char *s = new char[sz];
+    std::strcpy(s, seq.toString().c_str());
+    for (unsigned i = 0; i <= last_pos; i++) {
+        key = hseq(s);
 
-      if(wcount[key]!=0)
-		{
-		  *(hash_ptr[key])=KmerSpos(i,nbseqS);
-		  hash_ptr[key]++;
-		}
-      s++;
+        if (wcount[key] != 0) {
+            *(hash_ptr[key]) = KmerSpos(i, nbseqS);
+            hash_ptr[key]++;
+        }
+        s++;
     }
 }
 //-------------------------------------------------------------------------
