@@ -72,7 +72,8 @@ SDGString __SDGMemBioSeq::toString(unsigned long d, unsigned long lg) const
       if (lg==0)            {lg=length()-d;};
 
       if (lg == 0) return ""; // Cas d'une sous sequence de longueur nulle
-      if (( d == 0) && (lg == length())) return sequence; // Cas de la sequence complete
+      if (( d == 0) && (lg == length()))
+          return sequence; // Cas de la sequence complete
       return sequence.substr(d,lg);        // Sequence Lineaire
     }
 

@@ -114,29 +114,26 @@ class SDGReference{
       else return false;
     };
 
-  const T* getPointer() const
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "SDGReference<T>::getPointer():  empty reference !!!") ;
-	return ref->ptr;
+    const T *getPointer() const {
+        if (!ref)
+            throw SDGException(this,
+                               "SDGReference<T>::getPointer():  empty reference !!!");
+        return ref->ptr;
     };
 
-  T* getMutablePointer()
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "SDGReference<T>::getPointer():  empty reference !!!") ;
-      makeExclusif();
-      return ref->ptr;
+    T *getMutablePointer() {
+        if (!ref)
+            throw SDGException(this,
+                               "SDGReference<T>::getPointer():  empty reference !!!");
+        makeExclusif();
+        return ref->ptr;
     };
 
-  const T& getObject() const
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "const SDGReference<T>::getObject():  empty reference !!!") ;
-	return *(ref->ptr);
+    const T &getObject() const {
+        if (!ref)
+            throw SDGException(this,
+                               "const SDGReference<T>::getObject():  empty reference !!!");
+        return *(ref->ptr);
     };
 
   T& getMutableObject()

@@ -536,43 +536,36 @@ void RangeMap::merge(void)
     }
 }
 //-------------------------------------------------------------------
-void RangeMap::diff( RangeMap& m, int verbose )
-{
-  for(RangeMap::iterator c=begin(); c!=end();c++)
-    {
-      for(std::list<RangeSeq>::iterator i=c->second.begin();
-	  i!=c->second.end();i++)
-	{
-	  std::list<RangeSeq>::iterator j;
-	  for( j=m[c->first].begin();  i!=c->second.end()
-		 && j!=m[c->first].end();j++)
-	    if( i->overlap(*j) )
-	      {
-	    	if(verbose>0)
-	    	{
-	    		std::cout<<"\nsubject:\t"<<(*i)<<std::endl;
-	    		std::cout<<"query:\t"<<(*j)<<std::endl;
-	    	}
-		RangeSeq r=i->diff(*j);
-		if (i->empty())
-		  {
-		    i=c->second.erase(i);
-		    i--;
-	    	if(verbose>0)
-	    		std::cout<<"==>erase subject!"<<std::endl;
-		    break;
-		  }
-    	if(verbose>0)
-    		std::cout<<"==>change subject:"<<(*i)<<std::endl;
-		if (!r.empty())
-		  {
-	    	if(verbose>0)
-	    		std::cout<<"==>new subject:"<<r<<std::endl;
-		    c->second.push_back(r);
-		  }
-	      }
-	}
-      c->second.sort();
+void RangeMap::diff( RangeMap& m, int verbose ) {
+    for (RangeMap::iterator c = begin(); c != end(); c++) {
+        for (std::list<RangeSeq>::iterator i = c->second.begin();
+             i != c->second.end(); i++) {
+            std::list<RangeSeq>::iterator j;
+            for (j = m[c->first].begin(); i != c->second.end()
+                                          && j != m[c->first].end(); j++)
+                if (i->overlap(*j)) {
+                    if (verbose > 0) {
+                        std::cout << "\nsubject:\t" << (*i) << std::endl;
+                        std::cout << "query:\t" << (*j) << std::endl;
+                    }
+                    RangeSeq r = i->diff(*j);
+                    if (i->empty()) {
+                        i = c->second.erase(i);
+                        i--;
+                        if (verbose > 0)
+                            std::cout << "==>erase subject!" << std::endl;
+                        break;
+                    }
+                    if (verbose > 0)
+                        std::cout << "==>change subject:" << (*i) << std::endl;
+                    if (!r.empty()) {
+                        if (verbose > 0)
+                            std::cout << "==>new subject:" << r << std::endl;
+                        c->second.push_back(r);
+                    }
+                }
+        }
+        c->second.sort();
     } // for
 }
 //-------------------------------------------------------------------
