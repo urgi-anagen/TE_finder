@@ -601,8 +601,8 @@ unsigned Duster::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vector<
   unsigned nb_kmer=0;
   if(len<=wsize) return 0;
   unsigned last_pos=len-wsize;
-  std::size_t sz = std::strlen(seq.toString().c_str());
-  char *s = new char[sz];
+  char *s = new char[len+1];
+  char *ptr = s;
   std::strcpy(s, seq.toString().c_str());
   for(unsigned i=0;i<=last_pos;i++)
     {
@@ -610,6 +610,7 @@ unsigned Duster::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vector<
       wcount[hseq(s)]++;
       s++;
     }
+  delete [] ptr;
   return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -620,14 +621,15 @@ unsigned Duster::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize, st
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    std::size_t sz = std::strlen(seq.toString().c_str());
-    char *s = new char[sz];
+    char *s = new char[len+1];
+    char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[bhseq(s)]++;
         s++;
     }
+    delete [] ptr;
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -638,14 +640,15 @@ unsigned Duster::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std::ve
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    std::size_t sz = std::strlen(seq.toString().c_str());
-    char *s = new char[sz];
+    char *s = new char[len+1];
+    char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[mhseq(s)]++;
         s++;
     }
+    delete [] ptr;
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -655,14 +658,15 @@ unsigned Duster::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>& wc
     unsigned len = seq.length();
     unsigned nb_kmer = 0;
     if (len < 1) return 0;
-    std::size_t sz = std::strlen(seq.toString().c_str());
-    char *s = new char[sz];
+    char *s = new char[len+1];
+    char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
     for (unsigned i = 0; i < len; i++) {
         nb_kmer++;
         wcount[nhseq(s)]++;
         s++;
     }
+    delete [] ptr;
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -673,8 +677,8 @@ void Duster::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& wcoun
     if (len <= kmer_size) return;
     unsigned last_pos = len - kmer_size;
     unsigned key;
-    std::size_t sz = std::strlen(seq.toString().c_str());
-    char *s = new char[sz];
+    char *s = new char[len+1];
+    char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
     for (unsigned i = 0; i <= last_pos; i++) {
         key = hseq(s);
@@ -685,6 +689,7 @@ void Duster::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& wcoun
         }
         s++;
     }
+    delete [] ptr;
 }
 //-------------------------------------------------------------------------
 void Duster::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged)
