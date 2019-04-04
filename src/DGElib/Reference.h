@@ -118,70 +118,60 @@ class Reference{
       else return false;
     };
 
-  T* getPtr()
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "Reference<T>::getPtr():  empty reference !!!") ;
-	return ref->ptr;
+    T *getPtr() {
+        if (!ref)
+            throw SDGException(this,
+                               "Reference<T>::getPtr():  empty reference !!!");
+        return ref->ptr;
     };
 
-  const T* getPtr() const
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "Reference<T>::getPtr():  empty reference !!!") ;
-	return ref->ptr;
+    const T *getPtr() const {
+        if (!ref)
+            throw SDGException(this,
+                               "Reference<T>::getPtr():  empty reference !!!");
+        return ref->ptr;
     };
 
-  T& getObj()
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "Reference<T>::getObj():  empty reference !!!") ;
-	return *(ref->ptr);
+    T &getObj() {
+        if (!ref)
+            throw SDGException(this,
+                               "Reference<T>::getObj():  empty reference !!!");
+        return *(ref->ptr);
     };
 
-  const T& getObj() const
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "const Reference<T>::getObj():  empty reference !!!") ;
-	return *(ref->ptr);
+    const T &getObj() const {
+        if (!ref)
+            throw SDGException(this,
+                               "const Reference<T>::getObj():  empty reference !!!");
+        return *(ref->ptr);
     };
 
-  T* operator->()
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "Reference<T>::operator->():  empty reference !!!") ;
-	return ref->ptr;
+    T *operator->() {
+        if (!ref)
+            throw SDGException(this,
+                               "Reference<T>::operator->():  empty reference !!!");
+        return ref->ptr;
     };
 
-  const T* operator->() const
-    {
-      if(!ref)  
-	throw SDGException(this,
-	      "Reference<T>::operator->():  empty reference !!!") ;
-	return ref->ptr;
+    const T *operator->() const {
+        if (!ref)
+            throw SDGException(this,
+                               "Reference<T>::operator->():  empty reference !!!");
+        return ref->ptr;
     };
 
-  Reference<T> cloneRef() 
-   {
-     if(ref)
-       {
-	 return Reference((T*)ref->ptr->clone());
-       }
-     else
-       return Reference();
-   }; 
+    Reference<T> cloneRef() {
+        if (ref) {
+            return Reference((T *) ref->ptr->clone());
+        } else
+            return Reference();
+    };
 
- void makeExclusif()
-   {
-     Reference<T> old=*this;
-     clear();
-     *this=old.cloneRef();
-   };
+    void makeExclusif() {
+        Reference<T> old = *this;
+        clear();
+        *this = old.cloneRef();
+    };
 
  friend int operator==(const Reference<T>& r1, const Reference<T>& r2)
     {
