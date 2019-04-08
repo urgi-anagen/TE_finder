@@ -126,14 +126,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/duster/testfiles/CMakeFiles/progress.marks
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 duster/testfiles/all
+	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/src/duster/testfiles/CMakeFiles/progress.marks
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 duster/testfiles/clean
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,12 +143,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 duster/testfiles/preinstall
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 duster/testfiles/preinstall
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -157,18 +157,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-duster/testfiles/CMakeFiles/test_duster2.28.dir/rule:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 duster/testfiles/CMakeFiles/test_duster2.28.dir/rule
-.PHONY : duster/testfiles/CMakeFiles/test_duster2.28.dir/rule
+src/duster/testfiles/CMakeFiles/test_duster2.28.dir/rule:
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/CMakeFiles/test_duster2.28.dir/rule
+.PHONY : src/duster/testfiles/CMakeFiles/test_duster2.28.dir/rule
 
 # Convenience name for target.
-test_duster2.28: duster/testfiles/CMakeFiles/test_duster2.28.dir/rule
+test_duster2.28: src/duster/testfiles/CMakeFiles/test_duster2.28.dir/rule
 
 .PHONY : test_duster2.28
 
 # fast build rule for target.
 test_duster2.28/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/build
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build
 .PHONY : test_duster2.28/fast
 
 Test_Duster.o: Test_Duster.cpp.o
@@ -177,7 +177,7 @@ Test_Duster.o: Test_Duster.cpp.o
 
 # target to build an object file
 Test_Duster.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/Test_Duster.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/Test_Duster.cpp.o
 .PHONY : Test_Duster.cpp.o
 
 Test_Duster.i: Test_Duster.cpp.i
@@ -186,7 +186,7 @@ Test_Duster.i: Test_Duster.cpp.i
 
 # target to preprocess a source file
 Test_Duster.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/Test_Duster.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/Test_Duster.cpp.i
 .PHONY : Test_Duster.cpp.i
 
 Test_Duster.s: Test_Duster.cpp.s
@@ -195,7 +195,7 @@ Test_Duster.s: Test_Duster.cpp.s
 
 # target to generate assembly for a file
 Test_Duster.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/Test_Duster.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/Test_Duster.cpp.s
 .PHONY : Test_Duster.cpp.s
 
 __/Duster.o: __/Duster.cpp.o
@@ -204,7 +204,7 @@ __/Duster.o: __/Duster.cpp.o
 
 # target to build an object file
 __/Duster.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/__/Duster.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/__/Duster.cpp.o
 .PHONY : __/Duster.cpp.o
 
 __/Duster.i: __/Duster.cpp.i
@@ -213,7 +213,7 @@ __/Duster.i: __/Duster.cpp.i
 
 # target to preprocess a source file
 __/Duster.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/__/Duster.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/__/Duster.cpp.i
 .PHONY : __/Duster.cpp.i
 
 __/Duster.s: __/Duster.cpp.s
@@ -222,7 +222,7 @@ __/Duster.s: __/Duster.cpp.s
 
 # target to generate assembly for a file
 __/Duster.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/__/Duster.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/__/Duster.cpp.s
 .PHONY : __/Duster.cpp.s
 
 test_u.o: test_u.cpp.o
@@ -231,7 +231,7 @@ test_u.o: test_u.cpp.o
 
 # target to build an object file
 test_u.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/test_u.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/test_u.cpp.o
 .PHONY : test_u.cpp.o
 
 test_u.i: test_u.cpp.i
@@ -240,7 +240,7 @@ test_u.i: test_u.cpp.i
 
 # target to preprocess a source file
 test_u.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/test_u.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/test_u.cpp.i
 .PHONY : test_u.cpp.i
 
 test_u.s: test_u.cpp.s
@@ -249,7 +249,7 @@ test_u.s: test_u.cpp.s
 
 # target to generate assembly for a file
 test_u.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make duster/testfiles/CMakeFiles/test_duster2.28.dir/test_u.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.28.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.28.dir/test_u.cpp.s
 .PHONY : test_u.cpp.s
 
 # Help Target
