@@ -126,14 +126,14 @@ list_install_components/fast: list_install_components
 
 # The main all target
 all: cmake_check_build_system
-	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/DGElib/CMakeFiles/progress.marks
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 DGElib/all
+	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/src/DGElib/CMakeFiles/progress.marks
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/DGElib/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 DGElib/clean
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/DGElib/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,12 +143,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 DGElib/preinstall
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/DGElib/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 DGElib/preinstall
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/DGElib/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -157,18 +157,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-DGElib/CMakeFiles/DGElib.dir/rule:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 DGElib/CMakeFiles/DGElib.dir/rule
-.PHONY : DGElib/CMakeFiles/DGElib.dir/rule
+src/DGElib/CMakeFiles/DGElib.dir/rule:
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/DGElib/CMakeFiles/DGElib.dir/rule
+.PHONY : src/DGElib/CMakeFiles/DGElib.dir/rule
 
 # Convenience name for target.
-DGElib: DGElib/CMakeFiles/DGElib.dir/rule
+DGElib: src/DGElib/CMakeFiles/DGElib.dir/rule
 
 .PHONY : DGElib
 
 # fast build rule for target.
 DGElib/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/build
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/build
 .PHONY : DGElib/fast
 
 ACG.o: ACG.cpp.o
@@ -177,7 +177,7 @@ ACG.o: ACG.cpp.o
 
 # target to build an object file
 ACG.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ACG.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ACG.cpp.o
 .PHONY : ACG.cpp.o
 
 ACG.i: ACG.cpp.i
@@ -186,7 +186,7 @@ ACG.i: ACG.cpp.i
 
 # target to preprocess a source file
 ACG.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ACG.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ACG.cpp.i
 .PHONY : ACG.cpp.i
 
 ACG.s: ACG.cpp.s
@@ -195,7 +195,7 @@ ACG.s: ACG.cpp.s
 
 # target to generate assembly for a file
 ACG.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ACG.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ACG.cpp.s
 .PHONY : ACG.cpp.s
 
 Alea.o: Alea.cpp.o
@@ -204,7 +204,7 @@ Alea.o: Alea.cpp.o
 
 # target to build an object file
 Alea.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Alea.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Alea.cpp.o
 .PHONY : Alea.cpp.o
 
 Alea.i: Alea.cpp.i
@@ -213,7 +213,7 @@ Alea.i: Alea.cpp.i
 
 # target to preprocess a source file
 Alea.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Alea.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Alea.cpp.i
 .PHONY : Alea.cpp.i
 
 Alea.s: Alea.cpp.s
@@ -222,7 +222,7 @@ Alea.s: Alea.cpp.s
 
 # target to generate assembly for a file
 Alea.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Alea.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Alea.cpp.s
 .PHONY : Alea.cpp.s
 
 BLRBinSearch.o: BLRBinSearch.cpp.o
@@ -231,7 +231,7 @@ BLRBinSearch.o: BLRBinSearch.cpp.o
 
 # target to build an object file
 BLRBinSearch.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/BLRBinSearch.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/BLRBinSearch.cpp.o
 .PHONY : BLRBinSearch.cpp.o
 
 BLRBinSearch.i: BLRBinSearch.cpp.i
@@ -240,7 +240,7 @@ BLRBinSearch.i: BLRBinSearch.cpp.i
 
 # target to preprocess a source file
 BLRBinSearch.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/BLRBinSearch.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/BLRBinSearch.cpp.i
 .PHONY : BLRBinSearch.cpp.i
 
 BLRBinSearch.s: BLRBinSearch.cpp.s
@@ -249,7 +249,7 @@ BLRBinSearch.s: BLRBinSearch.cpp.s
 
 # target to generate assembly for a file
 BLRBinSearch.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/BLRBinSearch.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/BLRBinSearch.cpp.s
 .PHONY : BLRBinSearch.cpp.s
 
 BlastMatch.o: BlastMatch.cpp.o
@@ -258,7 +258,7 @@ BlastMatch.o: BlastMatch.cpp.o
 
 # target to build an object file
 BlastMatch.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/BlastMatch.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/BlastMatch.cpp.o
 .PHONY : BlastMatch.cpp.o
 
 BlastMatch.i: BlastMatch.cpp.i
@@ -267,7 +267,7 @@ BlastMatch.i: BlastMatch.cpp.i
 
 # target to preprocess a source file
 BlastMatch.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/BlastMatch.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/BlastMatch.cpp.i
 .PHONY : BlastMatch.cpp.i
 
 BlastMatch.s: BlastMatch.cpp.s
@@ -276,7 +276,7 @@ BlastMatch.s: BlastMatch.cpp.s
 
 # target to generate assembly for a file
 BlastMatch.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/BlastMatch.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/BlastMatch.cpp.s
 .PHONY : BlastMatch.cpp.s
 
 Cutter.o: Cutter.cpp.o
@@ -285,7 +285,7 @@ Cutter.o: Cutter.cpp.o
 
 # target to build an object file
 Cutter.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Cutter.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Cutter.cpp.o
 .PHONY : Cutter.cpp.o
 
 Cutter.i: Cutter.cpp.i
@@ -294,7 +294,7 @@ Cutter.i: Cutter.cpp.i
 
 # target to preprocess a source file
 Cutter.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Cutter.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Cutter.cpp.i
 .PHONY : Cutter.cpp.i
 
 Cutter.s: Cutter.cpp.s
@@ -303,7 +303,7 @@ Cutter.s: Cutter.cpp.s
 
 # target to generate assembly for a file
 Cutter.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Cutter.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Cutter.cpp.s
 .PHONY : Cutter.cpp.s
 
 DiagClone.o: DiagClone.cpp.o
@@ -312,7 +312,7 @@ DiagClone.o: DiagClone.cpp.o
 
 # target to build an object file
 DiagClone.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/DiagClone.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/DiagClone.cpp.o
 .PHONY : DiagClone.cpp.o
 
 DiagClone.i: DiagClone.cpp.i
@@ -321,7 +321,7 @@ DiagClone.i: DiagClone.cpp.i
 
 # target to preprocess a source file
 DiagClone.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/DiagClone.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/DiagClone.cpp.i
 .PHONY : DiagClone.cpp.i
 
 DiagClone.s: DiagClone.cpp.s
@@ -330,7 +330,7 @@ DiagClone.s: DiagClone.cpp.s
 
 # target to generate assembly for a file
 DiagClone.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/DiagClone.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/DiagClone.cpp.s
 .PHONY : DiagClone.cpp.s
 
 ExtAlign.o: ExtAlign.cpp.o
@@ -339,7 +339,7 @@ ExtAlign.o: ExtAlign.cpp.o
 
 # target to build an object file
 ExtAlign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ExtAlign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ExtAlign.cpp.o
 .PHONY : ExtAlign.cpp.o
 
 ExtAlign.i: ExtAlign.cpp.i
@@ -348,7 +348,7 @@ ExtAlign.i: ExtAlign.cpp.i
 
 # target to preprocess a source file
 ExtAlign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ExtAlign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ExtAlign.cpp.i
 .PHONY : ExtAlign.cpp.i
 
 ExtAlign.s: ExtAlign.cpp.s
@@ -357,7 +357,7 @@ ExtAlign.s: ExtAlign.cpp.s
 
 # target to generate assembly for a file
 ExtAlign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ExtAlign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ExtAlign.cpp.s
 .PHONY : ExtAlign.cpp.s
 
 FastExtAlign.o: FastExtAlign.cpp.o
@@ -366,7 +366,7 @@ FastExtAlign.o: FastExtAlign.cpp.o
 
 # target to build an object file
 FastExtAlign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FastExtAlign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FastExtAlign.cpp.o
 .PHONY : FastExtAlign.cpp.o
 
 FastExtAlign.i: FastExtAlign.cpp.i
@@ -375,7 +375,7 @@ FastExtAlign.i: FastExtAlign.cpp.i
 
 # target to preprocess a source file
 FastExtAlign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FastExtAlign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FastExtAlign.cpp.i
 .PHONY : FastExtAlign.cpp.i
 
 FastExtAlign.s: FastExtAlign.cpp.s
@@ -384,7 +384,7 @@ FastExtAlign.s: FastExtAlign.cpp.s
 
 # target to generate assembly for a file
 FastExtAlign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FastExtAlign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FastExtAlign.cpp.s
 .PHONY : FastExtAlign.cpp.s
 
 FastLalign.o: FastLalign.cpp.o
@@ -393,7 +393,7 @@ FastLalign.o: FastLalign.cpp.o
 
 # target to build an object file
 FastLalign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FastLalign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FastLalign.cpp.o
 .PHONY : FastLalign.cpp.o
 
 FastLalign.i: FastLalign.cpp.i
@@ -402,7 +402,7 @@ FastLalign.i: FastLalign.cpp.i
 
 # target to preprocess a source file
 FastLalign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FastLalign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FastLalign.cpp.i
 .PHONY : FastLalign.cpp.i
 
 FastLalign.s: FastLalign.cpp.s
@@ -411,7 +411,7 @@ FastLalign.s: FastLalign.cpp.s
 
 # target to generate assembly for a file
 FastLalign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FastLalign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FastLalign.cpp.s
 .PHONY : FastLalign.cpp.s
 
 FileUtils.o: FileUtils.cpp.o
@@ -420,7 +420,7 @@ FileUtils.o: FileUtils.cpp.o
 
 # target to build an object file
 FileUtils.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FileUtils.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FileUtils.cpp.o
 .PHONY : FileUtils.cpp.o
 
 FileUtils.i: FileUtils.cpp.i
@@ -429,7 +429,7 @@ FileUtils.i: FileUtils.cpp.i
 
 # target to preprocess a source file
 FileUtils.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FileUtils.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FileUtils.cpp.i
 .PHONY : FileUtils.cpp.i
 
 FileUtils.s: FileUtils.cpp.s
@@ -438,7 +438,7 @@ FileUtils.s: FileUtils.cpp.s
 
 # target to generate assembly for a file
 FileUtils.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FileUtils.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FileUtils.cpp.s
 .PHONY : FileUtils.cpp.s
 
 FragAlign.o: FragAlign.cpp.o
@@ -447,7 +447,7 @@ FragAlign.o: FragAlign.cpp.o
 
 # target to build an object file
 FragAlign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FragAlign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FragAlign.cpp.o
 .PHONY : FragAlign.cpp.o
 
 FragAlign.i: FragAlign.cpp.i
@@ -456,7 +456,7 @@ FragAlign.i: FragAlign.cpp.i
 
 # target to preprocess a source file
 FragAlign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FragAlign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FragAlign.cpp.i
 .PHONY : FragAlign.cpp.i
 
 FragAlign.s: FragAlign.cpp.s
@@ -465,7 +465,7 @@ FragAlign.s: FragAlign.cpp.s
 
 # target to generate assembly for a file
 FragAlign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/FragAlign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/FragAlign.cpp.s
 .PHONY : FragAlign.cpp.s
 
 Galign.o: Galign.cpp.o
@@ -474,7 +474,7 @@ Galign.o: Galign.cpp.o
 
 # target to build an object file
 Galign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Galign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Galign.cpp.o
 .PHONY : Galign.cpp.o
 
 Galign.i: Galign.cpp.i
@@ -483,7 +483,7 @@ Galign.i: Galign.cpp.i
 
 # target to preprocess a source file
 Galign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Galign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Galign.cpp.i
 .PHONY : Galign.cpp.i
 
 Galign.s: Galign.cpp.s
@@ -492,7 +492,7 @@ Galign.s: Galign.cpp.s
 
 # target to generate assembly for a file
 Galign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Galign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Galign.cpp.s
 .PHONY : Galign.cpp.s
 
 Graph.o: Graph.cpp.o
@@ -501,7 +501,7 @@ Graph.o: Graph.cpp.o
 
 # target to build an object file
 Graph.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Graph.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Graph.cpp.o
 .PHONY : Graph.cpp.o
 
 Graph.i: Graph.cpp.i
@@ -510,7 +510,7 @@ Graph.i: Graph.cpp.i
 
 # target to preprocess a source file
 Graph.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Graph.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Graph.cpp.i
 .PHONY : Graph.cpp.i
 
 Graph.s: Graph.cpp.s
@@ -519,7 +519,7 @@ Graph.s: Graph.cpp.s
 
 # target to generate assembly for a file
 Graph.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Graph.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Graph.cpp.s
 .PHONY : Graph.cpp.s
 
 HashAlign.o: HashAlign.cpp.o
@@ -528,7 +528,7 @@ HashAlign.o: HashAlign.cpp.o
 
 # target to build an object file
 HashAlign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashAlign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashAlign.cpp.o
 .PHONY : HashAlign.cpp.o
 
 HashAlign.i: HashAlign.cpp.i
@@ -537,7 +537,7 @@ HashAlign.i: HashAlign.cpp.i
 
 # target to preprocess a source file
 HashAlign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashAlign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashAlign.cpp.i
 .PHONY : HashAlign.cpp.i
 
 HashAlign.s: HashAlign.cpp.s
@@ -546,7 +546,7 @@ HashAlign.s: HashAlign.cpp.s
 
 # target to generate assembly for a file
 HashAlign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashAlign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashAlign.cpp.s
 .PHONY : HashAlign.cpp.s
 
 HashAlignClone.o: HashAlignClone.cpp.o
@@ -555,7 +555,7 @@ HashAlignClone.o: HashAlignClone.cpp.o
 
 # target to build an object file
 HashAlignClone.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashAlignClone.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashAlignClone.cpp.o
 .PHONY : HashAlignClone.cpp.o
 
 HashAlignClone.i: HashAlignClone.cpp.i
@@ -564,7 +564,7 @@ HashAlignClone.i: HashAlignClone.cpp.i
 
 # target to preprocess a source file
 HashAlignClone.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashAlignClone.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashAlignClone.cpp.i
 .PHONY : HashAlignClone.cpp.i
 
 HashAlignClone.s: HashAlignClone.cpp.s
@@ -573,7 +573,7 @@ HashAlignClone.s: HashAlignClone.cpp.s
 
 # target to generate assembly for a file
 HashAlignClone.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashAlignClone.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashAlignClone.cpp.s
 .PHONY : HashAlignClone.cpp.s
 
 HashRepeat.o: HashRepeat.cpp.o
@@ -582,7 +582,7 @@ HashRepeat.o: HashRepeat.cpp.o
 
 # target to build an object file
 HashRepeat.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashRepeat.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashRepeat.cpp.o
 .PHONY : HashRepeat.cpp.o
 
 HashRepeat.i: HashRepeat.cpp.i
@@ -591,7 +591,7 @@ HashRepeat.i: HashRepeat.cpp.i
 
 # target to preprocess a source file
 HashRepeat.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashRepeat.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashRepeat.cpp.i
 .PHONY : HashRepeat.cpp.i
 
 HashRepeat.s: HashRepeat.cpp.s
@@ -600,7 +600,7 @@ HashRepeat.s: HashRepeat.cpp.s
 
 # target to generate assembly for a file
 HashRepeat.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashRepeat.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashRepeat.cpp.s
 .PHONY : HashRepeat.cpp.s
 
 HashSearch.o: HashSearch.cpp.o
@@ -609,7 +609,7 @@ HashSearch.o: HashSearch.cpp.o
 
 # target to build an object file
 HashSearch.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashSearch.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashSearch.cpp.o
 .PHONY : HashSearch.cpp.o
 
 HashSearch.i: HashSearch.cpp.i
@@ -618,7 +618,7 @@ HashSearch.i: HashSearch.cpp.i
 
 # target to preprocess a source file
 HashSearch.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashSearch.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashSearch.cpp.i
 .PHONY : HashSearch.cpp.i
 
 HashSearch.s: HashSearch.cpp.s
@@ -627,7 +627,7 @@ HashSearch.s: HashSearch.cpp.s
 
 # target to generate assembly for a file
 HashSearch.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/HashSearch.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/HashSearch.cpp.s
 .PHONY : HashSearch.cpp.s
 
 ItrAlign.o: ItrAlign.cpp.o
@@ -636,7 +636,7 @@ ItrAlign.o: ItrAlign.cpp.o
 
 # target to build an object file
 ItrAlign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ItrAlign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ItrAlign.cpp.o
 .PHONY : ItrAlign.cpp.o
 
 ItrAlign.i: ItrAlign.cpp.i
@@ -645,7 +645,7 @@ ItrAlign.i: ItrAlign.cpp.i
 
 # target to preprocess a source file
 ItrAlign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ItrAlign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ItrAlign.cpp.i
 .PHONY : ItrAlign.cpp.i
 
 ItrAlign.s: ItrAlign.cpp.s
@@ -654,7 +654,7 @@ ItrAlign.s: ItrAlign.cpp.s
 
 # target to generate assembly for a file
 ItrAlign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/ItrAlign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/ItrAlign.cpp.s
 .PHONY : ItrAlign.cpp.s
 
 Lalign.o: Lalign.cpp.o
@@ -663,7 +663,7 @@ Lalign.o: Lalign.cpp.o
 
 # target to build an object file
 Lalign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Lalign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Lalign.cpp.o
 .PHONY : Lalign.cpp.o
 
 Lalign.i: Lalign.cpp.i
@@ -672,7 +672,7 @@ Lalign.i: Lalign.cpp.i
 
 # target to preprocess a source file
 Lalign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Lalign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Lalign.cpp.i
 .PHONY : Lalign.cpp.i
 
 Lalign.s: Lalign.cpp.s
@@ -681,7 +681,7 @@ Lalign.s: Lalign.cpp.s
 
 # target to generate assembly for a file
 Lalign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Lalign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Lalign.cpp.s
 .PHONY : Lalign.cpp.s
 
 RNG.o: RNG.cpp.o
@@ -690,7 +690,7 @@ RNG.o: RNG.cpp.o
 
 # target to build an object file
 RNG.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RNG.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RNG.cpp.o
 .PHONY : RNG.cpp.o
 
 RNG.i: RNG.cpp.i
@@ -699,7 +699,7 @@ RNG.i: RNG.cpp.i
 
 # target to preprocess a source file
 RNG.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RNG.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RNG.cpp.i
 .PHONY : RNG.cpp.i
 
 RNG.s: RNG.cpp.s
@@ -708,7 +708,7 @@ RNG.s: RNG.cpp.s
 
 # target to generate assembly for a file
 RNG.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RNG.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RNG.cpp.s
 .PHONY : RNG.cpp.s
 
 Random.o: Random.cpp.o
@@ -717,7 +717,7 @@ Random.o: Random.cpp.o
 
 # target to build an object file
 Random.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Random.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Random.cpp.o
 .PHONY : Random.cpp.o
 
 Random.i: Random.cpp.i
@@ -726,7 +726,7 @@ Random.i: Random.cpp.i
 
 # target to preprocess a source file
 Random.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Random.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Random.cpp.i
 .PHONY : Random.cpp.i
 
 Random.s: Random.cpp.s
@@ -735,7 +735,7 @@ Random.s: Random.cpp.s
 
 # target to generate assembly for a file
 Random.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Random.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Random.cpp.s
 .PHONY : Random.cpp.s
 
 Range.o: Range.cpp.o
@@ -744,7 +744,7 @@ Range.o: Range.cpp.o
 
 # target to build an object file
 Range.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Range.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Range.cpp.o
 .PHONY : Range.cpp.o
 
 Range.i: Range.cpp.i
@@ -753,7 +753,7 @@ Range.i: Range.cpp.i
 
 # target to preprocess a source file
 Range.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Range.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Range.cpp.i
 .PHONY : Range.cpp.i
 
 Range.s: Range.cpp.s
@@ -762,7 +762,7 @@ Range.s: Range.cpp.s
 
 # target to generate assembly for a file
 Range.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/Range.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/Range.cpp.s
 .PHONY : Range.cpp.s
 
 RangeAlign.o: RangeAlign.cpp.o
@@ -771,7 +771,7 @@ RangeAlign.o: RangeAlign.cpp.o
 
 # target to build an object file
 RangeAlign.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeAlign.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeAlign.cpp.o
 .PHONY : RangeAlign.cpp.o
 
 RangeAlign.i: RangeAlign.cpp.i
@@ -780,7 +780,7 @@ RangeAlign.i: RangeAlign.cpp.i
 
 # target to preprocess a source file
 RangeAlign.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeAlign.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeAlign.cpp.i
 .PHONY : RangeAlign.cpp.i
 
 RangeAlign.s: RangeAlign.cpp.s
@@ -789,7 +789,7 @@ RangeAlign.s: RangeAlign.cpp.s
 
 # target to generate assembly for a file
 RangeAlign.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeAlign.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeAlign.cpp.s
 .PHONY : RangeAlign.cpp.s
 
 RangeMap.o: RangeMap.cpp.o
@@ -798,7 +798,7 @@ RangeMap.o: RangeMap.cpp.o
 
 # target to build an object file
 RangeMap.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeMap.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeMap.cpp.o
 .PHONY : RangeMap.cpp.o
 
 RangeMap.i: RangeMap.cpp.i
@@ -807,7 +807,7 @@ RangeMap.i: RangeMap.cpp.i
 
 # target to preprocess a source file
 RangeMap.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeMap.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeMap.cpp.i
 .PHONY : RangeMap.cpp.i
 
 RangeMap.s: RangeMap.cpp.s
@@ -816,7 +816,7 @@ RangeMap.s: RangeMap.cpp.s
 
 # target to generate assembly for a file
 RangeMap.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeMap.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeMap.cpp.s
 .PHONY : RangeMap.cpp.s
 
 RangePair.o: RangePair.cpp.o
@@ -825,7 +825,7 @@ RangePair.o: RangePair.cpp.o
 
 # target to build an object file
 RangePair.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangePair.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangePair.cpp.o
 .PHONY : RangePair.cpp.o
 
 RangePair.i: RangePair.cpp.i
@@ -834,7 +834,7 @@ RangePair.i: RangePair.cpp.i
 
 # target to preprocess a source file
 RangePair.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangePair.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangePair.cpp.i
 .PHONY : RangePair.cpp.i
 
 RangePair.s: RangePair.cpp.s
@@ -843,7 +843,7 @@ RangePair.s: RangePair.cpp.s
 
 # target to generate assembly for a file
 RangePair.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangePair.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangePair.cpp.s
 .PHONY : RangePair.cpp.s
 
 RangePairSet.o: RangePairSet.cpp.o
@@ -852,7 +852,7 @@ RangePairSet.o: RangePairSet.cpp.o
 
 # target to build an object file
 RangePairSet.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangePairSet.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangePairSet.cpp.o
 .PHONY : RangePairSet.cpp.o
 
 RangePairSet.i: RangePairSet.cpp.i
@@ -861,7 +861,7 @@ RangePairSet.i: RangePairSet.cpp.i
 
 # target to preprocess a source file
 RangePairSet.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangePairSet.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangePairSet.cpp.i
 .PHONY : RangePairSet.cpp.i
 
 RangePairSet.s: RangePairSet.cpp.s
@@ -870,7 +870,7 @@ RangePairSet.s: RangePairSet.cpp.s
 
 # target to generate assembly for a file
 RangePairSet.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangePairSet.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangePairSet.cpp.s
 .PHONY : RangePairSet.cpp.s
 
 RangeSeq.o: RangeSeq.cpp.o
@@ -879,7 +879,7 @@ RangeSeq.o: RangeSeq.cpp.o
 
 # target to build an object file
 RangeSeq.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeSeq.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeSeq.cpp.o
 .PHONY : RangeSeq.cpp.o
 
 RangeSeq.i: RangeSeq.cpp.i
@@ -888,7 +888,7 @@ RangeSeq.i: RangeSeq.cpp.i
 
 # target to preprocess a source file
 RangeSeq.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeSeq.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeSeq.cpp.i
 .PHONY : RangeSeq.cpp.i
 
 RangeSeq.s: RangeSeq.cpp.s
@@ -897,7 +897,7 @@ RangeSeq.s: RangeSeq.cpp.s
 
 # target to generate assembly for a file
 RangeSeq.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/RangeSeq.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/RangeSeq.cpp.s
 .PHONY : RangeSeq.cpp.s
 
 SkipList.o: SkipList.cpp.o
@@ -906,7 +906,7 @@ SkipList.o: SkipList.cpp.o
 
 # target to build an object file
 SkipList.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/SkipList.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/SkipList.cpp.o
 .PHONY : SkipList.cpp.o
 
 SkipList.i: SkipList.cpp.i
@@ -915,7 +915,7 @@ SkipList.i: SkipList.cpp.i
 
 # target to preprocess a source file
 SkipList.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/SkipList.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/SkipList.cpp.i
 .PHONY : SkipList.cpp.i
 
 SkipList.s: SkipList.cpp.s
@@ -924,7 +924,7 @@ SkipList.s: SkipList.cpp.s
 
 # target to generate assembly for a file
 SkipList.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f DGElib/CMakeFiles/DGElib.dir/build.make DGElib/CMakeFiles/DGElib.dir/SkipList.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/DGElib/CMakeFiles/DGElib.dir/build.make src/DGElib/CMakeFiles/DGElib.dir/SkipList.cpp.s
 .PHONY : SkipList.cpp.s
 
 # Help Target

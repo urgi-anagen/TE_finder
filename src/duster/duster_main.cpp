@@ -11,8 +11,8 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=15, step_q=1, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
-min_size=20, chunk_size_kb=0, nb_iter=1, min_count=0, kmask=100, verbosity=0;
+unsigned kmer_size=15, step_q=7, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
+min_size=20, chunk_size_kb=100, nb_iter=0, min_count=0, kmask=4, verbosity=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 

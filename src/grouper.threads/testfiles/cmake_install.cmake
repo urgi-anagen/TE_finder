@@ -1,8 +1,8 @@
-# Install script for directory: /Users/hquesnev/src/git/TE_finder/grouper.threads/testfiles
+# Install script for directory: /Users/hquesnev/src/git/TE_finder/src/grouper.threads/testfiles
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/Users/hquesnev/src/git/TE_finder/bin")
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
