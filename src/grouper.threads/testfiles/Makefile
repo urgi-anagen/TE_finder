@@ -126,14 +126,14 @@ list_install_components/fast: list_install_components
 
 # The main all target
 all: cmake_check_build_system
-	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/grouper.threads/testfiles/CMakeFiles/progress.marks
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 grouper.threads/testfiles/all
+	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/src/grouper.threads/testfiles/CMakeFiles/progress.marks
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/grouper.threads/testfiles/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 grouper.threads/testfiles/clean
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/grouper.threads/testfiles/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,12 +143,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 grouper.threads/testfiles/preinstall
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/grouper.threads/testfiles/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 grouper.threads/testfiles/preinstall
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/grouper.threads/testfiles/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -157,18 +157,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule
-.PHONY : grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule
+src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule:
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule
+.PHONY : src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule
 
 # Convenience name for target.
-test_grouper2.28: grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule
+test_grouper2.28: src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/rule
 
 .PHONY : test_grouper2.28
 
 # fast build rule for target.
 test_grouper2.28/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build
 .PHONY : test_grouper2.28/fast
 
 Test_BLRGroup.o: Test_BLRGroup.cpp.o
@@ -177,7 +177,7 @@ Test_BLRGroup.o: Test_BLRGroup.cpp.o
 
 # target to build an object file
 Test_BLRGroup.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroup.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroup.cpp.o
 .PHONY : Test_BLRGroup.cpp.o
 
 Test_BLRGroup.i: Test_BLRGroup.cpp.i
@@ -186,7 +186,7 @@ Test_BLRGroup.i: Test_BLRGroup.cpp.i
 
 # target to preprocess a source file
 Test_BLRGroup.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroup.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroup.cpp.i
 .PHONY : Test_BLRGroup.cpp.i
 
 Test_BLRGroup.s: Test_BLRGroup.cpp.s
@@ -195,7 +195,7 @@ Test_BLRGroup.s: Test_BLRGroup.cpp.s
 
 # target to generate assembly for a file
 Test_BLRGroup.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroup.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroup.cpp.s
 .PHONY : Test_BLRGroup.cpp.s
 
 Test_BLRGroupUtils.o: Test_BLRGroupUtils.cpp.o
@@ -204,7 +204,7 @@ Test_BLRGroupUtils.o: Test_BLRGroupUtils.cpp.o
 
 # target to build an object file
 Test_BLRGroupUtils.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroupUtils.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroupUtils.cpp.o
 .PHONY : Test_BLRGroupUtils.cpp.o
 
 Test_BLRGroupUtils.i: Test_BLRGroupUtils.cpp.i
@@ -213,7 +213,7 @@ Test_BLRGroupUtils.i: Test_BLRGroupUtils.cpp.i
 
 # target to preprocess a source file
 Test_BLRGroupUtils.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroupUtils.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroupUtils.cpp.i
 .PHONY : Test_BLRGroupUtils.cpp.i
 
 Test_BLRGroupUtils.s: Test_BLRGroupUtils.cpp.s
@@ -222,7 +222,7 @@ Test_BLRGroupUtils.s: Test_BLRGroupUtils.cpp.s
 
 # target to generate assembly for a file
 Test_BLRGroupUtils.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroupUtils.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGroupUtils.cpp.s
 .PHONY : Test_BLRGroupUtils.cpp.s
 
 Test_BLRGrouper.o: Test_BLRGrouper.cpp.o
@@ -231,7 +231,7 @@ Test_BLRGrouper.o: Test_BLRGrouper.cpp.o
 
 # target to build an object file
 Test_BLRGrouper.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGrouper.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGrouper.cpp.o
 .PHONY : Test_BLRGrouper.cpp.o
 
 Test_BLRGrouper.i: Test_BLRGrouper.cpp.i
@@ -240,7 +240,7 @@ Test_BLRGrouper.i: Test_BLRGrouper.cpp.i
 
 # target to preprocess a source file
 Test_BLRGrouper.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGrouper.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGrouper.cpp.i
 .PHONY : Test_BLRGrouper.cpp.i
 
 Test_BLRGrouper.s: Test_BLRGrouper.cpp.s
@@ -249,7 +249,7 @@ Test_BLRGrouper.s: Test_BLRGrouper.cpp.s
 
 # target to generate assembly for a file
 Test_BLRGrouper.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGrouper.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/Test_BLRGrouper.cpp.s
 .PHONY : Test_BLRGrouper.cpp.s
 
 __/BLRGroupThreads.o: __/BLRGroupThreads.cpp.o
@@ -258,7 +258,7 @@ __/BLRGroupThreads.o: __/BLRGroupThreads.cpp.o
 
 # target to build an object file
 __/BLRGroupThreads.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGroupThreads.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGroupThreads.cpp.o
 .PHONY : __/BLRGroupThreads.cpp.o
 
 __/BLRGroupThreads.i: __/BLRGroupThreads.cpp.i
@@ -267,7 +267,7 @@ __/BLRGroupThreads.i: __/BLRGroupThreads.cpp.i
 
 # target to preprocess a source file
 __/BLRGroupThreads.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGroupThreads.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGroupThreads.cpp.i
 .PHONY : __/BLRGroupThreads.cpp.i
 
 __/BLRGroupThreads.s: __/BLRGroupThreads.cpp.s
@@ -276,7 +276,7 @@ __/BLRGroupThreads.s: __/BLRGroupThreads.cpp.s
 
 # target to generate assembly for a file
 __/BLRGroupThreads.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGroupThreads.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGroupThreads.cpp.s
 .PHONY : __/BLRGroupThreads.cpp.s
 
 __/BLRGrouperParameter.o: __/BLRGrouperParameter.cpp.o
@@ -285,7 +285,7 @@ __/BLRGrouperParameter.o: __/BLRGrouperParameter.cpp.o
 
 # target to build an object file
 __/BLRGrouperParameter.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperParameter.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperParameter.cpp.o
 .PHONY : __/BLRGrouperParameter.cpp.o
 
 __/BLRGrouperParameter.i: __/BLRGrouperParameter.cpp.i
@@ -294,7 +294,7 @@ __/BLRGrouperParameter.i: __/BLRGrouperParameter.cpp.i
 
 # target to preprocess a source file
 __/BLRGrouperParameter.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperParameter.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperParameter.cpp.i
 .PHONY : __/BLRGrouperParameter.cpp.i
 
 __/BLRGrouperParameter.s: __/BLRGrouperParameter.cpp.s
@@ -303,7 +303,7 @@ __/BLRGrouperParameter.s: __/BLRGrouperParameter.cpp.s
 
 # target to generate assembly for a file
 __/BLRGrouperParameter.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperParameter.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperParameter.cpp.s
 .PHONY : __/BLRGrouperParameter.cpp.s
 
 __/BLRGrouperThreads.o: __/BLRGrouperThreads.cpp.o
@@ -312,7 +312,7 @@ __/BLRGrouperThreads.o: __/BLRGrouperThreads.cpp.o
 
 # target to build an object file
 __/BLRGrouperThreads.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperThreads.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperThreads.cpp.o
 .PHONY : __/BLRGrouperThreads.cpp.o
 
 __/BLRGrouperThreads.i: __/BLRGrouperThreads.cpp.i
@@ -321,7 +321,7 @@ __/BLRGrouperThreads.i: __/BLRGrouperThreads.cpp.i
 
 # target to preprocess a source file
 __/BLRGrouperThreads.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperThreads.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperThreads.cpp.i
 .PHONY : __/BLRGrouperThreads.cpp.i
 
 __/BLRGrouperThreads.s: __/BLRGrouperThreads.cpp.s
@@ -330,7 +330,7 @@ __/BLRGrouperThreads.s: __/BLRGrouperThreads.cpp.s
 
 # target to generate assembly for a file
 __/BLRGrouperThreads.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperThreads.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRGrouperThreads.cpp.s
 .PHONY : __/BLRGrouperThreads.cpp.s
 
 __/BLRMemIdxBin.o: __/BLRMemIdxBin.cpp.o
@@ -339,7 +339,7 @@ __/BLRMemIdxBin.o: __/BLRMemIdxBin.cpp.o
 
 # target to build an object file
 __/BLRMemIdxBin.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRMemIdxBin.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRMemIdxBin.cpp.o
 .PHONY : __/BLRMemIdxBin.cpp.o
 
 __/BLRMemIdxBin.i: __/BLRMemIdxBin.cpp.i
@@ -348,7 +348,7 @@ __/BLRMemIdxBin.i: __/BLRMemIdxBin.cpp.i
 
 # target to preprocess a source file
 __/BLRMemIdxBin.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRMemIdxBin.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRMemIdxBin.cpp.i
 .PHONY : __/BLRMemIdxBin.cpp.i
 
 __/BLRMemIdxBin.s: __/BLRMemIdxBin.cpp.s
@@ -357,7 +357,7 @@ __/BLRMemIdxBin.s: __/BLRMemIdxBin.cpp.s
 
 # target to generate assembly for a file
 __/BLRMemIdxBin.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRMemIdxBin.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/__/BLRMemIdxBin.cpp.s
 .PHONY : __/BLRMemIdxBin.cpp.s
 
 test_u.o: test_u.cpp.o
@@ -366,7 +366,7 @@ test_u.o: test_u.cpp.o
 
 # target to build an object file
 test_u.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/test_u.cpp.o
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/test_u.cpp.o
 .PHONY : test_u.cpp.o
 
 test_u.i: test_u.cpp.i
@@ -375,7 +375,7 @@ test_u.i: test_u.cpp.i
 
 # target to preprocess a source file
 test_u.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/test_u.cpp.i
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/test_u.cpp.i
 .PHONY : test_u.cpp.i
 
 test_u.s: test_u.cpp.s
@@ -384,7 +384,7 @@ test_u.s: test_u.cpp.s
 
 # target to generate assembly for a file
 test_u.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/test_u.cpp.s
+	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/build.make src/grouper.threads/testfiles/CMakeFiles/test_grouper2.28.dir/test_u.cpp.s
 .PHONY : test_u.cpp.s
 
 # Help Target

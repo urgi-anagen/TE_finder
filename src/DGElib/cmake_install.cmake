@@ -1,8 +1,8 @@
-# Install script for directory: /Users/hquesnev/src/git/TE_finder/DGElib
+# Install script for directory: /Users/hquesnev/src/git/TE_finder/src/DGElib
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/Users/hquesnev/src/git/TE_finder/bin")
+  set(CMAKE_INSTALL_PREFIX "/usr/local")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/hquesnev/src/git/TE_finder/DGElib/testfiles/cmake_install.cmake")
+  include("/Users/hquesnev/src/git/TE_finder/src/DGElib/testfiles/cmake_install.cmake")
 
 endif()
 
