@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(TE_finder)
 
 set(CMAKE_CXX_STANDARD 11)
-set (VERSION "2.28")
+set (VERSION "2.29")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION=${VERSION} -pthread -Wall")
 
 # Search for cppunit library
