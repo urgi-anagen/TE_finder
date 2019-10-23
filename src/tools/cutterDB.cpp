@@ -1,6 +1,6 @@
 #include <unistd.h> //getopt
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <Cutter.h>
 
 int length=50000,over=100,word=11,verbose=0;
@@ -24,19 +24,7 @@ int main(int argc, char* argv[])
     {
       while (1)
 	{
-// 	  static struct option long_options[] =
-// 	  {
-// 	    {"help",no_argument, 0, 'h'},
-// 	    {"length",required_argument, 0, 'l'},
-// 	    {"overlap",required_argument, 0, 'o'},
-// 	    {"word",required_argument, 0, 'w'},
-// 	    {0, 0, 0, 0}
-// 	  };
-// 	  /* `getopt_long' stores the option index here. */
-// 	  int option_index = 0;
-	  
-// 	  int c = getopt_long (argc, argv, "hl:o:w:",
-// 			   long_options, &option_index);
+
  	  int c = getopt (argc, argv, "hl:o:w:v:");
 	  
 	  /* Detect the end of the options. */
@@ -98,9 +86,9 @@ int main(int argc, char* argv[])
       cutter.setLength(length);
       cutter.setOver(over);
       cutter.setWord(word);
-      if(!cutter.check(filename))
+      if(!cutter.check(filename,verbose))
 	{
-	  SDGString bqName=cutter.cutDB(filename);
+	  SDGString bqName=cutter.cutDB(filename,verbose);
 	  if(verbose>0)
 	    std::cout<<"\n\nbank '"<<bqName<<"' created!!\n";
 	}

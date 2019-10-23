@@ -12,7 +12,7 @@
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/BriefTestProgressListener.h>
-#include "Test_orienter.h"
+#include "test_Tools.h"
 
 int main( int argc, char *argv[] )
 {

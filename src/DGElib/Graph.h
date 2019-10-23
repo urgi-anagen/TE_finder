@@ -155,15 +155,7 @@ public:
 		return bfs(num_node, mark);
 	};
 
-	void connexComp(typename std::vector<typename std::vector<T> > &grp) {
-		std::vector<bool> mark(vec_node.size(), false);
-
-		for (typename std::vector<Node *>::iterator i = vec_node.begin();
-			 i != vec_node.end(); i++) {
-			if (!mark[(*i)->num_node])
-				grp.push_back(bfs((*i)->num_node, mark));
-		}
-	};
+	void connexComp(typename std::vector<typename std::vector<T> > &grp);
 
 	void view(void) {
 		for (typename std::vector<Node *>::iterator i = vec_node.begin(); i != vec_node.end(); i++) {

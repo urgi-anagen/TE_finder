@@ -273,13 +273,17 @@ void RangeMap::writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, in
 	  for(std::list<RangeSeq>::const_iterator i=c->second.begin();
 	      i!=c->second.end();i++)
 	    {
-	      if(i->getLength()<14)// temporaire !!
-		{
-		  count_skip++;
-		  continue;
-		}
-	      long is=i->getStart();
-	      long ie=i->getEnd();
+            long is = i->getStart();
+            long ie = i->getEnd();
+            if (i->getLength() < 14)// temporaire !!
+            {
+                count_skip++;
+                if(verbose>0)
+                    std::cout << "Squence length < 14 .. skip sequence:" << i->getName() << " " << i->getChr()
+                              << " {Cut} " << is << ".." << ie << std::endl;
+                continue;
+            }
+
 	      countTreated ++;
 	      if(verbose>0)
 	      {

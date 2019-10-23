@@ -3,7 +3,7 @@
  * \brief Definition d'une classe permettant de stocker un sequence biologique
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <cctype>
 #include <string>
 

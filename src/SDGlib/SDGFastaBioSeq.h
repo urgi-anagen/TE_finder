@@ -49,8 +49,10 @@ class __SDGFastaBioSeq :  public __SDGBioSeq
 
   long getOffset() const { return offset_sequence; };
 
-  virtual SDGString name() const { return "SDGFastaBioSeq"; }; 
-  
+  virtual SDGString name() const { return "SDGFastaBioSeq"; };
+
+
+
     //Retourne un objet __SDGString contenant la sequence sous forme ascii
   virtual SDGString toString(unsigned long d=0, unsigned long lg=0) const;
 
@@ -80,6 +82,7 @@ class __SDGFastaBioSeq :  public __SDGBioSeq
   void read_idx(std::istream&);
 
   virtual unsigned long length() const ;
+
   bool isLinear() const;
   void setLinear(bool);
 
