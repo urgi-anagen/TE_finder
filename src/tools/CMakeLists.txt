@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(tools${VERSION})
+add_subdirectory (testfiles)
 
 
 add_executable(cutterDB cutterDB.cpp)

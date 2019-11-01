@@ -4,7 +4,7 @@ Dependencies
 * cmake : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
 example under Debian type 'sudo apt-get install cmake'
 
-* cppunit : The C++ library for unitary tests (the "dev"/"devel" version as it will be used for compilation).
+* cppunit : A C++ library for unitary tests.
 
 Compilation
 ===========
@@ -15,6 +15,7 @@ Compilation
 2-type 'cmake .'
 3-type 'make install'
 4-binaries are in <TE_finder-root-dir>/bin
+
 
 blaster:
 ========

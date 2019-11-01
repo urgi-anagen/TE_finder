@@ -20,7 +20,7 @@
 #ifndef SDGBITSTR_H
 #define SDGBITSTR_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <string.h>
 #include <iostream>
 #include <limits.h>

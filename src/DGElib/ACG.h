@@ -19,8 +19,9 @@ Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #define _ACG_h 1 
 
 #include <RNG.h>
-#include <math.h>
+#include <cmath>
 #include <cstdint>
+#include <cassert>
 #ifdef __GNUG__
 #endif
 
