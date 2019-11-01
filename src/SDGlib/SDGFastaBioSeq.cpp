@@ -78,25 +78,24 @@ __SDGFastaBioSeq::__SDGFastaBioSeq(SDGString fich, unsigned long decalage,
 
   std::string line;
   SDGString titre;
-  if(std::getline(file,line))
-    {
-        titre=SDGString(line).substr(1);
-        titre=titre.trimR();
-        offset_sequence=file.tellg();
+    while (file && file.peek() != '>')
+        file.get();
+    if (std::getline(file, line)) {
+        titre = SDGString(line).substr(1);
+        titre = titre.trimR();
+        offset_sequence = file.tellg();
     }
-  if(std::getline(file,line))
-  {
-    npl=file.gcount()-1;
-    longueur=npl;     
-    while (file)
-    { 
-        if(std::getline(file,line) && file.peek()!='>')
-            longueur+=line.size();
-    } 
-  }  
-  file.close();
-  setDE(titre);
-
+    setDE(titre);
+    longueur = npl = 0;
+    while (file) {
+        if(file.peek() == '>')
+            break;
+        if (std::getline(file, line) )
+            longueur += line.size();
+        if (npl == 0)
+            npl = longueur;
+    }
+/*
   buffseq="";
   buffseq_pos=0;
   buffseq_size=buffsize<longueur?buffsize:longueur;
@@ -109,7 +108,7 @@ __SDGFastaBioSeq::__SDGFastaBioSeq(SDGString fich, unsigned long decalage,
 	molecule=__SDGBioSeq::NDG;
     }
   else
-    molecule=mol;
+    molecule=mol;*/
 }
  
 __SDGFastaBioSeq::__SDGFastaBioSeq(const __SDGFastaBioSeq &seq)

@@ -15,7 +15,6 @@ file(
         source_files
 
         *.cpp
-
 )
 
 #Declare library
@@ -24,8 +23,7 @@ add_executable(
         test_DGE
 
         ${source_files}
-
-        Test_Graph.cpp Test_Graph.h)
+)
 
 target_link_libraries(
         test_DGE

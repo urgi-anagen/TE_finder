@@ -24,7 +24,7 @@ class SDGBioSeqDB: public std::vector<SDGBioSeq>
  public:
 
   SDGBioSeqDB(void){};
-  SDGBioSeqDB(SDGString fichier){load(fichier);};
+  SDGBioSeqDB(SDGString fichier, int verbose=0){load(fichier,verbose);};
   void load( SDGString fichier, int verbose=0 );
 
   SDGBioSeq& find(SDGString name)
