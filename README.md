@@ -1,5 +1,6 @@
 # TE Finder 2.29
 
+##Overview
  The TE Finder suite gathers C++ programs developed for transposable element search and their annotation in 
  large eukaryotic genome sequence. But we think that the tools are generic enough to be used in other contexts.
  
@@ -10,3 +11,6 @@
  See the [documentation](Documentation.md)
 
 The binaries are part of the [REPET package](http://urgi.versailles.inra.fr/Tools/REPET).
+
+##Containers
+Singularity images are available [here](https://cloud.sylabs.io/library/hquesneville)
