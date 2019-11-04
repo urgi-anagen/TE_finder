@@ -14,6 +14,7 @@ Dependencies
     example (Debian): sudo apt -y install libcppunit-dev
 
 * GIT
+
     example (Debian): sudo apt -y install git
 
 Download
@@ -24,15 +25,15 @@ Download
 Compilation
 ===========
 
-<TE_finder-root-dir> is the root directory of TE-finder package
+<TE_finder-root-dir> is the root directory of TE-finder package.
 
-1-go to the <TE_finder-root-dir> directory
+1. go to the <TE_finder-root-dir> directory
 
-2-type 'cmake .'
+2. type 'cmake .'
 
-3-type 'make install'
+3. type 'make install'
 
-4-binaries are in <TE_finder-root-dir>/bin
+4. binaries are in <TE_finder-root-dir>/bin
 
 
 blaster:
