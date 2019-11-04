@@ -2,9 +2,21 @@ Dependencies
 ============
 
 * cmake : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
-example under Debian type 'sudo apt-get install cmake'
+    example (Debian): sudo apt -y install cmake
+
+* C++ compiler
+    example (Debian): sudo apt -y install g++
 
 * cppunit : A C++ library for unitary tests.
+    example (Debian): sudo apt -y install libcppunit-dev
+
+* GIT
+    example (Debian): sudo apt -y install git
+
+Download
+========
+
+    git clone https://github.com/urgi-anagen/TE_finder.git
 
 Compilation
 ===========
