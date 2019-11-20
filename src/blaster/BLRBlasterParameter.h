@@ -6,10 +6,10 @@
 #ifndef BLRBLASTERPARAMETER_H
 #define BLRBLASTERPARAMETER_H
 
-#include <string.h>
+#include <cstring>
 #include <cstdlib>
 #include <iostream>
-#include <time.h>
+#include <ctime>
 #include <fstream>
 #include <list>
 #include "SDGString.h"
@@ -253,9 +253,14 @@ class BLRBlasterParameter
   void setIdFilter(double f)                 {id_filter=f;};
   void setLenFilter(unsigned f)                 {len_filter=f;};
 
+  void set_is_wuBlast(void) {is_wuBlast=true;};
+  void set_is_ncbiBlast(void) {is_ncbiBlast=true;};
+  void set_is_ncbiBlastPlus(void) {is_ncbiBlastPlus=true;};
+
   bool get_is_wuBlast(void) {return is_wuBlast;};
   bool get_is_ncbiBlast(void) {return is_ncbiBlast;};
   bool get_is_ncbiBlastPlus(void) {return is_ncbiBlastPlus;};
+
   bool getPrepare(void) {return prepare;};
   bool getCleanTmpFiles(void) {return cleanTmpFiles;};
   int getVerbose(void) {return verbose;};

@@ -7,6 +7,7 @@
 
 void BLRBlaster::run( int verbose )
 {
+  para.write(para.getParameterFileName());
   if(verbose>0)
   {
 	  std::cout<<"subjects: "<<para.getBankCut()<<std::endl;
@@ -139,7 +140,6 @@ void BLRBlaster::run( int verbose )
   save_align( verbose );
   if(verbose>0)
 	  std::cout<<"Blaster was run."<<std::endl;
-  para.write(para.getParameterFileName());
 }
 
 void BLRBlaster::update(const std::list<unsigned>& nseq)
