@@ -1,4 +1,4 @@
-# TE Finder 2.29
+# TE Finder 2.30
 
  The TE Finder suite gathers C++ programs developed for transposable element search and their annotation in 
  large eukaryotic genome sequence. But we think that the tools are generic enough to be used in other contexts.

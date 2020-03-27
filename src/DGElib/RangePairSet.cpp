@@ -58,32 +58,33 @@ void RangePairSet::computeScoreWithDynaProg(double mism,double gapo_p,double gap
 	score=score>0?score:0;
 }
 
-void RangePairSet::computeScoreWithLength(void)
+void RangePairSet::computeScoreWithLengthAndId(void)
 {
 	unsigned long sumScore = 0;
 	for (std::list<RangePair>::iterator i =  path.begin(); i !=path.end(); i++)
 	{
-		unsigned long score = (i->getRangeQ().getEnd() - i->getRangeQ().getStart()) + 1;
-		i->setScore(score);
-		i->setLength(score);
-		sumScore = sumScore + score;
+		unsigned long sc = std::lround(
+		        (i->getIdentity()/100)
+		        *((i->getRangeQ().getEnd() - i->getRangeQ().getStart()) + 1));
+		i->setScore(sc);
+		i->setLength(sc);
+		sumScore = sumScore + sc;
 	}
 	setScore(sumScore);
 	setLength(sumScore);
 }
 
-void RangePairSet::setPath(const std::list<RangePair> rp_list,double mism,double gapo_p,double gape_p)
+
+void RangePairSet::setRpsFromRpList(const std::list<RangePair> rp_list)
 {
 	path.clear();
 	if(rp_list.empty())
 		return;
-	// Update for gcc 4.6.3
-	//*this=RangePairSet::RangePairSet(rp_list.front());
 
 	*this=RangePairSet(rp_list.front());
 
-	std::list<RangePair>::const_iterator prev,r=rp_list.begin();
-	prev=r++;
+	std::list<RangePair>::const_iterator r=rp_list.begin();
+	r++;
 	while(r!=rp_list.end())
 	{
 		first.merge(r->first);
@@ -93,16 +94,17 @@ void RangePairSet::setPath(const std::list<RangePair> rp_list,double mism,double
 		e_value=std::min(e_value,r->getE_value());
 		length+=r->getLength();
 		path.push_back(*r);
-		prev=r++;
+		r++;
 	}
-	computeScoreWithDynaProg(mism,gapo_p,gape_p);
 	if(!isPlusStrand())
-		path.sort(RangePair::greater);
+		path.sort(RangePair::less);
 }
 
-void RangePairSet::setPath(double mism,double gapo_p,double gape_p)
+
+void RangePairSet::updateQueryFromPathList(void)
 {
-  RangePairSet::setPath(path, mism, gapo_p,gape_p);
+    std::list<RangePair> list_rp=path;
+    setRpsFromRpList(list_rp);
 }
 
 void RangePairSet::addPath(const RangePair& rp)
@@ -110,6 +112,34 @@ void RangePairSet::addPath(const RangePair& rp)
   path.push_back(rp);
 }
 
+void RangePairSet::setQSName(std::string query_name, std::string subject_name)
+{
+    first.setNameSeq(query_name);
+    second.setNameSeq(subject_name);
+    for(std::list<RangePair>::iterator i=path.begin();i!=path.end();i++)
+    {
+        i->setQSName(query_name,subject_name);
+    }
+}
+
+void RangePairSet::write(std::ostream& out, unsigned id,
+                         const std::string& nameQ, const std::string& nameS)  const
+{
+
+    for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
+    {
+        out<<id<<"\t"<<nameQ
+           <<"\t"<<i->getRangeQ().getStart()
+           <<"\t"<<i->getRangeQ().getEnd()
+           <<"\t"<<nameS
+           <<"\t"<<i->getRangeS().getStart()
+           <<"\t"<<i->getRangeS().getEnd()
+           <<"\t"<<i->getE_value()
+           <<"\t"<<i->getScore()
+           <<"\t"<<i->getIdentity()
+           <<std::endl;
+    }
+}
 void RangePairSet::write(std::ostream& out, unsigned id,
 		const std::string& nameQ, const std::map<long,std::string>& nameS)  const
 {
@@ -129,24 +159,6 @@ void RangePairSet::write(std::ostream& out, unsigned id,
 	}
 }
 
-void RangePairSet::writePath(std::ostream& out, unsigned id,
-		const std::string& nameQ, const std::map<long,std::string>& nameS)  const
-{
-
-	for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
-	{
-		out<<id<<"\t"<<nameQ
-		<<"\t"<<i->getRangeQ().getStart()
-		<<"\t"<<i->getRangeQ().getEnd()
-		<<"\t"<<nameS.at(i->getRangeS().getNumChr())
-		<<"\t"<<i->getRangeS().getStart()
-		<<"\t"<<i->getRangeS().getEnd()
-		<<"\t"<<i->getE_value()
-		<<"\t"<<i->getScore()
-		<<"\t"<<i->getIdentity()
-		<<std::endl;
-	}
-}
 
 void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
 		const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& source) const
@@ -196,6 +208,54 @@ void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
 		<<std::endl;
 	}
 }
+void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
+                             const std::string& nameQ, const std::string& nameS, const std::string& source) const
+{
+    out<<nameQ
+       <<"\t"<<source
+       <<"\t"<<"match"
+       <<"\t"<<getRangeQ().getMin()
+       <<"\t"<<getRangeQ().getMax()
+       <<"\t"<<getScore()<<"\t";
+    if(isPlusStrand()) out<<"+";
+    else out<<"-";
+    out<<"\t."
+       <<"\tID="<<id;
+    if(getRangeS().getNumChr()!=-1){
+        out<<";Name="<<nameS
+           <<";Target="<<nameS<<" "<<getRangeS().getMin()<<" "<<getRangeS().getMax();
+    }
+    else{
+        out<<";Name="<<"Multiple";
+    }
+
+    out<<";Note=e-value:"<<getE_value()
+       <<",identity:"<<getIdentity()
+       <<std::endl;
+
+    int count=0;
+    for(std::list<RangePair>::const_iterator i=path.begin();i!=path.end();i++)
+    {
+        count++;
+        std::string subjectname=nameS;
+        out<<nameQ
+           <<"\t"<<source
+           <<"\t"<<"match_part"
+           <<"\t"<<i->getRangeQ().getMin()
+           <<"\t"<<i->getRangeQ().getMax()
+           <<"\t"<<i->getScore()<<"\t";
+        if(isPlusStrand()) out<<"+";
+        else out<<"-";
+        out<<"\t."
+           <<"\tID="<<id<<"."<<count
+           <<";Parent="<<id
+           <<";Name="<<subjectname<<"."<<count
+           <<";Target="<<subjectname<<" "<<getRangeS().getMin()<<" "<<getRangeS().getMax()
+           <<";Note=e-value:"<<getE_value()
+           <<",identity:"<<getIdentity()
+           <<std::endl;
+    }
+}
 
 void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& color) const
 {
@@ -239,7 +299,25 @@ void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const s
 	}
 	out<<std::endl;
 }
-
+void RangePairSet::writeRpsAttr(std::ostream& out, unsigned id,
+                                const std::string& nameQ, const std::string& nameS) const
+{
+    out<<"["<<id<<"\t"<<nameQ
+       <<"\t"<<getRangeQ().getStart()
+       <<"\t"<<getRangeQ().getEnd();
+    if(getRangeS().getNumChr()!=-1){
+        out<<"\t"<<nameS;
+    }
+    else{
+        out<<"\t-1";
+    }
+    out<<"\t"<<getRangeS().getStart()
+       <<"\t"<<getRangeS().getEnd()
+       <<"\t"<<getE_value()
+       <<"\t"<<getScore()
+       <<"\t"<<getIdentity()
+       <<"]"<<std::endl;
+}
 void RangePairSet::writeRpsAttr(std::ostream& out, unsigned id,
 		const std::string& nameQ, const std::map<long,std::string>& nameS) const
 {
@@ -289,7 +367,7 @@ bool RangePairSet::diffQ(const RangePairSet& r)
 	if(path.empty())
 		clear();
 
-	setPath(path); //warning: recompute score with alignment penalties at 0
+    setRpsFromRpList(path);
 	return modif;
 }
 
@@ -297,6 +375,7 @@ bool RangePairSet::diffQ(const RangePairSet& r)
 bool RangePairSet::split(const RangePairSet& r, std::list<RangePairSet>& lrp )
 {
   bool modif=false;
+
   lrp.clear();
   std::list<RangePair> r_path=r.path;
   r_path.sort(RangePair::less);
@@ -311,17 +390,18 @@ bool RangePairSet::split(const RangePairSet& r, std::list<RangePairSet>& lrp )
       next_i++;
       if(next_i==path.end()) break;
       if(*next_i>*j)
-	{
-	  modif=true;
-	  std::list<RangePair> lpath;
-	  lpath.splice(lpath.begin(),path,path.begin(),next_i);
-	  RangePairSet new_rps(lpath);
-	  lrp.push_back(new_rps);
-	  i=next_i;
-	}
+        {
+          modif=true;
+          std::list<RangePair> lpath;
+          lpath.splice(lpath.begin(),path,path.begin(),next_i);
+          RangePairSet new_rps(lpath); //new_rps init from lpath
+            new_rps.computeScoreWithLengthAndId();
+          lrp.push_back(new_rps);
+          i=next_i;
+        }
       else i++;
     }
-  setPath(path);
+    setRpsFromRpList(path);
   return modif;
 }
 
@@ -392,7 +472,7 @@ unsigned RangePairSet::overlapQ_length(const RangePairSet& r) const
 	return overlap;
 }
 
-void RangePairSet::setPathDirectly(const std::list<RangePair> rp_list){
+void RangePairSet::setPathDirectly(const std::list<RangePair>& rp_list){
     path = rp_list;
 }
 
@@ -415,12 +495,14 @@ bool operator!=(const RangePairSet &rps1, const RangePairSet &rps2)
 void RangePairSet::mergeQ(RangePairSet& rpsOther) 
 {
 	cleanConflictsOnOverlappingQuery(rpsOther);
-	
-	mergeCurrentPathWithOtherPath(rpsOther);
-	path.sort(RangePairSet::compareCoordsOnQuery);
-	updateSubject(rpsOther);
-	updateQuery();
-	updateScoreLengthAndIdentityAndEValue();
+	path.insert(path.begin(),rpsOther.path.begin(),rpsOther.path.end());
+	path.sort(RangePairSet::less);
+    updateQueryFromPathList(); // from path
+    computeScoreWithLengthAndId();
+    getRangeS().setNumChr(-1);
+    getRangeS().setNameSeq("-1");
+    getRangeS().setStart(0);
+    getRangeS().setEnd(0);
 }
 
 void RangePairSet::cleanConflictsOnOverlappingQuery(RangePairSet &rpsOther)
@@ -432,24 +514,6 @@ void RangePairSet::cleanConflictsOnOverlappingQuery(RangePairSet &rpsOther)
 	}
 }
 
-void RangePairSet::mergeCurrentPathWithOtherPath(RangePairSet &rpsOther)
-{
-	std::list<RangePair> newPath;
-	for(std::list<RangePair>::const_iterator i=path.begin();
-	i!=path.end();i++)
-	{
-		newPath.push_back(*i);
-	}
-
-	std::list<RangePair> pathOther = rpsOther.getPath();
-	for(std::list<RangePair>::const_iterator i=pathOther.begin();
-	i!=pathOther.end();i++)
-	{
-		newPath.push_back(*i);
-	}
-	setPathDirectly(newPath);
-}
-
 bool RangePairSet::compareCoordsOnQuery(const RangePairSet &rps1, const RangePairSet &rps2)
 {	
 	if (rps1.first.getNumChr() == rps2.first.getNumChr()){
@@ -459,43 +523,9 @@ bool RangePairSet::compareCoordsOnQuery(const RangePairSet &rps1, const RangePai
 	}
 }
 
-bool RangePairSet::compareScoreDecreasing(const RangePairSet &rps1, const RangePairSet &rps2)
-{	
-	return rps1.getScore() > rps2.getScore();
-}
-void RangePairSet::updateSubject(RangePairSet &rpsOther)
-{
-	
-	getRangeS().setNumChr(-1);
-	getRangeS().setNameSeq("-1");
-	getRangeS().setStart(0);
-	getRangeS().setEnd(0);
-}
 
-void RangePairSet::updateQuery(void)
-{
-	RangePair firstRps = path.front(); 
-	RangePair lastRps = path.back();
-	getRangeQ().setStart(firstRps.getRangeQ().getMin());
-	getRangeQ().setEnd(lastRps.getRangeQ().getMax());
-	getRangeQ().setNumChr(firstRps.getRangeQ().getNumChr());
-	getRangeQ().setNameSeq(firstRps.getRangeQ().getNameSeq());
-}
 
-// TODO: duplication with computeScoreWithLength
-void RangePairSet::updateScoreLengthAndIdentityAndEValue(void)
-{
-	unsigned long sumScore = 0;
-	for (std::list<RangePair>::iterator i =  path.begin(); i !=path.end(); i++)
-	{
-		unsigned long score = (i->getRangeQ().getMax() - i->getRangeQ().getMin()) + 1;
-		sumScore = sumScore + score;
-	}
-	setScore(sumScore);
-	setLength(sumScore);
-	setIdentity(0);
-	setE_value(0);
-}
+
 
 void RangePairSet::orientSubjects(void)
 {

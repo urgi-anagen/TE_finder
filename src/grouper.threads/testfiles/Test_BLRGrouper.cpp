@@ -7,13 +7,13 @@
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_BLRGrouper);
 void Test_BLRGrouper::test_mergeGroupsLists(void)
 {
-    para_ptr=new BLRGrouperParameter();
-    BLRMatchMap mm1(para_ptr),mm2(para_ptr);
-    BLRGrouper grpr(para_ptr);
+    para=new BLRGrouperParameter();
+    BLRMatchMap mm1(para),mm2(para);
+    BLRGrouper grpr(para);
 
     //Test
-    BLRGroup ext_gr(para_ptr,&mm1,3);
-    BLRGroup gr(para_ptr,&mm2,3);
+    BLRGroup ext_gr(para, &mm1, 3);
+    BLRGroup gr(para, &mm2, 3);
 
 
     //group init
@@ -42,7 +42,7 @@ void Test_BLRGrouper::test_mergeGroupsLists(void)
     grpr.mergeGroupsLists(&gr, &ext_gr,0);
 
     //Expectation. Note insertion order is important
-    BLRGroup gr_exp(para_ptr,&mm2,3);
+    BLRGroup gr_exp(para, &mm2, 3);
     GROUPLIST::iterator gr_exp_it=gr_exp.addGroup(m11,m12);
     gr_exp.addMember(gr_exp_it,m13);
     gr_exp.addMember(gr_exp_it,m14);

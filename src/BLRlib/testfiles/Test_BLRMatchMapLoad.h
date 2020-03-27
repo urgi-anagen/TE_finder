@@ -10,37 +10,36 @@
 #include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
 
-class Test_BLRMatchMapLoad: public CPPUNIT_NS::TestFixture
-{
-  CPPUNIT_TEST_SUITE(Test_BLRMatchMapLoad);
-  CPPUNIT_TEST(test_readAlign);
-  CPPUNIT_TEST(test_load);
-  CPPUNIT_TEST(test_readPath);
-  CPPUNIT_TEST(test_loadPath);
-//  CPPUNIT_TEST(test_loadPath_name2Num_and_num2Name);
-//  CPPUNIT_TEST(test_loadPath_rpsList);
-//  CPPUNIT_TEST(test_loadPath_with_join_end_of_file);
-//  CPPUNIT_TEST(test_loadPath_with_join_begin_of_file);
-//  CPPUNIT_TEST(test_loadPath_with_join_middle_of_file);
-  CPPUNIT_TEST_SUITE_END();
+class Test_BLRMatchMapLoad : public CPPUNIT_NS::TestFixture {
+CPPUNIT_TEST_SUITE(Test_BLRMatchMapLoad);
+        CPPUNIT_TEST(test_readAlign);
+        CPPUNIT_TEST(test_load);
+        CPPUNIT_TEST(test_readPath);
+        CPPUNIT_TEST(test_loadPath);
+    CPPUNIT_TEST_SUITE_END();
 
- public:
+    BLRMatcherThreadsParameter createParameter(void) {
+        BLRMatcherThreadsParameter para;
+        para.setLenFilter(0);
+        para.setEvalFilter(10);
+        para.setIdFilter(0);
+        return para;
+    };
+
+public:
     void setUp();
+
     void tearDown();
 
- protected:
+protected:
     void test_readAlign(void);
+
     void test_readPath(void);
+
     void test_load(void);
+
     void test_loadPath(void);
-    void test_loadPath_name2Num_and_num2Name(void);
-    void test_loadPath_rpsList(void);
-    void test_loadPath_with_join_end_of_file(void);
-    void test_loadPath_with_join_begin_of_file(void);
-    void test_loadPath_with_join_middle_of_file(void);
- 
- private:
-    bool areTwoRpsEqualsWithoutIndentity(RangePairSet rps1, RangePairSet rps2);
+
 
 };
 #endif

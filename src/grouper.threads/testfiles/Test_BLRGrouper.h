@@ -14,8 +14,8 @@
 
 class Test_BLRGrouper : public CppUnit::TestFixture {
 
-    BLRGrouperParameter *para_ptr;
-    BLRMatchMap *match_map_ptr;
+    BLRGrouperParameter para;
+    BLRMatchMap match_map;
 
 
     CPPUNIT_TEST_SUITE(Test_BLRGrouper);
@@ -26,17 +26,13 @@ class Test_BLRGrouper : public CppUnit::TestFixture {
 
     public:
 
-        Test_BLRGrouper(void) : para_ptr(0), match_map_ptr(0){}
+        Test_BLRGrouper(void) {}
 
     void setUp()
     {
-        para_ptr=new BLRGrouperParameter();
-        match_map_ptr=new BLRMatchMap(para_ptr);
     }
     void tearDown()
     {
-        delete match_map_ptr;
-        delete para_ptr;
     }
 
     protected:

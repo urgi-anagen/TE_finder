@@ -1,15 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(BLRlib_test)
+project(test_hasher${VERSION})
 
-
-#Inclusion des en-têtes publics
-
-include_directories(.
-        ..
-        ../../SDGlib
-        ../../DGElib)
-
+include_directories(..)
 #Generate file sources
 
 file(
@@ -18,7 +11,7 @@ file(
 
         source_files
 
-        *.cpp
+        *
 
 )
 
@@ -26,14 +19,14 @@ file(
 #Declare library
 
 add_executable(
-        test_BLR
+        test_hasher${VERSION}
 
         ${source_files}
-
-        Test_BLRUtils.cpp Test_BLRUtils.h)
+        ../Hasher.cpp
+)
 
 target_link_libraries(
-        test_BLR
+        test_hasher${VERSION}
 
         ${CPPUNIT_LIBRARY}
         SDGlib

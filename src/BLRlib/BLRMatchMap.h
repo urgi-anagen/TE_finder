@@ -46,7 +46,7 @@ class BLRMatchMap
  private:
   MapAlign map_align;
   MapPath map_path;
-  BLRJoinParameter *para;
+  BLRJoinParameter para;
   std::map<std::string,long> name2numQ,name2numS;
   std::map<long,std::string> num2nameQ,num2nameS;
   BLRBioSeqDB subjectCut_db,queryCut_db;
@@ -66,31 +66,30 @@ class BLRMatchMap
 			    std::list<RangePairSet>::iterator iter,
 			    int verbose=0);
   */
-  static void insert_path_static(MapPath mapPath, RangePairSet& rangePair);
-  void writePathForMergedS(std::ostream &out, unsigned path_id, std::string query_name, std::list<RangePair> path);
+  //static void insert_path_static(MapPath mapPath, RangePairSet& rangePair);
+  //void writePathForMergedS(std::ostream &out, unsigned path_id, std::string query_name, std::list<RangePair> path);
 
  public:
 
     BLRMatchMap(void) {
-        para = new BLRJoinParameter();
         same_db = false;
         merge_overlap = 200;
     };
 
-    BLRMatchMap(BLRJoinParameter *p) :
+    BLRMatchMap(const BLRJoinParameter& p) :
             para(p) {
         same_db = false;
         merge_overlap = 200;
-        if (para->getQuery() != "<not set>")
-            query_db.load(para->getQuery());
-        if (para->getBank() != "<not set>")
-            subject_db.load(para->getBank());
+        if (para.getQuery() != "<not set>")
+            query_db.load(para.getQuery());
+        if (para.getBank() != "<not set>")
+            subject_db.load(para.getBank());
     };
 
     BLRMatchMap(const BLRMatchMap &m) {
         map_align = m.map_align;
         map_path = m.map_path;
-        para = new BLRJoinParameter(*m.para);
+        para = m.para;
         rpsList = m.rpsList;
         name2numQ = m.name2numQ;
         name2numS = m.name2numS;
@@ -120,11 +119,11 @@ class BLRMatchMap
   unsigned getNbQseq(void) { return num2nameQ.size();};
   unsigned getNbSseq(void);
   void readAlign(std::istringstream& streamName, int verbose=0);
-  void load(int verbose=0){ loadAlign(para->getMatchFileName(), verbose);};
+  void load(int verbose=0){ loadAlign(para.getMatchFileName(), verbose);};
   void loadAlign(SDGString filename, int verbose = 0);
 
   void readPath(std::istringstream& streamName, int verbose=0);
-  void loadPath(int verbose=0){ loadPath(para->getPath_filename(),verbose);};
+  void loadPath(int verbose=0){ loadPath(para.getPath_filename(),verbose);};
 
   void clear(void){map_align.clear();map_path.clear();};
   void mapPath(bool joining=true, bool clean_before=false, bool clean_after=false, bool merged=false, int verbose=0);
@@ -132,8 +131,11 @@ class BLRMatchMap
   void clean_conflicts(void);
   void clean_path(bool same_S=true, int verbose=0);
   void split_path(void);
-  void select(bool subject=true, bool clean_before=false, bool clean_after=false);
-  void selectQregex(SDGString regex);
+//  void select(bool subject=true, bool clean_before=false, bool clean_after=false);
+//  void selectQregex(SDGString regex);
+
+  void writePath(std::ostream& out, int verbose=0);
+  void writePathAttr(std::ostream& out, int verbose=0);
   void writePath(const SDGString& filename, std::list<RangePairSet>& rps_list, int verbose=0);
   void writeRpsList(std::list<RangePairSet>& rps_list,std::ostream& out);
   void writeRpsListAttribute(std::list<RangePairSet>& rps_list, std::ostream& out);
@@ -143,6 +145,7 @@ class BLRMatchMap
   RangeMap writeMap(const SDGString& filename, int verbose=0);
   void writeSeq(const RangeMap& matchmap, const SDGString& filename, int verbose=0);
   void writeMapAlign(std::ostream& out);
+
   void contigOverlap(void);
   unsigned getNbMatchesInMapAlign(void);
   unsigned getNbMatchesInMapPath(void);
@@ -151,9 +154,10 @@ class BLRMatchMap
   
   std::list<RangePairSet> getRpsListFromMapPath(void);
   std::list<RangePairSet> copyRpsListFromMapPath(void);
-  std::list<RangePairSet> getRpsList(void) // Build list of RangePairSet
+  std::list<RangePairSet> getRpsList(void);
+  std::list<RangePairSet> getRawRpsList(void) // Build list of RangePairSet
 	{ return rpsList;};
-  void setRpsList(std::list<RangePairSet>& rpsListArg)
+  void setRawRpsList(std::list<RangePairSet>& rpsListArg)
         { rpsList = rpsListArg;}; 
   void setMapPath(MapPath& mapPathArg){map_path = mapPathArg;};
   MapAlign getMapAlign(void){return map_align;};
@@ -186,7 +190,7 @@ class BLRMatchMap
   std::map<std::string,long> getName2NumS(void){return name2numS;};
   std::map<long, std::string> getNum2NameS(void){return num2nameS;};
 
-  BLRJoinParameter* getParameter(){return para;};
+  const BLRJoinParameter& getParameter(){return para;};
   
   void mapPathJoinAndComputeScoreWithLengthOnly(bool joining, bool clean_before, bool clean_after, int verbose);
 };

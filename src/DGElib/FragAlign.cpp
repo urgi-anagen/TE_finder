@@ -18,7 +18,7 @@
 	    a_path.push_back(*(*r));
 	    l.erase(*r);
 	  }
-	newRange.setPath(a_path);
+          newRange.setRpsFromRpList(a_path);
 	newRange.computeScoreWithDynaProg(mism_pen,gapo_pen,gape_pen);
 	finish_list.push_back(newRange);
       }
@@ -35,7 +35,7 @@
 	    a_path.push_back(*(*r));
 	    l.erase(*r);
 	  }
-	newRange.setPath(a_path);
+          newRange.setRpsFromRpList(a_path);
 	newRange.computeScoreWithDynaProg(mism_pen,gapo_pen,gape_pen);
 	finish_list.push_back(newRange);
       }
@@ -52,7 +52,7 @@
 	    a_path.push_back(*(*r));
 	    l.erase(*r);
 	  }
-	newRange.setPath(a_path);
+          newRange.setRpsFromRpList(a_path);
 	newRange.computeScoreWithDynaProg(mism_pen,gapo_pen,gape_pen);
 	finish_list.push_back(newRange);
       }
@@ -69,7 +69,7 @@
 	    a_path.push_back(*(*r));
 	    l.erase(*r);
 	  }
-	newRange.setPath(a_path);
+          newRange.setRpsFromRpList(a_path);
 	newRange.computeScoreWithDynaProg(mism_pen,gapo_pen,gape_pen);
 	finish_list.push_back(newRange);
       }

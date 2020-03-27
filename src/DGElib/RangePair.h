@@ -204,6 +204,12 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 			}
 		}
 
+    void setQSName(std::string query_name, std::string subject_name)
+    {
+        first.setNameSeq(query_name);
+        second.setNameSeq(subject_name);
+    }
+
 	bool isPlusStrand(void) const
 		{ return second.isPlusStrand();};
 

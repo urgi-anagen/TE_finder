@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(TE_finder)
 
 set(CMAKE_CXX_STANDARD 11)
-set (VERSION "2.29")
+set (VERSION "2.30")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION=${VERSION} -pthread -Wall")
 
 # Search for cppunit library
@@ -50,6 +50,8 @@ add_subdirectory (src/DGElib)
 add_subdirectory (src/BLRlib)
 add_subdirectory (src/blaster)
 add_subdirectory (src/matcher)
+add_subdirectory (src/hasher)
+add_subdirectory (src/matcher.threads)
 add_subdirectory (src/grouper.threads)
 add_subdirectory (src/duster)
 add_subdirectory (src/tools)

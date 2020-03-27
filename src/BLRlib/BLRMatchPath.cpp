@@ -4,16 +4,17 @@
 
 #include "BLRMatchPath.h"
 //----------------------------------------------------------------------------
-void BLRMatchPath::insert(RangePairSet &rangePair)
+void BLRMatchPath::insert(RangePairSet &rangePairSet)
 //insert a RangePairSet in map_path at the right place
 {
     std::list<RangePairSet> &al_list
-            = map_path[rangePair.getRangeQ().getNumChr()];
+            = map_path[rangePairSet.getRangeQ().getNumChr()];
 
-    al_list.push_back(rangePair);
+    al_list.insert(al_list.end(),rangePairSet);
+    ++count_path;
 }
 //---------------------------------------------------------------------------
-void BLRMatchPath::read(const BLRJoinParameter& p, std::istream& input_path, int verbose)
+void BLRMatchPath::read(const BLRJoinParameter& para, std::istream& input_path, int verbose)
 {
     unsigned countseqS=0,countseqQ=0;
 
@@ -21,10 +22,11 @@ void BLRMatchPath::read(const BLRJoinParameter& p, std::istream& input_path, int
     name2numS.clear();
     num2nameQ.clear();
     num2nameS.clear();
-    para=p;
+
 
     unsigned long currentId=0, previousId=0;
     RangePairSet rps;
+    std::list<RangePair> rp_list;
 
     while(input_path)
     {
@@ -69,19 +71,22 @@ void BLRMatchPath::read(const BLRJoinParameter& p, std::istream& input_path, int
             if (previousId != currentId && previousId!=0) //new path
             {
                 //save previous path
-                rps.setPath(para.getDist_pen(),0.0,para.getGap_pen());
+                rps.setRpsFromRpList(rp_list);
+                rps.computeScoreWithDynaProg(para.getDist_pen(), 0.0, para.getGap_pen());
                 insert(rps);
 
                 //clear for new path
                 rps.clear();
+                rp_list.clear();
             }
-            rps.addPath(rp);
+            rp_list.push_back(rp);
             previousId=currentId;
         }
 
 
     }
-    rps.setPath(para.getDist_pen(),0.0,para.getGap_pen());
+    rps.setRpsFromRpList(rp_list);
+    rps.computeScoreWithDynaProg(para.getDist_pen(), 0.0, para.getGap_pen());
     insert(rps);
 
     if(verbose>0)
@@ -91,6 +96,105 @@ void BLRMatchPath::read(const BLRJoinParameter& p, std::istream& input_path, int
         std::cout<<"nb of distinct subjects: "<<getNbSseq()<<std::endl;
     }
 }
+//---------------------------------------------------------------------------
+void BLRMatchPath::setFromRpsList(const BLRJoinParameter& para, const std::list<RangePairSet>& rps_list, int verbose){
+
+    unsigned long count_rps=map_path.size();
+
+    for(std::list<RangePairSet>::const_iterator rps_it=rps_list.begin(); rps_it!=rps_list.end(); rps_it++)
+    {
+        //copy information on RangePairSet attributes
+        unsigned long rps_id=++count_rps;
+        RangePairSet rps=*rps_it;
+        rps.setId(rps_id);
+        std::map<std::string, long>::iterator it
+                = name2numQ.find(rps_it->getRangeQ().getNameSeq());
+
+        if (it == name2numQ.end()) //unknown name -> add to name list to associate a number
+        {
+            name2numQ[rps_it->getRangeQ().getNameSeq()] = ++countseqQ;
+            num2nameQ[countseqQ] = rps_it->getRangeQ().getNameSeq();
+            rps.getRangeQ().setNumChr(countseqQ);
+        } else
+            rps.getRangeQ().setNumChr(it->second); // name already found -> add number
+
+        if(rps_it->getRangeS().getNameSeq()!="-1"){ // considers if merged path with different subjects
+            it = name2numS.find(rps_it->getRangeS().getNameSeq());
+            if (it == name2numS.end()) {
+                name2numS[rps_it->getRangeS().getNameSeq()] = ++countseqS;
+                num2nameS[countseqS] = rps_it->getRangeS().getNameSeq();
+                rps.getRangeS().setNumChr(countseqS);
+            } else
+                rps.getRangeS().setNumChr(it->second);
+        } else {rps.getRangeS().setNumChr(-1);}
+
+        //remove sequence name to gain space
+        rps.getRangeQ().setNameSeq("");
+        rps.getRangeS().setNameSeq("");
+
+
+        //copy information on each RangePair attributes from path list
+        std::list<RangePair> rp_list;
+        for(std::list<RangePair>::const_iterator rp_it=rps_it->begin();rp_it!=rps_it->end();rp_it++) {
+            RangePair rp(*rp_it);
+            rp.setId(rps_id);
+            std::map<std::string, long>::iterator it
+                    = name2numQ.find(rp.getRangeQ().getNameSeq());
+
+            if (it == name2numQ.end()) //unknown name -> add to name list to associate a number
+            {
+                name2numQ[rp.getRangeQ().getNameSeq()] = ++countseqQ;
+                num2nameQ[countseqQ] = rp.getRangeQ().getNameSeq();
+                rp.getRangeQ().setNumChr(countseqQ);
+            } else
+                rp.getRangeQ().setNumChr(it->second); // name already found -> add number
+
+
+            it = name2numS.find(rp.getRangeS().getNameSeq());
+            if (it == name2numS.end()) {
+                name2numS[rp.getRangeS().getNameSeq()] = ++countseqS;
+                num2nameS[countseqS] = rp.getRangeS().getNameSeq();
+                rp.getRangeS().setNumChr(countseqS);
+            } else
+                rp.getRangeS().setNumChr(it->second);
+
+
+            //remove sequence name to gain space
+            rp.getRangeQ().setNameSeq("");
+            rp.getRangeS().setNameSeq("");
+            rp_list.push_back(rp);
+        }
+        rps.setPathDirectly(rp_list);
+        insert(rps);
+    }
+
+    if(verbose>0)
+    {
+        std::cout<<"nb of matches: "<<getNbMatchesInMapPath()<<std::endl;
+        std::cout<<"nb of path: "<<count_path<<std::endl;
+        std::cout<<"nb of distinct queries: "<<getNbQseq()<<std::endl;
+        std::cout<<"nb of distinct subjects: "<<getNbSseq()<<std::endl;
+    }
+}
+//---------------------------------------------------------------------------
+std::list<RangePairSet> BLRMatchPath::getRpsListFromMapPath(void){
+    std::list<RangePairSet> rps_list;
+    for (MapPath::iterator m = begin(); m != end(); m++) {
+        while (!m->second.empty()) {
+            RangePairSet rps = m->second.front();
+            rps.setId(m->second.front().getId());
+            m->second.pop_front(); //Warning! Destruct map_path to save memory
+            std::string subject_name;
+            if(rps.getNumSubject()==-1)
+                subject_name="-1";
+            else
+                subject_name=num2nameS[rps.getNumSubject()];
+            rps.setQSName(num2nameQ[rps.getNumQuery()],subject_name );
+            rps_list.push_back(rps);
+        }
+    }
+    return rps_list;
+};
 //---------------------------------------------------------------------------
 void BLRMatchPath::writeAttribute(std::ostream &out) {
     unsigned id=0;
@@ -125,6 +229,7 @@ void BLRMatchPath::writeBED(const SDGString &filename, const SDGString &color) {
 void BLRMatchPath::writeBED(std::ostream &out, const SDGString &color) {
 
     for (MapPath::iterator m = begin(); m != end(); m++) {
+        m->second.sort(RangePair::less);
         for(std::list<RangePairSet>::iterator it=m->second.begin(); it != m->second.end(); it++){
             std::string query_name = num2nameQ[it->getNumQuery()];
             it->writeBED(out, query_name, num2nameS, color);
@@ -132,7 +237,7 @@ void BLRMatchPath::writeBED(std::ostream &out, const SDGString &color) {
     }
 }
 //---------------------------------------------------------------------------
-void BLRMatchPath::writeSeq(const SDGString &filename, int verbose) {
+void BLRMatchPath::writeSeq(const BLRJoinParameter& para, const SDGString &filename, int verbose) {
     if (verbose > 0)
         std::cout << "writing 'fasta' file..." << std::endl;
 
@@ -229,7 +334,7 @@ void BLRMatchPath::writeSeq(const SDGString &filename, int verbose) {
         std::cout << " done" << std::endl;
 }
 //---------------------------------------------------------------------------
-void BLRMatchPath::writeMatch(const SDGString &filename, int verbose) {
+void BLRMatchPath::writeMatch(const BLRJoinParameter& para, const SDGString &filename, int verbose) {
     if (verbose > 0)
         std::cout << "writing 'tab' file..." << std::flush;
     std::ofstream fout(filename);

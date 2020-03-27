@@ -39,8 +39,8 @@ class BLRGroup
 	friend class BLRGrouper;
 
 	private:
-		BLRGrouperParameter* grouper_parameter;
-		BLRMatchMap* match_map;
+		BLRGrouperParameter grouper_parameter;
+		BLRMatchMap match_map;
 
 		GROUPLIST group_list;   // list of lists, each sub-list containing the identifier (unsigned integer) of the members in the group
 		VMEMB vec_memb;         // vector containing all the members
@@ -58,7 +58,7 @@ class BLRGroup
 
 	public:
 
-		BLRGroup(BLRGrouperParameter* gp, BLRMatchMap* mm,unsigned nb_seq):
+		BLRGroup(BLRGrouperParameter gp, BLRMatchMap mm,unsigned nb_seq):
 			grouper_parameter(gp), match_map(mm), group_list(0), vec_memb(0), count_memb(1)
 			{
 				Member null_mb;

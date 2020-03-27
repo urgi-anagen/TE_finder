@@ -20,7 +20,7 @@ class BLRMatchPath {
 
 public:
 
-    // Key is numQ-numS
+    // Key is numQ
     typedef std::map<long, std::list<RangePairSet> > MapPath;
 
     MapPath::iterator begin(){ return map_path.begin();};
@@ -33,11 +33,15 @@ public:
 private:
 
     MapPath map_path;
-    BLRJoinParameter para;
     std::map<std::string,long> name2numQ,name2numS;
     std::map<long,std::string> num2nameQ,num2nameS;
+    unsigned countseqS,countseqQ;
+    unsigned count_path;
 
 public:
+    BLRMatchPath(void){
+        countseqS=0,countseqQ=0;count_path=0;
+    };
     void insert(RangePairSet& range);
 
     std::list<RangePairSet>& operator[](long k){return map_path[k];};
@@ -71,24 +75,14 @@ public:
         return nbPaths;
     };
 
-    std::list<RangePairSet> getRpsListFromMapPath(void){
-        std::list<RangePairSet> rps_list;
-        for (MapPath::iterator m = begin(); m != end(); m++) {
-            while (!m->second.empty()) {
-                RangePairSet rp = m->second.front();
-                m->second.pop_front();
-                rps_list.push_back(rp);
-            }
-        }
-        return rps_list;
-    };
 
     void read(const BLRJoinParameter& param, std::istream& streamName, int verbose=0);
     void load(const BLRJoinParameter& param, const SDGString& filename, int verbose=0){
         std::ifstream input_align(filename);
         read(param,input_align, verbose);
     };
-
+    void setFromRpsList(const BLRJoinParameter& p, const std::list<RangePairSet>& rps_list, int verbose=0);
+    std::list<RangePairSet> getRpsListFromMapPath(void);
     void clear(void){map_path.clear();};
 
 
@@ -102,8 +96,8 @@ public:
     void writeAttribute(std::ostream &out);
     void writeBED(const SDGString &filename, const SDGString &color);
     void writeBED(std::ostream &out, const SDGString &color);
-    void writeMatch(const SDGString &filename, int verbose);
-    void writeSeq(const SDGString &filename, int verbose);
+    void writeMatch(const BLRJoinParameter& para, const SDGString &filename, int verbose);
+    void writeSeq(const BLRJoinParameter& para, const SDGString &filename, int verbose);
 
 };
 

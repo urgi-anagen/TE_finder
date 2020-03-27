@@ -1,6 +1,7 @@
-#include "Test_matcherThreads.h"
+
 #include "SDGString.h"
 #include "FileUtils.h"
+#include "Test_matcherThreads.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Test_matcherThreads );
 
@@ -11,7 +12,7 @@ void Test_matcherThreads::setUp()
 void Test_matcherThreads::tearDown()
 {
 }
-void Test_matcherThreads::test_runAsProcess( void ){
+/*void Test_matcherThreads::test_runAsProcess( void ){
 
 
 	SDGString inputFileName = "input.align";
@@ -40,8 +41,10 @@ void Test_matcherThreads::test_runAsProcess( void ){
 //	SDGString outMapFileName = "input.align.clean_match.map";
 //	SDGString obsFileNameAttr = "input.align.clean_match.path.attr";
 
-    BLRMatcherThreads matcherThreads;
-	matcherThreads.process(para);
+ *//*   BLRMatchMap match_map;
+    std::list<RangePair> rp_list;
+    BLRMatcherThreads matcherThreads(rp_list);
+	matcherThreads.process(para);*//*
 
 	std::ostringstream obsStr;
 	std::ifstream fin(obsFileName);
@@ -60,8 +63,8 @@ void Test_matcherThreads::test_runAsProcess( void ){
 //	FileUtils::removeFile(obsFileNameAttr);
 
 
-}
-void Test_matcherThreads::test_runAsScript( void ){
+}*/
+void Test_matcherThreads::test_runAsScript_join_simple( void ){
 	SDGString inputFileName = "input.align";
 	std::ofstream inputFileStream(inputFileName);
 	inputFileStream<<"chunk1\t100\t500\trefTE1\t100\t500\t9.4e-19\t400\t100.00\n";
@@ -80,8 +83,10 @@ void Test_matcherThreads::test_runAsScript( void ){
 //	SDGString outMapFileName = "input.align.clean_match.map";
 //	SDGString obsFileNameAttr = "input.align.clean_match.path.attr";
 
-	SDGString cmd = "../matcher.threads"+SDGString(VERSION)+" -m " + inputFileName + " -j -M -x -v 1";
-	std::system(cmd);
+    std::ostringstream cmd;
+	cmd<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+	cmd<<" -m "<<inputFileName<<" -j -M -x -v 1";
+	std::system(cmd.str().c_str());
 
 	std::ostringstream obsStr;
 	std::ifstream fin(obsFileName);
@@ -98,6 +103,252 @@ void Test_matcherThreads::test_runAsScript( void ){
 	FileUtils::removeFile(outParamFileName);
 //	FileUtils::removeFile(outMapFileName);
 //	FileUtils::removeFile(obsFileNameAttr);
+}
+void Test_matcherThreads::test_runAsScript_join( void ){
+    SDGString inputFileName = "blasterAthaBest.align";
+    SDGString expFileName = "blasterAthaBestNoMerge.match.path";
 
+    SDGString prefixFileName = "test_runAsScript_join_threads_";
+    SDGString prefixObsFileName = "obs.match";
+    SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
+    SDGString diff_result = prefixFileName+"result.txt";
+
+    std::ostringstream cmd;
+    cmd<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd<<" -m "<<inputFileName<<" -j -B "<<prefixFileName<<"obs";
+    std::system(cmd.str().c_str());
+
+    std::ostringstream cmd_diff;
+    cmd_diff<<"diff --side-by-side --suppress-common-lines "<<obsFileName<<" "<<expFileName<<" > "<<diff_result;
+    std::system(cmd_diff.str().c_str());
+
+    std::ostringstream obsStr;
+    std::ifstream fin_obs(diff_result);
+    char buff[2048];
+    while(fin_obs.getline(buff,2047,'\n'))
+        obsStr<<buff<<std::endl;
+
+    bool condition=(obsStr.str()=="");
+    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
+    if(condition) {
+        FileUtils::removeFile(diff_result);
+        FileUtils::removeFile(obsFileName);
+
+        SDGString file=prefixFileName+prefixObsFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixObsFileName+".bed";
+        FileUtils::removeFile(file);
+    }
+}
+void Test_matcherThreads::test_runAsScript_join_threads( void ){
+    SDGString inputFileName = "blasterAthaBest.align";
+    SDGString prefixFileName = "test_runAsScript_join_threads_";
+    SDGString prefixObsFileName = "obs.match";
+    SDGString prefixExpFileName = "exp.match";
+    SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
+    SDGString diff_result = prefixFileName+"result.txt";
+    SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+
+    std::ostringstream cmd_exp;
+    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<" -m "<<inputFileName<<" -j -B "<<prefixFileName<<"exp";
+    std::system(cmd_exp.str().c_str());
+
+    std::ostringstream cmd_obs;
+    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -B "<<prefixFileName<<"obs";
+    std::system(cmd_obs.str().c_str());
+
+    std::ostringstream cmd_diff;
+    cmd_diff<<"diff --side-by-side --suppress-common-lines "<<obsFileName<<" "<<expFileName<<" > "<<diff_result;
+    std::system(cmd_diff.str().c_str());
+
+    std::ostringstream obsStr;
+    std::ifstream fin_obs(diff_result);
+    char buff[2048];
+    while(fin_obs.getline(buff,2047,'\n'))
+        obsStr<<buff<<std::endl;
+
+    bool condition=(obsStr.str()=="");
+    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
+    if(condition)
+    {
+        FileUtils::removeFile(diff_result);
+        FileUtils::removeFile(expFileName);
+        FileUtils::removeFile(obsFileName);
+
+        SDGString file=prefixFileName+prefixObsFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixObsFileName+".bed";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".bed";
+        FileUtils::removeFile(file);
+    }
+}
+void Test_matcherThreads::test_runAsScript_join_clean_threads( void ){
+    SDGString inputFileName = "blasterAthaBest.align";
+    SDGString prefixFileName = "test_runAsScript_join_clean_threads_";
+    SDGString prefixObsFileName = "obs.clean_match";
+    SDGString prefixExpFileName = "exp.clean_match";
+    SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
+    SDGString diff_result = prefixFileName+"result.txt";
+    SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+
+    std::ostringstream cmd_exp;
+    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<" -m "<<inputFileName<<" -j -x -B "<<prefixFileName<<"exp";
+    std::system(cmd_exp.str().c_str());
+
+    std::ostringstream cmd_obs;
+    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -x -B "<<prefixFileName<<"obs";
+    std::system(cmd_obs.str().c_str());
+
+    std::ostringstream cmd_diff;
+    cmd_diff<<"diff --side-by-side --suppress-common-lines "<<obsFileName<<" "<<expFileName<<" > "<<diff_result;
+    std::system(cmd_diff.str().c_str());
+
+    std::ostringstream obsStr;
+    std::ifstream fin_obs(diff_result);
+    char buff[2048];
+    while(fin_obs.getline(buff,2047,'\n'))
+        obsStr<<buff<<std::endl;
+
+    bool condition=(obsStr.str()=="");
+    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
+    if(condition)
+    {
+        FileUtils::removeFile(diff_result);
+        FileUtils::removeFile(expFileName);
+        FileUtils::removeFile(obsFileName);
+
+        SDGString file=prefixFileName+prefixObsFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixObsFileName+".bed";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".bed";
+        FileUtils::removeFile(file);
+    }
+
+}
+void Test_matcherThreads::test_runAsScript_join_merge_threads( void ){
+
+    SDGString inputFileName = "blasterAthaBest.align";
+    SDGString prefixFileName = "test_runAsScript_join_merge_threads_";
+    SDGString prefixObsFileName = "obs.match";
+    SDGString prefixExpFileName = "exp.match";
+    SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
+    SDGString diff_result = prefixFileName+"result.txt";
+    SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+
+
+    std::ostringstream cmd_exp;
+    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<" -m "<<inputFileName<<" -j -M -B "<<prefixFileName<<"exp";
+    std::system(cmd_exp.str().c_str());
+
+
+
+    std::ostringstream cmd_obs;
+    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -M -B "<<prefixFileName<<"obs";
+    std::system(cmd_obs.str().c_str());
+
+    std::ostringstream cmd_diff;
+    cmd_diff<<"diff --side-by-side --suppress-common-lines "<<obsFileName<<" "<<expFileName<<" > "<<diff_result;
+    std::system(cmd_diff.str().c_str());
+
+    std::ostringstream obsStr;
+    std::ifstream fin_obs(diff_result);
+    char buff[2048];
+    while(fin_obs.getline(buff,2047,'\n'))
+        obsStr<<buff<<std::endl;
+
+    bool condition=(obsStr.str()=="");
+    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
+    if(condition)
+    {
+        FileUtils::removeFile(diff_result);
+        FileUtils::removeFile(expFileName);
+        FileUtils::removeFile(obsFileName);
+
+        SDGString file=prefixFileName+prefixObsFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixObsFileName+".bed";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".bed";
+        FileUtils::removeFile(file);
+    }
+
+}
+void Test_matcherThreads::test_runAsScript_join_merge_clean_threads( void ){
+
+    SDGString inputFileName = "blasterAthaBest.align";
+    SDGString prefixFileName = "test_runAsScript_join_merge_clean_threads_";
+    SDGString prefixObsFileName = "obs.clean_match";
+    SDGString prefixExpFileName = "exp.clean_match";
+    SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
+    SDGString diff_result = prefixFileName+"result.txt";
+    SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+
+
+    std::ostringstream cmd_exp;
+    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<" -m "<<inputFileName<<" -j -M -x -B "<<prefixFileName<<"exp";
+    std::system(cmd_exp.str().c_str());
+
+
+
+    std::ostringstream cmd_obs;
+    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -x -M -B "<<prefixFileName<<"obs";
+    std::system(cmd_obs.str().c_str());
+
+    std::ostringstream cmd_diff;
+    cmd_diff<<"diff --side-by-side --suppress-common-lines "<<obsFileName<<" "<<expFileName<<" > "<<diff_result;
+    std::system(cmd_diff.str().c_str());
+
+    std::ostringstream obsStr;
+    std::ifstream fin_obs(diff_result);
+    char buff[2048];
+    while(fin_obs.getline(buff,2047,'\n'))
+        obsStr<<buff<<std::endl;
+
+    bool condition=(obsStr.str()=="");
+    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
+    if(condition)
+    {
+        FileUtils::removeFile(diff_result);
+        FileUtils::removeFile(expFileName);
+        FileUtils::removeFile(obsFileName);
+
+        SDGString file=prefixFileName+prefixObsFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixObsFileName+".bed";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".param";
+        FileUtils::removeFile(file);
+
+        file=prefixFileName+prefixExpFileName+".bed";
+        FileUtils::removeFile(file);
+    }
 
 }

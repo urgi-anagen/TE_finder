@@ -50,7 +50,8 @@ class Range
   	Less(void){};
   	int operator () (const Range& a, const Range& b) const
   	{
-  		if(a<b) return true;
+  		if(a.getMin()<b.getMin()) return true;
+  		else if(a.getMin()==b.getMin() && a.getMax()<a.getMax()) return true;
   		return false;
   	};
   };

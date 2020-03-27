@@ -24,6 +24,8 @@ class BLRMatcherThreadsParameter: public BLRJoinParameter
  private:
   bool clean_before, clean_after, merge;
   int verbose;
+  unsigned nb_sets;
+
  public:
   //! -Constructor
   BLRMatcherThreadsParameter(void){reset();};
@@ -37,6 +39,7 @@ class BLRMatcherThreadsParameter: public BLRJoinParameter
       BLRJoinParameter::reset();
       clean_after=false;
       merge=false;
+      nb_sets=1;
       verbose=0;
     };
   void parseOptArg (int numarg, char *tabarg[]);
@@ -48,10 +51,10 @@ class BLRMatcherThreadsParameter: public BLRJoinParameter
 
   bool getCleanAfter(void) {return  clean_after;};
   void setCleanAfter(bool clean) {clean_after = clean;};
-
+  unsigned getNbSets(void) {return nb_sets;}
   bool getMerge(void) {return merge;}
 
-  int getVerbose(void) {return verbose;};
+  int getVerbose(void) const {return verbose;};
 
 };
 

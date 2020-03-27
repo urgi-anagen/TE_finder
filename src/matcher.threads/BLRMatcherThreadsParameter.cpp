@@ -4,7 +4,7 @@
  *
  ***/
 
-#include "../matcher/BLRMatcherParameter.h"
+#include "BLRMatcherThreadsParameter.h"
 #include <SDGFastaIstream.h>
 #include <unistd.h> //getopt
 #include <sstream>
@@ -29,7 +29,8 @@ void BLRMatcherThreadsParameter::view(std::ostream& out) const
   if (merge)
     out<<"Merge option enabled"<<std::endl;
   else
-    out<<"No merge option enabled"<<std::endl;   
+    out<<"No merge option enabled"<<std::endl;
+  out<<" nb sets="<<nb_sets<<std::endl;
   out<<"============================================="<<std::endl; 
 }
 //**************************************************************************
@@ -39,6 +40,7 @@ void BLRMatcherThreadsParameter::help(void)
   BLRJoinParameter::help();
   std::cout<<"-x:\n\tclean conflicts after join, default=FALSE"<<std::endl;
   std::cout<<"-M:\n\tmerge (use it with clean after join option), default=FALSE"<<std::endl;
+  std::cout<<"-S:\n\tsplit input data in 'n' sets, default="<<nb_sets<<std::endl;
   std::cout<<"-v:\n\tverbose, default=0"<<std::endl;
 }
 //**************************************************************************
@@ -79,7 +81,7 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 // 			 long_options, &option_index);
 
 	int c = getopt (numarg, tabarg, 
- 			     "hm:Mxs:q:I:E:L:ji:g:d:b:B:c:v:t:");
+ 			     "hm:Mxs:q:I:E:L:ji:g:d:b:B:c:v:t:S:");
 
 	/* Detect the end of the options. */
 	if (c == -1)
@@ -179,6 +181,11 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 	  		nbthread=atoi(optarg);
 	  	    break;
 	  	}
+      case 'S':
+      {
+          nb_sets=atoi(optarg);
+          break;
+      }
 	  case '?':
 	    help();
 	    exit(EXIT_FAILURE);

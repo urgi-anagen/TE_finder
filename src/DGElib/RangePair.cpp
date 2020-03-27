@@ -9,6 +9,7 @@
 const RangePair::Less RangePair::less;
 const RangePair::Greater RangePair::greater;
 const RangePair::GreaterScore RangePair::greaterScore;
+const RangePair::GreaterScoreIdLenCoord RangePair::greaterScoreIdLenCoord;
 const RangePair::LessIdentity RangePair::lessIdentity;
 const RangePair::GreaterLengthQ RangePair::greaterLengthQ;
 const RangePair::GreaterLengthIdent RangePair::greaterLengthIdent;
@@ -285,7 +286,6 @@ RangePair RangePair::diffQ(const RangePair& r)
 		}
 
       reComputeSubjectCoords(new_r,qs,qe);
-      //if(empty()) clear();
 
       if (!ra.empty())
 		{
