@@ -53,12 +53,10 @@ class BLRGroup
 		std::vector< std::vector<unsigned> > clust;
 		std::map<unsigned,unsigned> gr2clust;
 
-		//threadpool::ThreadPool pool;
-
 
 	public:
 
-		BLRGroup(BLRGrouperParameter gp, BLRMatchMap mm,unsigned nb_seq):
+		BLRGroup(const BLRGrouperParameter& gp, BLRMatchMap mm,unsigned nb_seq):
 			grouper_parameter(gp), match_map(mm), group_list(0), vec_memb(0), count_memb(1)
 			{
 				Member null_mb;
@@ -206,7 +204,7 @@ class BLRGroup
 
 //		std::list<RangePairSet> getRpsListAfterLoad( int verbose ); not used?
 
-		bool operator==(const BLRGroup& g) const
+/*		bool operator==(const BLRGroup& g) const
 		{
 			if(grouper_parameter!=g.grouper_parameter) return false;
 			if(match_map!=g.match_map) return false;
@@ -218,7 +216,7 @@ class BLRGroup
 			if(clust!=g.clust) return false;
 			if(gr2clust!=g.gr2clust) return false;
 			return true;
-		};
+		};*/
 };
 
 

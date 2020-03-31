@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
      if(para.getVerbose()>0)
        para.view(std::cout);
 
-     BLRMatchMap match_map(&para);
+     BLRMatchMap match_map(para);
 
      if(para.getVerbose()>0)
        std::cout<<"Load the matches..."<<std::endl<<std::flush;

@@ -17,9 +17,9 @@
 
 class Test_BLRGroup : public CppUnit::TestFixture {
 
-	BLRGroup blrgroup;
-	BLRGrouperParameter para;
-	BLRMatchMap match_map;
+//	BLRGroup blrgroup;
+//	BLRGrouperParameter para;
+//	BLRMatchMap match_map;
 
 	CPPUNIT_TEST_SUITE(Test_BLRGroup);
 	

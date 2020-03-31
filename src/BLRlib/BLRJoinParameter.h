@@ -124,10 +124,10 @@ class BLRJoinParameter
   void setMatch_filename(SDGString  filename) {match_filename=filename;};
   void setPrefix_filename(SDGString filename) {prefix_filename=filename;};
   void setPath_filename(SDGString filename){path_filename = filename;};
-  SDGString getPath_filename (void){return path_filename;};
-  bool getLoad_path (void){return loadPath;};
+  SDGString getPath_filename (void) const {return path_filename;};
+  bool getLoad_path (void) const {return loadPath;};
   void setLoad_path (bool load){loadPath=load;};
-  int getNbThread(void){return nbthread;};
+  int getNbThread(void) const {return nbthread;};
   void setNbThread(int n){nbthread=n;};
 };
 const static BLRJoinParameter defaultBLRJoinParameters;

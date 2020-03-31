@@ -60,8 +60,8 @@ class BLRGrouperParameter: public BLRJoinParameter
 		unsigned getIncludeFilter(void) const { return includefilter; };
 		unsigned getSizefilter( void ) const { return sizefilter; };
 		void setSizeFiler(unsigned sizeFilterParam){ sizefilter = sizeFilterParam; };
-		unsigned getNbSets(void) {return nb_sets;}
-		int getVerbose( void ) { return verbose; };
+		unsigned getNbSets(void) const {return nb_sets;}
+		int getVerbose( void ) const { return verbose; };
 };
 
 const static BLRGrouperParameter defaultBLRGrouperParameters;

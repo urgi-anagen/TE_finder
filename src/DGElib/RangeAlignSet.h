@@ -89,6 +89,10 @@ class RangeAlignSet : public RangeAlign
 		  return false;
 	  return true;
   };
+    friend bool operator<( const RangeAlignSet& ras1, const RangeAlignSet& ras2 )
+    {
+        return operator<((RangeAlign)ras1,(RangeAlign)ras2);
+    };
 
   /*
    * \fn unsigned long getStart( void ) const

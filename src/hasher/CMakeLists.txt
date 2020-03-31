@@ -24,6 +24,8 @@ add_executable(
 
         ${source_files}
 
+        ../duster/Duster.cpp
+        ../duster/Duster.h
 )
 
 target_link_libraries(

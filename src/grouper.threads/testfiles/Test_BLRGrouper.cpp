@@ -7,14 +7,13 @@
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_BLRGrouper);
 void Test_BLRGrouper::test_mergeGroupsLists(void)
 {
-    para=new BLRGrouperParameter();
-    BLRMatchMap mm1(para),mm2(para);
+    BLRGrouperParameter para;
+    BLRMatchMap mm1(para),mm2(para),mm3(para);
     BLRGrouper grpr(para);
 
     //Test
-    BLRGroup ext_gr(para, &mm1, 3);
-    BLRGroup gr(para, &mm2, 3);
-
+    BLRGroup ext_gr(para, mm1, 3);
+    BLRGroup gr(para, mm2, 3);
 
     //group init
     Member m11(RangeAlignSet(RangeAlign(1,100,200)),1);
@@ -25,8 +24,6 @@ void Test_BLRGrouper::test_mergeGroupsLists(void)
     gr.addMember(gr_it,m13);
     gr.addMember(gr_it,m14);
 
-    gr.view_a_group(gr_it);
-
     //ext group init
     Member m21(RangeAlignSet(RangeAlign(1,100,200)),5);
     Member m22(RangeAlignSet(RangeAlign(2,1000,1200)),6);
@@ -36,20 +33,19 @@ void Test_BLRGrouper::test_mergeGroupsLists(void)
     ext_gr.addMember(ext_gr_it,m23);
     ext_gr.addMember(ext_gr_it,m24);
 
-    ext_gr.view_a_group(ext_gr_it);
-
-
     grpr.mergeGroupsLists(&gr, &ext_gr,0);
 
     //Expectation. Note insertion order is important
-    BLRGroup gr_exp(para, &mm2, 3);
+    BLRGroup gr_exp(para, mm3, 3);
+    m11.merge(m21);
+    m11.idlist.splice( m11.idlist.end(), m21.idlist );
+
     GROUPLIST::iterator gr_exp_it=gr_exp.addGroup(m11,m12);
     gr_exp.addMember(gr_exp_it,m13);
     gr_exp.addMember(gr_exp_it,m14);
     gr_exp.addMember(gr_exp_it,m24);
     gr_exp.addMember(gr_exp_it,m23);
     gr_exp.addMember(gr_exp_it,m22);
-    gr_exp.addMember(gr_exp_it,m21);
 
     //compare test to expectation
     std::ostringstream ostr_obs;

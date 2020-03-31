@@ -4,9 +4,10 @@ function TestToolStdout
 {
     TOOL=$1
     CMD=$2
+    EXEC_DIR="../../../cmake-build-debug/src/tools"
     mkdir $TOOL
     cd $TOOL
-    ../../$TOOL $CMD > $TOOL.outres
+    ../../$TOOL $EXEC_DIR/$CMD > $TOOL.outres
     if [ $? -ne 0 ]
     then
         echo "***PRG ERROR***"
