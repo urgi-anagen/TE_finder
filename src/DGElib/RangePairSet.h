@@ -68,25 +68,6 @@ class RangePairSet: public RangePair
 		  path.clear();
 		}
 
-   /*
-    * \fn long getNumQuery( void )
-    * \brief return the identifier of the query of the first RangePair
-    */
-   long getNumQuery( void ) const
-   {
-  	 std::list<RangePair>::const_iterator i=path.begin();
-  	 return i->getRangeQ().getNumChr();
-   }
-
-   /*
-    * \fn long getNumSubject( void )
-    * \brief return the identifier of the subject of the first RangePair
-    */
-   long getNumSubject( void ) const
-   {
-  	 std::list<RangePair>::const_iterator i=path.begin();
-  	 return i->getRangeS().getNumChr();
-   }
 
    /*
     * \fn unsigned getNbRangePairs( void )
@@ -114,6 +95,7 @@ class RangePairSet: public RangePair
   void addPath(const RangePair& rp);
 
   void setQSName(std::string query_name, std::string subject_name);
+  void setQSName(std::string query_name, std::string subject_name, std::map<long,std::string> num2nameS);
 
   void write( std::ostream& out, unsigned id,
   		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;

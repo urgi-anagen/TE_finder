@@ -222,6 +222,10 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	void setRangeQ(const RangeAlign& r){first=r;};
 	void setRangeS(const RangeAlign& r){second=r;};
 
+	long getNumQuery( void ) const {return getRangeQ().getNumChr();};
+
+	long getNumSubject( void ) const {return getRangeS().getNumChr();};
+
 	void set( SDGString );
 
 	unsigned long getId(void){return id;};

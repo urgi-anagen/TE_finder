@@ -121,6 +121,20 @@ void RangePairSet::setQSName(std::string query_name, std::string subject_name)
         i->setQSName(query_name,subject_name);
     }
 }
+void RangePairSet::setQSName(std::string query_name, std::string subject_name, std::map<long,std::string> num2nameS)
+{
+    first.setNameSeq(query_name);
+    second.setNameSeq(subject_name);
+    std::string rp_subject_name;
+    for(std::list<RangePair>::iterator i=path.begin();i!=path.end();i++)
+    {
+        if(i->getNumSubject()==-1)
+            rp_subject_name="-1";
+        else
+            rp_subject_name=num2nameS[i->getNumSubject()];
+        i->setQSName(query_name,rp_subject_name);
+    }
+}
 
 void RangePairSet::write(std::ostream& out, unsigned id,
                          const std::string& nameQ, const std::string& nameS)  const
@@ -343,6 +357,8 @@ bool RangePairSet::diffQ(const RangePairSet& r)
 	bool modif=false;
 
 	std::list<RangePair> r_path=r.path;
+    r_path.sort( RangePair::greaterScoreIdLenCoord);
+    path.sort( RangePair::greaterScoreIdLenCoord);
 	for(std::list<RangePair>::iterator i=path.begin();i!=path.end();i++)
 		for(std::list<RangePair>::iterator j=r_path.begin();j!=r_path.end();
 		j++)
@@ -353,7 +369,13 @@ bool RangePairSet::diffQ(const RangePairSet& r)
 				RangePair new_r=i->diffQ(*j);
 				if(!new_r.empty() && new_r.getRangeQ().getLength()>= 10)
 				{
-					path.push_back(new_r);
+                    std::list<RangePair>::iterator it
+                            = std::lower_bound(i, path.end(),
+                                               new_r,
+                                               RangePair::greaterScoreIdLenCoord);
+                    if (it == i)
+                        it++;
+                    path.insert(it, new_r);
 				}
 				if(i->empty() || i->getRangeQ().getLength()< 10)
 				{
@@ -507,7 +529,8 @@ void RangePairSet::mergeQ(RangePairSet& rpsOther)
 
 void RangePairSet::cleanConflictsOnOverlappingQuery(RangePairSet &rpsOther)
 {
-	if (this->score >= rpsOther.getScore()){
+	//if (this->score >= rpsOther.getScore()){
+	if(RangePair::greaterScoreIdLenCoord(*this,rpsOther)){
 		rpsOther.diffQ(*this); 
 	}else{
 		this->diffQ(rpsOther);

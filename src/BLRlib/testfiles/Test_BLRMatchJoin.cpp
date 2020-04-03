@@ -150,8 +150,9 @@ void Test_BLRMatchJoin::test_merge(void){
 	inputData<<"1\tchunk1\t600\t1000\trefTE_1\t500\t900\t0\t400\t100.00\n";
 	inputData<<"1\tchunk1\t1001\t2000\trefTE_1\t2000\t3000\t0\t1000\t100.00\n";
 	inputData<<"2\tchunk1\t1500\t2500\trefTE_2\t1500\t2500\t0\t999\t100.00\n";
-	inputData<<"3\tchunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1000\t80.00\n";
-	inputData<<"3\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t400\t90.00\n";
+    inputData<<"3\tchunk1\t1500\t2500\trefTE_3\t1500\t2500\t0\t999\t100.00\n"; //removed in results!
+	inputData<<"4\tchunk1\t10000\t11000\trefTE_2\t1\t1000\t0\t1000\t80.00\n";
+	inputData<<"4\tchunk1\t11100\t11500\trefTE_2\t1100\t1500\t0\t400\t90.00\n";
 
 	BLRJoinParameter para = Test_BLRUtils::createParameter();
 	BLRMatchJoin matchJoin(para);

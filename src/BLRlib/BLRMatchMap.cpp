@@ -510,7 +510,7 @@ std::list<RangePairSet> BLRMatchMap::getRpsList(void) // Build list of RangePair
             subject_name = "-1";
         else
             subject_name = num2nameS[rps.getNumSubject()];
-        rps.setQSName(num2nameQ[rps.getNumQuery()], subject_name);
+        rps.setQSName(num2nameQ[rps.getNumQuery()],subject_name, num2nameS );
         rps_list.push_back(rps);
     }
     return rps_list;
