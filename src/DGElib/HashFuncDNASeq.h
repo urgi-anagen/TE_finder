@@ -1,17 +1,16 @@
-#ifndef HASHDNASEQ_H
-#define HASHDNASEQ_H
+#ifndef HASHFUNCDNASEQ_H
+#define HASHFUNCDNASEQ_H
 
 #include <iostream>
 #include <string>
 
-
-struct HashDNASeq // Compute hashing value of a word
+struct HashFuncDNASeq // Compute hashing value of a word
 {
 	unsigned kmer_size;
 	unsigned hole_period;
 	unsigned effectiveKmerSize;
 
-	HashDNASeq(unsigned w,unsigned p=100): kmer_size(w), hole_period(p)
+	HashFuncDNASeq(unsigned w, unsigned p=100): kmer_size(w), hole_period(p)
 	{
 		effectiveKmerSize=0;
 		if(hole_period<2) hole_period=w+1;

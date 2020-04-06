@@ -12,7 +12,7 @@ file(
 
         source_files
 
-        *.cpp
+        *
 
 )
 

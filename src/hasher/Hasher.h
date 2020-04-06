@@ -16,12 +16,11 @@
 #include "RangePair.h"
 
 #include "HashDNASeq.h"
-#include "../duster/Duster.h"
 
 class Test_Hasher;
 
 
-class Hasher : public Duster
+class Hasher : public HashDNASeq
 {
 	friend class Test_Hasher;
 	void matchKmers(const SDGBioSeq& sequence,
@@ -38,12 +37,12 @@ class Hasher : public Duster
  public:
 
   Hasher(unsigned w=10, unsigned msk=100, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20,unsigned step=1):
-			  Duster(w,msk,bw,wd,fd,minsize,step)
+          HashDNASeq(w, msk, bw, wd, fd, minsize, step)
     {};
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		  unsigned min_count, bool & valid_idx_file)
 	  {
-		  Duster::load(filenameS,kmer_size, kmask, bkmer_size,mkmer_size , count_cutoff, diversity_cutoff, min_count,valid_idx_file, true);
+		  HashDNASeq::load(filenameS, kmer_size, kmask, bkmer_size, mkmer_size , count_cutoff, diversity_cutoff, min_count, valid_idx_file, true);
 		  std::string line;
 		   std::ifstream myfile (filenameS);
 		   if (myfile.is_open())

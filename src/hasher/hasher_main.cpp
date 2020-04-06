@@ -241,7 +241,7 @@ int main(int argc, char* argv[])
     	std::cout<<"\nCompute kmer stat only!"<<std::endl;
     	for(unsigned bw=1; bw<=bkmer_size; bw++)
     	{
-    	    Duster hsrch(kmer_size,kmask,bw,kmer_dist,0, min_size, step_q );
+    	    HashDNASeq hsrch(kmer_size, kmask, bw, kmer_dist, 0, min_size, step_q );
         	std::vector<unsigned> kmer_count((unsigned)pow(4,hsrch.getEffectiveKmerSize()),0);
         	std::list< Info_kmer > list_infokmer;
         	Info_kmer kmer_threshold;
@@ -251,7 +251,7 @@ int main(int argc, char* argv[])
 
     		hsrch.kmer_analysis(filename2,kmer_size,kmask, bw, kmer_size/2, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
     	}
-    	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
+    	std::cout<<"\nEnd HashDNASeq (version "<<VERSION<<")"<<std::endl;
     	exit( EXIT_SUCCESS );
     }
 

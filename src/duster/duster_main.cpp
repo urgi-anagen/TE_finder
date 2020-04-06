@@ -76,7 +76,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
 int main(int argc, char* argv[])
 {
   try{
-		std::cout<<"Beginning Duster (version "<<VERSION<<")"<<std::endl;
+		std::cout<<"Beginning HashDNASeq (version "<<VERSION<<")"<<std::endl;
 		clock_t begin, end;
               double time_spent;
               begin = clock();
@@ -240,7 +240,7 @@ int main(int argc, char* argv[])
       if (stat_only) {
           std::cout << "\nCompute kmer stat only!" << std::endl;
           for (unsigned bw = 1; bw <= bkmer_size; bw++) {
-              Duster hsrch(kmer_size, kmask, bw, kmer_dist, frag_connect_dist, min_size, step_q);
+              HashDNASeq hsrch(kmer_size, kmask, bw, kmer_dist, frag_connect_dist, min_size, step_q);
               std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
               std::list<Info_kmer> list_infokmer;
               Info_kmer kmer_threshold;
@@ -252,11 +252,11 @@ int main(int argc, char* argv[])
               hsrch.kmer_analysis(filename2, kmer_size, kmask, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
                                   kmer_count, nb_kmer, list_infokmer, kmer_threshold);
           }
-          std::cout << "\nEnd Duster (version " << VERSION << ")" << std::endl;
+          std::cout << "\nEnd HashDNASeq (version " << VERSION << ")" << std::endl;
           exit(EXIT_SUCCESS);
       }
 
-    Duster hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
+    Duster hsrch(kmer_size, kmask, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
 		repeat=false;
 		first_iter=false;
     }
-	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
+	std::cout<<"\nEnd HashDNASeq (version "<<VERSION<<")"<<std::endl;
 	end = clock();
     time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
     std::cout<<"====>Total time spent****: "<<time_spent<<std::endl;
