@@ -25,7 +25,7 @@ class Test_Duster : public CppUnit::TestFixture {
 
 public:
 
-    Test_Hasher(void) {}
+    Test_Duster(void) {}
 
 	void setUp()
 	{
