@@ -4,6 +4,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../BLRMatcherThreads.h"
+#include <iomanip>
 
 class Test_matcherThreads: public CPPUNIT_NS::TestFixture
 {
