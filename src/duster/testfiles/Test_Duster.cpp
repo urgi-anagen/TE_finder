@@ -4,7 +4,7 @@
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_Duster);
 
-void Test_Duster::test_fragMerge(void )
+void Test_Duster::test_fragMerge(void)
 {
 	unsigned word_len=10;
 	unsigned word_dist=1;

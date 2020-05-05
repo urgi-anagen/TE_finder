@@ -12,6 +12,7 @@
 #include "Hasher.h"
 #include <list>
 #include <vector>
+#include <iomanip>
 
 class Test_Hasher : public CppUnit::TestFixture {
 

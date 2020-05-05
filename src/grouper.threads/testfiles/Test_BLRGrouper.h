@@ -11,6 +11,7 @@
 #include "../BLRGrouperThreads.h"
 #include <list>
 #include <vector>
+#include <iomanip>
 
 class Test_BLRGrouper : public CppUnit::TestFixture {
 

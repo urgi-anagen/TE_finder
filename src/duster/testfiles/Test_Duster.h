@@ -12,8 +12,9 @@
 #include "Duster.h"
 #include <list>
 #include <vector>
+#include <iomanip>
 
-class Test_Hasher : public CppUnit::TestFixture {
+class Test_Duster : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST_SUITE(Test_Duster);
 
