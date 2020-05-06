@@ -33,6 +33,13 @@ void BLRWUBlast::blast( int verbose )
     if( verbose > 0 )
         std::cout<<"system call to blast return:"<<sys_return<<std::endl;
 
+    if (sys_return == -1) {
+        std::cout << std::ifstream(query_filename + "_blast.log").rdbuf();
+        std::ostringstream ostr;
+        ostr << " call to 'system()' function return 'fork()' error -1 !";
+        throw SDGException(NULL, ostr.str(), -1);
+    }
+
 	if( sys_return != 0 )
   	{
         std::cout << std::ifstream(query_filename+"_blast.log").rdbuf();
