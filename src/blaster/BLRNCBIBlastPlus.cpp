@@ -49,6 +49,8 @@ void BLRNCBIBlastPlus::blast( int verbose )
   	sys_return=system(blast_command);
   }
 
+    if( verbose > 0 )
+        std::cout<<"system call to blast return:"<<sys_return<<std::endl;
 
     if (sys_return != 0) {
         std::cout << std::ifstream(query_filename + "_blast.log").rdbuf();

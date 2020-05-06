@@ -30,6 +30,8 @@ void BLRWUBlast::blast( int verbose )
 			std::cout<<blast_command<<std::endl;
 		sys_return = system( blast_command );
 	}
+    if( verbose > 0 )
+        std::cout<<"system call to blast return:"<<sys_return<<std::endl;
 
 	if( sys_return != 0 )
   	{
