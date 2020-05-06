@@ -13,7 +13,7 @@ void BLRWUBlast::blast( int verbose )
 		SDGString blast_command=para.getType()
 		+" "+para.getBankCut()+" "+query_filename
 		+auto_blastparam+auto_blastnparam+" "+para.getOption()
-		+" O="+result_filename+" &> "+query_filename+"_blast.log";;
+		+" O="+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
 		if( verbose > 0 )
 			std::cout<<blast_command<<std::endl;
 		sys_return = system( blast_command );
@@ -25,14 +25,11 @@ void BLRWUBlast::blast( int verbose )
 	{
 		SDGString blast_command=para.getType()
 		+" "+para.getBankCut()+" "+query_filename
-		+auto_blastparam+" "+para.getOption()+" O="+result_filename+" &> "+query_filename+"_blast.log";;
+		+auto_blastparam+" "+para.getOption()+" O="+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
 		if( verbose > 0 )
 			std::cout<<blast_command<<std::endl;
 		sys_return = system( blast_command );
 	}
-
-	SDGString rm_command = "rm -f " + query_filename;
-	system( rm_command );
 
 	if( sys_return != 0 )
   	{
@@ -43,6 +40,11 @@ void BLRWUBlast::blast( int verbose )
   		<<", stopping blaster";
   		throw SDGException(NULL,ostr.str(),-1);
   	}
+
+    SDGString rm_command="rm -f "+query_filename;
+    system( rm_command );
+    rm_command="rm -f "+query_filename+ "_blast.log";
+    system( rm_command );
 }
 
 void BLRWUBlast::pressdb( int verbose )

@@ -14,7 +14,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   	blast_command=para.getType() + " -task " + para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
 			+auto_blastparam+auto_blastnparam+" "+para.getOption()
-			+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
+			+" -out "+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -24,7 +24,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   {
   	blast_command=para.getType() + " -task " + para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
-			+auto_blastparam+" "+para.getOption()+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
+			+auto_blastparam+" "+para.getOption()+" -out "+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -34,7 +34,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   {
   	blast_command=para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
-			+auto_blastparam+" "+para.getOption()+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
+			+auto_blastparam+" "+para.getOption()+" -out "+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -43,14 +43,11 @@ void BLRNCBIBlastPlus::blast( int verbose )
   {
   	blast_command= "blastn -task " + para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
-			+auto_megablastparam+" "+para.getOption()+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
+			+auto_megablastparam+" "+para.getOption()+" -out "+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
   }
-
-  SDGString rm_command="rm -f "+query_filename;
-  system( rm_command );
 
 
     if (sys_return != 0) {
@@ -61,6 +58,11 @@ void BLRNCBIBlastPlus::blast( int verbose )
              << ", stopping blaster";
         throw SDGException(NULL, ostr.str(), -1);
     }
+
+    SDGString rm_command="rm -f "+query_filename;
+    system( rm_command );
+    rm_command="rm -f "+query_filename+ "_blast.log";
+    system( rm_command );
 }
 
 void BLRNCBIBlastPlus::pressdb( int verbose )
