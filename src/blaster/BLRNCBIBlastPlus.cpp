@@ -14,7 +14,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   	blast_command=para.getType() + " -task " + para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
 			+auto_blastparam+auto_blastnparam+" "+para.getOption()
-			+" -out "+result_filename;
+			+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -24,7 +24,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   {
   	blast_command=para.getType() + " -task " + para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
-			+auto_blastparam+" "+para.getOption()+" -out "+result_filename;
+			+auto_blastparam+" "+para.getOption()+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -34,7 +34,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   {
   	blast_command=para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
-			+auto_blastparam+" "+para.getOption()+" -out "+result_filename;
+			+auto_blastparam+" "+para.getOption()+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -43,7 +43,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
   {
   	blast_command= "blastn -task " + para.getType()
 			+" -db "+para.getBankCut()+" -query "+query_filename
-			+auto_megablastparam+" "+para.getOption()+" -out "+result_filename;
+			+auto_megablastparam+" "+para.getOption()+" -out "+result_filename+" &> "+query_filename+"_blast.log";;
   	if( verbose > 0 )
   		std::cout<<blast_command<<std::endl;
   	sys_return=system(blast_command);
@@ -52,17 +52,15 @@ void BLRNCBIBlastPlus::blast( int verbose )
   SDGString rm_command="rm -f "+query_filename;
   system( rm_command );
 
-  if( sys_return == -1 )
-  	throw SDGException(NULL," fork error!, stopping program.",-1);
 
-  if( sys_return != 0 )
-  {
-  	std::ostringstream ostr;
-  	ostr<<" program "<<para.getType()
-	  		<<" return with error value: "<<sys_return
-	  		<<", stopping blaster";
-  	throw SDGException(NULL,ostr.str(),-1);
-  }
+    if (sys_return != 0) {
+        std::cout << std::ifstream(query_filename + "_blast.log").rdbuf();
+        std::ostringstream ostr;
+        ostr << " program " << para.getType()
+             << " return with error value: " << sys_return
+             << ", stopping blaster";
+        throw SDGException(NULL, ostr.str(), -1);
+    }
 }
 
 void BLRNCBIBlastPlus::pressdb( int verbose )

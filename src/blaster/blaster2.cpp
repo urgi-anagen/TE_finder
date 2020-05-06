@@ -32,14 +32,14 @@ int main( int argc, char* argv[] )
     }
   catch(SDGException e)
     {
-      std::cout<<"Exception catch: "<<e.message<<std::endl;;
+      std::cout<<"BLASTER Exception catch: "<<e.message<<std::endl;;
       std::cout<<"Exit with value "<<EXIT_FAILURE<<std::endl;
   		system( cmd.c_str() );
       exit(EXIT_FAILURE);
     }
   catch(...)
     {
-      std::cout<<"Exception catch: unknown exception!!"<<std::endl;;
+      std::cout<<"BLASTER Exception catch: unknown exception!!"<<std::endl;;
       std::cout<<"Exit with value "<<EXIT_FAILURE<<std::endl;
   		system( cmd.c_str() );
       exit(EXIT_FAILURE);
