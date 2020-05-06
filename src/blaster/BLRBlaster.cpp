@@ -88,8 +88,15 @@ void BLRBlaster::run(int verbose) {
                 }
             }
         }
-        if (lseq.empty())
+       if(waiting_seq.empty() && verbose > 1) {
+           std::cout << "no more sequences !" << std::endl;
+       }
+        if (lseq.empty()){
+            if (verbose > 1) {
+                std::cout << "empty batch !" << std::endl;
+            }
             break;
+        }
 
         blasting->prepblast(lseq, first_num_seq);
         blasting->blast(verbose);
