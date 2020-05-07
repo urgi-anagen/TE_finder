@@ -50,14 +50,16 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 						  if(end+kmer_size-start-1>=min_frag_size)
 						  {
 							 count++;
+							 double kmer_density=(double(score)/((end-start+1)/step_q));
+							 unsigned kmer_score=(double)(end-start+1)*kmer_density;
 							 out<<qname<<"\t"
 							 <<diag+start+1<<"\t"<<diag+end+kmer_size
 							 <<"\t"
 							 <<sname<<"\t"
 							 <<start+1<<"\t"<<end+kmer_size
 							 <<"\t0.0"
-							 <<"\t"<<score
-							 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
+							 <<"\t"<<kmer_score
+							 <<"\t"<<kmer_density*100
 							 <<std::endl;
 						  }
 						  start=0;
@@ -69,14 +71,16 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 			  if(end+kmer_size-start-1>=min_frag_size)
 			  {
 				 count++;
+				 double kmer_density=(double(score)/((end-start+1)/step_q));
+				 unsigned kmer_score=(double)(end-start+1)*kmer_density;
 				 out<<qname<<"\t"
 				 <<diag+start+1<<"\t"<<diag+end+kmer_size
 				 <<"\t"
 				 <<sname<<"\t"
 				 <<start+1<<"\t"<<end+kmer_size
 				 <<"\t0.0"
-				 <<"\t"<<score
-				 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
+                 <<"\t"<<kmer_score
+                 <<"\t"<<kmer_density*100
 				 <<std::endl;
 			  }
 			}
@@ -123,14 +127,16 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 						  if(end+kmer_size-start-1>=min_frag_size)
 						  {
 							 count++;
+							 double kmer_density=(double(score)/((end-start+1)/step_q));
+							 unsigned kmer_score=(double)(end-start+1)*kmer_density;
 							 out<<qname<<"\t"
 							 <<len-(diag+start)<<"\t"<<len-(diag+end)-kmer_size+1
 							 <<"\t"
 							 <<sname<<"\t"
 							 <<start+1<<"\t"<<end+kmer_size
 							 <<"\t0.0"
-							 <<"\t"<<score
-							 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
+                             <<"\t"<<kmer_score
+                             <<"\t"<<kmer_density*100
 							 <<std::endl;
 						  }
 						  start=0;
@@ -142,14 +148,16 @@ void Hasher::diagSearch(const SDGBioSeq& sequence, std::vector< std::list<Diag> 
 			  if(end+kmer_size-start-1>=min_frag_size)
 			  {
 				 count++;
+				 double kmer_density=(double(score)/((end-start+1)/step_q));
+				 unsigned kmer_score=(double)(end-start+1)*kmer_density;
 				 out<<qname<<"\t"
 				 <<len-(diag+start)<<"\t"<<len-(diag+end)-kmer_size+1
 				 <<"\t"
 				 <<sname<<"\t"
 				 <<start+1<<"\t"<<end+kmer_size
 				 <<"\t0.0"
-				 <<"\t"<<score
-				 <<"\t"<<(double(score)/((end-start+1)/step_q))*100
+                 <<"\t"<<kmer_score
+                 <<"\t"<<kmer_density*100
 				 <<std::endl;
 			  }
 			}
