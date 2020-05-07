@@ -32,17 +32,21 @@ std::list< std::list<RangePair> > splitInputData(std::list<RangePair>& rp_list, 
     std::list< std::list<RangePair> > lrpl;
     rp_list.sort( RangePair::less);
 
-    std::map<unsigned,unsigned> countMatchPerChr;
+    unsigned count_diff_chr=0;
+    unsigned numChr,prevNumChr=0;
     for(std::list<RangePair>::iterator rp_list_it=rp_list.begin();rp_list_it!=rp_list.end();rp_list_it++)
     {
-        unsigned numChr=rp_list_it->getRangeQ().getNumChr();
-        countMatchPerChr[numChr]++;
+        numChr=rp_list_it->getRangeQ().getNumChr();
+        if(numChr!=prevNumChr){
+            count_diff_chr++;
+        }
+        prevNumChr=numChr;
     }
-    int size=countMatchPerChr.size();
-    int set_size= floor(size/nb_set);
+    unsigned size=count_diff_chr;
+    unsigned set_size= floor((double)size/nb_set);
     std::cout << "set size=" << set_size << " from " << size << " query sequences" << std::endl;
 
-    unsigned numChr,prevNumChr=0;
+    prevNumChr=0;
     std::list<RangePair>::iterator rp_list_it=rp_list.begin();
     for(int i=0; i < nb_set; i++)
     {
