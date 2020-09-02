@@ -5,6 +5,7 @@
 #include <SDGFastaIstream.h>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <cmath>
 #include <list>
 #include <tuple>
