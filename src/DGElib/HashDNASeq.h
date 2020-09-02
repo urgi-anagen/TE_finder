@@ -1,11 +1,11 @@
 #ifndef HASHDNASEQ_H
 #define HASHDNASEQ_H
 
+#include <SDGError.h>
 #include <SDGMemBioSeq.h>
 #include <SDGFastaIstream.h>
 #include <fstream>
 #include <string>
-#include <sstream>
 #include <cmath>
 #include <list>
 #include <tuple>
@@ -62,15 +62,9 @@ protected:
 
       KmerSpos(unsigned p=0, unsigned n=0): pos(p), numSeq(n) {
           if (n>1000000)
-              throw std::overflow_error((std::ostringstream()
-                      << "KmerSpos setup error: n=" << n << " too big !"
-
-                                        ).str());
+              throw Unsigned_Out_Of_Range("KmerSpos setup error: n=",n);
           if(p>500000)
-              throw std::overflow_error((std::ostringstream()
-                      << "KmerSpos setup error: p=" << p << " too big !"
-
-                                        ).str());
+              throw Unsigned_Out_Of_Range("KmerSpos setup error: p=",p);
           pos=p;
           numSeq=n;
       };
@@ -105,10 +99,7 @@ protected:
 
       Diag(long d = 0, unsigned p = 0, unsigned n = 0) {
           if (d > 100000000)
-              throw std::overflow_error((std::ostringstream()
-                      << "Diag setup error: d=" << d << " too big !"
-
-                                        ).str());
+              throw Long_Out_Of_Range("Diag setup error: d=",d);
           diag = d;
           wpos = KmerSpos(p, n);
       };
