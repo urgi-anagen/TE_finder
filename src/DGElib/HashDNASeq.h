@@ -9,7 +9,6 @@
 #include <list>
 #include <tuple>
 #include <unordered_map>
-#include <sys/dtrace.h>
 #include "HashFuncDNASeq.h"
 
 
