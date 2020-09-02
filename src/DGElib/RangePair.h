@@ -160,13 +160,24 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	static const GreaterLengthQ greaterLengthQ;
 	static const GreaterLengthIdent greaterLengthIdent;
 	static const StrictLess strictLess;
-
+    RangePair (const unsigned numseqQ, unsigned int qstart, unsigned int qend,
+                               const unsigned numseqS, unsigned int sstart, unsigned int send,
+                               unsigned int score, double e_val=0, double ident=0, unsigned i=0)
+                               : e_value(e_val), identity(ident), length(0), score(score),id(i){
+        RangeAlign r1(numseqQ,qstart,qend);
+        setRangeQ(r1);
+        RangeAlign r2(numseqS,sstart,send);
+        setRangeS(r2);
+        length=std::abs((int)(first.getStart()-first.getEnd()));
+    }
 	RangePair(void): e_value(0), identity(0), length(0), score(0),id(0){};
 	RangePair(const RangeAlign& r1,const RangeAlign& r2)
 		:std::pair<RangeAlign,RangeAlign>(r1,r2),e_value(0), identity(0), length(0), score(0),id(0)
-		{};
+		{length=std::abs((int)(first.getStart()-first.getEnd()));};
 	RangePair( BlastMatch al );
 	RangePair( SDGString line );
+
+
 
 
 	friend bool operator==( const RangePair &rp1, const RangePair &rp2 );
@@ -222,9 +233,9 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	void setRangeQ(const RangeAlign& r){first=r;};
 	void setRangeS(const RangeAlign& r){second=r;};
 
-	long getNumQuery( void ) const {return getRangeQ().getNumChr();};
+	long getNumQuery( void ) const {return first.getNumChr();};
 
-	long getNumSubject( void ) const {return getRangeS().getNumChr();};
+	long getNumSubject( void ) const {return second.getNumChr();};
 
 	void set( SDGString );
 
@@ -264,7 +275,7 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 		 second.view(); 
 		 std::cout<<"id "<<id<<" e_value "<<e_value<<" identity "<<identity<<" length "<<length<<" score "<<score<<std::endl;
 	};
-	void writetxt(std::ostream& out);
+	void writetxt(std::ostream& out) const;
 
 	void readReputer(std::istream& in);
 	void readtxt(std::istream& in);

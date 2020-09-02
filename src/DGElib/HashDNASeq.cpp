@@ -274,7 +274,7 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 			break;
 		count++;
 	}
-	std::cout<<"Kmers with poor model probability will be removed (if not one iteration)! Will remove "<<count<<" kmers."<<std::endl;
+	std::cout<<"Kmers with poor model probability will be removed ! Will remove "<<count<<" kmers."<<std::endl;
 
 }
 //-------------------------------------------------------------------------
@@ -740,6 +740,7 @@ void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
       for(std::vector<KmerSpos>::iterator j=begin_d;j!=end_d;j++)
       {
     	  // Attention cas j->numSeq==0 à traiter (no kmer hit!)
+    	  if(j->numSeq==0) std::cout<<"Error: j->numSeq==0"<<std::endl;
     	  if(!(repeat && numseq==j->numSeq && i==j->pos))
     			  diag_map.push_back(Diag(i-j->pos,j->pos,j->numSeq));
       }

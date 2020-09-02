@@ -50,7 +50,7 @@ class __SDGBioSeq : public __SDGSequence
     enum type_molecule {NDF=0,NUC,PRT,NDG}; 
     static type_molecule sequenceType(const char *seq);
 
-    static char complement(char a);	// ok
+    static char complement(char a);
 
 	virtual ~__SDGBioSeq() {};
 
@@ -64,6 +64,7 @@ class __SDGBioSeq : public __SDGSequence
 	virtual SDGBioSeq subseq(unsigned long d,unsigned long lg=0) const =0;
 
 	virtual SDGBioSeq complement() const =0;
+    virtual SDGBioSeq reverse() const =0;
 
 	virtual SDGBioSeq concat(SDGBioSeq seq) const =0;
 	virtual SDGBioSeq concat(SDGString seq) const =0;

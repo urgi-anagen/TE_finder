@@ -15,6 +15,7 @@ const RangePair::GreaterLengthQ RangePair::greaterLengthQ;
 const RangePair::GreaterLengthIdent RangePair::greaterLengthIdent;
 const RangePair::StrictLess RangePair::strictLess;
 
+
 RangePair::RangePair( SDGString line )
 {
 	set( line );
@@ -239,7 +240,7 @@ void RangePair::readtxt(std::istream& in)
   setStrand();
 }
 
-void RangePair::writetxt(std::ostream& out)
+void RangePair::writetxt(std::ostream& out) const
 {
   out<<first.getNameSeq()<<"\t";
   out<<first.getStart()<<"\t";
@@ -259,7 +260,7 @@ void RangePair::merge(RangePair& r)
   score+=r.score;
   identity=(((identity/100)*length+(r.identity/100)*r.length)/(length+r.length))*100;
   e_value=std::min(e_value,r.e_value);
-  length+=r.length;
+  length=std::abs((int)(first.getStart()-first.getEnd()));
 }
 
 void RangePair::merge(const RangePair& r)
@@ -269,7 +270,7 @@ void RangePair::merge(const RangePair& r)
   score+=r.score;
   identity=(((identity/100)*length+(r.identity/100)*r.length)/(length+r.length))*100;
   e_value=std::min(e_value,r.e_value);
-  length+=r.length;
+  length=std::abs((int)(first.getStart()-first.getEnd()));
 }
 
 RangePair RangePair::diffQ(const RangePair& r)

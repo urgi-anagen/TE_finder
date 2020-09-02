@@ -142,9 +142,15 @@ SDGBioSeq __SDGSubBioSeq::subseq(unsigned long d, unsigned long lg)  const
 SDGBioSeq __SDGSubBioSeq::complement() const
 {
   __SDGSubBioSeq tmp(*this);
-  return SDGBioSeq(tmp);
+  return SDGBioSeq(tmp.complement());
 }
-  
+
+SDGBioSeq __SDGSubBioSeq::reverse() const
+{
+    __SDGSubBioSeq tmp(*this);
+    return SDGBioSeq(tmp.reverse());
+}
+
 SDGBioSeq __SDGSubBioSeq::concat(SDGBioSeq seq) const
 {
   return concat(seq.toString());

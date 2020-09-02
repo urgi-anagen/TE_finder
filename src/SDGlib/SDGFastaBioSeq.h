@@ -69,6 +69,7 @@ class __SDGFastaBioSeq :  public __SDGBioSeq
   virtual SDGBioSeq subseq(unsigned long d, unsigned long lg=0)  const;
   
   virtual SDGBioSeq complement()  const ;
+  virtual SDGBioSeq reverse()  const ;
   
   virtual SDGBioSeq concat(SDGBioSeq seq) const;
   

@@ -12,7 +12,8 @@ file(
         source_files
 
         *
-
+        ../Hasher.cpp
+        ../Hasher.h
 )
 
 
@@ -22,7 +23,6 @@ add_executable(
         test_hasher${VERSION}
 
         ${source_files}
-        ../Hasher.cpp
 )
 
 target_link_libraries(

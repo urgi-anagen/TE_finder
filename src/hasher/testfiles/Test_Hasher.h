@@ -18,6 +18,7 @@ class Test_Hasher : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST_SUITE(Test_Hasher);
 
+	CPPUNIT_TEST( test_fragMerge );
     CPPUNIT_TEST( test_runAsScript );
 
 	CPPUNIT_TEST_SUITE_END();
@@ -35,6 +36,7 @@ public:
 
 protected:
 
+    void test_fragMerge( void );
     void test_runAsScript( void );
 
 };

@@ -9,6 +9,7 @@
 #include <list>
 #include <tuple>
 #include <unordered_map>
+#include <sys/dtrace.h>
 #include "HashFuncDNASeq.h"
 
 
@@ -59,7 +60,20 @@ protected:
       unsigned pos;
       unsigned numSeq;
 
-      KmerSpos(unsigned p=0, unsigned n=0): pos(p), numSeq(n) {};
+      KmerSpos(unsigned p=0, unsigned n=0): pos(p), numSeq(n) {
+          if (n>1000000)
+              throw std::overflow_error((std::ostringstream()
+                      << "KmerSpos setup error: n=" << n << " too big !"
+
+                                        ).str());
+          if(p>500000)
+              throw std::overflow_error((std::ostringstream()
+                      << "KmerSpos setup error: p=" << p << " too big !"
+
+                                        ).str());
+          pos=p;
+          numSeq=n;
+      };
 
       friend int operator< (const KmerSpos& w1, const KmerSpos& w2)
       {
@@ -86,10 +100,18 @@ protected:
 
   struct Diag // Store the diagonal of a kmer match
     {
-      int diag;
+      long diag;
       KmerSpos wpos;
 
-      Diag(int d=0, unsigned p=0, unsigned n=0): diag(d), wpos(p,n) {};
+      Diag(long d = 0, unsigned p = 0, unsigned n = 0) {
+          if (d > 100000000)
+              throw std::overflow_error((std::ostringstream()
+                      << "Diag setup error: d=" << d << " too big !"
+
+                                        ).str());
+          diag = d;
+          wpos = KmerSpos(p, n);
+      };
 
       friend std::ostream& operator<<(std::ostream& os, const Diag& d)
       {
