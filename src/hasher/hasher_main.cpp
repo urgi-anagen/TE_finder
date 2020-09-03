@@ -2,8 +2,6 @@
 #include <fstream>
 #include <cstdlib>
 #include <list>
-#include <filesystem>
-namespace fs = std::__fs::filesystem;
 
 #include "SDGString.h"
 #include "SDGFastaIstream.h"
@@ -371,8 +369,13 @@ int main(int argc, char *argv[]) {
             seqout_final_name << filename1 << ".final.hasher.fa";
         }
 
-        fs::copy_file(alignout_name.str(), alignout_final_name.str(), fs::copy_options::overwrite_existing);
-        fs::copy_file(seqout_name.str(), seqout_final_name.str(), fs::copy_options::overwrite_existing);
+        std::stringstream cmd1,cmd2;
+
+        cmd1<<"cp "<<alignout_name.str()<<" "<<alignout_final_name.str();
+        std::system(cmd1.str().c_str());
+
+        cmd2<<"cp "<<seqout_name.str()<<" "<<seqout_final_name.str();
+        std::system(cmd2.str().c_str());
 
         exit(EXIT_SUCCESS);
     }
