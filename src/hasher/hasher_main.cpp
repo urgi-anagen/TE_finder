@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
 
             //Compute stat on resuts and filters false positives
             unsigned qval;
-            double qtile=0.95;
+            double qtile=0.99;
             std::cout<<"--Random fragment stats:"<<std::endl;
             qval=hsrch.fragStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
