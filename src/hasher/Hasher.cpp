@@ -160,25 +160,36 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
   std::string str_comp=comp_sequence.toString();
   const char* seq_comp=str_comp.c_str();
 
-  unsigned key_d=0,key_c=0,dirhit=0,comphit=0;
-  for(unsigned i=start;i<=last_pos;i+=step_q)
-    {
-      key_d=hseq(seq);
-      seq+=step_q;
-      std::vector<KmerSpos>::iterator begin_d=hash2wpos[key_d];
-      std::vector<KmerSpos>::iterator end_d=hash2wpos[key_d+1];
-      for(std::vector<KmerSpos>::iterator j=begin_d;j!=end_d;j++)
-      {
-    	  if(j->numSeq>0)
-    		{
-        	  dirhit++;
-        	  long diag=long(i)-j->pos;
-        	  diag_map[j->numSeq].push_back(Diag(diag,j->pos,j->numSeq));
-    		}
+  unsigned key_d=0,dirhit=0;
+  unsigned i=start;
+  while(i<=last_pos) {
+      bool found=false;
+      key_d = hseq(seq);
+      std::vector<KmerSpos>::iterator begin_d = hash2wpos[key_d];
+      std::vector<KmerSpos>::iterator end_d = hash2wpos[key_d + 1];
+      for (std::vector<KmerSpos>::iterator j = begin_d; j != end_d; j++) {
+          if (j->numSeq > 0) {
+              dirhit++;
+              long diag = long(i) - j->pos;
+              diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+              found=true;
+          }
       }
+      if(found){
+      seq += step_q;
+      i+=step_q;
+      } else {
+          seq += 1;
+          i += 1;
+      }
+  }
+  std::cout<<dirhit<<" direct hits found / ";
 
+  unsigned key_c=0,comphit=0;
+  i=start;
+  while(i<=last_pos) {
+      bool found=false;
       key_c=hseq(seq_comp);
-      seq_comp+=step_q;
       std::vector<KmerSpos>::iterator begin_c=hash2wpos[key_c];
       std::vector<KmerSpos>::iterator end_c=hash2wpos[key_c+1];
       for(std::vector<KmerSpos>::iterator j=begin_c;j!=end_c;j++)
@@ -187,11 +198,18 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
               comphit++;
               long diag = long(i) - j->pos;
               diag_map_comp[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+              found=true;
           }
       }
-
+      if(found){
+          seq_comp += step_q;
+          i+=step_q;
+      } else {
+          seq_comp += 1;
+          i += 1;
+      }
     }
-	std::cout<<dirhit<<" direct hits found / ";
+
 	std::cout<<comphit<<" reverse hits found"<<std::endl;;
 }
 //-------------------------------------------------------------------------
