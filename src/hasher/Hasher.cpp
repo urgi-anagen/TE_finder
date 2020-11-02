@@ -346,13 +346,13 @@ void Hasher::fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfile
     for( std::list< RangePair >::iterator curr_frag_it=frag.begin();
          curr_frag_it != frag.end() ; curr_frag_it++) {
         if(curr_frag_it->getNumQuery()>num2nameQ.size()){
-            std::cout<<"Error query sequence number "<<curr_frag_it->getNumQuery()<<" doesn't exist!"<<std::endl;
+            std::cerr<<"Error query sequence number "<<curr_frag_it->getNumQuery()<<" doesn't exist!"<<std::endl;
             exit(EXIT_FAILURE);
         }
         SDGString qname=num2nameQ[curr_frag_it->getNumQuery()-1];
 
         if(curr_frag_it->getNumSubject()>num2nameS.size()){
-            std::cout<<"Error subject sequence number "<<curr_frag_it->getNumSubject()<<" doesn't exist!"<<std::endl;
+            std::cerr<<"Error subject sequence number "<<curr_frag_it->getNumSubject()<<" doesn't exist!"<<std::endl;
             exit(EXIT_FAILURE);
         }
         SDGString sname=num2nameS[curr_frag_it->getNumSubject()-1];;

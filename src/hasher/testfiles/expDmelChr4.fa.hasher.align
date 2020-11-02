@@ -1,289 +1,349 @@
-dmel_chr4	4440	4496	DmelChr4-B-R9-Map3_NoCat	24	80	0	0	0
-dmel_chr4	4503	4566	DmelChr4-B-G11-Map20_classII-TIR-incomp	108	1098	0	0	0
-dmel_chr4	13288	13358	DmelChr4-B-G11-Map20_classII-TIR-incomp	529	1491	0	0	0
-dmel_chr4	13596	13722	DmelChr4-B-G11-Map20_classII-TIR-incomp	884	1881	0	0	0
-dmel_chr4	25601	26952	DmelChr4-B-R12-Map3_NoCat	167	1518	0	0	0
-dmel_chr4	26980	31677	DmelChr4-B-R12-Map3_NoCat	2	3934	0	0	0
-dmel_chr4	31684	34274	DmelChr4-B-R1-Map4_NoCat	8	4635	0	0	0
-dmel_chr4	40714	44949	DmelChr4-B-R12-Map3_NoCat	7	3934	0	0	0
-dmel_chr4	44956	45754	DmelChr4-B-R1-Map4_NoCat	8	4635	0	0	0
-dmel_chr4	45761	46125	DmelChr4-B-R4-Map5_NoCat	4	1217	0	0	0
-dmel_chr4	46202	46328	DmelChr4-B-G11-Map20_classII-TIR-incomp	417	1377	0	0	0
-dmel_chr4	46349	46559	DmelChr4-B-G11-Map20_classII-TIR-incomp	552	1654	0	0	0
-dmel_chr4	46566	46860	DmelChr4-B-G11-Map20_classII-TIR-incomp	770	1944	0	0	0
-dmel_chr4	46874	52075	DmelChr4-B-R12-Map3_NoCat	8	3123	0	0	0
-dmel_chr4	52089	54448	DmelChr4-B-R1-Map4_NoCat	6	4633	0	0	0
-dmel_chr4	54455	55008	DmelChr4-B-R4-Map5_NoCat	6	1533	0	0	0
-dmel_chr4	55491	55547	DmelChr4-B-G11-Map20_classII-TIR-incomp	714	770	0	0	0
-dmel_chr4	55596	55918	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	798	1234	0	0	0
-dmel_chr4	55946	59852	DmelChr4-B-R1-Map4_NoCat	27	3933	0	0	0
-dmel_chr4	59880	60566	DmelChr4-B-R1-Map4_NoCat	5	4632	0	0	0
-dmel_chr4	62148	62589	DmelChr4-B-G11-Map20_classII-TIR-incomp	52	1586	0	0	0
-dmel_chr4	67293	67349	DmelChr4-B-G11-Map20_classII-TIR-incomp	34	1017	0	0	0
-dmel_chr4	67783	67839	DmelChr4-B-G11-Map20_classII-TIR-incomp	751	1699	0	0	0
-dmel_chr4	67881	68063	DmelChr4-B-G11-Map20_classII-TIR-incomp	862	1880	0	0	0
-dmel_chr4	73579	73817	DmelChr4-B-G11-Map20_classII-TIR-incomp	4	1162	0	0	0
-dmel_chr4	73838	73957	DmelChr4-B-R9-Map3_NoCat	267	1313	0	0	0
-dmel_chr4	73992	74090	DmelChr4-B-R9-Map3_NoCat	422	520	0	0	0
-dmel_chr4	74097	74174	DmelChr4-B-G11-Map20_classII-TIR-incomp	540	1509	0	0	0
-dmel_chr4	74244	74622	DmelChr4-B-G11-Map20_classII-TIR-incomp	686	1944	0	0	0
-dmel_chr4	83539	83434	DmelChr4-B-G7-Map3_classII-TIR-incomp	436	541	0	0	0
-dmel_chr4	83896	83567	DmelChr4-B-G7-Map3_classII-TIR-incomp	79	406	0	0	0
-dmel_chr4	83966	83903	DmelChr4-B-G7-Map3_classII-TIR-incomp	8	71	0	0	0
-dmel_chr4	84981	84827	DmelChr4-B-G7-Map3_classII-TIR-incomp	9	163	0	0	0
-dmel_chr4	88488	88131	DmelChr4-B-G11-Map20_classII-TIR-incomp	707	1944	0	0	0
-dmel_chr4	88775	88509	DmelChr4-B-R4-Map5_NoCat	414	1572	0	0	0
-dmel_chr4	89258	88789	DmelChr4-B-R9-Map3_NoCat	7	1325	0	0	0
-dmel_chr4	97392	96937		642	1230	0	0	0
-dmel_chr4	97777	97455	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	197	1584	0	0	0
-dmel_chr4	97903	97784		70	1289	0	0	0
-dmel_chr4	114703	114647		374	1530	0	0	0
-dmel_chr4	114892	114801		194	1385	0	0	0
-dmel_chr4	145744	145877	DmelChr4-B-R19-Map4_NoCat	3	136	0	0	0
-dmel_chr4	145933	146451	DmelChr4-B-R19-Map4_NoCat	195	713	0	0	0
-dmel_chr4	160826	160707	DmelChr4-B-R9-Map3_NoCat	743	1747	0	0	0
-dmel_chr4	160987	160875	DmelChr4-B-G11-Map20_classII-TIR-incomp	568	1572	0	0	0
-dmel_chr4	161407	161344	DmelChr4-B-G11-Map20_classII-TIR-incomp	188	1100	0	0	0
-dmel_chr4	162044	161421	DmelChr4-B-G11-Map20_classII-TIR-incomp	45	1880	0	0	0
-dmel_chr4	162240	162072	DmelChr4-B-R9-Map3_NoCat	336	1382	0	0	0
-dmel_chr4	162478	162254	DmelChr4-B-G11-Map20_classII-TIR-incomp	65	1216	0	0	0
-dmel_chr4	162590	162492	DmelChr4-B-G11-Map20_classII-TIR-incomp	7	954	0	0	0
-dmel_chr4	162758	162681		960	1231	0	0	0
-dmel_chr4	163213	162772	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	568	1139	0	0	0
-dmel_chr4	163395	163220	DmelChr4-B-G11-Map20_classII-TIR-incomp	385	1590	0	0	0
-dmel_chr4	163752	163444	DmelChr4-B-G11-Map20_classII-TIR-incomp	14	1422	0	0	0
-dmel_chr4	171844	171746		379	1549	0	0	0
-dmel_chr4	172061	171893	DmelChr4-B-R4-Map5_NoCat	160	1428	0	0	0
-dmel_chr4	172208	172089	DmelChr4-B-G11-Map20_classII-TIR-incomp	7	1205	0	0	0
-dmel_chr4	178788	178242	DmelChr4-B-G11-Map20_classII-TIR-incomp	518	1944	0	0	0
-dmel_chr4	179089	178809	DmelChr4-B-R4-Map5_NoCat	184	1391	0	0	0
-dmel_chr4	179635	179096		566	1233	0	0	0
-dmel_chr4	180118	179649	DmelChr4-B-G11-Map20_classII-TIR-incomp	82	1553	0	0	0
-dmel_chr4	180447	180132	DmelChr4-B-R4-Map5_NoCat	5	1156	0	0	0
-dmel_chr4	202859	202929	DmelChr4-B-R4-Map5_NoCat	7	77	0	0	0
-dmel_chr4	202957	203216	DmelChr4-B-R9-Map3_NoCat	104	1290	0	0	0
-dmel_chr4	203223	203307	DmelChr4-B-G11-Map20_classII-TIR-incomp	474	1380	0	0	0
-dmel_chr4	203405	203601	DmelChr4-B-R9-Map3_NoCat	491	1579	0	0	0
-dmel_chr4	203608	203972	DmelChr4-B-G11-Map20_classII-TIR-incomp	695	1867	0	0	0
-dmel_chr4	222382	222515	DmelChr4-B-R9-Map3_NoCat	36	1096	0	0	0
-dmel_chr4	227821	228318	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	5	1553	0	0	0
-dmel_chr4	228325	228409	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	463	596	0	0	0
-dmel_chr4	228430	229116	DmelChr4-B-G11-Map20_classII-TIR-incomp	43	1235	0	0	0
-dmel_chr4	242073	242136	DmelChr4-B-G1-Map3_NoCat	13	76	0	0	0
-dmel_chr4	242157	242318	DmelChr4-B-G1-Map3_NoCat	103	264	0	0	0
-dmel_chr4	242339	242500	DmelChr4-B-G1-Map3_NoCat	284	445	0	0	0
-dmel_chr4	242591	242759	DmelChr4-B-G1-Map3_NoCat	536	704	0	0	0
-dmel_chr4	248482	248209	DmelChr4-B-R19-Map4_NoCat	436	709	0	0	0
-dmel_chr4	248699	248559	DmelChr4-B-R19-Map4_NoCat	187	328	0	0	0
-dmel_chr4	268421	268477	DmelChr4-B-G11-Map20_classII-TIR-incomp	3	908	0	0	0
-dmel_chr4	268484	268617	DmelChr4-B-R4-Map5_NoCat	63	1045	0	0	0
-dmel_chr4	303038	303374	DmelChr4-B-G9-Map3_NoCat	1930	2266	0	0	0
-dmel_chr4	307476	309758	DmelChr4-B-G9-Map3_NoCat	2	2284	0	0	0
-dmel_chr4	310714	310035	DmelChr4-B-R9-Map3_NoCat	296	1881	0	0	0
-dmel_chr4	311015	310721	DmelChr4-B-R4-Map5_NoCat	17	1203	0	0	0
-dmel_chr4	314938	315974	DmelChr4-B-R4-Map5_NoCat	17	1875	0	0	0
-dmel_chr4	322925	323422	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	9	1585	0	0	0
-dmel_chr4	323485	323555	DmelChr4-B-G11-Map20_classII-TIR-incomp	569	766	0	0	0
-dmel_chr4	323562	324017	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	647	1231	0	0	0
-dmel_chr4	326852	327391	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	11	1587	0	0	0
-dmel_chr4	327447	327986	DmelChr4-B-G11-Map20_classII-TIR-incomp	567	1235	0	0	0
-dmel_chr4	334129	333828		763	1234	0	0	0
-dmel_chr4	334262	334157	DmelChr4-B-G11-Map20_classII-TIR-incomp	660	878	0	0	0
-dmel_chr4	334360	334283		566	770	0	0	0
-dmel_chr4	334731	334367	DmelChr4-B-G11-Map20_classII-TIR-incomp	194	1588	0	0	0
-dmel_chr4	334927	334738	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	2	1291	0	0	0
-dmel_chr4	337153	336670	DmelChr4-B-R9-Map3_NoCat	579	1884	0	0	0
-dmel_chr4	337349	337181	DmelChr4-B-R9-Map3_NoCat	340	1386	0	0	0
-dmel_chr4	337594	337391	DmelChr4-B-G11-Map20_classII-TIR-incomp	61	1191	0	0	0
-dmel_chr4	337706	337601	DmelChr4-B-R4-Map5_NoCat	3	943	0	0	0
-dmel_chr4	338507	338717	DmelChr4-B-G11-Map20_classII-TIR-incomp	16	1097	0	0	0
-dmel_chr4	338885	338948	DmelChr4-B-R9-Map3_NoCat	412	475	0	0	0
-dmel_chr4	339270	339473	DmelChr4-B-G11-Map20_classII-TIR-incomp	747	1842	0	0	0
-dmel_chr4	339487	339543	DmelChr4-B-R9-Map3_NoCat	975	1067	0	0	0
-dmel_chr4	347359	347268	DmelChr4-B-R12-Map3_NoCat	252	343	0	0	0
-dmel_chr4	353078	353001	DmelChr4-B-G7-Map3_classII-TIR-incomp	454	531	0	0	0
-dmel_chr4	353260	353120	DmelChr4-B-G7-Map3_classII-TIR-incomp	85	225	0	0	0
-dmel_chr4	357817	357334	DmelChr4-B-R9-Map3_NoCat	473	1806	0	0	0
-dmel_chr4	357950	357831	DmelChr4-B-R9-Map3_NoCat	272	1311	0	0	0
-dmel_chr4	358279	357971	DmelChr4-B-R9-Map3_NoCat	3	1160	0	0	0
-dmel_chr4	362451	362276	DmelChr4-B-R9-Map3_NoCat	876	1943	0	0	0
-dmel_chr4	362598	362493	DmelChr4-B-G11-Map20_classII-TIR-incomp	739	1736	0	0	0
-dmel_chr4	363403	363109	DmelChr4-B-G11-Map20_classII-TIR-incomp	7	1101	0	0	0
-dmel_chr4	384314	384188		960	1231	0	0	0
-dmel_chr4	384727	384622		108	1313	0	0	0
-dmel_chr4	387114	387002	DmelChr4-B-G7-Map3_classII-TIR-incomp	424	536	0	0	0
-dmel_chr4	387226	387121		297	402	0	0	0
-dmel_chr4	387359	387254	DmelChr4-B-G7-Map3_classII-TIR-incomp	165	270	0	0	0
-dmel_chr4	387675	387731	DmelChr4-B-G11-Map20_classII-TIR-incomp	3	908	0	0	0
-dmel_chr4	387738	387815	DmelChr4-B-G11-Map20_classII-TIR-incomp	13	996	0	0	0
-dmel_chr4	387829	388165	DmelChr4-B-R4-Map5_NoCat	730	1881	0	0	0
-dmel_chr4	390356	390433	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	139	1316	0	0	0
-dmel_chr4	390510	390594		242	1426	0	0	0
-dmel_chr4	391349	391027		782	1232	0	0	0
-dmel_chr4	391468	391398	DmelChr4-B-G11-Map20_classII-TIR-incomp	699	769	0	0	0
-dmel_chr4	393890	393827		624	814	0	0	0
-dmel_chr4	394528	394647	DmelChr4-B-G11-Map20_classII-TIR-incomp	567	1578	0	0	0
-dmel_chr4	394703	394759	DmelChr4-B-G11-Map20_classII-TIR-incomp	747	1695	0	0	0
-dmel_chr4	452098	452238	DmelChr4-B-G11-Map20_classII-TIR-incomp	6	995	0	0	0
-dmel_chr4	452280	452980	DmelChr4-B-R4-Map5_NoCat	7	1590	0	0	0
-dmel_chr4	452987	453435	DmelChr4-B-G11-Map20_classII-TIR-incomp	655	1231	0	0	0
-dmel_chr4	453442	453505	DmelChr4-B-G11-Map20_classII-TIR-incomp	184	1096	0	0	0
-dmel_chr4	454597	454709	DmelChr4-B-R9-Map3_NoCat	574	1578	0	0	0
-dmel_chr4	454744	454863	DmelChr4-B-G11-Map20_classII-TIR-incomp	738	1742	0	0	0
-dmel_chr4	454933	454989	DmelChr4-B-R9-Map3_NoCat	973	1065	0	0	0
-dmel_chr4	460089	459816	DmelChr4-B-R9-Map3_NoCat	778	1880	0	0	0
-dmel_chr4	460551	460117	DmelChr4-B-R4-Map5_NoCat	306	1660	0	0	0
-dmel_chr4	460698	460558	DmelChr4-B-G11-Map20_classII-TIR-incomp	139	1206	0	0	0
-dmel_chr4	460915	460705	DmelChr4-B-R4-Map5_NoCat	8	1060	0	0	0
-dmel_chr4	472444	472388	DmelChr4-B-R12-Map3_NoCat	287	343	0	0	0
-dmel_chr4	474316	475002	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	3	1584	0	0	0
-dmel_chr4	475009	475093	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	642	853	0	0	0
-dmel_chr4	475100	475191	DmelChr4-B-G11-Map20_classII-TIR-incomp	717	956	0	0	0
-dmel_chr4	475198	475282		853	1107	0	0	0
-dmel_chr4	476409	476507	DmelChr4-B-G11-Map20_classII-TIR-incomp	9	935	0	0	0
-dmel_chr4	477011	477557	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	5	1588	0	0	0
-dmel_chr4	477578	478103		566	1226	0	0	0
-dmel_chr4	483807	483632	DmelChr4-B-R9-Map3_NoCat	840	1823	0	0	0
-dmel_chr4	484171	484052	DmelChr4-B-R4-Map5_NoCat	51	1097	0	0	0
-dmel_chr4	485508	485417	DmelChr4-B-G7-Map3_classII-TIR-incomp	444	535	0	0	0
-dmel_chr4	485865	485802		11	74	0	0	0
-dmel_chr4	531711	531767		985	1235	0	0	0
-dmel_chr4	551966	551896		970	1234	0	0	0
-dmel_chr4	575563	575395	DmelChr4-B-R19-Map4_NoCat	283	451	0	0	0
-dmel_chr4	575843	575584	DmelChr4-B-R19-Map4_NoCat	2	261	0	0	0
-dmel_chr4	614562	614387	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	958	1236	0	0	0
-dmel_chr4	614828	614688	DmelChr4-B-G11-Map20_classII-TIR-incomp	642	881	0	0	0
-dmel_chr4	614975	614835	DmelChr4-B-G11-Map20_classII-TIR-incomp	514	760	0	0	0
-dmel_chr4	615444	615024		4	1531	0	0	0
-dmel_chr4	632618	632863	DmelChr4-B-R4-Map5_NoCat	2	1119	0	0	0
-dmel_chr4	632919	633059	DmelChr4-B-G11-Map20_classII-TIR-incomp	249	1316	0	0	0
-dmel_chr4	633066	633220	DmelChr4-B-G11-Map20_classII-TIR-incomp	414	1381	0	0	0
-dmel_chr4	633255	633388	DmelChr4-B-G11-Map20_classII-TIR-incomp	634	1662	0	0	0
-dmel_chr4	633395	633675	DmelChr4-B-G11-Map20_classII-TIR-incomp	781	1941	0	0	0
-dmel_chr4	701843	702018		3	1325	0	0	0
-dmel_chr4	702263	702375		820	1102	0	0	0
-dmel_chr4	702424	702655	DmelChr4-B-R19-Map4_NoCat	477	708	0	0	0
-dmel_chr4	713516	713460	DmelChr4-B-G11-Map20_classII-TIR-incomp	3	908	0	0	0
-dmel_chr4	770107	770184	DmelChr4-B-R4-Map5_NoCat	4	930	0	0	0
-dmel_chr4	793466	793585		10	129	0	0	0
-dmel_chr4	802379	802505	DmelChr4-B-R4-Map5_NoCat	7	133	0	0	0
-dmel_chr4	802813	802918	DmelChr4-B-R4-Map5_NoCat	852	1849	0	0	0
-dmel_chr4	804409	804535	DmelChr4-B-R19-Map4_NoCat	3	129	0	0	0
-dmel_chr4	804759	804913	DmelChr4-B-R19-Map4_NoCat	551	705	0	0	0
-dmel_chr4	809211	809540	DmelChr4-B-G11-Map20_classII-TIR-incomp	6	1176	0	0	0
-dmel_chr4	809589	809659	DmelChr4-B-G11-Map20_classII-TIR-incomp	340	1259	0	0	0
-dmel_chr4	812018	812081	DmelChr4-B-G11-Map20_classII-TIR-incomp	344	1334	0	0	0
-dmel_chr4	824870	825325	DmelChr4-B-G1-Map3_NoCat	6	461	0	0	0
-dmel_chr4	825332	825563	DmelChr4-B-G1-Map3_NoCat	469	700	0	0	0
-dmel_chr4	833967	833827		968	1232	0	0	0
-dmel_chr4	835164	834009	DmelChr4-B-R4-Map5_NoCat	7	1880	0	0	0
-dmel_chr4	835234	835171		821	884	0	0	0
-dmel_chr4	836438	836326	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	379	1584	0	0	0
-dmel_chr4	836592	836473	DmelChr4-B-G11-Map20_classII-TIR-incomp	210	1427	0	0	0
-dmel_chr4	836718	836662		36	1192	0	0	0
-dmel_chr4	856822	856045	DmelChr4-B-G11-Map20_classII-TIR-incomp	305	1944	0	0	0
-dmel_chr4	856920	856829	DmelChr4-B-G11-Map20_classII-TIR-incomp	203	1221	0	0	0
-dmel_chr4	857011	856927	DmelChr4-B-G11-Map20_classII-TIR-incomp	60	1064	0	0	0
-dmel_chr4	858236	858145		944	1229	0	0	0
-dmel_chr4	859832	858740	DmelChr4-B-R4-Map5_NoCat	12	1882	0	0	0
-dmel_chr4	877993	878574	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	14	1572	0	0	0
-dmel_chr4	878581	878742	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	571	859	0	0	0
-dmel_chr4	878749	879099	DmelChr4-B-G11-Map20_classII-TIR-incomp	725	1230	0	0	0
-dmel_chr4	897053	896647	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	643	1178	0	0	0
-dmel_chr4	897130	897060	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	565	762	0	0	0
-dmel_chr4	897683	897179	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	5	1588	0	0	0
-dmel_chr4	899839	899699	DmelChr4-B-G7-Map3_classII-TIR-incomp	285	425	0	0	0
-dmel_chr4	900119	899846	DmelChr4-B-G7-Map3_classII-TIR-incomp	4	277	0	0	0
-dmel_chr4	905726	904641	DmelChr4-B-R9-Map3_NoCat	7	1885	0	0	0
-dmel_chr4	909114	908603	DmelChr4-B-R9-Map3_NoCat	557	1883	0	0	0
-dmel_chr4	909695	909128	DmelChr4-B-R4-Map5_NoCat	3	1412	0	0	0
-dmel_chr4	920426	920216		820	1200	0	0	0
-dmel_chr4	920657	920580	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	530	741	0	0	0
-dmel_chr4	921182	920979	DmelChr4-B-G11-Map20_classII-TIR-incomp	115	1418	0	0	0
-dmel_chr4	921252	921196		34	1190	0	0	0
-dmel_chr4	928206	928710		55	1547	0	0	0
-dmel_chr4	928724	928885	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	574	862	0	0	0
-dmel_chr4	928892	929151	DmelChr4-B-G11-Map20_classII-TIR-incomp	721	1143	0	0	0
-dmel_chr4	946466	946018	DmelChr4-B-G9-Map3_NoCat	1832	2280	0	0	0
-dmel_chr4	948300	946473	DmelChr4-B-G9-Map3_NoCat	3	1830	0	0	0
-dmel_chr4	948832	948601	DmelChr4-B-G1-Map3_NoCat	471	702	0	0	0
-dmel_chr4	949287	948839	DmelChr4-B-G1-Map3_NoCat	13	461	0	0	0
-dmel_chr4	951999	952307	DmelChr4-B-R4-Map5_NoCat	4	1161	0	0	0
-dmel_chr4	952328	952433	DmelChr4-B-G11-Map20_classII-TIR-incomp	280	1284	0	0	0
-dmel_chr4	952454	952902	DmelChr4-B-R4-Map5_NoCat	465	1763	0	0	0
-dmel_chr4	952909	953098	DmelChr4-B-G11-Map20_classII-TIR-incomp	874	1943	0	0	0
-dmel_chr4	954841	955877	DmelChr4-B-G11-Map20_classII-TIR-incomp	3	1586	0	0	0
-dmel_chr4	969440	969384		985	1235	0	0	0
-dmel_chr4	969867	969538	DmelChr4-B-R4-Map5_NoCat	6	1435	0	0	0
-dmel_chr4	970738	970997	DmelChr4-B-R19-Map4_NoCat	454	713	0	0	0
-dmel_chr4	972142	972065	DmelChr4-B-G11-Map20_classII-TIR-incomp	849	1818	0	0	0
-dmel_chr4	972303	972219	DmelChr4-B-G11-Map20_classII-TIR-incomp	739	1715	0	0	0
-dmel_chr4	975512	975988	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	158	1580	0	0	0
-dmel_chr4	976002	976121	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	647	886	0	0	0
-dmel_chr4	976149	976468	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	262	1584	0	0	0
-dmel_chr4	980447	980510	DmelChr4-B-G11-Map20_classII-TIR-incomp	2	65	0	0	0
-dmel_chr4	980545	980622	DmelChr4-B-G11-Map20_classII-TIR-incomp	112	1289	0	0	0
-dmel_chr4	980664	980769	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	221	1426	0	0	0
-dmel_chr4	981280	981525		816	1231	0	0	0
-dmel_chr4	983296	983380	DmelChr4-B-R12-Map3_NoCat	259	343	0	0	0
-dmel_chr4	984618	984548		967	1231	0	0	0
-dmel_chr4	984877	984660		696	1006	0	0	0
-dmel_chr4	984996	984912		578	789	0	0	0
-dmel_chr4	985290	985108	DmelChr4-B-G11-Map20_classII-TIR-incomp	378	1576	0	0	0
-dmel_chr4	985661	985297	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	6	1470	0	0	0
-dmel_chr4	989974	990170	DmelChr4-B-G1-Map3_NoCat	6	202	0	0	0
-dmel_chr4	990219	990457	DmelChr4-B-G1-Map3_NoCat	270	508	0	0	0
-dmel_chr4	1004204	1004071	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	821	1124	0	0	0
-dmel_chr4	1010007	1009559	DmelChr4-B-R9-Map3_NoCat	612	1882	0	0	0
-dmel_chr4	1010098	1010014	DmelChr4-B-G11-Map20_classII-TIR-incomp	518	1494	0	0	0
-dmel_chr4	1010791	1010119	DmelChr4-B-R4-Map5_NoCat	3	1391	0	0	0
-dmel_chr4	1045598	1045787	DmelChr4-B-G7-Map3_classII-TIR-incomp	89	278	0	0	0
-dmel_chr4	1045815	1046053	DmelChr4-B-G7-Map3_classII-TIR-incomp	304	542	0	0	0
-dmel_chr4	1050166	1050110		985	1235	0	0	0
-dmel_chr4	1050292	1050173	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	1056	1175	0	0	0
-dmel_chr4	1065681	1065891	DmelChr4-B-G7-Map3_classII-TIR-incomp	17	227	0	0	0
-dmel_chr4	1065919	1066199	DmelChr4-B-G7-Map3_classII-TIR-incomp	256	536	0	0	0
-dmel_chr4	1128582	1128519	DmelChr4-B-G7-Map3_classII-TIR-incomp	5	68	0	0	0
-dmel_chr4	1182436	1182520	DmelChr4-B-R19-Map4_NoCat	3	87	0	0	0
-dmel_chr4	1182527	1182674	DmelChr4-B-R19-Map4_NoCat	98	245	0	0	0
-dmel_chr4	1182821	1183136	DmelChr4-B-R19-Map4_NoCat	399	714	0	0	0
-dmel_chr4	1186215	1186159		819	875	0	0	0
-dmel_chr4	1188022	1188379	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	3	1458	0	0	0
-dmel_chr4	1188400	1188666		385	1590	0	0	0
-dmel_chr4	1188680	1189149		626	1231	0	0	0
-dmel_chr4	1195007	1194937	DmelChr4-B-G11-Map20_classII-TIR-incomp	466	599	0	0	0
-dmel_chr4	1195371	1195245	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	55	1281	0	0	0
-dmel_chr4	1196828	1197668	DmelChr4-B-G11-Map20_classII-TIR-incomp	8	1760	0	0	0
-dmel_chr4	1197675	1197794	DmelChr4-B-G11-Map20_classII-TIR-incomp	876	1880	0	0	0
-dmel_chr4	1214538	1214594	DmelChr4-B-G11-Map20_classII-TIR-incomp	635	1583	0	0	0
-dmel_chr4	1214692	1214783	DmelChr4-B-G11-Map20_classII-TIR-incomp	780	1763	0	0	0
-dmel_chr4	1227774	1227410		741	1234	0	0	0
-dmel_chr4	1227977	1227851	DmelChr4-B-G11-Map20_classII-TIR-incomp	518	764	0	0	0
-dmel_chr4	1228208	1227998	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	303	1585	0	0	0
-dmel_chr4	1228509	1228215	DmelChr4-B-G11-Map20_classII-TIR-incomp	3	1395	0	0	0
-dmel_chr4	1236657	1236104	DmelChr4-B-R4-Map5_NoCat	506	1881	0	0	0
-dmel_chr4	1237196	1237140	DmelChr4-B-G11-Map20_classII-TIR-incomp	339	1244	0	0	0
-dmel_chr4	1237567	1237245	DmelChr4-B-R9-Map3_NoCat	4	1175	0	0	0
-dmel_chr4	1244238	1243797	DmelChr4-B-R9-Map3_NoCat	572	1877	0	0	0
-dmel_chr4	1249208	1249138	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	838	908	0	0	0
-dmel_chr4	1249488	1249432	DmelChr4-B-G11-Map20_classII-TIR-incomp	258	1414	0	0	0
-dmel_chr4	1249712	1249642		21	1191	0	0	0
-dmel_chr4	1255466	1255256	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	790	1135	0	0	0
-dmel_chr4	1255606	1255494	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	638	884	0	0	0
-dmel_chr4	1255739	1255641	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	619	717	0	0	0
-dmel_chr4	1255823	1255746	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	448	595	0	0	0
-dmel_chr4	1256271	1255893	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	3	1479	0	0	0
-dmel_chr4	1260598	1260717	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	205	1422	0	0	0
-dmel_chr4	1260766	1260878	DmelChr4-B-R4-Map5_NoCat	385	1576	0	0	0
-dmel_chr4	1261235	1261298		817	880	0	0	0
-dmel_chr4	1261312	1262481	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	2	1590	0	0	0
-dmel_chr4	1262572	1262649	DmelChr4-B-G11-Map20_classII-TIR-incomp	7	912	0	0	0
-dmel_chr4	1262663	1263286	DmelChr4-B-R4-Map5_NoCat	21	1572	0	0	0
-dmel_chr4	1263335	1263643	DmelChr4-B-G11-Map20_classII-TIR-incomp	743	1880	0	0	0
-dmel_chr4	1271434	1271497	DmelChr4-B-R9-Map3_NoCat	411	474	0	0	0
-dmel_chr4	1271637	1271735	DmelChr4-B-G11-Map20_classII-TIR-incomp	588	1578	0	0	0
-dmel_chr4	1271784	1271952	DmelChr4-B-R4-Map5_NoCat	737	1797	0	0	0
-dmel_chr4	1271980	1272099	DmelChr4-B-R9-Map3_NoCat	939	1094	0	0	0
-dmel_chr4	1278133	1278679	DmelChr4-B-P0.0-Map3_classII-TIR-incomp	3	1584	0	0	0
-dmel_chr4	1278700	1279246	DmelChr4-B-G11-Map20_classII-TIR-incomp	4	1113	0	0	0
-dmel_chr4	1279253	1280345	DmelChr4-B-G11-Map20_classII-TIR-incomp	199	1938	0	0	0
+dmel_chr4	9607	9326	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:1109521..1109200	25	306	0	235	0.833333
+dmel_chr4	10073	9912	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1109974..1109793	12	173	0	113	0.7
+dmel_chr4	10375	10125	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:1110266..1110007	2	252	0	203	0.8125
+dmel_chr4	13591	13725	DmelChr4-B-G9-Map3_NoCat dmel_chr4:74236..74607	8	1880	0	474	0.372912
+dmel_chr4	18534	18016	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1118446..1117897	23	541	0	427	0.823529
+dmel_chr4	19427	19148	DmelChr4-B-R4-Map5_NoCat dmel_chr4:1119332..1119033	16	295	0	233	0.833333
+dmel_chr4	25601	26974	DmelChr4-B-R2-Map6_NoCat dmel_chr4:41039..45754	2	4716	0	4822	0.829005
+dmel_chr4	26975	27779	DmelChr4-B-R2-Map6_NoCat dmel_chr4:31692..34271	5	2568	0	2611	0.813996
+dmel_chr4	27823	28614	DmelChr4-B-R2-Map6_NoCat dmel_chr4:27814..28618	9	800	0	2694	0.846154
+dmel_chr4	28618	34275	DmelChr4-B-R2-Map6_NoCat dmel_chr4:48976..52062	4	4702	0	17497	0.845997
+dmel_chr4	38121	37795	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1138012..1137671	2	328	0	295	0.904762
+dmel_chr4	40715	41004	DmelChr4-B-R2-Map6_NoCat dmel_chr4:46868..48941	15	2344	0	882	0.78086
+dmel_chr4	41048	45756	DmelChr4-B-R2-Map6_NoCat dmel_chr4:27814..28618	2	4702	0	15456	0.811248
+dmel_chr4	45777	46092	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:476409..476507	6	1084	0	1527	0.516103
+dmel_chr4	46338	46548	DmelChr4-B-G9-Map3_NoCat dmel_chr4:46334..46554	4	1648	0	1213	0.525083
+dmel_chr4	46564	46858	DmelChr4-B-G9-Map3_NoCat dmel_chr4:454749..454862	4	1880	0	1530	0.565398
+dmel_chr4	46868	48941	DmelChr4-B-R2-Map6_NoCat dmel_chr4:25601..26974	5	2568	0	6967	0.816768
+dmel_chr4	48985	52062	DmelChr4-B-R2-Map6_NoCat dmel_chr4:27814..28618	2	3086	0	10150	0.824844
+dmel_chr4	52085	54429	DmelChr4-B-R2-Map6_NoCat dmel_chr4:59884..60557	4	4702	0	7820	0.829132
+dmel_chr4	54467	55019	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	9	552	0	3192	0.476033
+dmel_chr4	55585	55913	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:55572..55913	3	1001	0	2317	0.690787
+dmel_chr4	55957	59845	DmelChr4-B-R2-Map6_NoCat dmel_chr4:27814..28618	2	3902	0	12070	0.817712
+dmel_chr4	59878	60553	DmelChr4-B-R2-Map6_NoCat dmel_chr4:41039..45754	10	4594	0	2161	0.850198
+dmel_chr4	60860	60612	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1160762..1160492	13	261	0	186	0.75
+dmel_chr4	61384	60901	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1161289..1160778	16	499	0	408	0.84375
+dmel_chr4	61897	61438	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1161789..1161313	3	462	0	352	0.766667
+dmel_chr4	62594	61988	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1162099..1161877	2	520	0	2025	0.589968
+dmel_chr4	67868	67725	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1167707..1167612	2	1704	0	410	0.62789
+dmel_chr4	67877	68051	DmelChr4-B-G9-Map3_NoCat dmel_chr4:46560..46843	15	906	0	334	0.674495
+dmel_chr4	74620	73214	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1173526..1173095	2	1770	0	4921	0.662541
+dmel_chr4	83880	83722	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1045603..1045764	67	194	0	94	0.459236
+dmel_chr4	88493	88133	DmelChr4-B-G9-Map3_NoCat dmel_chr4:475015..474254	2	1868	0	2294	0.534656
+dmel_chr4	88778	88505	DmelChr4-B-G9-Map3_NoCat dmel_chr4:62594..61988	2	1581	0	1301	0.738687
+dmel_chr4	89263	88785	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1262884..1263278	3	1334	0	1661	0.399328
+dmel_chr4	91888	91762	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:310712..310043	28	315	0	108	0.539286
+dmel_chr4	97324	96938	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:878746..879098	2	999	0	3019	0.581855
+dmel_chr4	97783	97457	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	2	539	0	2688	0.563134
+dmel_chr4	127901	127537	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1227803..1227415	13	377	0	319	0.875
+dmel_chr4	128306	128109	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1228209..1227998	14	211	0	167	0.846154
+dmel_chr4	128586	128337	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1228492..1228220	17	266	0	218	0.875
+dmel_chr4	136762	136224	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1236661..1236114	10	548	0	431	0.8
+dmel_chr4	137657	137352	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1237551..1237234	5	310	0	260	0.85
+dmel_chr4	141775	141648	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1244244..1243808	7	134	0	96	0.75
+dmel_chr4	144348	143924	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1244244..1243808	7	431	0	379	0.892857
+dmel_chr4	145974	146450	DmelChr4-B-R9-Map3_NoCat dmel_chr4:145946..146450	3	504	0	540	0.483519
+dmel_chr4	155543	155369	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1255448..1255239	16	190	0	143	0.818182
+dmel_chr4	156348	156024	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1256254..1255894	17	341	0	263	0.809524
+dmel_chr4	161551	161415	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:73579..73810	4	1037	0	689	0.374529
+dmel_chr4	162044	161557	DmelChr4-B-G9-Map3_NoCat dmel_chr4:475015..474254	2	1758	0	3042	0.660324
+dmel_chr4	162236	162073	DmelChr4-B-G9-Map3_NoCat dmel_chr4:73981..74087	7	1383	0	309	0.580084
+dmel_chr4	162482	162279	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	2	1060	0	747	0.502502
+dmel_chr4	163210	162780	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1261311..1261447	2	906	0	3245	0.728716
+dmel_chr4	163386	163211	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:452305..452980	9	560	0	879	0.668511
+dmel_chr4	163765	163422	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:980677..980787	3	378	0	1918	0.661172
+dmel_chr4	169904	169759	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1270128..1269800	13	158	0	113	0.777778
+dmel_chr4	170226	169923	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1270128..1269800	13	316	0	258	0.85
+dmel_chr4	170533	170240	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1270128..1269800	4	321	0	262	0.809834
+dmel_chr4	170994	170606	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1270899..1270469	16	404	0	326	0.84
+dmel_chr4	172076	171877	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:980677..980787	10	378	0	851	0.509953
+dmel_chr4	178783	178261	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:387825..388146	2	1880	0	4012	0.692887
+dmel_chr4	179093	178814	DmelChr4-B-G9-Map3_NoCat dmel_chr4:314934..315972	15	1391	0	935	0.701027
+dmel_chr4	179634	179109	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:954856..955864	3	1007	0	3086	0.680754
+dmel_chr4	180121	179637	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1188400..1188664	3	585	0	3233	0.499745
+dmel_chr4	180432	180189	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1262673..1262874	6	1084	0	1263	0.465268
+dmel_chr4	191858	191430	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1010011..1009572	4	432	0	367	0.857143
+dmel_chr4	192490	191987	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1010641..1010124	2	505	0	412	0.818182
+dmel_chr4	192654	192519	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:1010808..1010663	5	140	0	90	0.666667
+dmel_chr4	202680	202530	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:615430..615091	10	160	0	75	0.5
+dmel_chr4	202962	203219	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:981516..981279	11	1259	0	664	0.552215
+dmel_chr4	203417	203602	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1262884..1263278	4	1569	0	967	0.595369
+dmel_chr4	203603	203975	DmelChr4-B-G9-Map3_NoCat dmel_chr4:46334..46554	4	1753	0	2267	0.545354
+dmel_chr4	212017	211762	DmelChr4-B-R9-Map3_NoCat dmel_chr4:1030182..1029910	16	271	0	210	0.823529
+dmel_chr4	222375	222506	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:222373..222508	2	1091	0	601	0.393837
+dmel_chr4	227830	228327	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:227813..228328	3	514	0	3211	0.63998
+dmel_chr4	228331	228963	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	2	999	0	4189	0.608738
+dmel_chr4	228967	229109	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:632636..632782	4	1037	0	583	0.517354
+dmel_chr4	242159	242307	DmelChr4-B-R19-Map4_NoCat dmel_chr4:989992..990160	15	226	0	280	0.578652
+dmel_chr4	242329	242730	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:367476..367141	22	422	0	668	0.602616
+dmel_chr4	245446	245313	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1063612..1063451	17	150	0	117	0.875
+dmel_chr4	248491	248204	DmelChr4-B-R9-Map3_NoCat dmel_chr4:804727..804921	32	491	0	371	0.425136
+dmel_chr4	251083	250017	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1069241..1068155	9	1075	0	886	0.830986
+dmel_chr4	254435	254017	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1072587..1072148	3	421	0	356	0.851852
+dmel_chr4	255046	254551	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1073197..1072695	2	497	0	420	0.848485
+dmel_chr4	268481	268605	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:809211..809550	15	1037	0	279	0.533409
+dmel_chr4	281912	281755	DmelChr4-B-G1-Map3_NoCat dmel_chr4:900095..899872	14	171	0	142	0.9
+dmel_chr4	287527	286494	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:905720..904650	24	1057	0	991	0.877468
+dmel_chr4	290913	290451	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:909117..908610	35	497	0	416	0.9
+dmel_chr4	291489	290976	DmelChr4-B-G9-Map3_NoCat dmel_chr4:909678..909139	20	533	0	408	0.794118
+dmel_chr4	293653	291879	DmelChr4-B-R12-Map3_NoCat dmel_chr4:911825..910047	3	1777	0	1534	0.864407
+dmel_chr4	294183	293995	DmelChr4-B-R19-Map4_NoCat dmel_chr4:912355..912158	3	191	0	157	0.833333
+dmel_chr4	294659	294217	DmelChr4-B-R19-Map4_NoCat dmel_chr4:912830..912387	2	444	0	351	0.793103
+dmel_chr4	297665	297387	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:915844..915556	10	288	0	217	0.777778
+dmel_chr4	298262	297925	DmelChr4-B-G9-Map3_NoCat dmel_chr4:916437..916083	6	343	0	276	0.818182
+dmel_chr4	298426	298295	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:916605..916452	10	141	0	115	0.875
+dmel_chr4	300679	300227	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:918850..918387	2	454	0	362	0.8
+dmel_chr4	300855	300726	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:919034..918893	10	139	0	97	0.75
+dmel_chr4	301124	300954	DmelChr4-B-R4-Map5_NoCat dmel_chr4:919296..919115	3	173	0	124	0.727273
+dmel_chr4	302226	302066	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:920412..920224	17	177	0	144	0.9
+dmel_chr4	303011	302820	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:921182..920981	2	193	0	176	0.916667
+dmel_chr4	303040	303365	DmelChr4-B-R12-Map3_NoCat dmel_chr4:307520..309743	11	2211	0	357	0.561042
+dmel_chr4	307479	309731	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:366700..366497	7	2211	0	1786	0.69956
+dmel_chr4	310712	310031	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:952906..953082	2	1770	0	3754	0.616206
+dmel_chr4	311020	310725	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	11	1115	0	1186	0.47872
+dmel_chr4	315972	314926	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:933365..933086	2	1770	0	5955	0.582367
+dmel_chr4	316936	316810	DmelChr4-B-R4-Map5_NoCat dmel_chr4:169908..169759	23	149	0	47	0.375
+dmel_chr4	321366	320890	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:939537..939060	2	478	0	384	0.806452
+dmel_chr4	321794	321524	DmelChr4-B-R4-Map5_NoCat dmel_chr4:939979..939693	16	286	0	195	0.722222
+dmel_chr4	322924	323425	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	2	501	0	3305	0.501051
+dmel_chr4	323564	324015	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:878577..878738	2	999	0	3430	0.531332
+dmel_chr4	327391	326675	DmelChr4-B-R4-Map5_NoCat dmel_chr4:945066..944837	4	530	0	3653	0.66131
+dmel_chr4	327448	328295	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	2	999	0	4432	0.614552
+dmel_chr4	330086	328320	DmelChr4-B-R12-Map3_NoCat dmel_chr4:948257..946480	2	1768	0	1510	0.854701
+dmel_chr4	330264	330107	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:948436..948267	3	160	0	126	0.8
+dmel_chr4	330643	330462	DmelChr4-B-R19-Map4_NoCat dmel_chr4:948817..948624	5	186	0	151	0.833333
+dmel_chr4	331101	330681	DmelChr4-B-R19-Map4_NoCat dmel_chr4:949288..948833	18	438	0	330	0.785714
+dmel_chr4	334139	333833	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:327447..328295	5	906	0	2086	0.61332
+dmel_chr4	334731	334362	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1188400..1188664	9	585	0	2680	0.649199
+dmel_chr4	334911	334736	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:928213..928714	10	245	0	983	0.663409
+dmel_chr4	337157	336670	DmelChr4-B-G9-Map3_NoCat dmel_chr4:475015..474254	2	1758	0	3042	0.660324
+dmel_chr4	337349	337186	DmelChr4-B-G9-Map3_NoCat dmel_chr4:73981..74087	7	1383	0	326	0.587036
+dmel_chr4	337594	337391	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	2	1060	0	747	0.502502
+dmel_chr4	338507	338715	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:632636..632782	15	1069	0	670	0.464089
+dmel_chr4	339270	339461	DmelChr4-B-G9-Map3_NoCat dmel_chr4:454749..454862	4	1784	0	1002	0.468174
+dmel_chr4	351678	351390	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:969850..969543	3	291	0	243	0.842105
+dmel_chr4	353266	353118	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1045603..1045764	51	184	0	103	0.547491
+dmel_chr4	354806	354605	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:972992..972758	17	218	0	155	0.769231
+dmel_chr4	357829	357337	DmelChr4-B-G9-Map3_NoCat dmel_chr4:633392..633659	2	1770	0	2621	0.630805
+dmel_chr4	357962	357833	DmelChr4-B-G9-Map3_NoCat dmel_chr4:73854..73953	10	1314	0	477	0.809867
+dmel_chr4	358272	357972	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	4	1111	0	1041	0.507275
+dmel_chr4	363357	363114	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:981516..981279	2	1084	0	1080	0.504588
+dmel_chr4	366728	366482	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:984899..984652	2	248	0	200	0.8125
+dmel_chr4	367108	366935	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:985295..985095	18	191	0	126	0.727273
+dmel_chr4	367476	367141	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:985649..985297	4	339	0	259	0.772727
+dmel_chr4	387825	388157	DmelChr4-B-G9-Map3_NoCat dmel_chr4:62594..61988	9	1866	0	1985	0.606485
+dmel_chr4	391344	391030	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:228331..228963	4	1001	0	1997	0.474808
+dmel_chr4	394527	394651	DmelChr4-B-G9-Map3_NoCat dmel_chr4:46334..46554	11	1587	0	387	0.289262
+dmel_chr4	402150	401435	DmelChr4-B-G9-Map3_NoCat dmel_chr4:820354..819619	15	730	0	594	0.829787
+dmel_chr4	405145	404121	DmelChr4-B-G9-Map3_NoCat dmel_chr4:823338..822297	4	1028	0	813	0.794118
+dmel_chr4	415785	415647	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:833976..833837	2	140	0	92	0.666667
+dmel_chr4	416596	415834	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:834820..834016	35	797	0	640	0.84
+dmel_chr4	416957	416633	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:835151..834821	5	329	0	263	0.809524
+dmel_chr4	423617	423381	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:841812..841566	6	242	0	189	0.8
+dmel_chr4	424091	423683	DmelChr4-B-G9-Map3_NoCat dmel_chr4:842282..841858	2	410	0	348	0.851852
+dmel_chr4	424428	424252	DmelChr4-B-G9-Map3_NoCat dmel_chr4:842633..842442	16	192	0	144	0.818182
+dmel_chr4	438627	437881	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:856825..856062	9	755	0	670	0.897959
+dmel_chr4	440274	440426	DmelChr4-B-R4-Map5_NoCat dmel_chr4:441636..441311	11	304	0	183	0.631757
+dmel_chr4	441288	440565	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:859493..858753	16	739	0	618	0.854167
+dmel_chr4	441636	441311	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:859841..859494	16	341	0	294	0.904762
+dmel_chr4	442379	442007	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:860585..860197	17	389	0	326	0.875
+dmel_chr4	443002	442563	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:861207..860737	16	455	0	348	0.793103
+dmel_chr4	445185	445059	DmelChr4-B-G1-Map3_NoCat dmel_chr4:863378..863243	4	130	0	111	0.875
+dmel_chr4	452311	452980	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:452305..452980	6	675	0	3748	0.596833
+dmel_chr4	452981	453433	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:477578..478091	2	999	0	3168	0.611158
+dmel_chr4	460089	459820	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:387825..388146	14	1769	0	1450	0.525115
+dmel_chr4	460552	460117	DmelChr4-B-G9-Map3_NoCat dmel_chr4:74236..74607	2	1665	0	1981	0.598781
+dmel_chr4	460904	460565	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	8	1149	0	1249	0.511554
+dmel_chr4	465771	465613	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:883963..883790	3	161	0	127	0.8
+dmel_chr4	466509	466362	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:884703..884547	5	152	0	98	0.666667
+dmel_chr4	474216	473578	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:892409..891762	4	642	0	562	0.880952
+dmel_chr4	475015	474254	DmelChr4-B-R4-Map5_NoCat dmel_chr4:892728..892443	3	675	0	4568	0.689429
+dmel_chr4	477024	477569	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	3	585	0	3812	0.530079
+dmel_chr4	477586	478089	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:452305..452980	2	999	0	3720	0.626433
+dmel_chr4	478842	478478	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:897047..896657	16	380	0	288	0.791667
+dmel_chr4	479498	479010	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:897691..897186	4	492	0	427	0.875
+dmel_chr4	481658	481528	DmelChr4-B-G1-Map3_NoCat dmel_chr4:899851..899717	4	134	0	114	0.875
+dmel_chr4	539357	539154	DmelChr4-B-R9-Map3_NoCat dmel_chr4:757571..757364	5	208	0	188	0.923077
+dmel_chr4	560119	559912	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:778331..778119	3	210	0	176	0.846154
+dmel_chr4	560692	560521	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:778919..778705	18	189	0	125	0.727273
+dmel_chr4	575563	575409	DmelChr4-B-R9-Map3_NoCat dmel_chr4:145946..146450	75	229	0	124	0.8
+dmel_chr4	580122	579360	DmelChr4-B-G9-Map3_NoCat dmel_chr4:798347..797569	16	778	0	595	0.78
+dmel_chr4	580453	580176	DmelChr4-B-R4-Map5_NoCat dmel_chr4:798664..798373	2	279	0	200	0.722222
+dmel_chr4	596325	596158	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:614564..614385	10	177	0	106	0.636364
+dmel_chr4	596744	596615	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:614987..614836	14	143	0	97	0.75
+dmel_chr4	597169	596874	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:615430..615091	32	327	0	233	0.789474
+dmel_chr4	614561	614394	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:228331..228963	3	632	0	664	0.540966
+dmel_chr4	614816	614692	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:327447..328295	5	782	0	757	0.720801
+dmel_chr4	614987	614836	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:228331..228963	8	660	0	449	0.718257
+dmel_chr4	615430	615161	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:54467..55019	3	339	0	1667	0.548185
+dmel_chr4	632636	632800	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:809211..809550	6	1037	0	577	0.43321
+dmel_chr4	632806	633061	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:809211..809550	8	1275	0	590	0.627537
+dmel_chr4	633062	633219	DmelChr4-B-G9-Map3_NoCat dmel_chr4:314934..315972	8	1388	0	424	0.646404
+dmel_chr4	633392	633676	DmelChr4-B-G9-Map3_NoCat dmel_chr4:952466..952897	2	1880	0	1795	0.543793
+dmel_chr4	702425	702659	DmelChr4-B-R9-Map3_NoCat dmel_chr4:145946..146450	17	380	0	205	0.450774
+dmel_chr4	721087	720915	DmelChr4-B-R9-Map3_NoCat dmel_chr4:539352..539156	16	188	0	141	0.818182
+dmel_chr4	778067	777926	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:596325..596158	9	150	0	110	0.777778
+dmel_chr4	778907	778635	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:597162..596874	6	278	0	242	0.888889
+dmel_chr4	798342	797578	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:416615..415834	4	768	0	600	0.784314
+dmel_chr4	798668	798368	DmelChr4-B-R4-Map5_NoCat dmel_chr4:416953..416633	16	316	0	240	0.8
+dmel_chr4	804727	804921	DmelChr4-B-R9-Map3_NoCat dmel_chr4:145946..146450	33	505	0	344	0.587041
+dmel_chr4	805302	805093	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:423584..423358	13	222	0	150	0.714286
+dmel_chr4	805814	805414	DmelChr4-B-G9-Map3_NoCat dmel_chr4:424091..423683	8	408	0	323	0.807692
+dmel_chr4	806157	806004	DmelChr4-B-R4-Map5_NoCat dmel_chr4:424428..424259	2	155	0	123	0.8
+dmel_chr4	809211	809550	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	4	1191	0	1449	0.470285
+dmel_chr4	820354	819609	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:438627..437864	4	749	0	608	0.816327
+dmel_chr4	823007	822329	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:441284..440585	8	686	0	543	0.8
+dmel_chr4	823359	823048	DmelChr4-B-R4-Map5_NoCat dmel_chr4:441636..441311	8	319	0	296	0.678154
+dmel_chr4	824906	825322	DmelChr4-B-R19-Map4_NoCat dmel_chr4:989992..990160	6	431	0	1018	0.795032
+dmel_chr4	825353	825541	DmelChr4-B-G9-Map3_NoCat dmel_chr4:367108..366937	4	192	0	252	0.726782
+dmel_chr4	833976	833839	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:954856..955864	24	1007	0	815	0.380967
+dmel_chr4	834820	834016	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	3	1943	0	4143	0.615762
+dmel_chr4	835151	834821	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	6	1084	0	1596	0.465716
+dmel_chr4	835674	835529	DmelChr4-B-R4-Map5_NoCat dmel_chr4:441636..441311	23	324	0	163	0.625763
+dmel_chr4	836597	836468	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:980677..980787	2	369	0	933	0.641952
+dmel_chr4	841816	841553	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:460089..459818	4	267	0	201	0.764706
+dmel_chr4	842254	841858	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:460552..460117	29	425	0	320	0.807692
+dmel_chr4	842633	842452	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:460904..460711	2	183	0	136	0.75
+dmel_chr4	855945	855320	DmelChr4-B-G9-Map3_NoCat dmel_chr4:474230..473578	16	641	0	519	0.829268
+dmel_chr4	856823	855995	DmelChr4-B-G9-Map3_NoCat dmel_chr4:475015..474254	2	1880	0	4442	0.612141
+dmel_chr4	859493	858755	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:387825..388146	2	1880	0	4462	0.725146
+dmel_chr4	859841	859494	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:202966..203219	4	1084	0	1644	0.473686
+dmel_chr4	860570	860225	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:478845..478478	6	351	0	255	0.73913
+dmel_chr4	861216	860748	DmelChr4-B-G9-Map3_NoCat dmel_chr4:479498..479010	13	481	0	393	0.83871
+dmel_chr4	877989	878574	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:227813..228328	4	585	0	3245	0.614184
+dmel_chr4	878577	878738	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:228331..228963	3	732	0	765	0.501021
+dmel_chr4	878746	879098	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	7	848	0	2056	0.53266
+dmel_chr4	879858	879982	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:879832..879982	26	150	0	93	0.75
+dmel_chr4	882390	881966	DmelChr4-B-R4-Map5_NoCat dmel_chr4:300681..300242	2	426	0	379	0.892857
+dmel_chr4	882832	882649	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:301124..300936	3	186	0	153	0.833333
+dmel_chr4	883924	883790	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:302223..302054	10	144	0	105	0.777778
+dmel_chr4	884719	884547	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:303011..302820	3	175	0	125	0.727273
+dmel_chr4	892417	891762	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:310712..310043	6	661	0	564	0.860465
+dmel_chr4	892704	892439	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:311020..310721	27	292	0	203	0.764706
+dmel_chr4	897047	896645	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1261311..1261447	2	902	0	2838	0.495307
+dmel_chr4	897670	897186	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1188400..1188664	2	524	0	3323	0.555782
+dmel_chr4	899833	899698	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1045807..1046039	12	154	0	175	0.688876
+dmel_chr4	900076	899872	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1045603..1045764	19	192	0	189	0.567531
+dmel_chr4	903073	902625	DmelChr4-B-G9-Map3_NoCat dmel_chr4:321366..320908	4	452	0	387	0.862069
+dmel_chr4	903503	903277	DmelChr4-B-R4-Map5_NoCat dmel_chr4:321794..321549	2	228	0	151	0.666667
+dmel_chr4	905720	904639	DmelChr4-B-R4-Map5_NoCat dmel_chr4:327391..326675	2	1770	0	5868	0.462781
+dmel_chr4	907687	907557	DmelChr4-B-G9-Map3_NoCat dmel_chr4:325978..325836	2	132	0	114	0.875
+dmel_chr4	909117	908396	DmelChr4-B-R4-Map5_NoCat dmel_chr4:327391..326675	5	1778	0	3587	0.64484
+dmel_chr4	909678	909129	DmelChr4-B-G9-Map3_NoCat dmel_chr4:314934..315972	2	1423	0	2206	0.405064
+dmel_chr4	911811	910038	DmelChr4-B-R12-Map3_NoCat dmel_chr4:330108..328316	8	1781	0	1398	0.788136
+dmel_chr4	912362	912173	DmelChr4-B-R19-Map4_NoCat dmel_chr4:330653..330462	2	191	0	174	0.916667
+dmel_chr4	912809	912398	DmelChr4-B-R19-Map4_NoCat dmel_chr4:331101..330681	3	414	0	350	0.851852
+dmel_chr4	915844	915556	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:334139..333833	6	294	0	228	0.789474
+dmel_chr4	916438	916088	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:334730..334364	3	353	0	335	0.814636
+dmel_chr4	916606	916456	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:334911..334740	16	166	0	120	0.8
+dmel_chr4	918850	918402	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:337156..336683	17	465	0	387	0.862069
+dmel_chr4	919038	918898	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:337349..337183	22	162	0	125	0.888889
+dmel_chr4	919293	919115	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:337594..337391	12	190	0	146	0.818182
+dmel_chr4	920412	920224	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1261311..1261447	7	906	0	980	0.409814
+dmel_chr4	921182	920980	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:980677..980787	24	369	0	995	0.430134
+dmel_chr4	928223	928709	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	9	580	0	3173	0.552122
+dmel_chr4	928720	928878	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:228331..228963	3	732	0	841	0.508199
+dmel_chr4	928886	929184	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	2	902	0	2057	0.655092
+dmel_chr4	933387	933102	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:351679..351381	3	288	0	255	0.894737
+dmel_chr4	934968	934833	DmelChr4-B-G1-Map3_NoCat dmel_chr4:353266..353117	9	144	0	105	0.777778
+dmel_chr4	936510	936298	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:354812..354586	13	225	0	167	0.785714
+dmel_chr4	939537	939061	DmelChr4-B-G9-Map3_NoCat dmel_chr4:357829..357337	3	479	0	415	0.870968
+dmel_chr4	939978	939693	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:358272..357972	5	290	0	225	0.789474
+dmel_chr4	945066	944837	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:363357..363116	2	231	0	168	0.733333
+dmel_chr4	946443	946041	DmelChr4-B-R12-Map3_NoCat dmel_chr4:303044..303377	21	2211	0	367	0.522682
+dmel_chr4	948432	946480	DmelChr4-B-R12-Map3_NoCat dmel_chr4:307520..309743	4	1777	0	1525	0.741632
+dmel_chr4	948810	948624	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:825349..825541	7	389	0	309	0.661625
+dmel_chr4	949272	948842	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:990223..990449	4	431	0	939	0.682659
+dmel_chr4	952015	952305	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:981516..981279	6	1111	0	924	0.426704
+dmel_chr4	952451	952889	DmelChr4-B-G9-Map3_NoCat dmel_chr4:475015..474254	2	1740	0	2451	0.634462
+dmel_chr4	952904	953097	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:1278129..1280072	6	1880	0	1051	0.665833
+dmel_chr4	954856	955871	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:322924..323431	2	999	0	5438	0.658952
+dmel_chr4	969850	969541	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:227813..228328	5	384	0	1984	0.679507
+dmel_chr4	970738	970996	DmelChr4-B-R9-Map3_NoCat dmel_chr4:145946..146450	15	487	0	581	0.541454
+dmel_chr4	973080	972741	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:391372..391030	3	342	0	309	0.909091
+dmel_chr4	975504	975917	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	9	585	0	2720	0.61354
+dmel_chr4	976138	976491	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:878746..879098	7	906	0	2817	0.566079
+dmel_chr4	981523	981279	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1236661..1236114	3	895	0	1433	0.584215
+dmel_chr4	984899	984652	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:1280079..1280334	4	861	0	1645	0.747552
+dmel_chr4	985281	985095	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:452305..452980	2	580	0	1115	0.648218
+dmel_chr4	985649	985297	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:954856..955864	3	422	0	2070	0.509796
+dmel_chr4	989996	990166	DmelChr4-B-R19-Map4_NoCat dmel_chr4:989992..990160	4	171	0	214	0.7
+dmel_chr4	990223	990437	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:367476..367141	22	431	0	519	0.82671
+dmel_chr4	993658	993466	DmelChr4-B-R9-Map3_NoCat dmel_chr4:212006..211762	39	231	0	176	0.916667
+dmel_chr4	1004196	1004060	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1261311..1261447	2	902	0	604	0.380482
+dmel_chr4	1010011	1009527	DmelChr4-B-R4-Map5_NoCat dmel_chr4:327391..326675	3	1753	0	3126	0.662512
+dmel_chr4	1010659	1010124	DmelChr4-B-G9-Map3_NoCat dmel_chr4:314934..315972	2	1391	0	2366	0.508178
+dmel_chr4	1010804	1010660	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:976138..976490	7	315	0	336	0.426047
+dmel_chr4	1028931	1028776	DmelChr4-B-R4-Map5_NoCat dmel_chr4:441636..441311	28	305	0	91	0.396943
+dmel_chr4	1030180	1029910	DmelChr4-B-R9-Map3_NoCat dmel_chr4:248491..248205	2	272	0	225	0.833333
+dmel_chr4	1045604	1045764	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1065692..1065886	18	194	0	192	0.705967
+dmel_chr4	1045809	1046035	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1045807..1046039	2	236	0	286	0.704239
+dmel_chr4	1050300	1050172	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1261311..1261447	7	288	0	272	0.403906
+dmel_chr4	1063615	1063451	DmelChr4-B-G1-Map3_NoCat dmel_chr4:281936..281757	12	176	0	135	0.818182
+dmel_chr4	1065708	1065886	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1065692..1065886	16	194	0	183	0.725643
+dmel_chr4	1065951	1066191	DmelChr4-B-G1-Map3_NoCat dmel_chr4:1065935..1066181	16	240	0	293	0.69972
+dmel_chr4	1069241	1068192	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:287557..286492	7	1056	0	885	0.842857
+dmel_chr4	1072592	1072185	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:290913..290477	12	419	0	347	0.851852
+dmel_chr4	1073151	1072695	DmelChr4-B-G9-Map3_NoCat dmel_chr4:291479..290976	19	475	0	380	0.833333
+dmel_chr4	1079329	1079087	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:297640..297391	2	244	0	182	0.75
+dmel_chr4	1079907	1079604	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:298247..297914	31	334	0	228	0.75
+dmel_chr4	1109565	1109215	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:127898..127537	4	354	0	259	0.73913
+dmel_chr4	1109975	1109793	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:128306..128119	2	184	0	137	0.75
+dmel_chr4	1110266	1110007	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:128600..128337	5	264	0	214	0.823529
+dmel_chr4	1118430	1117897	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:136762..136224	3	536	0	442	0.828571
+dmel_chr4	1119326	1119029	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:137672..137354	17	314	0	250	0.842105
+dmel_chr4	1125993	1125635	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:144349..143954	27	385	0	327	0.913043
+dmel_chr4	1137197	1137053	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:155543..155369	17	161	0	128	0.888889
+dmel_chr4	1138012	1137701	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:156348..156023	7	318	0	296	0.95
+dmel_chr4	1143710	1143250	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:162043..161570	4	464	0	338	0.733333
+dmel_chr4	1143905	1143745	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:162236..162066	2	162	0	128	0.8
+dmel_chr4	1144150	1143955	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:162482..162279	3	198	0	150	0.769231
+dmel_chr4	1144877	1144456	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:163210..162774	4	425	0	346	0.821429
+dmel_chr4	1145040	1144881	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:163386..163211	17	176	0	144	0.9
+dmel_chr4	1145418	1145108	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:163765..163422	18	328	0	279	0.9
+dmel_chr4	1147286	1147100	DmelChr4-B-G1-Map3_NoCat dmel_chr4:165637..165430	22	208	0	140	0.75
+dmel_chr4	1151574	1151434	DmelChr4-B-R4-Map5_NoCat dmel_chr4:169908..169759	5	145	0	109	0.777778
+dmel_chr4	1151887	1151597	DmelChr4-B-R4-Map5_NoCat dmel_chr4:170230..169915	14	304	0	245	0.842105
+dmel_chr4	1152191	1151920	DmelChr4-B-R4-Map5_NoCat dmel_chr4:170522..170240	2	273	0	241	0.888889
+dmel_chr4	1152638	1152223	DmelChr4-B-R4-Map5_NoCat dmel_chr4:170992..170552	25	440	0	292	0.703704
+dmel_chr4	1153731	1153550	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:172076..171877	16	197	0	151	0.833333
+dmel_chr4	1160427	1159946	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:178779..178259	23	504	0	376	0.78125
+dmel_chr4	1160744	1160492	DmelChr4-B-G9-Map3_NoCat dmel_chr4:179093..178814	20	272	0	221	0.875
+dmel_chr4	1161301	1160779	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:179632..179100	2	524	0	415	0.794118
+dmel_chr4	1161789	1161311	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:180121..179633	3	481	0	432	0.903226
+dmel_chr4	1162099	1161878	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:180432..180189	4	225	0	206	0.928571
+dmel_chr4	1173527	1173107	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:191858..191430	2	422	0	360	0.857143
+dmel_chr4	1174159	1173647	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:192507..191976	19	531	0	422	0.823529
+dmel_chr4	1182821	1183135	DmelChr4-B-R9-Map3_NoCat dmel_chr4:145946..146450	15	505	0	576	0.541608
+dmel_chr4	1188039	1188383	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	2	399	0	1898	0.501575
+dmel_chr4	1188388	1188663	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:227813..228328	4	623	0	1077	0.504954
+dmel_chr4	1188672	1189140	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:878577..878738	5	906	0	2747	0.487705
+dmel_chr4	1196840	1197219	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:809211..809550	6	1237	0	1733	0.595779
+dmel_chr4	1197351	1197673	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1262884..1263278	3	1770	0	2529	0.441074
+dmel_chr4	1227803	1227415	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:878746..879098	2	999	0	2727	0.690163
+dmel_chr4	1228208	1227998	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	8	535	0	1539	0.758964
+dmel_chr4	1228500	1228220	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:975504..975915	7	293	0	1523	0.607271
+dmel_chr4	1236660	1236101	DmelChr4-B-G9-Map3_NoCat dmel_chr4:475015..474254	3	1880	0	3433	0.663624
+dmel_chr4	1237551	1237234	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:809211..809550	4	1191	0	1601	0.513707
+dmel_chr4	1242519	1242277	DmelChr4-B-G9-Map3_NoCat dmel_chr4:60870..60618	2	244	0	182	0.75
+dmel_chr4	1242768	1242539	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:61119..60882	2	231	0	184	0.8
+dmel_chr4	1243021	1242815	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:61387..61160	17	223	0	191	0.923077
+dmel_chr4	1243513	1243126	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:61866..61460	4	391	0	310	0.8
+dmel_chr4	1244244	1243654	DmelChr4-B-G9-Map3_NoCat dmel_chr4:62594..61988	4	1874	0	2274	0.564788
+dmel_chr4	1255436	1255245	DmelChr4-B-P0.0-Map3_classII-TIR-incomp dmel_chr4:55572..55913	5	906	0	1438	0.544586
+dmel_chr4	1255610	1255484	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:327447..328295	7	771	0	760	0.629444
+dmel_chr4	1256254	1255890	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:877989..878574	10	434	0	2240	0.587327
+dmel_chr4	1260589	1260739	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:54467..55019	20	320	0	465	0.485301
+dmel_chr4	1261314	1261447	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:928886..929191	3	598	0	838	0.610202
+dmel_chr4	1261463	1262479	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:322924..323431	2	999	0	6060	0.661721
+dmel_chr4	1262671	1262874	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:338507..338710	11	1084	0	1083	0.535335
+dmel_chr4	1262884	1263278	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:1196840..1197206	4	1553	0	1775	0.722863
+dmel_chr4	1263338	1263637	DmelChr4-B-G9-Map3_NoCat dmel_chr4:952466..952897	2	1880	0	2354	0.608661
+dmel_chr4	1265521	1265389	DmelChr4-B-G1-Map3_NoCat dmel_chr4:83881..83722	11	143	0	116	0.875
+dmel_chr4	1270128	1269805	DmelChr4-B-G9-Map3_NoCat dmel_chr4:88493..88146	16	339	0	277	0.857143
+dmel_chr4	1270413	1270166	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:88778..88505	16	263	0	217	0.875
+dmel_chr4	1270899	1270446	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:89263..88785	15	468	0	378	0.833333
+dmel_chr4	1271813	1271954	DmelChr4-B-G9-Map3_NoCat dmel_chr4:1263339..1263639	3	1804	0	914	0.371132
+dmel_chr4	1271972	1272099	DmelChr4-B-G7-Map3_classII-TIR-incomp dmel_chr4:387825..388146	16	1038	0	283	0.467551
+dmel_chr4	1278129	1280072	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:227813..228328	2	1943	0	11559	0.487016
+dmel_chr4	1280079	1280334	DmelChr4-B-G11-Map20_classII-TIR-incomp dmel_chr4:954856..955864	2	999	0	1938	0.65404
