@@ -81,6 +81,8 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, u
 		  model_count, nb_mkmer,
 		  nuc_count, nb_nuc);
 
+  if(nb_kmer==0)
+      throw "Error: No more kmer to use!";
 
 
   kmer_count[0]=0; //remove kmers AAAAAA... NNNNNN.... XXXXX....
@@ -426,7 +428,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     	double ecount=prob_bkmer*nb_kmer;
     	list_skmer.sort();
     	list_skmer.unique();
-       	double diversity=list_skmer.size()/pow(4,bkmer_size);
+       	double diversity=list_skmer.size()/(wsize-bwsize);
 
        	s=kmer.c_str();
 

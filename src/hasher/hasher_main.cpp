@@ -226,7 +226,11 @@ int main(int argc, char *argv[]) {
                       << std::endl;
             exit(EXIT_FAILURE);
         }
-
+        if (kmask < 2 ) {
+            std::cout << "kmask must be greater than 1! Entered value is " << kmask
+                      << std::endl;
+            exit(EXIT_FAILURE);
+        }
 
         if (stat_only) {
             std::cout << "\nCompute kmer stat only!" << std::endl;
@@ -396,6 +400,11 @@ int main(int argc, char *argv[]) {
     catch (std::exception& e)
     {
         std::cerr << "standard exception catched: "<< e.what() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    catch (const char* msg) {
+        std::cerr << msg << std::endl;
+        exit(EXIT_FAILURE);
     }
     catch (...) {
         std::cerr << "****** unknown exception catch !!! ******" << std::endl;
