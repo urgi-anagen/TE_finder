@@ -210,11 +210,11 @@ void Test_BLRMatchPath::test_writeBED(void){
 	std::ostringstream obs;
 	SDGString color = "255,127,0";
 
-	matchPath.writeBED(obs, color);
+	matchPath.writeBED(obs);
 
 	std::ostringstream exp;
-	exp << "CHR1v01212004\t100\t1000\tTNAT1A,TNAT1A\t868\t+\t100\t1000\t255,127,0\t2\t151,201,\t0,700,\n";
-	exp << "CHR2v01212004\t1050\t2000\tTNAT1A\t87\t-\t1050\t2000\t255,127,0\n";
+	exp << "CHR1v01212004\t100\t1000\tTNAT1A,TNAT1A\t868\t+\t100\t1000\t2\t151,201,\t0,700,\n";
+	exp << "CHR2v01212004\t1050\t2000\tTNAT1A\t87\t-\t1050\t2000\n";
 
 	CPPUNIT_ASSERT_EQUAL(exp.str(), obs.str());
 }

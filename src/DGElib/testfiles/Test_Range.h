@@ -23,6 +23,7 @@ class Test_Range: public CPPUNIT_NS::TestFixture
 	CPPUNIT_TEST( test_getLength );
 	CPPUNIT_TEST( test_getMin );
 	CPPUNIT_TEST( test_getMax );
+	CPPUNIT_TEST( test_translate_comp );
 	CPPUNIT_TEST( test_reverse );
 	CPPUNIT_TEST( test_overlap );
 	CPPUNIT_TEST( test_isContained );
@@ -40,6 +41,7 @@ class Test_Range: public CPPUNIT_NS::TestFixture
 	 void test_getLength( void );
 	 void test_getMin( void );
 	 void test_getMax( void );
+	 void test_translate_comp( void );
 	 void test_reverse( void );
 	 void test_overlap( void );
 	 void test_isContained(void);

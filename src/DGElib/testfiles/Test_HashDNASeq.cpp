@@ -62,29 +62,6 @@ void Test_HashDNASeq::test_hashSeqCountwHole( void )
                 ostr_obs<<"["<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
         }
 
-    //std::cout<<"\n"<<ostr_obs.str()<<std::endl;
-
-    /* To display all kmers
-    word_len=3;
-    kmask=100;
-    HashDNASeq hsrch2(word_len,kmask);
-
-    std::vector<unsigned> word_count2;
-    word_count2.resize((unsigned)pow(4,hsrch2.getEffectiveKmerSize()));
-
-    hsrch2.hashSeqCount(seq,word_len,word_count2);
-
-    std::ostringstream ostr_obs2;
-    unsigned size2=word_count2.size();
-    for(unsigned i=0; i<size2; ++i)
-        {
-            if(word_count2[i]!=0)
-                ostr_obs2<<"["<<hsrch2.hseq.reverse_hash(i)<<"]="<<word_count2[i]<<std::endl;
-        }
-
-    std::cout<<"\n"<<ostr_obs2.str()<<std::endl; 
-    */
-
     std::ostringstream ostr_exp;
     ostr_exp
         <<"[C-A]=1\n"

@@ -12,8 +12,9 @@
 
 
 double filter_cutoff=0.0;
-unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,
+unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=0;
+
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
 double p_value=0.05;
@@ -30,6 +31,7 @@ void help(void)
       <<"   -w, --kmer:\n\t kmer length, default: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
       <<"   -k, --kmask:\n\t period of k-mer mask, default: "<<kmask<<std::endl
+      <<"   -l, --len_hole_mask:\n\t kmer mask hole length, default: "<<mask_hole_length<<std::endl
       <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
 	<<kmer_dist<<std::endl
     <<"   -s, --min_size:\n\t min size range to report, default: "
@@ -57,6 +59,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -w, --kmer:\t kmer length: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\t step on query sequence: "<<step_q<<std::endl
       <<"   -k, --kmask:\t length of k-mer mask: "<<kmask<<std::endl
+      <<"   -l, --len_hole_mask:\t kmer mask hole length: "<<mask_hole_length<<std::endl
       <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: "<<kmer_dist<<std::endl
       <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
       <<"   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
@@ -69,6 +72,37 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
   	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
 };
+// search on sequence chunk, reverse sequence, and reverse complement
+void search_frag(Hasher& hsrch,
+                 const SDGBioSeq& seq, const SDGBioSeq& seq_rev,
+                 const SDGBioSeq& seq_comp, const SDGBioSeq& seq_revcomp,
+                 unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
+                 unsigned min_frag_size, bool repeat,
+                 std::list< RangePair >& frag_list,
+                 std::list< RangePair >& rev_frag_list,
+                 std::list< RangePair >& compfrag_list,
+                 std::list< RangePair >& rev_compfrag_list,
+                 unsigned verbose)
+{
+    hsrch.search(seq, start, end, numseq, connect_dist,
+                 min_frag_size, repeat, frag_list, verbosity);
+    hsrch.search(seq_rev, start, end, numseq, connect_dist,
+                 min_frag_size, repeat, rev_frag_list, verbosity);
+    hsrch.search(seq_comp, start, end, numseq, connect_dist,
+                 min_frag_size, repeat, compfrag_list, verbosity);
+    hsrch.search(seq_revcomp, start, end, numseq, connect_dist,
+                 min_frag_size, repeat, rev_compfrag_list, verbosity);
+}
+//translate reverse complement coordinate
+void translate_comp(std::list< RangePair >& frag_list,const std::list< RangePair >& compfrag_list,
+                    unsigned len_seq){
+    for (std::list<RangePair>::const_iterator it = compfrag_list.cbegin();
+         it!=compfrag_list.cend(); it++){
+        RangePair rp(*it);
+        rp.getRangeQ().translate_comp(len_seq);
+        frag_list.push_back(rp);
+    }
+}
 
 int main(int argc, char *argv[]) {
     try {
@@ -89,6 +123,7 @@ int main(int argc, char *argv[]) {
                             {"kmer",                 required_argument, 0, 'w'},
                             {"step_q",               required_argument, 0, 'S'},
                             {"kmask",                required_argument, 0, 'k'},
+                            {"len_hole_mask",        required_argument, 0, 'l'},
                             {"kmer_dist",            required_argument, 0, 'd'},
                             {"min_size",             required_argument, 0, 's'},
                             {"filter_cutoff",        required_argument, 0, 'C'},
@@ -106,7 +141,7 @@ int main(int argc, char *argv[]) {
             /* `getopt_long' stores the option index here. */
             int option_index = 0;
 
-            c = getopt_long(argc, argv, "hd:f:w:S:k:d:s:C:D:m:b:p:o:c:n:av:",
+            c = getopt_long(argc, argv, "hd:f:w:S:k:l:d:s:C:D:m:b:p:o:c:n:av:",
                             long_options, &option_index);
 
             /* Detect the end of the options. */
@@ -130,8 +165,13 @@ int main(int argc, char *argv[]) {
                     kmask = atoi(optarg);
                     break;
                 }
+                case 'l': {
+                    mask_hole_length = atoi(optarg);
+                    break;
+                }
                 case 'd': {
                     kmer_dist = atoi(optarg);
+                    connect_dist=(kmer_dist + 1) * kmer_size;
                     break;
                 }
                 case 's': {
@@ -235,7 +275,7 @@ int main(int argc, char *argv[]) {
         if (stat_only) {
             std::cout << "\nCompute kmer stat only!" << std::endl;
             for (unsigned bw = 1; bw <= bkmer_size; bw++) {
-                HashDNASeq hsrch(kmer_size, kmask, bw, kmer_dist, 0, min_size, step_q);
+                HashDNASeq hsrch(kmer_size, kmask, mask_hole_length, bw, kmer_dist, 0, min_size, step_q);
                 std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
                 std::list<Info_kmer> list_infokmer;
                 Info_kmer kmer_threshold;
@@ -244,14 +284,14 @@ int main(int argc, char *argv[]) {
                 std::cout << "\n======Compute kmer background probability for " << bw - 1
                           << " Markov's chain order======" << std::endl;
 
-                hsrch.kmer_analysis(filename2, kmer_size, kmask, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
+                hsrch.kmer_analysis(filename2, kmer_size, kmask, mask_hole_length, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
                                     kmer_count, nb_kmer, list_infokmer, kmer_threshold);
             }
             std::cout << "\nEnd HashDNASeq (version " << VERSION << ")" << std::endl;
             exit(EXIT_SUCCESS);
         }
 
-        Hasher hsrch(kmer_size, kmask, bkmer_size, kmer_dist, 0, min_size, step_q);
+        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q);
         bool valid_idx_file = true;
         double prev_genome_perc_coverage = 0.0;
         std::stringstream alignout_name, seqout_name ;
@@ -260,7 +300,7 @@ int main(int argc, char *argv[]) {
             if (iter==1){
                 first_iter=true;
             }
-            hsrch.load(filename2, kmer_size, kmask, bkmer_size, kmer_size / 2, count_cutoff, diversity_cutoff,
+            hsrch.load(filename2, kmer_size, kmask, mask_hole_length, bkmer_size, kmer_size / 2, count_cutoff, diversity_cutoff,
                        min_count,valid_idx_file, first_iter);
 
 
@@ -274,7 +314,7 @@ int main(int argc, char *argv[]) {
             unsigned genome_coverage=0;
             min_frag_size = min_size;
             unsigned numseq = 0;
-            std::list< RangePair > frag_list, rev_frag_list;
+            std::list< RangePair > frag_list, rev_frag_list, compfrag_list, rev_compfrag_list;
             while (in) {
                 SDGBioSeq seq;
                 if (in)
@@ -282,52 +322,61 @@ int main(int argc, char *argv[]) {
                 numseq++;
                 std::cout << seq.getDE() << " len:" << seq.length() << " read!" << std::endl;
                 SDGBioSeq seq_rev=seq.reverse();
+                SDGBioSeq seq_comp=seq.complement();
+                SDGBioSeq seq_revcomp=seq_comp.reverse();
                 genome_size+=seq.length();
 
                 //Search on chunked input sequence
                 if (chunk_size_kb != 0) {
-                    unsigned start = 1;
+                    unsigned start = 0;
                     unsigned chunk_size = ((chunk_size_kb * 1000) / kmer_size) * kmer_size;
                     unsigned nb_chunk = seq.length() / chunk_size;
                     for (unsigned i = 1; i < nb_chunk; i++) {
                         std::cout << "==>chunk #" << i << "/" << nb_chunk << ":" << start << ".."
                                   << start + chunk_size - 1 << std::endl;
-                        hsrch.search(seq, start, start + chunk_size - 1, numseq, (kmer_dist + 1) * kmer_size,
-                                     min_frag_size,
-                                     repeat, frag_list, verbosity);
-                        hsrch.search(seq_rev, start, start + chunk_size - 1, numseq, (kmer_dist + 1) * kmer_size,
-                                     min_frag_size,
-                                     repeat, rev_frag_list, verbosity);
-
+                        search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,start + chunk_size - 1,numseq,
+                                    connect_dist,min_frag_size,repeat,
+                                    frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
                         start = start + chunk_size;
                     }
                     std::cout << "==>chunk #" << nb_chunk << "/" << nb_chunk << ":" << start << ".." << seq.length()
                               << std::endl;
-                    hsrch.search(seq, start, seq.length(), numseq, (kmer_dist + 1) * kmer_size,
-                                 min_frag_size, repeat, frag_list, verbosity);
-                    hsrch.search(seq_rev, start, seq.length(), numseq, (kmer_dist + 1) * kmer_size,
-                                 min_frag_size, repeat, rev_frag_list, verbosity);
+                    search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,seq.length(),numseq,
+                                connect_dist,min_frag_size,repeat,
+                                frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
                 } else {
                     //Search on full input sequence
-                    hsrch.search(seq, 1, seq.length(), numseq, (kmer_dist + 1) * kmer_size,
-                                 min_frag_size, repeat, frag_list, verbosity);
-                    hsrch.search(seq_rev, 1, seq.length(), numseq, (kmer_dist + 1) * kmer_size,
-                                 min_frag_size, repeat, rev_frag_list, verbosity);
+                    search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,0,seq.length(),numseq,
+                                connect_dist,min_frag_size,repeat,
+                                frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
                 }
+                translate_comp(frag_list,compfrag_list,seq.length());
+                compfrag_list.clear();
+                translate_comp(rev_frag_list,rev_compfrag_list,seq.length());
+                rev_compfrag_list.clear();
                 std::cout << "ok!\n" << std::endl;
             }
             in.close();
 
+
             //Compute stat on resuts and filters false positives
             unsigned qval;
             double qtile=1-p_value;
+
             std::cout<<"--Random fragment stats:"<<std::endl;
+            std::cout << "--Compute score and identity" << std::endl;
+            hsrch.fragSeqAlign(rev_frag_list,filename1,filename2,true);
             qval=hsrch.fragStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
-            hsrch.fragLenFilter(frag_list,qval);
+
+
+
             std::cout<<"--Real fragment stats:"<<std::endl;
-            qval=hsrch.fragStat(frag_list, qtile, genome_coverage);
+            std::cout << "--Compute score and identity" << std::endl;
+            hsrch.fragSeqAlign(frag_list,filename1,filename2,false);
+            hsrch.fragScoreFilter(frag_list,qval);
+            hsrch.fragStat(frag_list, qtile, genome_coverage);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
@@ -361,7 +410,9 @@ int main(int argc, char *argv[]) {
 
             if(genome_coverage==0) break;
 
-            if(fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<0.01 && nb_iter==0 && iter>1) break;
+            if((fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<0.01 || (float)genome_coverage/genome_size>=1.0)
+                && nb_iter==0 && iter>1)
+                break;
             prev_genome_perc_coverage=(float)genome_coverage/genome_size;
             filename2=seqout_name.str();
 

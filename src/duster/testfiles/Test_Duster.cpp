@@ -3,12 +3,64 @@
 #include "Test_Duster.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_Duster);
+//-------------------------------------------------------------------------
+void Test_Duster::test_search(void ){
 
+    std::ostringstream ostr;
+    ostr<<"ATATTTATTTTAGCGTTTACGCTATGTGTTGCGTATTGCTAATCGCTATGATTATATTTATTTTAGCGTTTACGCTATG";
+    ostr<<"TTACGCTATGTGTTATTTTTAGCGTTATTGCTAGCGTTTGCGATATTTATTTAATCGCTATGATTATATTTACGCTATG";
+    ostr<<"ATATTTCGCGCTATGTGTTGCGATAGCGTTTATTATACCTATATCGCTATGATTATATTTATTTTTAGCGTTTTGTATG";
+    SDGBioSeq seq=newSDGMemBioSeq(ostr.str());
+    std::ofstream fout_query("query_test.fa");
+    fout_query << ">query_test"<<std::endl<<ostr.str();
+    fout_query.close();
+
+    SDGBioSeq subseq1=seq.subseq(10-1,51);
+    subseq1.setDE("test1 10..60");
+    SDGBioSeq subseq3=seq.subseq(110-1,51);
+    subseq3.setDE("test1 110..160");
+    SDGBioSeq subseq2=seq.subseq(50-1,51);
+    subseq2.setDE("test2 comp 100..50");
+    subseq2=subseq2.complement();
+
+    std::ostringstream str_fasta;
+    str_fasta << ">" << subseq1.getDE() << std::endl;
+    str_fasta << subseq1.toString() << std::endl;
+    str_fasta << ">" << subseq2.getDE() << std::endl;
+    str_fasta << subseq2.toString() << std::endl;
+    str_fasta << ">" << subseq3.getDE() << std::endl;
+    str_fasta << subseq3.toString() << std::endl;
+
+
+    std::ofstream fout_subject("subject_test.fa");
+    fout_subject << str_fasta.str();
+    fout_subject.close();
+
+    unsigned start=5,end=200,numseq=1,connect_dist=20,min_frag_size=35,verbosity=0,min_count=0;
+    std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
+    unsigned kmer_size=10, kmask=12, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
+    double count_cutoff=1.0, diversity_cutoff=0.0;
+    bool valid_idx_file = true;
+
+    Duster dstr(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
+    dstr.load("subject_test.fa", kmer_size, kmer_size, mask_hole_length, bkmer_size, kmer_size / 2,
+               count_cutoff, diversity_cutoff,
+               min_count,valid_idx_file, true);
+
+    dstr.search(seq, start, end, numseq, false, fmerged);
+
+    for (  std::vector< std::pair<unsigned,unsigned> >::iterator it = fmerged.begin();
+         it!=fmerged.end(); it++){
+        std::cout<<it->first<<".."<<it->second<<std::endl;
+    }
+
+    std::system("rm query_test.fa subject_test.fa subject_test.fa.kidx");
+}
 void Test_Duster::test_fragMerge(void)
 {
 	unsigned word_len=10;
 	unsigned word_dist=1;
-	Duster hsrch(word_len, word_dist);
+	Duster dstr(word_len, word_dist);
 
 	std::vector< std::pair<unsigned,unsigned> > frag;
 	frag.push_back(std::pair<unsigned,unsigned>(10,50));
@@ -23,12 +75,12 @@ void Test_Duster::test_fragMerge(void)
 	frag.push_back(std::pair<unsigned,unsigned>(250,260));
 	frag.push_back(std::pair<unsigned,unsigned>(350,360));
 	frag.push_back(std::pair<unsigned,unsigned>(360,370));
-	frag.push_back(std::pair<unsigned,unsigned>(450,460));
+	frag.push_back(std::pair<unsigned,unsigned>(400,460));
 	frag.push_back(std::pair<unsigned,unsigned>(500,600));
 	frag.push_back(std::pair<unsigned,unsigned>(550,600));
 
 	std::vector< std::pair<unsigned,unsigned> > fmerged;
-	hsrch.fragMerge(frag,(unsigned)((word_dist+1)*word_len),fmerged);
+	dstr.fragMerge(frag,(unsigned)((word_dist+1)*word_len),fmerged);
 
     sort(fmerged.begin(),fmerged.end());
 	std::ostringstream ostr_obs;
@@ -45,6 +97,7 @@ void Test_Duster::test_fragMerge(void)
 	fmerged_exp.push_back(std::pair<unsigned,unsigned>(100,150));
 	fmerged_exp.push_back(std::pair<unsigned,unsigned>(200,300));
 	fmerged_exp.push_back(std::pair<unsigned,unsigned>(350,370));
+    fmerged_exp.push_back(std::pair<unsigned,unsigned>(400,460));
 	fmerged_exp.push_back(std::pair<unsigned,unsigned>(500,600));
 
     sort(fmerged_exp.begin(),fmerged_exp.end());
@@ -68,7 +121,7 @@ void Test_Duster::test_runAsScript( void ){
     SDGString diff_result = prefixFileName+"result.txt";
 
     std::ostringstream cmd;
-    cmd<<"../../../cmake-build-debug/src/duster/duster"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd<<"../duster"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd<<" -w 15 -k 4 -d 5 -f 100 -S 7 -n 1 "<<inputFileNameGenome<<" "<<inputFileNameTE;
     std::system(cmd.str().c_str());
 

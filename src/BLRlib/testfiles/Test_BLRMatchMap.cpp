@@ -462,7 +462,7 @@ void Test_BLRMatchMap::test_writeBED(void)
 		std::list<RangePairSet> rps_list = matchMap.getRawRpsList();
 	SDGString color = "255,127,0";	
 
-	matchMap.writeBED(obs, rps_list, color, 0);
+	matchMap.writeBED(obs, rps_list, 0);
 
 		std::ostringstream exp;
 	exp<<"CHR1v01212004\t100\t1000\tTNAT1A,TNAT1A\t868\t+\t100\t1000\t255,127,0\t2\t151,201,\t0,700,\n";

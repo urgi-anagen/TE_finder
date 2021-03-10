@@ -17,7 +17,7 @@
 class Test_Duster : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST_SUITE(Test_Duster);
-
+	CPPUNIT_TEST( test_search );
 	CPPUNIT_TEST( test_fragMerge );
     CPPUNIT_TEST( test_runAsScript );
 
@@ -35,7 +35,7 @@ public:
 	}
 
 protected:
-
+    void test_search( void );
 	void test_fragMerge( void );
     void test_runAsScript( void );
 

@@ -8,22 +8,48 @@ struct HashFuncDNASeq // Compute hashing value of a word
 {
 	unsigned kmer_size;
 	unsigned hole_period;
+    unsigned hole_size;
 	unsigned effectiveKmerSize;
+	char* mask;
 
-	HashFuncDNASeq(unsigned w, unsigned p=100): kmer_size(w), hole_period(p)
+	HashFuncDNASeq(unsigned w, unsigned p=0, unsigned s=1): kmer_size(w), hole_period(p), hole_size(s)
 	{
-		effectiveKmerSize=0;
-		if(hole_period<2) hole_period=w+1;
-		for(unsigned i=1;i<=kmer_size;i++)
-		{
-			if(i%hole_period!=0)
-				effectiveKmerSize++;
-		}
-	  if(effectiveKmerSize>15)
-	throw SDGException(NULL,"HashDNASeq: Effective word size must be < 16 !!");
+        if(hole_period<2) {
+            hole_period=w+1;
+            hole_size=0;
+        }
+        mask = new char[kmer_size+1];
+        effectiveKmerSize=0;
+        build_mask_spaced_hole();
+        if(effectiveKmerSize>15)
+            throw SDGException(NULL,"HashDNASeq: Effective word size must be < 16 !!");
 	};
 
-	unsigned getEffectiveKmerSize(void){return effectiveKmerSize;};
+    virtual ~HashFuncDNASeq() {
+        delete[] mask;
+    }
+
+    void build_mask_spaced_hole(void){
+        unsigned i=0;
+        while(i<kmer_size)
+        {
+            if((i+1)%hole_period==0)
+            {
+                for(unsigned j=0;j<hole_size && i<kmer_size;j++,i++){
+                    mask[i]='-';
+                }
+            }
+            else
+            {
+                mask[i]='+';
+                effectiveKmerSize++;
+                i++;
+            }
+        }
+        mask[i]='\0';
+    }
+    unsigned getEffectiveKmerSize(void){return effectiveKmerSize;};
+    std::string getMask(void){return std::string(mask);};
 
 	unsigned hash(const char* p)
 	{
@@ -31,7 +57,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 		unsigned h=0, val_nuc=0;
 		for(unsigned i=0;i<kmer_size && *p!='\0';i++,p++)
 		{
-			if((i+1)%hole_period==0)
+			if(mask[i]=='-')
 			{
 				continue;
 			}
@@ -93,9 +119,9 @@ struct HashFuncDNASeq // Compute hashing value of a word
 		std::string kmer;
 
 		unsigned val=0;
-		for(unsigned i=0;i<kmer_size;i++)
+		for(unsigned i=1;i<=kmer_size;i++)
 		{
-			if((kmer_size-i)%hole_period==0)
+			if(mask[kmer_size-i]=='-')
 				{
 					car='-';
 				}

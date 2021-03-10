@@ -20,6 +20,21 @@ void Test_SDGlib::test_SDGMemBioSeq( void )
 	CPPUNIT_ASSERT_EQUAL(exp_len,obs_len);
 }
 //------------------------------------------------------------------------------------------------------------
+void Test_SDGlib::test_SDGMemBioSeq_subseq( void )
+{
+    std::ostringstream ostr;
+    ostr<<"ATATTTATTTTAGCGTTTACGCT";
+    SDGBioSeq seq=newSDGMemBioSeq(ostr.str());
+
+    std::ostringstream ostr_exp;
+    ostr_exp<<"TTTATTT";
+
+    std::ostringstream ostr_obs;
+    ostr_obs<<seq.subseq(3,7).toString();
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+}
+//------------------------------------------------------------------------------------------------------------
 void Test_SDGlib::test_SDGMemBioSeq_complement( void )
 {
     std::ostringstream ostr;

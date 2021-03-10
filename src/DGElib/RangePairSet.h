@@ -102,10 +102,10 @@ class RangePairSet: public RangePair
   void write( std::ostream& out, unsigned id,
                 const std::string& nameQ, const std::string& nameS ) const;
   void writeGFF3( std::ostream& out, unsigned id,
-                    const std::string& nameQ, const std::string& nameS, const std::string& source ) const;
+                    const std::string& nameQ, const std::string& nameS ) const;
   void writeGFF3( std::ostream& out, unsigned id,
-  		const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& source ) const;
-  void writeBED( std::ostream& out, const std::string& nameQ,  const std::map<long,std::string>& nameS, const std::string& color) const;
+  		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;
+  void writeBED( std::ostream& out, const std::string& nameQ,  const std::map<long,std::string>& nameS) const;
   void writeRpsAttr(std::ostream& out, unsigned id, const std::string& nameQ, const std::string& nameS) const;
   void writeRpsAttr(std::ostream& out, unsigned id, const std::string& nameQ, const std::map<long,std::string>& nameS) const;
 

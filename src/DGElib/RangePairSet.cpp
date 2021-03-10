@@ -175,8 +175,9 @@ void RangePairSet::write(std::ostream& out, unsigned id,
 
 
 void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
-		const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& source) const
+		const std::string& nameQ, const std::map<long,std::string>& nameS) const
 {
+    std::string source="matcher";
 	out<<nameQ
 	<<"\t"<<source
 	<<"\t"<<"match"
@@ -223,8 +224,9 @@ void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
 	}
 }
 void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
-                             const std::string& nameQ, const std::string& nameS, const std::string& source) const
+                             const std::string& nameQ, const std::string& nameS) const
 {
+    std::string source="matcher";
     out<<nameQ
        <<"\t"<<source
        <<"\t"<<"match"
@@ -271,7 +273,7 @@ void RangePairSet::writeGFF3(std::ostream& out, unsigned id,
     }
 }
 
-void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& color) const
+void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const std::map<long,std::string>& nameS) const
 {
 	
 	ulong referenceMin = getRangeQ().getMin();
@@ -285,12 +287,11 @@ void RangePairSet::writeBED(std::ostream& out, const std::string& nameQ, const s
 		out<<nameS.at(i->getRangeS().getNumChr());
 	}
 
-	out<<"\t"<<getScore()<<"\t";
+	out<<"\t"<<getIdentity()<<"\t";
 	if(isPlusStrand()) out<<"+";
 	else out<<"-";
 	out<<"\t"<<getRangeQ().getMin()
-	<<"\t"<<getRangeQ().getMax()
-	<<"\t"<<color;
+	<<"\t"<<getRangeQ().getMax();
 	
 	std::vector<unsigned> vecBlockSize; 
 	//std::vector<int> vecBlockStarts;

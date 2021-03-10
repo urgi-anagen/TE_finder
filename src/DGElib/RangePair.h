@@ -168,12 +168,12 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
         setRangeQ(r1);
         RangeAlign r2(numseqS,sstart,send);
         setRangeS(r2);
-        length=std::abs((int)(first.getStart()-first.getEnd()));
+        length=std::abs((int)(first.getStart()-first.getEnd()))+1;
     }
 	RangePair(void): e_value(0), identity(0), length(0), score(0),id(0){};
 	RangePair(const RangeAlign& r1,const RangeAlign& r2)
 		:std::pair<RangeAlign,RangeAlign>(r1,r2),e_value(0), identity(0), length(0), score(0),id(0)
-		{length=std::abs((int)(first.getStart()-first.getEnd()));};
+		{length=std::abs((int)(first.getStart()-first.getEnd()))+1;};
 	RangePair( BlastMatch al );
 	RangePair( SDGString line );
 
@@ -270,9 +270,11 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	void viewWithLabel(void)
 	{
 		 std::cout<<"rangeQ "<<std::endl;
-		 first.view(); 
+		 first.view();
+		 if(first.isPlusStrand()) std::cout<<" (+)"; else std::cout<<" (-)";
 		 std::cout<<"rangeS "<<std::endl;
-		 second.view(); 
+		 second.view();
+        if(second.isPlusStrand()) std::cout<<" (+)"; else std::cout<<" (-)";
 		 std::cout<<"id "<<id<<" e_value "<<e_value<<" identity "<<identity<<" length "<<length<<" score "<<score<<std::endl;
 	};
 	void writetxt(std::ostream& out) const;
@@ -326,7 +328,9 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	friend std::ostream& operator<<(std::ostream& out, const RangePair& r)
 		{
 		out<<r.first<<"\t";
+		if(r.first.isPlusStrand()) std::cout<<"(+)\t"; else std::cout<<"(-)\t";
 		out<<r.second<<"\t";
+		if(r.second.isPlusStrand()) std::cout<<"(+)\t"; else std::cout<<"(-)\t";
 		out<<"score="<<r.score;
 		out<<" e_value="<<r.e_value;
 		out<<" identity="<<r.identity;

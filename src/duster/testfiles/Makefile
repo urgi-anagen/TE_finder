@@ -39,79 +39,45 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake
+CMAKE_COMMAND = /usr/local/Cellar/cmake/3.15.4/bin/cmake
 
 # The command to remove a file.
-RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
+RM = /usr/local/Cellar/cmake/3.15.4/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/hquesnev/src/git/TE_finder
+CMAKE_SOURCE_DIR = /Users/hquesnev/CLionProjects/te_finder
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/hquesnev/src/git/TE_finder
+CMAKE_BINARY_DIR = /Users/hquesnev/CLionProjects/te_finder
 
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip
 
 # Special rule for the target install/strip
 install/strip/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -P cmake_install.cmake
 .PHONY : install
 
 # Special rule for the target install
 install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -P cmake_install.cmake
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
 
 # Special rule for the target list_install_components
@@ -124,16 +90,50 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/local/Cellar/cmake/3.15.4/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/local/Cellar/cmake/3.15.4/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
+
 # The main all target
 all: cmake_check_build_system
-	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles /Users/hquesnev/src/git/TE_finder/src/duster/testfiles/CMakeFiles/progress.marks
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/src/git/TE_finder/CMakeFiles 0
+	cd /Users/hquesnev/CLionProjects/te_finder && $(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/CLionProjects/te_finder/CMakeFiles /Users/hquesnev/CLionProjects/te_finder/src/duster/testfiles/CMakeFiles/progress.marks
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/hquesnev/CLionProjects/te_finder/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/clean
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,33 +143,33 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/preinstall
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/preinstall
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /Users/hquesnev/CLionProjects/te_finder && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
-src/duster/testfiles/CMakeFiles/test_duster2.29.dir/rule:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/CMakeFiles/test_duster2.29.dir/rule
-.PHONY : src/duster/testfiles/CMakeFiles/test_duster2.29.dir/rule
+src/duster/testfiles/CMakeFiles/test_duster2.30.dir/rule:
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f CMakeFiles/Makefile2 src/duster/testfiles/CMakeFiles/test_duster2.30.dir/rule
+.PHONY : src/duster/testfiles/CMakeFiles/test_duster2.30.dir/rule
 
 # Convenience name for target.
-test_duster2.29: src/duster/testfiles/CMakeFiles/test_duster2.29.dir/rule
+test_duster2.30: src/duster/testfiles/CMakeFiles/test_duster2.30.dir/rule
 
-.PHONY : test_duster2.29
+.PHONY : test_duster2.30
 
 # fast build rule for target.
-test_duster2.29/fast:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build
-.PHONY : test_duster2.29/fast
+test_duster2.30/fast:
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build
+.PHONY : test_duster2.30/fast
 
 Test_Duster.o: Test_Duster.cpp.o
 
@@ -177,7 +177,7 @@ Test_Duster.o: Test_Duster.cpp.o
 
 # target to build an object file
 Test_Duster.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/Test_Duster.cpp.o
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/Test_Duster.cpp.o
 .PHONY : Test_Duster.cpp.o
 
 Test_Duster.i: Test_Duster.cpp.i
@@ -186,7 +186,7 @@ Test_Duster.i: Test_Duster.cpp.i
 
 # target to preprocess a source file
 Test_Duster.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/Test_Duster.cpp.i
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/Test_Duster.cpp.i
 .PHONY : Test_Duster.cpp.i
 
 Test_Duster.s: Test_Duster.cpp.s
@@ -195,7 +195,7 @@ Test_Duster.s: Test_Duster.cpp.s
 
 # target to generate assembly for a file
 Test_Duster.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/Test_Duster.cpp.s
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/Test_Duster.cpp.s
 .PHONY : Test_Duster.cpp.s
 
 __/Duster.o: __/Duster.cpp.o
@@ -204,7 +204,7 @@ __/Duster.o: __/Duster.cpp.o
 
 # target to build an object file
 __/Duster.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/__/Duster.cpp.o
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/__/Duster.cpp.o
 .PHONY : __/Duster.cpp.o
 
 __/Duster.i: __/Duster.cpp.i
@@ -213,7 +213,7 @@ __/Duster.i: __/Duster.cpp.i
 
 # target to preprocess a source file
 __/Duster.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/__/Duster.cpp.i
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/__/Duster.cpp.i
 .PHONY : __/Duster.cpp.i
 
 __/Duster.s: __/Duster.cpp.s
@@ -222,7 +222,7 @@ __/Duster.s: __/Duster.cpp.s
 
 # target to generate assembly for a file
 __/Duster.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/__/Duster.cpp.s
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/__/Duster.cpp.s
 .PHONY : __/Duster.cpp.s
 
 test_u.o: test_u.cpp.o
@@ -231,7 +231,7 @@ test_u.o: test_u.cpp.o
 
 # target to build an object file
 test_u.cpp.o:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/test_u.cpp.o
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/test_u.cpp.o
 .PHONY : test_u.cpp.o
 
 test_u.i: test_u.cpp.i
@@ -240,7 +240,7 @@ test_u.i: test_u.cpp.i
 
 # target to preprocess a source file
 test_u.cpp.i:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/test_u.cpp.i
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/test_u.cpp.i
 .PHONY : test_u.cpp.i
 
 test_u.s: test_u.cpp.s
@@ -249,7 +249,7 @@ test_u.s: test_u.cpp.s
 
 # target to generate assembly for a file
 test_u.cpp.s:
-	cd /Users/hquesnev/src/git/TE_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.29.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.29.dir/test_u.cpp.s
+	cd /Users/hquesnev/CLionProjects/te_finder && $(MAKE) -f src/duster/testfiles/CMakeFiles/test_duster2.30.dir/build.make src/duster/testfiles/CMakeFiles/test_duster2.30.dir/test_u.cpp.s
 .PHONY : test_u.cpp.s
 
 # Help Target
@@ -258,13 +258,13 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/local"
-	@echo "... rebuild_cache"
-	@echo "... edit_cache"
 	@echo "... install/strip"
 	@echo "... install"
 	@echo "... list_install_components"
-	@echo "... test_duster2.29"
+	@echo "... rebuild_cache"
+	@echo "... edit_cache"
+	@echo "... install/local"
+	@echo "... test_duster2.30"
 	@echo "... Test_Duster.o"
 	@echo "... Test_Duster.i"
 	@echo "... Test_Duster.s"
@@ -285,6 +285,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /Users/hquesnev/src/git/TE_finder && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /Users/hquesnev/CLionProjects/te_finder && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

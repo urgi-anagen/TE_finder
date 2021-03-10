@@ -1,4 +1,4 @@
-# Install script for directory: /Users/hquesnev/src/git/TE_finder/src/grouper.threads/testfiles
+# Install script for directory: /Users/hquesnev/CLionProjects/te_finder/src/grouper.threads/testfiles
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

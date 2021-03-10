@@ -17,7 +17,7 @@ public:
     BLRRangePairSetList(const std::list<RangePairSet>& rps):std::list<RangePairSet>(rps){};
     void writePath(std::ostream& out);
     void writePathAttr(std::ostream& out);
-    void writeGFF3(std::ostream& out, const std::string& source);
+    void writeGFF3(std::ostream& out);
 
 };
 

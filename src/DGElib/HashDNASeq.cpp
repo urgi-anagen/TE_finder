@@ -1,8 +1,9 @@
 #include <cstring>
+#include <SDGMemBioSeq.h>
 #include "HashDNASeq.h"
 
 //-------------------------------------------------------------------------
-void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
+void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		unsigned min_count,bool & valid_idx_file, bool first_iter)
 {
 
@@ -11,9 +12,10 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
   clock_t begin, end;
   begin = clock();
 
-  std::cout<<"Effective Kmer size (without kmer mask size):"<<hseq.getEffectiveKmerSize()<<std::endl;
+
+  std::cout<<"Kmer mask :"<<hseq.getMask()<<" -> Effective Kmer size (without kmer mask size):"<<hseq.getEffectiveKmerSize()<<std::endl;
   if(valid_idx_file)
-	  valid_idx_file=read_idx(filenameS,count_cutoff,diversity_cutoff, min_count,kmask);
+	  valid_idx_file=read_idx(filenameS,count_cutoff,diversity_cutoff, min_count,kmask,mask_hole_length);
   if(!valid_idx_file)
     {
 	  //Count kmers and filters
@@ -21,7 +23,8 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
 	  unsigned nb_kmer=0;
 	  std::list< Info_kmer > list_infokmer;
 	  Info_kmer kmer_threshold;
-	  kmer_analysis(filenameS,kmer_size, kmask, bkmer_size, mkmer_size, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
+	  kmer_analysis(filenameS,kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
+	  kmer_ssr_filter(kmer_size, kmer_count);
       kmer_filter(list_infokmer, kmer_threshold, min_count, kmer_count, first_iter);
       end = clock();
       std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
@@ -54,14 +57,14 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
 		}
       inS2.close();
       hash_ptr.clear();
-      save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,kmer_count);
+      save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,mask_hole_length,kmer_count);
     }
   std::cout<<"end preparation of subjects";
   end = clock();
   std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size,
+void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size,
 		double count_cutoff, double diversity_cutoff, std::vector<unsigned>& kmer_count, unsigned& nb_kmer,
 		std::list< Info_kmer >& list_infokmer, Info_kmer& kmer_threshold)
 {
@@ -86,7 +89,7 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, u
 
 
   kmer_count[0]=0; //remove kmers AAAAAA... NNNNNN.... XXXXX....
-  kmer_prob(kmer_size, bkmer_size, mkmer_size,mask,
+  kmer_prob(kmer_size, bkmer_size, mkmer_size,mask, mask_hole_length,
 		  kmer_count,nb_kmer,
 		  background_count, nb_bkmer,
 		  model_count, nb_mkmer,
@@ -115,7 +118,7 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmer_size, uns
   unsigned count_seq=0;
   while(inS)
 	{
-	  SDGBioSeq sS;
+      SDGBioSeq sS;
 	  if(inS)
 		inS>>sS;
 	  std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::flush;
@@ -281,7 +284,7 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 }
 //-------------------------------------------------------------------------
 //
-void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsigned mask,
+void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsigned mask,unsigned mask_hole_length,
 		const std::vector<unsigned>& wcount, unsigned nb_kmer,
 		const std::vector<unsigned>& bcount, unsigned nb_bkmer,
 		const std::vector<unsigned>& mcount, unsigned nb_mkmer,
@@ -289,9 +292,10 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
 		std::list< Info_kmer >& list_infokmer)
 {
 	std::cout<<"\nCompute kmer stats ... "<<std::endl;
-    HashDNASeq h(wsize,mask,bwsize, 0);
+    HashDNASeq h(wsize,mask,mask_hole_length,bwsize, 0);
 	std::cout<<"kmer size="<<wsize
-			<<"\tmask size="<<mask
+			<<"\tmask period="<<mask
+            <<"\tmask hole size="<<mask_hole_length
 			<<"\teffective kmer size="<<h.hseq.getEffectiveKmerSize()<<std::endl;
 
 	std::cout<<"\nSequence composition:\n";
@@ -428,7 +432,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     	double ecount=prob_bkmer*nb_kmer;
     	list_skmer.sort();
     	list_skmer.unique();
-       	double diversity=list_skmer.size()/(wsize-bwsize);
+       	double diversity=(double)list_skmer.size()/(wsize-bwsize+1);
 
        	s=kmer.c_str();
 
@@ -517,12 +521,55 @@ void HashDNASeq::kmer_filter(const std::list< Info_kmer >& list_infokmer, const 
     		nb_removed++;
     	}
     }
-
     std::cout<<"removed kmers:"<<nb_removed<<" over "<<nb_kmer<<" existing ("<<(double)nb_removed/nb_kmer<<") and "<<max_key+1<<" possible."<<std::endl;
 }
 //-------------------------------------------------------------------------
+//
+void HashDNASeq::kmer_ssr_filter(unsigned wsize, std::vector<unsigned>& wcount) {
+    std::cout << "\nFilter SSR kmers ... " << std::endl;
+    unsigned nb_removed = 0;
+
+    std::list<std::string> list_ssr;
+    HashDNASeq h2(2,0,2, 0);
+    for(unsigned i=0; i<16; i++)
+    {list_ssr.push_back(h2.hseq.reverse_hash(i));}
+    HashDNASeq h3(3,0,3, 0);
+    for(unsigned i=0; i<64; i++)
+    {list_ssr.push_back(h3.hseq.reverse_hash(i));}
+
+    std::ostringstream oseq;
+    for(std::list<std::string>::iterator it=list_ssr.begin();it!=list_ssr.end();it++)
+    {
+        unsigned l = 0;
+        std::ostringstream oseq;
+        while (l < 18) {
+            oseq << *it;
+            l += it->size();
+        }
+        SDGBioSeq seq_ssr = newSDGMemBioSeq(oseq.str());
+        unsigned len = seq_ssr.length();
+        std::cout << "SSR:" << seq_ssr.toString() <<" len="<<len<<std::endl;
+        unsigned last_pos = len - wsize;
+        char *s = new char[len + 1];
+        char *ptr=s;
+        std::strcpy(s, seq_ssr.toString().c_str());
+        for (unsigned i = 0; i <= last_pos; i++) {
+            unsigned hval=hseq(s);
+            if(wcount[hval]!=0){
+                std::cout <<"kmer:"<< hseq.reverse_hash(hval) <<" count:"<< wcount[hval]<<" removed !" << std::endl;
+                wcount[hval]=0;
+                nb_removed++;
+            }
+            s++;
+        }
+        delete [] ptr;
+    }
+
+    std::cout << "removed kmers:" << nb_removed << std::endl;
+}
+//-------------------------------------------------------------------------
 // Read a hash index
-bool HashDNASeq::read_idx(const SDGString& filename, double count_cutoff , double diversity_cutoff, unsigned min_count, unsigned kmask)
+bool HashDNASeq::read_idx(const SDGString& filename, double count_cutoff , double diversity_cutoff, unsigned min_count, unsigned kmask, unsigned mask_hole_length)
 {
   std::ifstream in(filename+".kidx");
   if(!in) return false;
@@ -532,6 +579,8 @@ bool HashDNASeq::read_idx(const SDGString& filename, double count_cutoff , doubl
   if(val!=kmer_size) return false;
   in>>val;
   if(val!=kmask) return false;
+  in>>val;
+  if(val!=mask_hole_length) return false;
   in>>val;
   if(val!=min_count) return false;
   double fval;
@@ -574,12 +623,13 @@ bool HashDNASeq::read_idx(const SDGString& filename, double count_cutoff , doubl
 }
 //-------------------------------------------------------------------------
 // Save a hash index
-void HashDNASeq::save_idx(const SDGString& filename, double count_cutoff, double diversity_cutoff, unsigned min_count, unsigned kmask, const std::vector<unsigned>& wcount)
+void HashDNASeq::save_idx(const SDGString& filename, double count_cutoff, double diversity_cutoff, unsigned min_count, unsigned kmask, unsigned mask_hole_length, const std::vector<unsigned>& wcount)
 {
   std::ofstream fout(filename+".kidx");
   std::cout<<"Save idx"<<std::endl;
   fout<<kmer_size<<std::endl;
   fout<<kmask<<std::endl;
+  fout<<mask_hole_length<<std::endl;
   fout<<min_count<<std::endl;
   fout<<count_cutoff<<std::endl;
   fout<<diversity_cutoff<<std::endl;
@@ -606,6 +656,7 @@ unsigned HashDNASeq::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vec
   char *s = new char[len+1];
   char *ptr = s;
   std::strcpy(s, seq.toString().c_str());
+  s[len+1]='\0';
   for(unsigned i=0;i<=last_pos;i++)
     {
 	  nb_kmer++;
@@ -626,6 +677,7 @@ unsigned HashDNASeq::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize
     char *s = new char[len+1];
     char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
+    s[len+1]='\0';
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[bhseq(s)]++;
@@ -645,6 +697,7 @@ unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std
     char *s = new char[len+1];
     char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
+    s[len+1]='\0';
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[mhseq(s)]++;
@@ -663,6 +716,7 @@ unsigned HashDNASeq::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>
     char *s = new char[len+1];
     char *ptr = s;
     std::strcpy(s, seq.toString().c_str());
+    s[len+1]='\0';
     for (unsigned i = 0; i < len; i++) {
         nb_kmer++;
         wcount[nhseq(s)]++;
@@ -715,8 +769,6 @@ void HashDNASeq::search(const SDGBioSeq& sequence, unsigned start, unsigned end,
 	std::cout<<frag.size()<<" fragments found";
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
-
-	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
@@ -741,10 +793,10 @@ void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
       std::vector<KmerSpos>::iterator end_d=hash2wpos[key_d+1];
       for(std::vector<KmerSpos>::iterator j=begin_d;j!=end_d;j++)
       {
-    	  // Attention cas j->numSeq==0 à traiter (no kmer hit!)
-    	  if(j->numSeq==0) std::cout<<"Error: j->numSeq==0"<<std::endl;
-    	  if(!(repeat && numseq==j->numSeq && i==j->pos))
-    			  diag_map.push_back(Diag(i-j->pos,j->pos,j->numSeq));
+          if (j->numSeq > 0) {
+              long diag = long(i) - j->pos;
+              diag_map.push_back(Diag(diag, j->pos, j->numSeq));
+          }
       }
       seq+=step_q;
     }

@@ -94,8 +94,10 @@ public:
         pathFile << pathStream.str();
     };
     void writeAttribute(std::ostream &out);
-    void writeBED(const SDGString &filename, const SDGString &color);
-    void writeBED(std::ostream &out, const SDGString &color);
+    void writeBED(const SDGString &filename);
+    void writeBED(std::ostream &out);
+    void writeGFF3(const SDGString &filename);
+    void writeGFF3(std::ostream &out);
     void writeMatch(const BLRJoinParameter& para, const SDGString &filename, int verbose);
     void writeSeq(const BLRJoinParameter& para, const SDGString &filename, int verbose);
 

@@ -100,6 +100,11 @@ class Range
     	end = e;
     };
 
+    void translate_comp(unsigned len_seq){
+        start=len_seq-start+1;
+        end=len_seq-end+1;
+    }
+
     ulong getStart( void ) const { return start; };
 
     void setStart( ulong s ){ start=s; };

@@ -24,7 +24,7 @@ void BLRMatchMapWriter::writePath(const RpsList& rpsList,
 }
 //---------------------------------------------------------------------------------------
 void BLRMatchMapWriter::writeGFF3(const RpsList& rpsList,
-		const std::map<long,std::string>& num2nameQ, const std::map<long,std::string>& num2nameS, std::ostream& out, const std::string& source)
+		const std::map<long,std::string>& num2nameQ, const std::map<long,std::string>& num2nameS, std::ostream& out)
 {
 	unsigned path_id=0;
 	for(RpsList::const_iterator iter_list
@@ -33,6 +33,6 @@ void BLRMatchMapWriter::writeGFF3(const RpsList& rpsList,
 		{
 		  std::string query_name=num2nameQ.at(iter_list->getNumQuery());
 		  unsigned id = ++path_id;
-		  iter_list->writeGFF3(out,id,query_name,num2nameS, source);
+		  iter_list->writeGFF3(out,id,query_name,num2nameS);
 		}
 }

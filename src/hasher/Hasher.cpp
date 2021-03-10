@@ -1,15 +1,15 @@
+#include <SDGBioSeqDB.h>
 #include "Hasher.h"
 
 //-------------------------------------------------------------------------
 // Search for diagonal of word matches
-void Hasher::diagSearch(const SDGBioSeq &sequence, unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
-                        std::vector<std::list<Diag> > &diag_map_comp,
+void Hasher::diagSearch(const SDGBioSeq &sequence,
+                        unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
                         unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
                         std::list< RangePair >& frag, unsigned verbose) {
     unsigned count = 0;
     SDGString qname = sequence.getDE();
 
-    unsigned len = sequence.length();
     unsigned curr_seq=0;
     for (std::vector<std::list<Diag> >::iterator iter_seq = diag_map.begin(); iter_seq != diag_map.end(); iter_seq++) {
         unsigned size = iter_seq->size();
@@ -44,15 +44,8 @@ void Hasher::diagSearch(const SDGBioSeq &sequence, unsigned numseqQ, std::vector
                 if (start != 0) {
                     if (end + kmer_size - start - 1 >= min_frag_size) {
                         count++;
-
-                        unsigned qstart = diag + start + 1;
-                        unsigned qend = diag + end + kmer_size;
-                        unsigned sstart = start + 1;
-                        unsigned send = end + kmer_size;
-
-                        RangePair rp= rangePairFactory(numseqQ, qstart, qend, curr_seq , sstart, send, score, step_q, count);
-                        frag.push_back(rp);
-
+                        frag.push_back(record_frag(start,end,diag,
+                                                   score,numseqQ,curr_seq,count));
                     }
                     start = 0;
                 }
@@ -62,103 +55,28 @@ void Hasher::diagSearch(const SDGBioSeq &sequence, unsigned numseqQ, std::vector
             {
                 if (end + kmer_size - start - 1 >= min_frag_size) {
                     count++;
-                    unsigned qstart = diag + start + 1;
-                    unsigned qend = diag + end + kmer_size;
-                    unsigned sstart = start + 1;
-                    unsigned send = end + kmer_size;
-                    RangePair rp= rangePairFactory(numseqQ, qstart, qend, curr_seq , sstart, send, score, step_q, count);
-                    frag.push_back(rp);
+                    frag.push_back(record_frag(start,end,diag,
+                                               score,numseqQ,curr_seq,count));
                 }
             }
         } //end size>2, diag_map loop
     }
 
-    curr_seq=0;
-    for (std::vector<std::list<Diag> >::iterator iter_seq = diag_map_comp.begin();
-         iter_seq != diag_map_comp.end(); iter_seq++) {
-        unsigned size = iter_seq->size();
-        if (size > 2) {
-            iter_seq->sort();
-
-            unsigned start = 0;
-            unsigned end = 0;
-            unsigned score = 0;
-            int diag = 0;
-
-            std::list<Diag>::iterator iter_diag = iter_seq->begin();
-            Diag prev_d = *iter_diag;
-            while (++iter_diag != iter_seq->end()) {
-                Diag curr_d = *iter_diag;
-                curr_seq=curr_d.wpos.numSeq;
-
-                if (prev_d.diag == curr_d.diag
-                    && prev_d.wpos.numSeq == curr_d.wpos.numSeq
-                    && prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos)
-                    if (start != 0) //extending
-                    {
-                        end = curr_d.wpos.pos;
-                        score++;
-                    } else //first hit (2 kmers found at correct distance)
-                    {
-                        diag = prev_d.diag;
-                        start = prev_d.wpos.pos;
-                        end = curr_d.wpos.pos;
-                        score = 1;
-                    }
-                else //stop extension if distance between kmer too long
-                if (start != 0) // Record hit
-                {
-                    if (end + kmer_size - start - 1 >= min_frag_size) {
-                        count++;
-                        unsigned qstart = len - (diag + start);
-                        unsigned qend = len - (diag + end) - kmer_size + 1;
-                        unsigned sstart = start + 1;
-                        unsigned send = end + kmer_size;
-                        RangePair rp= rangePairFactory(numseqQ, qstart, qend, curr_seq , sstart, send, score, step_q, count);
-                        frag.push_back(rp);
-                    }
-                    start = 0;
-                }
-                prev_d = curr_d;
-            } //end for
-            if (start != 0) // Record hit at the end of the loop
-            {
-                if (end + kmer_size - start - 1 >= min_frag_size) {
-                    count++;
-                    unsigned qstart = len - (diag + start);
-                    unsigned qend = len - (diag + end) - kmer_size + 1;
-                    unsigned sstart = start + 1;
-                    unsigned send = end + kmer_size;
-                    RangePair rp= rangePairFactory(numseqQ, qstart, qend, curr_seq , sstart, send, score, step_q, count);
-                    frag.push_back(rp);
-                }
-            }
-        } //end size>2, diag_map_comp loop
-
-    }
     if (verbose > 0) {
         std::cout << "Fragments number founds:" << count << std::endl;
     }
 }
-
-
-
-
 //-------------------------------------------------------------------------
 // Search for alignments with word matches
 void Hasher::matchKmers(const SDGBioSeq& sequence,
-	    unsigned start, unsigned end, unsigned numseq, bool repeat,
-		std::vector< std::list<Diag> >& diag_map, std::vector< std::list<Diag> >& diag_map_comp)
+	    unsigned start, unsigned end, bool repeat,
+		std::vector< std::list<Diag> >& diag_map)
 {
   unsigned last_pos=end-kmer_size;
   if(end<=kmer_size) return;
 
   std::string str=sequence.toString().substr(start,end-start);
   const char* seq=str.c_str();
-
-  SDGBioSeq comp_sequence=newSDGMemBioSeq(str).complement();
-  std::string str_comp=comp_sequence.toString();
-  const char* seq_comp=str_comp.c_str();
 
   unsigned key_d=0,dirhit=0;
   unsigned i=start;
@@ -183,34 +101,7 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
           i += 1;
       }
   }
-  std::cout<<dirhit<<" direct hits found / ";
-
-  unsigned key_c=0,comphit=0;
-  i=start;
-  while(i<=last_pos) {
-      bool found=false;
-      key_c=hseq(seq_comp);
-      std::vector<KmerSpos>::iterator begin_c=hash2wpos[key_c];
-      std::vector<KmerSpos>::iterator end_c=hash2wpos[key_c+1];
-      for(std::vector<KmerSpos>::iterator j=begin_c;j!=end_c;j++)
-      {
-          if (j->numSeq > 0) {
-              comphit++;
-              long diag = long(i) - j->pos;
-              diag_map_comp[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
-              found=true;
-          }
-      }
-      if(found){
-          seq_comp += step_q;
-          i+=step_q;
-      } else {
-          seq_comp += 1;
-          i += 1;
-      }
-    }
-
-	std::cout<<comphit<<" reverse hits found"<<std::endl;;
+  std::cout<<dirhit<<" hits found / ";
 }
 //-------------------------------------------------------------------------
 // Search for Alignments
@@ -221,29 +112,29 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 	clock_begin = clock();
 	std::cout<<"hashing query sequence..."<<std::flush;
 
-	std::vector< std::list<Diag> > diag_map, diag_map_comp;
+	std::vector< std::list<Diag> > diag_map;
 	diag_map.resize(subject_names.size()+1);
-	diag_map_comp.resize(subject_names.size()+1);
-	matchKmers(sequence, start, end, numseq, repeat, diag_map, diag_map_comp);
+	matchKmers(sequence, start, end, repeat, diag_map);
 
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
-	diagSearch(sequence, numseq, diag_map, diag_map_comp, connect_dist, kmer_size, min_frag_size, frag, verbose);
+	diagSearch(sequence, numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 
-    clock_begin = clock();
-    std::cout<<"merge fragments..."<<std::flush;
-    fragMerge(frag);
-    std::cout<<"ok"<<std::endl;
-    std::cout<<frag.size()<<" ranges found";
-    clock_end = clock();
-    std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
+//    clock_begin = clock();
+//    std::cout<<"merge fragments..."<<std::flush;
+//    fragMerge(frag);
+//    std::cout<<"ok"<<std::endl;
+//    std::cout<<frag.size()<<" ranges found";
+//    clock_end = clock();
+//    std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
+
 }
 //-------------------------------------------------------------------------
 // Merge overlapping rangePair
@@ -258,8 +149,8 @@ void Hasher::fragMerge(std::list< RangePair >& frag)
         std::list< RangePair >::iterator next_frag_it =curr_frag_it;
         next_frag_it++;
         while( next_frag_it != frag.end()) {
-
             if (curr_frag_it->overlapQ(*next_frag_it)) {
+                //TODO chose a subject name if different
                 curr_frag_it->merge(*next_frag_it);
                 next_frag_it = frag.erase(next_frag_it);
             } else{
@@ -274,35 +165,34 @@ void Hasher::fragMerge(std::list< RangePair >& frag)
 // Stats on rangePair lists
 unsigned Hasher::fragStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage)
 {
-
     coverage=0;
     if(frag.size()==0){
         return 0;
     }
-    std::vector<unsigned> length_list;
+    std::vector<unsigned> score_list;
     for( std::list< RangePair >::const_iterator curr_frag_it=frag.begin();
          curr_frag_it != frag.end() ; curr_frag_it++) {
         unsigned len=curr_frag_it->getLength();
         coverage+=len;
-        length_list.push_back(len);
+        score_list.push_back(curr_frag_it->getScore());
     }
-    sort(length_list.begin(),length_list.end());
-    unsigned nb_frag=length_list.size();
-    unsigned min_len=length_list.front();
-    unsigned max_len=length_list.back();
-    unsigned qval=length_list[(int)std::floor(length_list.size()*quantile)];
-    std::cout<<"Frag number="<<nb_frag<<" / "
-             <<"min length="<<min_len<<" / "
-             <<"max length="<<max_len<<" / "
+    sort(score_list.begin(), score_list.end());
+    unsigned nb_frag=score_list.size();
+    unsigned min_score=score_list.front();
+    unsigned max_score=score_list.back();
+    unsigned qval=score_list[(int)std::floor(score_list.size() * quantile)];
+    std::cout << "Frag number=" << nb_frag << " / "
+              << "min score=" << min_score << " / "
+              << "max score=" << max_score << " / "
              <<"quantile ("<<quantile<<")="<<qval
              <<std::endl;
     return qval;
 }
 //-------------------------------------------------------------------------
-// Stats on rangePair lists
+// Filter length on rangePair lists
 void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
 {
-    std::cout<<"--Filter fragments <"<<min_len<<" ... "<<std::flush;
+    std::cout<<"--Filter fragments length <"<<min_len<<" ... "<<std::flush;
     std::list< RangePair >::iterator frag_it=frag.begin();
     while(frag_it != frag.end()) {
         if(frag_it->getLength()<min_len){
@@ -310,6 +200,90 @@ void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
         }else{frag_it++;}
     }
     std::cout<<"done !"<<std::endl;
+}
+//-------------------------------------------------------------------------
+// Filter score on rangePair lists
+void Hasher::fragScoreFilter(std::list< RangePair >& frag, unsigned min_score)
+{
+    std::cout<<"--Filter fragments score <"<<min_score<<" ... "<<std::flush;
+    std::list< RangePair >::iterator frag_it=frag.begin();
+    while(frag_it != frag.end()) {
+        if(frag_it->getScore()<min_score){
+            frag_it = frag.erase(frag_it);
+        }else{frag_it++;}
+    }
+    std::cout<<"done !"<<std::endl;
+}
+//-------------------------------------------------------------------------
+// Write a rangePair lists
+void Hasher::fragSeqAlign(std::list< RangePair >& frag,
+                          const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse)
+{
+    SDGFastaIstream query_in(fasta_queryfilename);
+    if (!query_in) {
+        std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
+    }
+
+    SDGBioSeqDB subject_db(fasta_subjectfilename);
+
+    unsigned numseq=0;
+    while (query_in) {
+        SDGBioSeq seq;
+        if (query_in)
+            query_in >> seq;
+        if(reverse){
+            seq=seq.reverse();
+        }
+        numseq++;
+        std::cout << seq.getDE() << " len:" << seq.length() << " read!" << std::endl;
+        for (std::list<RangePair>::iterator curr_frag_it = frag.begin();
+             curr_frag_it != frag.end(); curr_frag_it++) {
+            if (curr_frag_it->getRangeQ().getNumChr() == numseq) {
+                curr_frag_it->view();
+                // RangePair on the current query sequence
+                SDGBioSeq qseq;
+                qseq = seq.subseq(curr_frag_it->getRangeQ().getMin()-1,
+                                  curr_frag_it->getRangeQ().getLength());
+                if (!curr_frag_it->getRangeQ().isPlusStrand()) {
+                    qseq = qseq.complement();
+                }
+                unsigned qlen=qseq.length();
+                char *qs = new char[qlen+1];
+                char *qptr = qs;
+                std::strcpy(qs, qseq.toString().c_str());
+                std::cout << "query:  " << qs << "-" << qlen << std::endl;
+
+                // Get subject sequence
+                SDGBioSeq sseq = subject_db[curr_frag_it->getRangeS().getNumChr()-1];
+
+                SDGBioSeq fragsseq;
+                fragsseq = sseq.subseq(curr_frag_it->getRangeS().getMin()-1,
+                                       curr_frag_it->getRangeS().getLength());
+                if (!curr_frag_it->getRangeS().isPlusStrand()) {
+                    fragsseq = fragsseq.complement();
+                }
+                unsigned slen=fragsseq.length();
+                char *ss = new char[slen+1];
+                char *sptr = ss;
+                std::strcpy(ss, fragsseq.toString().c_str());
+                std::cout << "subject:" << ss << "-" << slen << std::endl;
+
+                unsigned count=0;
+                for(unsigned i=0;i<qlen;i++)
+                {
+                    if(*qs==*ss) count++;
+                    ss++;
+                    qs++;
+                }
+                delete [] qptr;
+                delete [] sptr;
+
+                curr_frag_it->setIdentity(((float)count)/qlen*100);
+                curr_frag_it->setScore(count);
+                std::cout << "Score = " << count<<" identity = " << ((float)count)/qlen * 100<< std::endl;
+            }
+        }
+    }
 }
 //-------------------------------------------------------------------------
 // Write a rangePair lists

@@ -62,9 +62,9 @@ protected:
 
       KmerSpos(unsigned p=0, unsigned n=0): pos(p), numSeq(n) {
           if (n>1000000)
-              throw Unsigned_Out_Of_Range("KmerSpos setup error: n=",n);
-          if(p>500000)
-              throw Unsigned_Out_Of_Range("KmerSpos setup error: p=",p);
+              throw Unsigned_Out_Of_Range("KmerSpos - sequence number setup out of range: n=",n);
+          if(p>1000000000)
+              throw Unsigned_Out_Of_Range("KmerSpos - sequence position setup out of range: p=",p);
           pos=p;
           numSeq=n;
       };
@@ -148,7 +148,7 @@ protected:
   		std::vector<unsigned>& bcount, unsigned& nb_bkmer,
   		std::vector<unsigned>& mcount, unsigned& nb_mkmer,
   		std::vector<unsigned>& ncount, unsigned& nb_nuc);
-  void kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize, unsigned mask,
+  void kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize, unsigned mask, unsigned mask_hole_length,
 		  const std::vector<unsigned>& wcount, unsigned nb_kmer,
 		  const std::vector<unsigned>& bcount, unsigned nb_bkmer,
 		  const std::vector<unsigned>& mcount, unsigned nb_mkmer,
@@ -163,9 +163,10 @@ protected:
   void kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_infokmer);
   void kmer_filter(const std::list< Info_kmer >& list_infokmer, const Info_kmer& kmer_threshold, unsigned min_count,
   			std::vector<unsigned>& wcount, bool first_iter);
+  void kmer_ssr_filter(unsigned wsize, std::vector<unsigned>& wcount);
 
-  bool read_idx(const SDGString& filename, double count_cutoff, double diversity_cutoff, unsigned min_count, unsigned kmask);
-  void save_idx(const SDGString& filename, double count_cutoff, double diversity_cutoff, unsigned min_count, unsigned kmask, const std::vector<unsigned>& wcount);
+  bool read_idx(const SDGString& filename, double count_cutoff, double diversity_cutoff, unsigned min_count, unsigned kmask, unsigned mask_hole_length);
+  void save_idx(const SDGString& filename, double count_cutoff, double diversity_cutoff, unsigned min_count, unsigned kmask, unsigned mask_hole_length, const std::vector<unsigned>& wcount);
   unsigned hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount);
   unsigned hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount);
   unsigned hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount);
@@ -181,11 +182,11 @@ protected:
 
  public:
 
-  HashDNASeq(unsigned w=10, unsigned msk=100, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned step=1):
-    hseq(w,msk),
-    bhseq(bw),
-    mhseq(w/2),
-    nhseq(1),
+  HashDNASeq(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned step=1):
+    hseq(w,msk,mask_hole_length),
+    bhseq(bw,0,0),
+    mhseq(w/2,0,0),
+    nhseq(1,0,0),
     kmer_size(w),
     bkmer_size(bw),
     mkmer_size(w/2),
@@ -202,10 +203,10 @@ protected:
     };
 
   unsigned getEffectiveKmerSize() {return hseq.getEffectiveKmerSize();};
-  void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
+  void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		  unsigned min_count,
 		  bool & valid_idx_file, bool first_iter);
-  void kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned bkmer_size, unsigned mkmer_size,
+  void kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size,
 		  double count_cutoff, double diversity_cutoff,
 		  std::vector<unsigned>& wcount,
 		  unsigned& nb_kmer,

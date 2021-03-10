@@ -390,7 +390,7 @@ void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, boo
             SDGString filename = para.getPrefixFileName() + ".joined.bed";
             std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
             SDGString color = "253,63,146";
-            writeBED(filename, copy_list, color, verbose - 1);
+            writeBED(filename, copy_list, verbose - 1);
         }
         if (merged) {
             if (verbose > 0)
@@ -422,7 +422,7 @@ void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, boo
                 SDGString filename = para.getPrefixFileName() + ".merged.bed";
                 std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
                 SDGString color = "0,255,0";
-                writeBED(filename, copy_list, color, verbose - 1);
+                writeBED(filename, copy_list, verbose - 1);
             }
         }
         if ((clean_before | clean_after) & (verbose > 0))
@@ -440,7 +440,7 @@ void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, boo
             SDGString filename = para.getPrefixFileName() + ".cleaned.bed";
             std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
             SDGString color = "255,0,0";
-            writeBED(filename, copy_list, color, verbose - 1);
+            writeBED(filename, copy_list, verbose - 1);
         }
         if (clean_before || clean_after) {
             if (verbose > 0)
@@ -454,7 +454,7 @@ void BLRMatchMap::mapPath(bool joining, bool clean_before, bool clean_after, boo
                 SDGString filename = para.getPrefixFileName() + ".split.bed";
                 std::list<RangePairSet> copy_list = copyRpsListFromMapPath();
                 SDGString color = "237,127,16";
-                writeBED(filename, copy_list, color, verbose - 1);
+                writeBED(filename, copy_list, verbose - 1);
             }
         }
     } else  { // no join
@@ -759,17 +759,17 @@ void BLRMatchMap::writeRpsList(std::list<RangePairSet> &rps_list, std::ostream &
 }
 
 //---------------------------------------------------------------------------
-void BLRMatchMap::writeBED(const SDGString &filename, const std::list<RangePairSet> &rps_list, const SDGString &color,
+void BLRMatchMap::writeBED(const SDGString &filename, const std::list<RangePairSet> &rps_list,
                            int verbose) {
     std::ostringstream bedStream;
-    writeBED(bedStream, rps_list, color, verbose);
+    writeBED(bedStream, rps_list, verbose);
     std::ofstream bedFile(filename);
     bedFile << bedStream.str();
 }
 
 //---------------------------------------------------------------------------
 void
-BLRMatchMap::writeBED(std::ostream &out, const std::list<RangePairSet> &rps_list, const SDGString &color, int verbose) {
+BLRMatchMap::writeBED(std::ostream &out, const std::list<RangePairSet> &rps_list, int verbose) {
     if (verbose > 0)
         std::cout << "writing 'bed' file..." << std::flush;
 
@@ -783,7 +783,35 @@ BLRMatchMap::writeBED(std::ostream &out, const std::list<RangePairSet> &rps_list
             = rps_list.begin(); iter_list != rps_list.end();
          iter_list++) {
         std::string query_name = num2nameQ[iter_list->getNumQuery()];
-        iter_list->writeBED(out, query_name, num2nameS, color);
+        iter_list->writeBED(out, query_name, num2nameS);
+    }
+}
+//---------------------------------------------------------------------------
+void BLRMatchMap::writeGFF3(const SDGString &filename, const std::list<RangePairSet> &rps_list,
+                           int verbose) {
+    std::ostringstream gffStream;
+    writeGFF3(gffStream, rps_list, verbose);
+    std::ofstream bedFile(filename);
+    bedFile << gffStream.str();
+}
+
+//---------------------------------------------------------------------------
+void
+BLRMatchMap::writeGFF3(std::ostream &out, const std::list<RangePairSet> &rps_list, int verbose) {
+    if (verbose > 0)
+        std::cout << "writing 'gff3' file..." << std::flush;
+
+    if (verbose > 0) {
+        std::cout << " " << std::endl;
+        std::cout << "writeGFF3 rpsList size " << rps_list.size() << std::endl;
+    }
+
+    unsigned id=0;
+    for (std::list<RangePairSet>::const_iterator iter_list
+            = rps_list.begin(); iter_list != rps_list.end();
+         iter_list++) {
+        std::string query_name = num2nameQ[iter_list->getNumQuery()];
+        iter_list->writeGFF3(out, ++id, query_name, num2nameS);
     }
 }
 /*

@@ -37,7 +37,7 @@ void BLRRangePairSetList::writePathAttr(std::ostream& out)
     }
 }
 //---------------------------------------------------------------------------------------
-void BLRRangePairSetList::writeGFF3(std::ostream& out, const std::string& source)
+void BLRRangePairSetList::writeGFF3(std::ostream& out)
 {
 	unsigned path_id=0;
 	for(BLRRangePairSetList::const_iterator iter_list
@@ -45,7 +45,7 @@ void BLRRangePairSetList::writeGFF3(std::ostream& out, const std::string& source
 			iter_list++)
 		{
 		  unsigned id = ++path_id;
-		  iter_list->writeGFF3(out,id,iter_list->getRangeQ().getNameSeq(),iter_list->getRangeS().getNameSeq(),source);
+		  iter_list->writeGFF3(out,id,iter_list->getRangeQ().getNameSeq(),iter_list->getRangeS().getNameSeq());
 		}
 }
 

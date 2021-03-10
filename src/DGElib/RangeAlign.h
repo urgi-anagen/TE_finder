@@ -57,6 +57,10 @@ class RangeAlign: public Range
 			Range::set(s,e);
 		};
 
+        void translate_comp(unsigned len_seq){
+            Range::translate_comp(len_seq);
+        }
+
 		long getNumChr(){return num_chr;};
 		long getNumChr() const {return num_chr;};
 		void setNumChr(long c){num_chr=c;};

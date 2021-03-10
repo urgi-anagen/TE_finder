@@ -218,21 +218,41 @@ void BLRMatchPath::write(std::ostream &out) {
     }
 }
 //---------------------------------------------------------------------------
-void BLRMatchPath::writeBED(const SDGString &filename, const SDGString &color) {
+void BLRMatchPath::writeBED(const SDGString &filename) {
     std::ostringstream bedStream;
-    writeBED(bedStream, color);
+    writeBED(bedStream);
     std::ofstream bedFile(filename);
     bedFile << bedStream.str();
 }
 
 //---------------------------------------------------------------------------
-void BLRMatchPath::writeBED(std::ostream &out, const SDGString &color) {
+void BLRMatchPath::writeBED(std::ostream &out) {
 
     for (MapPath::iterator m = begin(); m != end(); m++) {
         m->second.sort(RangePair::less);
         for(std::list<RangePairSet>::iterator it=m->second.begin(); it != m->second.end(); it++){
             std::string query_name = num2nameQ[it->getNumQuery()];
-            it->writeBED(out, query_name, num2nameS, color);
+            it->writeBED(out, query_name, num2nameS);
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void BLRMatchPath::writeGFF3(const SDGString &filename) {
+    std::ostringstream gffStream;
+    writeBED(gffStream);
+    std::ofstream bedFile(filename);
+    bedFile << gffStream.str();
+}
+
+//---------------------------------------------------------------------------
+void BLRMatchPath::writeGFF3(std::ostream &out) {
+
+    unsigned id=0;
+    for (MapPath::iterator m = begin(); m != end(); m++) {
+        m->second.sort(RangePair::less);
+        for(std::list<RangePairSet>::iterator it=m->second.begin(); it != m->second.end(); it++){
+            std::string query_name = num2nameQ[it->getNumQuery()];
+            it->writeGFF3(out, ++id, query_name, num2nameS);
         }
     }
 }

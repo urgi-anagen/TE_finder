@@ -175,7 +175,8 @@ int main(int argc, char *argv[]) {
         SDGString parafile = filename.str() + ".param";
         para.write(filename.str() + ".param");
         map_path.write(filename.str() + ".path");
-        map_path.writeBED(filename.str() + ".bed", "black");
+        map_path.writeBED(filename.str() + ".bed");
+        map_path.writeGFF3(filename.str() + ".gff3");
 
         if (para.getBank() != "<not set!>" && para.getQuery() != "<not set>")
             map_path.writeMatch(para,filename.str() + ".tab", para.getVerbose());
