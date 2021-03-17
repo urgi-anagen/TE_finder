@@ -1,4 +1,5 @@
 #include <cstring>
+#include <memory>
 #include <SDGMemBioSeq.h>
 #include "HashDNASeq.h"
 
@@ -23,7 +24,8 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
 	  unsigned nb_kmer=0;
 	  std::list< Info_kmer > list_infokmer;
 	  Info_kmer kmer_threshold;
-	  kmer_analysis(filenameS,kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size, count_cutoff, diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
+	  kmer_analysis(filenameS,kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size, count_cutoff,
+                 diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
 	  kmer_ssr_filter(kmer_size, kmer_count);
       kmer_filter(list_infokmer, kmer_threshold, min_count, kmer_count, first_iter);
       end = clock();
@@ -33,6 +35,7 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
       //Prepare hash table of kmer positions
       begin = clock();
       std::cout<<"Prepare hash table"<<std::endl;
+      kmer_pos.clear();
       kmer_pos.resize(nb_kmer);
       unsigned k=0;
       std::vector<KmerSpos>::iterator last_it=kmer_pos.begin();
@@ -58,6 +61,7 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
       inS2.close();
       hash_ptr.clear();
       save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,mask_hole_length,kmer_count);
+      valid_idx_file=true;
     }
   std::cout<<"end preparation of subjects";
   end = clock();
@@ -116,11 +120,11 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmer_size, uns
 
   SDGFastaIstream inS(filenameS);
   unsigned count_seq=0;
+
   while(inS)
 	{
       SDGBioSeq sS;
-	  if(inS)
-		inS>>sS;
+	  if(inS) inS>>sS;
 	  std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::flush;
 	  nb_kmer+=hashSeqCount(sS,kmer_size, wcount);
 	  nb_bkmer+=hashSeqBackgroundCount(sS,bkmer_size, bcount);
@@ -548,7 +552,7 @@ void HashDNASeq::kmer_ssr_filter(unsigned wsize, std::vector<unsigned>& wcount) 
         }
         SDGBioSeq seq_ssr = newSDGMemBioSeq(oseq.str());
         unsigned len = seq_ssr.length();
-        std::cout << "SSR:" << seq_ssr.toString() <<" len="<<len<<std::endl;
+        // std::cout << "SSR:" << seq_ssr.toString() <<" len="<<len<<std::endl;
         unsigned last_pos = len - wsize;
         char *s = new char[len + 1];
         char *ptr=s;
@@ -653,17 +657,13 @@ unsigned HashDNASeq::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vec
   unsigned nb_kmer=0;
   if(len<=wsize) return 0;
   unsigned last_pos=len-wsize;
-  char *s = new char[len+1];
-  char *ptr = s;
-  std::strcpy(s, seq.toString().c_str());
-  s[len+1]='\0';
-  for(unsigned i=0;i<=last_pos;i++)
+ char* s = const_cast<char*>(seq.toString().c_str());
+  for(unsigned i=0;i<last_pos;i++)
     {
 	  nb_kmer++;
       wcount[hseq(s)]++;
       s++;
     }
-  delete [] ptr;
   return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -674,16 +674,12 @@ unsigned HashDNASeq::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    char *s = new char[len+1];
-    char *ptr = s;
-    std::strcpy(s, seq.toString().c_str());
-    s[len+1]='\0';
-    for (unsigned i = 0; i <= last_pos; i++) {
+    char* s = const_cast<char*>(seq.toString().c_str());
+    for (unsigned i = 0; i < last_pos; i++) {
         nb_kmer++;
         wcount[bhseq(s)]++;
         s++;
     }
-    delete [] ptr;
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -694,16 +690,12 @@ unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    char *s = new char[len+1];
-    char *ptr = s;
-    std::strcpy(s, seq.toString().c_str());
-    s[len+1]='\0';
-    for (unsigned i = 0; i <= last_pos; i++) {
+    char* s = const_cast<char*>(seq.toString().c_str());
+    for (unsigned i = 0; i < last_pos; i++) {
         nb_kmer++;
         wcount[mhseq(s)]++;
         s++;
     }
-    delete [] ptr;
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -713,16 +705,12 @@ unsigned HashDNASeq::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>
     unsigned len = seq.length();
     unsigned nb_kmer = 0;
     if (len < 1) return 0;
-    char *s = new char[len+1];
-    char *ptr = s;
-    std::strcpy(s, seq.toString().c_str());
-    s[len+1]='\0';
+    char* s = const_cast<char*>(seq.toString().c_str());
     for (unsigned i = 0; i < len; i++) {
         nb_kmer++;
         wcount[nhseq(s)]++;
         s++;
     }
-    delete [] ptr;
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
@@ -733,10 +721,8 @@ void HashDNASeq::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& w
     if (len <= kmer_size) return;
     unsigned last_pos = len - kmer_size;
     unsigned key;
-    char *s = new char[len+1];
-    char *ptr = s;
-    std::strcpy(s, seq.toString().c_str());
-    for (unsigned i = 0; i <= last_pos; i++) {
+    char* s = const_cast<char*>(seq.toString().c_str());
+    for (unsigned i = 0; i < last_pos; i++) {
         key = hseq(s);
 
         if (wcount[key] != 0) {
@@ -745,7 +731,6 @@ void HashDNASeq::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& w
         }
         s++;
     }
-    delete [] ptr;
 }
 //-------------------------------------------------------------------------
 void HashDNASeq::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged)

@@ -1,3 +1,8 @@
 #! /bin/bash
 
-rm *.kidx
+
+for i in *.kidx; do
+  if [ -f $i ]; then
+    rm $i
+  fi
+done

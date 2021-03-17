@@ -9,15 +9,15 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test_SDGlib);
 //------------------------------------------------------------------------------------------------------------
 void Test_SDGlib::test_SDGMemBioSeq( void )
 {
-    char str[]="ATATTTATTTTAGCGTTTACGCT";
 
-    unsigned exp_len=std::strlen(str);
-    
-	SDGBioSeq seq=newSDGMemBioSeq(str);
-	
-	unsigned obs_len=seq.length();
-	
-	CPPUNIT_ASSERT_EQUAL(exp_len,obs_len);
+    std::ostringstream ostr_exp;
+    ostr_exp<<"ATATTTATTTTAGCGTTTACGCT";
+    SDGBioSeq seq=newSDGMemBioSeq(ostr_exp.str());
+
+    std::ostringstream ostr_obs;
+    ostr_obs<<seq.toString();
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
 }
 //------------------------------------------------------------------------------------------------------------
 void Test_SDGlib::test_SDGMemBioSeq_subseq( void )

@@ -365,7 +365,7 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Random fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            hsrch.fragSeqAlign(rev_frag_list,filename1,filename2,true);
+            hsrch.fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
             qval=hsrch.fragStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
@@ -374,9 +374,10 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Real fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            hsrch.fragSeqAlign(frag_list,filename1,filename2,false);
+            hsrch.fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
             hsrch.fragScoreFilter(frag_list,qval);
             hsrch.fragStat(frag_list, qtile, genome_coverage);
+            genome_coverage=hsrch.fragCoverage(frag_list);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 

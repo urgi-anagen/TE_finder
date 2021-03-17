@@ -10,7 +10,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 	unsigned hole_period;
     unsigned hole_size;
 	unsigned effectiveKmerSize;
-	char* mask;
+	std::string mask;
 
 	HashFuncDNASeq(unsigned w, unsigned p=0, unsigned s=1): kmer_size(w), hole_period(p), hole_size(s)
 	{
@@ -18,7 +18,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
             hole_period=w+1;
             hole_size=0;
         }
-        mask = new char[kmer_size+1];
+        mask.resize(kmer_size) ;
         effectiveKmerSize=0;
         build_mask_spaced_hole();
         if(effectiveKmerSize>15)
@@ -26,7 +26,6 @@ struct HashFuncDNASeq // Compute hashing value of a word
 	};
 
     virtual ~HashFuncDNASeq() {
-        delete[] mask;
     }
 
     void build_mask_spaced_hole(void){
@@ -46,7 +45,6 @@ struct HashFuncDNASeq // Compute hashing value of a word
                 i++;
             }
         }
-        mask[i]='\0';
     }
     unsigned getEffectiveKmerSize(void){return effectiveKmerSize;};
     std::string getMask(void){return std::string(mask);};

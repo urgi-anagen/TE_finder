@@ -84,13 +84,14 @@ class Hasher : public HashDNASeq
 
   void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
               unsigned min_frag_size, bool repeat, std::list< RangePair >& fmerged, unsigned verbose);
-  void fragSeqAlign(std::list< RangePair >& frag,
-                              const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse);
-  unsigned fragStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);
-  void fragLenFilter(std::list< RangePair >& frag, unsigned min_len);
-  void fragScoreFilter(std::list< RangePair >& frag, unsigned min_score);
-  void fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfilename, const SDGString& sfilename, std::ostream& out);
-  void fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, SDGFastaOstream& out);
+  static void fragSeqAlign(std::list< RangePair >& frag,
+                              const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse, unsigned verbose);
+  static unsigned fragCoverage(const std::list< RangePair >& frag);
+  static unsigned fragStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);
+  static void fragLenFilter(std::list< RangePair >& frag, unsigned min_len);
+  static void fragScoreFilter(std::list< RangePair >& frag, unsigned min_score);
+  static void fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfilename, const SDGString& sfilename, std::ostream& out);
+  static void fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, SDGFastaOstream& out);
 };
 
 

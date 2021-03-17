@@ -256,17 +256,18 @@ int main(int argc, char* argv[])
               hsrch.kmer_analysis(filename2, kmer_size, kmask, 1,bw, kmer_size / 2, count_cutoff, diversity_cutoff,
                                   kmer_count, nb_kmer, list_infokmer, kmer_threshold);
           }
-          std::cout << "\nEnd HashDNASeq (version " << VERSION << ")" << std::endl;
+          std::cout << "\nEnd Duster (version " << VERSION << ")" << std::endl;
           exit(EXIT_SUCCESS);
       }
 
-    Duster hsrch(kmer_size, kmask, 1, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
+    Duster dstr(kmer_size, kmask, 1, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
-		hsrch.load(filename2,kmer_size, kmask, 1, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file, first_iter);
+		dstr.load(filename2, kmer_size, kmask, 1, bkmer_size, kmer_size / 2 , count_cutoff,
+                  diversity_cutoff, min_count, valid_idx_file, first_iter);
 
 		std::ofstream out;
 		std::stringstream out_name;
@@ -326,32 +327,32 @@ int main(int argc, char* argv[])
 				{
 					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 					std::cout<<"---direct strand---"<<std::endl;
-					hsrch.search(s,start,start+chunk_size-1,numseq,repeat,frag);
+					dstr.search(s, start, start + chunk_size - 1, numseq, repeat, frag);
 					std::cout<<"---reverse strand---"<<std::endl;
-					hsrch.search(comp_s,start,start+chunk_size-1,numseq,repeat,frag_comp);
+					dstr.search(comp_s, start, start + chunk_size - 1, numseq, repeat, frag_comp);
 					start=start+chunk_size;
 				}
 				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,start,s.length(),numseq,repeat,frag);
+				dstr.search(s, start, s.length(), numseq, repeat, frag);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,s.length(),numseq,repeat,frag_comp);
+				dstr.search(comp_s, start, s.length(), numseq, repeat, frag_comp);
 			}else
 			{
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,1,s.length(),numseq,repeat,frag);
+				dstr.search(s, 1, s.length(), numseq, repeat, frag);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,1,s.length(),numseq,repeat,frag_comp);
+				dstr.search(comp_s, 1, s.length(), numseq, repeat, frag_comp);
 
 			}
 			translate_comp(frag_comp, s.length());
 			frag.insert(frag.begin(), frag_comp.begin(), frag_comp.end());
-			hsrch.fragMerge(frag,(kmer_dist+1)*kmer_size,fmerged);
+			dstr.fragMerge(frag, (kmer_dist + 1) * kmer_size, fmerged);
 
-			genome_coverage+=hsrch.compute_coverage(fmerged);
-			if(verbosity>0) hsrch.writeBED(s.getDE(),frag,fragout);
-			hsrch.writeBED(s.getDE(),fmerged,out);
-			hsrch.get_sequences(fmerged,s,seqout);
+			genome_coverage+=dstr.compute_coverage(fmerged);
+			if(verbosity>0) dstr.writeBED(s.getDE(), frag, fragout);
+			dstr.writeBED(s.getDE(), fmerged, out);
+			dstr.get_sequences(fmerged, s, seqout);
 		  }
 		out.close();
 		if(verbosity>0) fragout.close();
@@ -367,7 +368,7 @@ int main(int argc, char* argv[])
 		repeat=false;
 		first_iter=false;
     }
-	std::cout<<"\nEnd HashDNASeq (version "<<VERSION<<")"<<std::endl;
+	std::cout<<"\nEnd Duster (version "<<VERSION<<")"<<std::endl;
 	end = clock();
     time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
     std::cout<<"====>Total time spent****: "<<time_spent<<std::endl;
