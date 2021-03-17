@@ -1,10 +1,10 @@
 Dependencies
 ============
 
-* cmake : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
+* cmake3 : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
 example under Debian type 'sudo apt-get install cmake'
 
-* cppunit : A C++ library for unitary tests.
+* cppunit-devel : A C++ library for unitary tests.
 
 Compilation
 ===========
@@ -12,7 +12,7 @@ Compilation
 <TE_finder-root-dir> is the root directory of TE-finder package
 
 1-go to the <TE_finder-root-dir> directory
-2-type 'cmake .'
+2-type 'cmake3 .'
 3-type 'make install'
 4-binaries are in <TE_finder-root-dir>/bin
 

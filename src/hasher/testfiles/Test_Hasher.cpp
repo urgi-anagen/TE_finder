@@ -47,9 +47,8 @@ void Test_Hasher::test_search(void ){
     hsrch.search(seq, start, end, numseq, connect_dist,
            min_frag_size, false, frag_list, verbosity);
 
-    for (std::list<RangePair>::const_iterator it = frag_list.cbegin();
-         it!=frag_list.cend(); it++){
-      it->view();
+    for (const auto & it : frag_list){
+      it.view();
     }
 
     // search on complement
@@ -58,14 +57,12 @@ void Test_Hasher::test_search(void ){
     hsrch.search(comp_seq, start, end, numseq, connect_dist,
                  min_frag_size, false, compfrag_list, verbosity);
 
-    for (std::list<RangePair>::const_iterator it = compfrag_list.cbegin();
-         it!=compfrag_list.cend(); it++){
-        RangePair rp(*it);
+    for (auto rp : compfrag_list){
         rp.getRangeQ().translate_comp(comp_seq.length());
         rp.view();
         frag_list.push_back(rp);
     }
-    hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false);
+    hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false,verbosity);
 
     std::system("rm query_test.fa subject_test.fa subject_test.fa.kidx");
 }
