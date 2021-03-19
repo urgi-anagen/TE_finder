@@ -17,10 +17,10 @@ Singularity images are available [here](https://cloud.sylabs.io/library/hquesnev
 
 You can run by simply typing:
 
--if the image is localy downloaded, type:
+-if the image is localy downloaded, type for example :
 
 `$ singularity run te_finder2.29.sif blaster2.29 -h`
 
--if the image is remote, type:
+-if the image is remote, type for example :
 
-`$ singularity run library://hquesneville/default/te_finder:2.29 blaster2.29`
+`$ singularity run library://hquesneville/default/te_finder:2.29 blaster2.29 -h`
