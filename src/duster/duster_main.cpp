@@ -264,19 +264,27 @@ int main(int argc, char* argv[])
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
+	std::stringstream bedout_name, seqout_name ;
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
 		dstr.load(filename2, kmer_size, kmask, 1, bkmer_size, kmer_size / 2 , count_cutoff,
                   diversity_cutoff, min_count, valid_idx_file, first_iter);
 
-		std::ofstream out;
-		std::stringstream out_name;
-		if(outfilename!="")
-			out_name<<outfilename<<"."<<iter<<".bed";
-		else
-			out_name<<filename1<<"."<<iter<<".duster.bed";
+        std::ofstream bedout;
+        bedout_name.str("");
+        bedout_name.clear();
+        seqout_name.str("");
+        seqout_name.clear();
+        if (!outfilename.empty()){
+            bedout_name << outfilename << "." << iter << ".bed";
+            seqout_name << outfilename << "." << iter << ".fa";
+        }
+        else{
+            bedout_name << filename1 << "." << iter << ".duster.bed";
+            seqout_name << filename1 << "." << iter << ".duster.fa";
+        }
 
-		out.open(out_name.str());
+		bedout.open(bedout_name.str());
 
 		std::ofstream fragout;
 		if(verbosity>0)
@@ -291,12 +299,6 @@ int main(int argc, char* argv[])
 		}
 
 		SDGFastaOstream seqout;
-		std::stringstream seqout_name;
-		if(outfilename!="")
-			seqout_name<<outfilename<<"."<<iter<<".fa";
-		else
-			seqout_name<<filename1<<"."<<iter<<".duster.bed.fa";
-
 		seqout.open(seqout_name.str());
 	
 		SDGFastaIstream in(filename1);
@@ -351,10 +353,10 @@ int main(int argc, char* argv[])
 
 			genome_coverage+=dstr.compute_coverage(fmerged);
 			if(verbosity>0) dstr.writeBED(s.getDE(), frag, fragout);
-			dstr.writeBED(s.getDE(), fmerged, out);
+			dstr.writeBED(s.getDE(), fmerged, bedout);
 			dstr.get_sequences(fmerged, s, seqout);
 		  }
-		out.close();
+		bedout.close();
 		if(verbosity>0) fragout.close();
 		seqout.close();
 		std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
@@ -373,6 +375,24 @@ int main(int argc, char* argv[])
     time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
     std::cout<<"====>Total time spent****: "<<time_spent<<std::endl;
 
+      //Write final results
+      std::stringstream alignout_final_name;
+      std::stringstream seqout_final_name;
+      if (outfilename != "") {
+          alignout_final_name << outfilename << ".final.bed";
+          seqout_final_name << outfilename << ".final.fa";
+      } else {
+          alignout_final_name << filename1 << ".final.duster.bed";
+          seqout_final_name << filename1 << ".final.duster.fa";
+      }
+
+      std::stringstream cmd1,cmd2;
+
+      cmd1<<"cp "<<bedout_name.str()<<" "<<alignout_final_name.str();
+      std::system(cmd1.str().c_str());
+
+      cmd2<<"cp "<<seqout_name.str()<<" "<<seqout_final_name.str();
+      std::system(cmd2.str().c_str());
 	exit( EXIT_SUCCESS );
   }
 	catch( SDGException e )

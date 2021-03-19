@@ -41,7 +41,6 @@ class Hasher : public HashDNASeq
                                unsigned int score, unsigned step_q, unsigned kmer_size, unsigned id) {
         double kmer_density =  ((double)(score) / ((send - sstart + 1) / step_q)) * 100;
         unsigned kmer_score = std::lround((send - sstart + 1) * (kmer_density/100));
-        if(numseqS>100000){std::cout<<"error subject num:"<<numseqS<<std::endl;}
         RangePair rp(numseqQ,qstart,qend,numseqS,sstart,send,kmer_score,0,kmer_density, id);
         return rp;
     }
