@@ -202,8 +202,9 @@ protected:
       max_key=(unsigned)pow(4,hseq.getEffectiveKmerSize());
     };
 
-  unsigned getEffectiveKmerSize() {return hseq.getEffectiveKmerSize();};
-  void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
+    virtual unsigned getEffectiveKmerSize() {return hseq.getEffectiveKmerSize();};
+
+    virtual void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		  unsigned min_count,
 		  bool & valid_idx_file, bool first_iter);
   void kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size,
@@ -211,7 +212,8 @@ protected:
 		  std::vector<unsigned>& wcount,
 		  unsigned& nb_kmer,
 		  std::list< Info_kmer >& list_infokmer, Info_kmer& kmer_threshold);
-  void search(const SDGBioSeq& seq, unsigned start, unsigned end,unsigned numseq, bool repeat,
+
+    virtual void search(const SDGBioSeq& seq, unsigned start, unsigned end,unsigned numseq, bool repeat,
 		  std::vector< std::pair<unsigned,unsigned> >& fmerged);
 };
 

@@ -31,7 +31,6 @@ class Duster : public HashDNASeq
 
   void search(const SDGBioSeq& seq, unsigned start, unsigned end,unsigned numseq, bool repeat,
 		  std::vector< std::pair<unsigned,unsigned> >& fmerged);
-  void writeHitBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out);
   void writeBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out);
   unsigned compute_coverage(const std::vector< std::pair<unsigned,unsigned> >& frag);
   void fragMerge(std::vector< std::pair<unsigned,unsigned> >& frag,

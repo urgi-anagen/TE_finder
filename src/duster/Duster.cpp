@@ -102,34 +102,27 @@ void Duster::fragMerge(std::vector< std::pair<unsigned,unsigned> >& frag,
       }
 }
 //-------------------------------------------------------------------------
-void Duster::writeHitBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out)
-{
-  unsigned size=frag.size();
-  for(unsigned i=0; i<size; ++i)
-    {
-	  out<<qname<<"\t" // chromosome
-		 <<frag[i].first  //chrom start
-		 <<"\t"<<frag[i].second  //chrom end
-		 <<"\t"<<"duster" // name
-		 <<"\t"<<frag[i].second-frag[i].first //score
-		 <<"\t"<<"+" //strand
-//		 <<"\t"<<frag[i].first //thickStart
-//		 <<"\t"<<frag[i].second //thickEnd
-		 <<std::endl;
-    }
-}//-------------------------------------------------------------------------
 void Duster::writeBED(SDGString qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out)
 {
   unsigned size=frag.size();
-  for(unsigned i=0; i<size; ++i)
-    {
-	  out<<qname<<"\t" // chromosome
-		 <<frag[i].first  //chrom start
-		 <<"\t"<<frag[i].second  //chrom end
-		 <<"\t"<<"duster" // name
-		 <<"\t"<<frag[i].second-frag[i].first //score
-		 <<"\t"<<"+" //strand
-		 <<std::endl;
+    for (unsigned i = 0; i < size; ++i) {
+        if (frag[i].first < frag[i].second) {
+            out << qname << "\t" // chromosome
+                << frag[i].first  //chrom start
+                << "\t" << frag[i].second  //chrom end
+                << "\t" << "duster" // name
+                << "\t" << frag[i].second - frag[i].first //score
+                << "\t" << "+" //strand
+                << std::endl;
+        } else {
+            out << qname << "\t" // chromosome
+                << frag[i].second  //chrom start
+                << "\t" << frag[i].first  //chrom end
+                << "\t" << "duster" // name
+                << "\t" << frag[i].first - frag[i].second //score
+                << "\t" << "-" //strand
+                << std::endl;
+        }
     }
 }
 //-------------------------------------------------------------------------
@@ -139,21 +132,31 @@ unsigned Duster::compute_coverage(const std::vector< std::pair<unsigned,unsigned
   unsigned coverage=0;
   for(unsigned i=0; i<size; ++i)
     {
-	  coverage+=frag[i].second-frag[i].first;
+        if (frag[i].first < frag[i].second)
+            coverage += frag[i].second - frag[i].first;
+        else
+            coverage += frag[i].first - frag[i].second;
     }
   return coverage;
 }
 //-------------------------------------------------------------------------
 void Duster::get_sequences(const std::vector< std::pair<unsigned,unsigned> >& frag, SDGBioSeq& seq, SDGFastaOstream& out)
 {
-  unsigned size=frag.size();
-  for(unsigned i=0; i<size; ++i)
-    {
-	  SDGBioSeq subseq=seq.subseq(frag[i].first,frag[i].second-frag[i].first+1);
-	  std::ostringstream name;
-	  name<<seq.getDE()<<":"<<frag[i].first<<".."<<frag[i].second;
-	  subseq.setDE((SDGString)name.str());
-	  out<<subseq;
+
+    unsigned size = frag.size();
+    for (unsigned i = 0; i < size; ++i) {
+        std::ostringstream name;
+        name << seq.getDE() << ":" << frag[i].first << ".." << frag[i].second;
+        if (frag[i].first < frag[i].second) {
+            SDGBioSeq subseq = seq.subseq(frag[i].first, frag[i].second - frag[i].first + 1);
+            subseq.setDE((SDGString) name.str());
+            out << subseq;
+        } else {
+            SDGBioSeq subseq = seq.subseq(frag[i].second, frag[i].first - frag[i].second + 1);
+            SDGBioSeq subseq_comp = subseq.complement();
+            subseq_comp.setDE((SDGString) name.str());
+            out << subseq_comp;
+        }
     }
 }
 

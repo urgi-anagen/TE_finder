@@ -74,8 +74,8 @@ void show_parameter(SDGString filename1,SDGString filename2)
 };
 void translate_comp(std::vector< std::pair<unsigned,unsigned> >& frag, unsigned len_seq){
     for(std::vector< std::pair<unsigned,unsigned> >::iterator it=frag.begin(); it!=frag.end();it++){
-        it->first=len_seq-it->second+1;
-        it->second=len_seq-it->first+1;
+        it->first=len_seq-it->first+1;
+        it->second=len_seq-it->second+1;
     }
 }
 int main(int argc, char* argv[])
@@ -286,17 +286,6 @@ int main(int argc, char* argv[])
 
 		bedout.open(bedout_name.str());
 
-		std::ofstream fragout;
-		if(verbosity>0)
-		{
-			std::stringstream fragout_name;
-			if(outfilename!="")
-				fragout_name<<outfilename<<"."<<iter<<".frag.bed";
-			else
-				fragout_name<<filename1<<"."<<iter<<".duster.frag.bed";
-
-			fragout.open(fragout_name.str());
-		}
 
 		SDGFastaOstream seqout;
 		seqout.open(seqout_name.str());
@@ -349,15 +338,14 @@ int main(int argc, char* argv[])
 			}
 			translate_comp(frag_comp, s.length());
 			frag.insert(frag.begin(), frag_comp.begin(), frag_comp.end());
-			dstr.fragMerge(frag, (kmer_dist + 1) * kmer_size, fmerged);
+			frag_comp.clear();
+			//dstr.fragMerge(frag, frag_connect_dist, fmerged);
 
-			genome_coverage+=dstr.compute_coverage(fmerged);
-			if(verbosity>0) dstr.writeBED(s.getDE(), frag, fragout);
-			dstr.writeBED(s.getDE(), fmerged, bedout);
-			dstr.get_sequences(fmerged, s, seqout);
+			genome_coverage+=dstr.compute_coverage(frag);
+			dstr.writeBED(s.getDE(), frag, bedout);
+			dstr.get_sequences(frag, s, seqout);
 		  }
 		bedout.close();
-		if(verbosity>0) fragout.close();
 		seqout.close();
 		std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
 				<<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
