@@ -238,7 +238,19 @@ void Hasher::fragSeqAlign(std::list< RangePair >& frag,
     if (!query_in) {
         std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
     }
-    SDGBioSeqDB subject_db(fasta_subjectfilename);
+
+    std::vector<SDGBioSeq> subject_db;
+    SDGFastaIstream subject_in(fasta_subjectfilename);
+    if (!query_in) {
+        std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
+    }
+    while (subject_in) {
+        SDGBioSeq seq;
+        if (subject_in) {
+            subject_in >> seq;
+            subject_db.push_back(seq);
+        }
+    }
 
     unsigned numseq=0;
     while (query_in) {
