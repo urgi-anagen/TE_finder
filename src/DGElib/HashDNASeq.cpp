@@ -774,9 +774,9 @@ void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
   for(unsigned i=start;i<=last_pos;i+=step_q)
     {
       key_d=hseq(seq);
-      std::vector<KmerSpos>::iterator begin_d=hash2wpos[key_d];
-      std::vector<KmerSpos>::iterator end_d=hash2wpos[key_d+1];
-      for(std::vector<KmerSpos>::iterator j=begin_d;j!=end_d;j++)
+      auto begin_d=hash2wpos[key_d];
+      auto end_d=hash2wpos[key_d+1];
+      for(auto j=begin_d;j!=end_d;j++)
       {
           if (j->numSeq > 0) {
               long diag = long(i) - j->pos;

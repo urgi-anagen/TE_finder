@@ -25,6 +25,8 @@ class Hasher : public HashDNASeq
 {
 	friend class Test_Hasher;
 
+    using HashDNASeq::search;
+
 	void matchKmers(const SDGBioSeq& sequence,
 			    unsigned start, unsigned end, bool repeat,
 				std::vector< std::list<Diag> >& diag_map);
@@ -62,7 +64,7 @@ class Hasher : public HashDNASeq
           HashDNASeq(w, msk, mask_hole_length, bw, wd, fd, minsize, step)
     {};
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
-		  unsigned min_count, bool & valid_idx_file, bool first_iter)
+		  unsigned min_count, bool & valid_idx_file, bool first_iter) override
 	  {
 		  HashDNASeq::load(filenameS, kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size , count_cutoff, diversity_cutoff, min_count, valid_idx_file, first_iter);
 		  std::string line;
@@ -86,7 +88,8 @@ class Hasher : public HashDNASeq
   static void fragSeqAlign(std::list< RangePair >& frag,
                               const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse, unsigned verbose);
   static unsigned fragCoverage(const std::list< RangePair >& frag);
-  static unsigned fragStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);
+  static unsigned fragScoreStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);
+  static unsigned fragLengthStat(const std::list< RangePair >& frag, double quantile);
   static void fragLenFilter(std::list< RangePair >& frag, unsigned min_len);
   static void fragScoreFilter(std::list< RangePair >& frag, unsigned min_score);
   static void fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfilename, const SDGString& sfilename, std::ostream& out);

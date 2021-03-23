@@ -13,7 +13,7 @@
 
 double filter_cutoff=0.0;
 unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
-min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=0;
+min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=1;
 
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
@@ -30,7 +30,7 @@ void help(void)
       <<"   -h, --help:\n\t this help"<<std::endl
       <<"   -w, --kmer:\n\t kmer length, default: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
-      <<"   -k, --kmask:\n\t period of k-mer mask, default: "<<kmask<<std::endl
+      <<"   -k, --kmask:\n\t period of k-mer hole, default: "<<kmask<<std::endl
       <<"   -l, --len_hole_mask:\n\t kmer mask hole length, default: "<<mask_hole_length<<std::endl
       <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
 	<<kmer_dist<<std::endl
@@ -58,7 +58,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
 	  <<"Model sequences: "<<filename2<<std::endl
       <<"   -w, --kmer:\t kmer length: "<<kmer_size<<std::endl
       <<"   -S, --step_q:\t step on query sequence: "<<step_q<<std::endl
-      <<"   -k, --kmask:\t length of k-mer mask: "<<kmask<<std::endl
+      <<"   -k, --kmask:\t period of k-mer hole: "<<kmask<<std::endl
       <<"   -l, --len_hole_mask:\t kmer mask hole length: "<<mask_hole_length<<std::endl
       <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: "<<kmer_dist<<std::endl
       <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
@@ -360,13 +360,15 @@ int main(int argc, char *argv[]) {
 
 
             //Compute stat on resuts and filters false positives
-            unsigned qval;
+            unsigned qval_score,qval_len;
             double qtile=1-p_value;
 
             std::cout<<"--Random fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            hsrch.fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
-            qval=hsrch.fragStat(rev_frag_list, qtile, genome_coverage);
+            qval_len=Hasher::fragLengthStat(rev_frag_list, qtile);
+            Hasher::fragLenFilter(rev_frag_list,qval_len);
+            Hasher::fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
+            qval_score=Hasher::fragScoreStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
@@ -374,10 +376,11 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Real fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            hsrch.fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
-            hsrch.fragScoreFilter(frag_list,qval);
-            hsrch.fragStat(frag_list, qtile, genome_coverage);
-            genome_coverage=hsrch.fragCoverage(frag_list);
+            Hasher::fragLenFilter(frag_list,qval_len);
+            Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
+            Hasher::fragScoreFilter(frag_list,qval_score);
+            Hasher::fragScoreStat(frag_list, qtile, genome_coverage);
+            genome_coverage=Hasher::fragCoverage(frag_list);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
@@ -399,13 +402,13 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Write coord in "<<alignout_name.str()<<" ... "<<std::flush;
             alignout.open(alignout_name.str());
-            hsrch.fragAlignWrite(frag_list, filename1, filename2, alignout);
+            Hasher::fragAlignWrite(frag_list, filename1, filename2, alignout);
             alignout.close();
             std::cout<<"done!"<<std::endl;
 
             std::cout<<"--Write fasta in "<<seqout_name.str()<<" ... "<<std::flush;
             seqout.open(seqout_name.str());
-            hsrch.fragSeqWrite(frag_list, filename1, seqout);
+            Hasher::fragSeqWrite(frag_list, filename1, seqout);
             seqout.close();
             std::cout<<"done!"<<std::endl;
 
@@ -427,7 +430,7 @@ int main(int argc, char *argv[]) {
         //Write final results
         std::stringstream alignout_final_name;
         std::stringstream seqout_final_name;
-        if (outfilename != "") {
+        if (!outfilename.empty()) {
             alignout_final_name << outfilename << ".final.align";
             seqout_final_name << outfilename << ".final.fa";
         } else {
@@ -445,7 +448,7 @@ int main(int argc, char *argv[]) {
 
         exit(EXIT_SUCCESS);
     }
-    catch (SDGException e) {
+    catch (const SDGException& e) {
         std::cerr << "******Exception catched: " << e.message << " ******" << std::endl;
         exit(EXIT_FAILURE);
     }

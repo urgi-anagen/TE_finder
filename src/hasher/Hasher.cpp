@@ -86,12 +86,11 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
       auto begin_d = hash2wpos[key_d];
       auto end_d = hash2wpos[key_d + 1];
       for (auto j = begin_d; j != end_d; j++) {
-          if (j->numSeq > 0) {
-              dirhit++;
-              long diag = long(i) - j->pos;
-              diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
-              found=true;
-          }
+          if (j->numSeq == 0) continue;
+          dirhit++;
+          long diag = long(i) - j->pos;
+          diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+          found=true;
       }
       if(found){
       seq += step_q;
@@ -126,15 +125,6 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 	std::cout<<"ok"<<std::endl;
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
-
-//    clock_begin = clock();
-//    std::cout<<"merge fragments..."<<std::flush;
-//    fragMerge(frag);
-//    std::cout<<"ok"<<std::endl;
-//    std::cout<<frag.size()<<" ranges found";
-//    clock_end = clock();
-//    std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
-
 }
 //-------------------------------------------------------------------------
 // Merge overlapping rangePair
@@ -167,7 +157,7 @@ unsigned Hasher::fragCoverage(const std::list< RangePair >& frag)
 }
 //-------------------------------------------------------------------------
 // Stats on rangePair lists
-unsigned Hasher::fragStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage)
+unsigned Hasher::fragScoreStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage)
 {
     coverage=0;
     if(frag.empty()){
@@ -189,6 +179,28 @@ unsigned Hasher::fragStat(const std::list< RangePair >& frag, double quantile, u
               << "max score=" << max_score << " / "
              <<"quantile ("<<quantile<<")="<<qval
              <<std::endl;
+    return qval;
+}
+//-------------------------------------------------------------------------
+unsigned Hasher::fragLengthStat(const std::list< RangePair >& frag, double quantile)
+{
+    if(frag.empty()){
+        return 0;
+    }
+    std::vector<unsigned> length_list;
+    for(const auto & curr_frag_it : frag) {
+        length_list.push_back(curr_frag_it.getLength());
+    }
+    sort(length_list.begin(), length_list.end());
+    unsigned nb_frag=length_list.size();
+    unsigned min_score=length_list.front();
+    unsigned max_score=length_list.back();
+    unsigned qval=length_list[(int)std::floor(length_list.size() * quantile)];
+    std::cout << "Frag number=" << nb_frag << " / "
+              << "min length=" << min_score << " / "
+              << "max length=" << max_score << " / "
+              <<"quantile ("<<quantile<<")="<<qval
+              <<std::endl;
     return qval;
 }
 //-------------------------------------------------------------------------
@@ -226,7 +238,6 @@ void Hasher::fragSeqAlign(std::list< RangePair >& frag,
     if (!query_in) {
         std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
     }
-
     SDGBioSeqDB subject_db(fasta_subjectfilename);
 
     unsigned numseq=0;
@@ -256,6 +267,7 @@ void Hasher::fragSeqAlign(std::list< RangePair >& frag,
 
                 if(verbose>0) std::cout << "query:  " << qseq_str << "-" << qlen << std::endl;
                 // Get subject sequence
+
                 SDGBioSeq sseq = subject_db[curr_frag_it.getRangeS().getNumChr()-1];
 
                 SDGBioSeq fragsseq;
