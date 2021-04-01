@@ -256,6 +256,68 @@ void RangeMap::writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const
 	  std::cout<<count_skip<<" skipped!"<<std::endl;
 }
 //-------------------------------------------------------------------
+void RangeMap::writeCutSeq( const SDGString& outfname, const std::string& fasta_filename, int verbose )
+{
+    SDGFastaOstream out(outfname);
+    int countTreated=0;
+    int count_skip=0;
+    SDGFastaIstream in(fasta_filename);
+    if (!in) {
+        std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
+    }
+
+    while (in) {
+        SDGBioSeq chr;
+        if (!in) break;
+        in >> chr;
+        std::string h_seq=(const char*)(chr.getDE().start());
+        RangeMap::const_iterator c=find(h_seq);
+        if(c!=end())
+        {
+            for(std::list<RangeSeq>::const_iterator i=c->second.begin();
+                i!=c->second.end();i++)
+            {
+                long is = i->getStart();
+                long ie = i->getEnd();
+                if (i->getLength() < 14)// temporaire !!
+                {
+                    count_skip++;
+                    if(verbose>0)
+                        std::cout << "Squence length < 14 .. skip sequence:" << i->getName() << " " << i->getChr()
+                                  << " {Cut} " << is << ".." << ie << std::endl;
+                    continue;
+                }
+
+                countTreated ++;
+                if(verbose>0)
+                {
+                    std::cout<<"   working on range "<<countTreated<<"/"<<countRange
+                             <<" length="<<(long)std::abs(is-ie)+1<<std::endl;
+                    std::cout<<*i<<std::endl<<std::flush;
+                }
+                SDGBioSeq s=newSDGMemBioSeq("");
+                if(is<=ie)
+                {
+                    s=chr.subseq(is-1,ie-is+1);
+                }
+                else
+                {
+                    s=chr.subseq(ie-1,is-ie+1);
+                    s=s.complement();
+                }
+                std::ostringstream name;
+                name<<countTreated<<" "<<i->getName()<<" "<<i->getChr()
+                    <<" {Cut} "<<is<<".."<<ie;
+                s.setDE(name.str());
+                out<<s;
+            }
+        }
+    }
+    if(count_skip>0)
+        if(verbose>0)
+            std::cout<<count_skip<<" skipped!"<<std::endl;
+}
+//-------------------------------------------------------------------
 void RangeMap::writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose )
 {
   SDGFastaOstream out(outfname);
