@@ -13,7 +13,7 @@
 
 double filter_cutoff=0.0;
 unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
-min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=1;
+min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=1,algorithm=1;
 
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
@@ -49,6 +49,7 @@ void help(void)
       <<"   -c, --chunk_size:\n\t sequence chunk size in kb, default: None"<<std::endl
       <<"   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
       <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
+      <<"   -A, --algorithm:\n\t algorithm number, default"<<algorithm<<std::endl
   	  <<"   -v, --verbosity:\n\t verbosity level, default:"<<verbosity<<std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
@@ -70,6 +71,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
       <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
       <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
       <<"   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
+      <<"   -A, --algorithm:\t algorithm number, default: "<<algorithm<<std::endl
   	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
 };
 // search on sequence chunk, reverse sequence, and reverse complement
@@ -135,13 +137,14 @@ int main(int argc, char *argv[]) {
                             {"chunk_size",           required_argument, 0, 'c'},
                             {"nb_iter",              required_argument, 0, 'n'},
                             {"analysis",             no_argument,       0, 'a'},
+                            {"algorithm",            required_argument, 0, 'A'},
                             {"verbosity",            no_argument,       0, 'v'},
                             {0, 0,                                      0, 0}
                     };
             /* `getopt_long' stores the option index here. */
             int option_index = 0;
 
-            c = getopt_long(argc, argv, "hd:f:w:S:k:l:d:s:C:D:m:b:p:o:c:n:av:",
+            c = getopt_long(argc, argv, "hd:f:w:S:k:l:d:s:C:D:m:b:p:o:c:n:aA:v:",
                             long_options, &option_index);
 
             /* Detect the end of the options. */
@@ -214,7 +217,10 @@ int main(int argc, char *argv[]) {
                     stat_only = true;
                     break;
                 }
-
+                case 'A': {
+                    algorithm = atoi(optarg);
+                    break;
+                }
                 case 'v': {
                     verbosity = atoi(optarg);
                     break;
@@ -291,7 +297,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         }
 
-        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q);
+        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q, algorithm);
         bool valid_idx_file = true;
         double prev_genome_perc_coverage = 0.0;
         std::stringstream alignout_name, seqout_name ;
@@ -365,9 +371,13 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Random fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            qval_len=Hasher::fragLengthStat(rev_frag_list, qtile);
-            Hasher::fragLenFilter(rev_frag_list,qval_len);
-            Hasher::fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
+
+            if(algorithm==1)
+            {
+                qval_len=Hasher::fragLengthStat(rev_frag_list, qtile);
+                Hasher::fragLenFilter(rev_frag_list,qval_len);
+                Hasher::fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
+            }
             qval_score=Hasher::fragScoreStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
@@ -376,8 +386,10 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Real fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            Hasher::fragLenFilter(frag_list,qval_len);
-            Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
+            if(algorithm==1) {
+                Hasher::fragLenFilter(frag_list,qval_len);
+                Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
+            }
             Hasher::fragScoreFilter(frag_list,qval_score);
             Hasher::fragScoreStat(frag_list, qtile, genome_coverage);
             genome_coverage=Hasher::fragCoverage(frag_list);

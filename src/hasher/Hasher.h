@@ -27,14 +27,18 @@ class Hasher : public HashDNASeq
 
     using HashDNASeq::search;
 
+    unsigned algorithm;
+
 	void matchKmers(const SDGBioSeq& sequence,
 			    unsigned start, unsigned end, bool repeat,
 				std::vector< std::list<Diag> >& diag_map);
 
-    void diagSearch(const SDGBioSeq &sequence,
-                    unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
-                    unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
-                    std::list<RangePair> &frag, unsigned verbose);
+    void diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+                        unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
+                        std::list<RangePair> &frag, unsigned verbose);
+    void diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+                        unsigned min_frag_size,
+                        std::list<RangePair> &frag, unsigned verbose);
 
     void fragMerge(std::list< RangePair >& frag);
 
@@ -42,7 +46,7 @@ class Hasher : public HashDNASeq
                                const unsigned numseqS, unsigned int sstart, unsigned int send,
                                unsigned int score, unsigned step_q, unsigned kmer_size, unsigned id) {
         double kmer_density =  ((double)(score) / ((send - sstart + 1) / step_q)) * 100;
-        unsigned kmer_score = std::lround((send - sstart + 1) * (kmer_density/100));
+        unsigned kmer_score = score;
         RangePair rp(numseqQ,qstart,qend,numseqS,sstart,send,kmer_score,0,kmer_density, id);
         return rp;
     }
@@ -50,9 +54,9 @@ class Hasher : public HashDNASeq
     RangePair record_frag(unsigned start, unsigned end, unsigned diag,
                         unsigned score,unsigned numseqQ,unsigned curr_seq, unsigned count) {
         unsigned qstart = diag + start +1;
-        unsigned qend = diag + end + kmer_size ;
-        unsigned sstart = start  +1;
-        unsigned send = end + kmer_size ;
+        unsigned qend = diag + end + kmer_size +1;
+        unsigned sstart = start + 1;
+        unsigned send = end + kmer_size +1;
         return rangePairFactory(numseqQ, qstart, qend, curr_seq, sstart, send, score, step_q, kmer_size, count);
     }
 
@@ -60,9 +64,9 @@ class Hasher : public HashDNASeq
 
  public:
 
-  Hasher(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20,unsigned step=1):
+  Hasher(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20,unsigned step=1, unsigned alg=1):
           HashDNASeq(w, msk, mask_hole_length, bw, wd, fd, minsize, step)
-    {};
+    {algorithm=alg;};
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
 		  unsigned min_count, bool & valid_idx_file, bool first_iter) override
 	  {

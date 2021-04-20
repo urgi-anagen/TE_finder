@@ -52,6 +52,7 @@ struct Compare_Info_kmer {
 class HashDNASeq
 {
 	friend class Test_HashDNASeq;
+    friend class Test_Hasher;
 
 protected:
 

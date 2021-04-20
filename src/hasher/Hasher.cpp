@@ -2,19 +2,18 @@
 #include "Hasher.h"
 
 //-------------------------------------------------------------------------
-// Search for diagonal of word matches
-void Hasher::diagSearch(const SDGBioSeq &sequence,
-                        unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
-                        unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
-                        std::list< RangePair >& frag, unsigned verbose) {
+// Search for diagonal of word matches with distance
+void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+                            unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
+                            std::list< RangePair >& frag, unsigned verbose) {
     unsigned count = 0;
-    SDGString qname = sequence.getDE();
 
     unsigned curr_seq = 0;
     for (auto &iter_seq : diag_map) {
         unsigned size = iter_seq.size();
         if (size > 2) {
             iter_seq.sort();
+            bool extending=false;
             unsigned start = 0;
             unsigned end = 0;
             unsigned score = 0;
@@ -29,7 +28,7 @@ void Hasher::diagSearch(const SDGBioSeq &sequence,
                 if (prev_d.diag == curr_d.diag
                     && prev_d.wpos.numSeq == curr_d.wpos.numSeq
                     && prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos) {
-                    if (start != 0) //extending
+                    if (extending) //extending
                     {
                         end = curr_d.wpos.pos;
                         score++;
@@ -38,20 +37,21 @@ void Hasher::diagSearch(const SDGBioSeq &sequence,
                         diag = prev_d.diag;
                         start = prev_d.wpos.pos;
                         end = curr_d.wpos.pos;
+                        extending=true;
                         score = 1;
                     }
                 } else //stop extension if distance between kmer too long
-                if (start != 0) {
+                if (extending) {
                     if (end + kmer_size - start - 1 >= min_frag_size) {
                         count++;
                         frag.push_back(record_frag(start, end, diag,
                                                    score, numseqQ, curr_seq, count));
                     }
-                    start = 0;
+                    extending=false;
                 }
                 prev_d = curr_d;
             } //end for
-            if (start != 0) // Record hit at the end of the loop
+            if (extending) // Record hit at the end of the loop
             {
                 if (end + kmer_size - start - 1 >= min_frag_size) {
                     count++;
@@ -64,6 +64,82 @@ void Hasher::diagSearch(const SDGBioSeq &sequence,
 
     if (verbose > 0) {
         std::cout << "Fragments number founds:" << count << std::endl;
+    }
+}
+//-------------------------------------------------------------------------
+// Search for diagonal of word matches with score and penalty
+void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+                             unsigned min_frag_size,
+                             std::list<RangePair> &frag, unsigned verbose) {
+    double penalty = (double)1/wdist;
+    unsigned count = 0;
+
+    for (auto &iter_seq : diag_map) { // iter on subject sequence
+        unsigned size = iter_seq.size();
+        if (size > 2) {
+            iter_seq.sort();
+            bool extending = false;
+            unsigned start = 0;
+            unsigned end = 0;
+            unsigned score = kmer_size;
+            int diag = 0;
+
+            auto iter_diag = iter_seq.begin();
+            Diag curr_d, prev_d = *iter_diag;
+            while (++iter_diag != iter_seq.end()) {
+                curr_d = *iter_diag;
+                if (prev_d.diag == curr_d.diag) {
+                    int extended_score = 0;
+                    int dist = curr_d.wpos.pos - prev_d.wpos.pos - kmer_size;
+                    if (dist < 0 )
+                        extended_score = score + step_q;
+                    else
+                        extended_score = score + kmer_size - (unsigned) std::floor((double) (dist * penalty));
+                    if (extended_score > 0) {
+                        if (!extending){ //first hit (2 kmers found at correct distance)
+                            diag = curr_d.diag;
+                            start = prev_d.wpos.pos;
+                            end = curr_d.wpos.pos;
+                            extending = true;
+                            score = extended_score;
+                        } else { //extending
+                            end = curr_d.wpos.pos;
+                            score = extended_score;
+                        }
+                    } else //stop extension score to join two kmers < 0
+                        if (extending) {
+                            if (end + kmer_size - start - 1 >= min_frag_size) {
+                                count++;
+                                frag.push_back(record_frag(start, end, diag,
+                                                           score, numseqQ, curr_d.wpos.numSeq, count));
+                            }
+                            extending = false;
+                            score=kmer_size;
+                        }
+
+                } else //stop extension diag or seq are different
+                    if (extending) {
+                        if (end + kmer_size - start - 1 >= min_frag_size) {
+                            count++;
+                            frag.push_back(record_frag(start, end, diag,
+                                                       score, numseqQ, curr_d.wpos.numSeq, count));
+                        }
+                        extending = false;
+                        score=kmer_size;
+                }
+                prev_d = curr_d;
+            } //end size>2, diag_map loop
+            if (extending) // Record hit at the end of the loop
+                if (end + kmer_size - start - 1 >= min_frag_size) {
+                    count++;
+                    frag.push_back(record_frag(start, end, diag,
+                                               score, numseqQ, curr_d.wpos.numSeq, count));
+                }
+        }
+
+        if (verbose > 0) {
+            std::cout << "Fragments number founds:" << count << std::endl;
+        }
     }
 }
 //-------------------------------------------------------------------------
@@ -120,7 +196,10 @@ void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, uns
 
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
-	diagSearch(sequence, numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose);
+    if(algorithm==1)
+        diagSearchDist(numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose);
+    else
+        diagSearchScore(numseq, diag_map, min_frag_size, frag, verbose);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
 	clock_end = clock();
