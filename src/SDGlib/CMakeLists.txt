@@ -27,4 +27,6 @@ add_library(
 
         ${source_files}
 
-)
+        BioSeq.cpp BioSeq.h
+        FastaIstream.cpp FastaIstream.h
+        FastaOstream.cpp FastaOstream.h)

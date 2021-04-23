@@ -313,18 +313,18 @@ void Hasher::fragScoreFilter(std::list< RangePair >& frag, unsigned min_score)
 void Hasher::fragSeqAlign(std::list< RangePair >& frag,
                           const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse, unsigned verbose)
 {
-    SDGFastaIstream query_in(fasta_queryfilename);
+    FastaIstream query_in(fasta_queryfilename);
     if (!query_in) {
         std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
     }
 
-    std::vector<SDGBioSeq> subject_db;
-    SDGFastaIstream subject_in(fasta_subjectfilename);
+    std::vector<BioSeq> subject_db;
+    FastaIstream subject_in(fasta_subjectfilename);
     if (!query_in) {
         std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
     }
     while (subject_in) {
-        SDGBioSeq seq;
+        BioSeq seq;
         if (subject_in) {
             subject_in >> seq;
             subject_db.push_back(seq);
@@ -333,49 +333,43 @@ void Hasher::fragSeqAlign(std::list< RangePair >& frag,
 
     unsigned numseq=0;
     while (query_in) {
-        SDGBioSeq seq;
+        BioSeq seq;
         if (query_in)
             query_in >> seq;
         if(reverse){
             seq=seq.reverse();
         }
         numseq++;
-        if(verbose>0) std::cout << seq.getDE() << " len:" << seq.length() << " read!" << std::endl;
+        if(verbose>0) std::cout << seq.header << " len:" << seq.size() << " read!" << std::endl;
         for (auto & curr_frag_it : frag) {
             if (curr_frag_it.getRangeQ().getNumChr() == numseq) {
                 if(verbose>0) curr_frag_it.view();
                 // RangePair on the current query sequence
-                SDGBioSeq qseq;
-                std::string qseq_str;
+                BioSeq qseq;
                 qseq = seq.subseq(curr_frag_it.getRangeQ().getMin()-1,
                                   curr_frag_it.getRangeQ().getLength());
                 if (!curr_frag_it.getRangeQ().isPlusStrand()) {
-                    qseq_str = qseq.complement().toString();
+                    qseq = qseq.complement();
                 }
-                else
-                    qseq_str = qseq.toString();
-                unsigned qlen=qseq.length();
+                unsigned qlen=qseq.size();
 
-                if(verbose>0) std::cout << "query:  " << qseq_str << "-" << qlen << std::endl;
+                if(verbose>0) std::cout << "query:  " << qseq << "-" << qlen << std::endl;
                 // Get subject sequence
 
-                SDGBioSeq sseq = subject_db[curr_frag_it.getRangeS().getNumChr()-1];
+                BioSeq sseq = subject_db[curr_frag_it.getRangeS().getNumChr()-1];
 
-                SDGBioSeq fragsseq;
-                std::string fragsseq_str;
+                BioSeq fragsseq;
                 fragsseq = sseq.subseq(curr_frag_it.getRangeS().getMin()-1,
                                        curr_frag_it.getRangeS().getLength());
                 if (!curr_frag_it.getRangeS().isPlusStrand()) {
-                    fragsseq_str = fragsseq.complement().toString();
+                    fragsseq = fragsseq.complement();
                 }
-                else
-                    fragsseq_str = fragsseq.toString();
-                unsigned slen=fragsseq.length();
-                if(verbose>0) std::cout << "subject:" << fragsseq_str << "-" << slen << std::endl;
+                unsigned slen=fragsseq.size();
+                if(verbose>0) std::cout << "subject:" << fragsseq << "-" << slen << std::endl;
                 unsigned count=0;
                 for(unsigned i=0;i<qlen;i++)
                 {
-                    if(qseq_str[i]==fragsseq_str[i]) count++;
+                    if(qseq[i]==fragsseq[i]) count++;
                 }
 
                 curr_frag_it.setIdentity(((float)count)/qlen*100);
@@ -435,22 +429,22 @@ void Hasher::fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfile
 }
 //-------------------------------------------------------------------------
 // Write a rangePair lists
-void Hasher::fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, SDGFastaOstream& out)
+void Hasher::fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out)
 {
-    SDGFastaIstream in(fasta_filename);
+    FastaIstream in(fasta_filename);
     if (!in) {
         std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
     }
     unsigned numseq=0;
     while (in) {
-        SDGBioSeq seq;
+        BioSeq seq;
         if (in)
             in >> seq;
         numseq++;
-        std::cout << seq.getDE() << " len:" << seq.length() << " read!" << std::endl;
+        std::cout << seq.header << " len:" << seq.size() << " read!" << std::endl;
         for (const auto & curr_frag_it : frag) {
             if (curr_frag_it.getRangeQ().getNumChr() == numseq) {
-                SDGBioSeq sseq;
+                BioSeq sseq;
                 if (curr_frag_it.getRangeQ().isPlusStrand()) {
                     sseq = seq.subseq(curr_frag_it.getRangeQ().getStart(), curr_frag_it.getRangeQ().getEnd() - curr_frag_it.getRangeQ().getStart() + 1);
                 } else {
@@ -461,10 +455,10 @@ void Hasher::fragSeqWrite(const std::list< RangePair >& frag, const SDGString& f
                 std::string prefix_name;
                 subject_name>>prefix_name;
                 std::ostringstream name;
-                name << prefix_name << " " <<seq.getDE() << ":"
+                name << prefix_name << " " <<seq.header << ":"
                     << curr_frag_it.getRangeQ().getStart() << ".."
                     << curr_frag_it.getRangeQ().getEnd();
-                sseq.setDE((SDGString) name.str());
+                sseq.header=name.str();
                 out << sseq;
             }
         }

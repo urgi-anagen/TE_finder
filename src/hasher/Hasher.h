@@ -1,6 +1,10 @@
 #ifndef HASHER_H
 #define HASHER_H
 
+#include <FastaIstream.h>
+#include <FastaOstream.h>
+#include <BioSeq.h>
+
 #include <SDGMemBioSeq.h>
 #include <SDGSubBioSeq.h>
 #include <SDGFastaIstream.h>
@@ -97,7 +101,7 @@ class Hasher : public HashDNASeq
   static void fragLenFilter(std::list< RangePair >& frag, unsigned min_len);
   static void fragScoreFilter(std::list< RangePair >& frag, unsigned min_score);
   static void fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfilename, const SDGString& sfilename, std::ostream& out);
-  static void fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, SDGFastaOstream& out);
+  static void fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out);
 };
 
 

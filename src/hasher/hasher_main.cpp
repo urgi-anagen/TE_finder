@@ -5,7 +5,7 @@
 
 #include "SDGString.h"
 #include "SDGFastaIstream.h"
-#include "SDGFastaOstream.h"
+#include "FastaOstream.h"
 #include "SDGMemBioSeq.h"
 
 #include "Hasher.h"
@@ -398,7 +398,7 @@ int main(int argc, char *argv[]) {
 
             //Write results
             std::ofstream alignout;
-            SDGFastaOstream seqout;
+            FastaOstream seqout;
             alignout_name.str("");
             alignout_name.clear();
             seqout_name.str("");

@@ -9,3 +9,5 @@
 /src/blaster/testfiles/test.param
 /src/blaster/testfiles/test.raw
 /src/blaster/testfiles/test.seq_treated
+/src/SDGlib/testfiles/test_in.fa
+/src/SDGlib/testfiles/test_out.fa
