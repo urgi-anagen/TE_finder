@@ -53,6 +53,7 @@ class RangeMap
   void extend(unsigned size_flank);
   void selectSrcSeq(const SDGString& outfname,const SDGBioSeqDB& db);
   void writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const;
+  void writeCutSeq( const SDGString& outfname, const std::string& fasta_filename, int verbose=0 );
   void writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose=0 );
   void writeFlank53Seq(const SDGString& outfname,const SDGBioSeqDB& db,
 		       unsigned len=100);

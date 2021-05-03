@@ -6,7 +6,7 @@
 #ifndef BLRBLASTER_H
 #define BLRBLASTER_H
 
-#include <cstdlib>
+#include <stdlib.h>
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
@@ -95,8 +95,6 @@ public:
       query_name=para.getQuery();
       min_len=20;
       blasting = NULL;
-      count_treated=0;
-      same_db=false;
       
       if(para.get_is_wuBlast())
       {
@@ -121,6 +119,7 @@ public:
 		  {
 			  FILE *p = popen("blastn -h", "r");
 			  std::string output;
+			  // char* buf; gcc warning -> change to following line
 			  char buf[1024];
 			  for (std::size_t count; (count = fread(buf, 1, sizeof(buf), p));)
 				  output += std::string(buf, buf + count);
@@ -133,21 +132,40 @@ public:
 			  {
 				  isWuBeforeBlastPlus = true;
 			  }
+//			  std::system("blastn -h 2&> helpBlastn.log");
+//			  std::ifstream file("helpBlastn.log");
+//			  if (file)
+//			  {
+//				  std::stringstream buffer;
+//				  buffer << file.rdbuf();
+//				  file.close();
+//				  remove("helpBlastn.log");
+//
+//				  std::string output;
+//				  output = buffer.str();
+//				  std::transform(output.begin(), output.end(), output.begin(), ::tolower);
+//
+//				  std::size_t found = output.find("washu");
+//				  if (found != std::string::npos)
+//				  {
+//					  isWuBeforeBlastPlus = true;
+//				  }
+//			  }
+//			  else {
+//				  throw SDGException(NULL, "Fatal error, when trying to select blast executable", -1);
+//			  }
 		  }
 
 		  if ((isBlastPlusInPath and !isWublastInPath) or (isBlastPlusInPath and isWublastInPath and !isWuBeforeBlastPlus)){
 			  blasting=&ncbiblplus;
-              para.set_is_ncbiBlastPlus();
 			  std::cout<<"Selecting NCBI Blastplus"<<std::endl;
 		  }
 		  else if ((!isBlastPlusInPath and isBlastInPath) or (isBlastPlusInPath and isWuBeforeBlastPlus and isBlastInPath)){
 			  blasting=&ncbibl;
-              para.set_is_ncbiBlast();
 			  std::cout<<"Selecting NCBI Blast"<<std::endl;
 		  }
 		  else if ((!isBlastPlusInPath and !isBlastInPath and isWublastInPath) or (isBlastPlusInPath and isWuBeforeBlastPlus and !isBlastInPath)){
 			  blasting=&wubl;
-              para.set_is_wuBlast();
 			  std::cout<<"Selecting WuBlast"<<std::endl;
 		  }
 		  else {

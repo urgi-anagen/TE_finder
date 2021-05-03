@@ -47,31 +47,31 @@ class BLRNCBIBlastPlus: public BLRBlast
 		 case 0:
 		 {
 			 auto_blastparam=" -evalue 0.001 -outfmt 6 -max_target_seqs 100000000";
-			 auto_blastnparam=" -reward 1 -penalty -3 -gapopen 5 -gapextend 2 -word_size 11 -dust no";
+			 auto_blastnparam=" -reward 1 -penalty -3 -gapopen 5 -gapextend 2 -word_size 11";
 			 break;
 		 }
 		 case 1:
 		 {
 			 auto_blastparam=" -evalue 0.001 -outfmt 6 -max_target_seqs 100000000";
-			 auto_blastnparam=" -reward 5 -penalty -4 -gapopen 10 -gapextend 6 -word_size 11 -dust no";
+			 auto_blastnparam=" -reward 5 -penalty -4 -gapopen 10 -gapextend 6 -word_size 11";
 			 break;
 		 }
 		 case 2:
 		 {
 			 auto_blastparam=" -evalue 0.001 -outfmt 6 -max_target_seqs 100000000";
-			 auto_blastnparam=" -reward 10 -penalty -10 -gapopen 40 -gapextend 10 -word_size 8 -dust no";
+			 auto_blastnparam=" -reward 10 -penalty -10 -gapopen 40 -gapextend 10 -word_size 8";
 			 break;
 		 }
 		 case 3:
 		 {
 			 auto_blastparam=" -evalue 0.001 -outfmt 6 -max_target_seqs 100000000";
-			 auto_blastnparam=" -reward 10 -penalty -10 -gapopen 30 -gapextend 10 -word_size 7 -dust no";
+			 auto_blastnparam=" -reward 10 -penalty -10 -gapopen 30 -gapextend 10 -word_size 7";
 			 break;
 		 }
 		 case 4:
 		 {
 			 auto_blastparam=" -evalue 0.001 -outfmt 6 -max_target_seqs 100000000";
-			 auto_blastnparam=" -reward 10 -penalty -10 -gapopen 20 -gapextend 10 -word_size 7 -dust no";
+			 auto_blastnparam=" -reward 10 -penalty -10 -gapopen 20 -gapextend 10 -word_size 7";
 			 break;
 		 }
 		 default:

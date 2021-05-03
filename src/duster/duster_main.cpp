@@ -72,7 +72,12 @@ void show_parameter(SDGString filename1,SDGString filename2)
           << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
           << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
 };
-
+void translate_comp(std::vector< std::pair<unsigned,unsigned> >& frag, unsigned len_seq){
+    for(std::vector< std::pair<unsigned,unsigned> >::iterator it=frag.begin(); it!=frag.end();it++){
+        it->first=len_seq-it->first+1;
+        it->second=len_seq-it->second+1;
+    }
+}
 int main(int argc, char* argv[])
 {
   try{
@@ -236,11 +241,10 @@ int main(int argc, char* argv[])
     	exit( EXIT_FAILURE );
     }
 
-
       if (stat_only) {
           std::cout << "\nCompute kmer stat only!" << std::endl;
           for (unsigned bw = 1; bw <= bkmer_size; bw++) {
-              Duster hsrch(kmer_size, kmask, bw, kmer_dist, frag_connect_dist, min_size, step_q);
+              HashDNASeq hsrch(kmer_size, kmask, 1, bw, kmer_dist, frag_connect_dist, min_size, step_q);
               std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
               std::list<Info_kmer> list_infokmer;
               Info_kmer kmer_threshold;
@@ -249,49 +253,41 @@ int main(int argc, char* argv[])
               std::cout << "\n======Compute kmer background probability for " << bw - 1 << " Markov's chain order======"
                         << std::endl;
 
-              hsrch.kmer_analysis(filename2, kmer_size, kmask, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
+              hsrch.kmer_analysis(filename2, kmer_size, kmask, 1,bw, kmer_size / 2, count_cutoff, diversity_cutoff,
                                   kmer_count, nb_kmer, list_infokmer, kmer_threshold);
           }
           std::cout << "\nEnd Duster (version " << VERSION << ")" << std::endl;
           exit(EXIT_SUCCESS);
       }
 
-    Duster hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
+    Duster dstr(kmer_size, kmask, 1, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
+	std::stringstream bedout_name, seqout_name ;
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
-		hsrch.load(filename2,kmer_size, kmask, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file, first_iter);
+		dstr.load(filename2, kmer_size, kmask, 1, bkmer_size, kmer_size / 2 , count_cutoff,
+                  diversity_cutoff, min_count, valid_idx_file, first_iter);
 
-		std::ofstream out;
-		std::stringstream out_name;
-		if(outfilename!="")
-			out_name<<outfilename<<"."<<iter<<".bed";
-		else
-			out_name<<filename1<<"."<<iter<<".duster.bed";
+        std::ofstream bedout;
+        bedout_name.str("");
+        bedout_name.clear();
+        seqout_name.str("");
+        seqout_name.clear();
+        if (!outfilename.empty()){
+            bedout_name << outfilename << "." << iter << ".bed";
+            seqout_name << outfilename << "." << iter << ".fa";
+        }
+        else{
+            bedout_name << filename1 << "." << iter << ".duster.bed";
+            seqout_name << filename1 << "." << iter << ".duster.fa";
+        }
 
-		out.open(out_name.str());
+		bedout.open(bedout_name.str());
 
-		std::ofstream fragout;
-		if(verbosity>0)
-		{
-			std::stringstream fragout_name;
-			if(outfilename!="")
-				fragout_name<<outfilename<<"."<<iter<<".frag.bed";
-			else
-				fragout_name<<filename1<<"."<<iter<<".duster.frag.bed";
-
-			fragout.open(fragout_name.str());
-		}
 
 		SDGFastaOstream seqout;
-		std::stringstream seqout_name;
-		if(outfilename!="")
-			seqout_name<<outfilename<<"."<<iter<<".fa";
-		else
-			seqout_name<<filename1<<"."<<iter<<".duster.bed.fa";
-
 		seqout.open(seqout_name.str());
 	
 		SDGFastaIstream in(filename1);
@@ -312,43 +308,44 @@ int main(int argc, char* argv[])
 			genome_size+=s.length();
 			std::cout<<s.getDE()<<" len:"<<s.length()<<" read!"<<std::endl;
 			SDGBioSeq comp_s=s.complement();
-			std::vector< std::pair<unsigned,unsigned> > frag,fmerged;
+			std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
 			if(chunk_size_kb!=0)
 			{
-				unsigned start=1;
+				unsigned start=0;
 				unsigned chunk_size=((chunk_size_kb*1000)/kmer_size)*kmer_size;
 				unsigned nb_chunk=s.length()/chunk_size;
 				for(unsigned i=1;i<nb_chunk;i++)
 				{
 					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 					std::cout<<"---direct strand---"<<std::endl;
-					hsrch.search(s,start,start+chunk_size-1,numseq,repeat,frag);
+					dstr.search(s, start, start + chunk_size - 1, numseq, repeat, frag);
 					std::cout<<"---reverse strand---"<<std::endl;
-					hsrch.search(comp_s,start,start+chunk_size-1,numseq,repeat,frag);
+					dstr.search(comp_s, start, start + chunk_size - 1, numseq, repeat, frag_comp);
 					start=start+chunk_size;
 				}
 				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,start,s.length(),numseq,repeat,frag);
+				dstr.search(s, start, s.length(), numseq, repeat, frag);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,s.length(),numseq,repeat,frag);
-
-				hsrch.fragMerge(frag,(kmer_dist+1)*kmer_size,fmerged);
+				dstr.search(comp_s, start, s.length(), numseq, repeat, frag_comp);
 			}else
 			{
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,1,s.length(),numseq,repeat,frag);
+				dstr.search(s, 1, s.length(), numseq, repeat, frag);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,1,s.length(),numseq,repeat,frag);
-				hsrch.fragMerge(frag,(kmer_dist+1)*kmer_size,fmerged);
+				dstr.search(comp_s, 1, s.length(), numseq, repeat, frag_comp);
+
 			}
-			genome_coverage+=hsrch.compute_coverage(fmerged);
-			if(verbosity>0) hsrch.writeBED(s.getDE(),frag,fragout);
-			hsrch.writeBED(s.getDE(),fmerged,out);
-			hsrch.get_sequences(fmerged,s,seqout);
+			translate_comp(frag_comp, s.length());
+			frag.insert(frag.begin(), frag_comp.begin(), frag_comp.end());
+			frag_comp.clear();
+			//dstr.fragMerge(frag, frag_connect_dist, fmerged);
+
+			genome_coverage+=dstr.compute_coverage(frag);
+			dstr.writeBED(s.getDE(), frag, bedout);
+			dstr.get_sequences(frag, s, seqout);
 		  }
-		out.close();
-		if(verbosity>0) fragout.close();
+		bedout.close();
 		seqout.close();
 		std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
 				<<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
@@ -366,6 +363,24 @@ int main(int argc, char* argv[])
     time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
     std::cout<<"====>Total time spent****: "<<time_spent<<std::endl;
 
+      //Write final results
+      std::stringstream alignout_final_name;
+      std::stringstream seqout_final_name;
+      if (outfilename != "") {
+          alignout_final_name << outfilename << ".final.bed";
+          seqout_final_name << outfilename << ".final.fa";
+      } else {
+          alignout_final_name << filename1 << ".final.duster.bed";
+          seqout_final_name << filename1 << ".final.duster.fa";
+      }
+
+      std::stringstream cmd1,cmd2;
+
+      cmd1<<"cp "<<bedout_name.str()<<" "<<alignout_final_name.str();
+      std::system(cmd1.str().c_str());
+
+      cmd2<<"cp "<<seqout_name.str()<<" "<<seqout_final_name.str();
+      std::system(cmd2.str().c_str());
 	exit( EXIT_SUCCESS );
   }
 	catch( SDGException e )

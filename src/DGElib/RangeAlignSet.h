@@ -89,6 +89,10 @@ class RangeAlignSet : public RangeAlign
 		  return false;
 	  return true;
   };
+    friend bool operator<( const RangeAlignSet& ras1, const RangeAlignSet& ras2 )
+    {
+        return operator<((RangeAlign)ras1,(RangeAlign)ras2);
+    };
 
   /*
    * \fn unsigned long getStart( void ) const
@@ -401,12 +405,12 @@ class RangeAlignSet : public RangeAlign
 		  return false;
 	  std::list<Range>::const_iterator it1 = range_set.begin();
 	  std::list<Range>::const_iterator it2 = ras2.range_set.begin();
-	  while( *it1 == *it2 )
+	  while( *it1 == *it2 && it1!=range_set.end() && it2!=ras2.range_set.end())
 	  {
 		  it1 ++;
 		  it2 ++;
 	  }
-	  if( it1 != range_set.end() )
+	  if( it1 != range_set.end() && it2!=ras2.range_set.end())
 		  return false;
 	  return true;
   };

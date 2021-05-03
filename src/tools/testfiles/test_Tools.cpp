@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include "SDGString.h"
 #include "Cutter.h"
 #include "test_Tools.h"
+
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test_Tools);
@@ -118,4 +120,48 @@ AACCTACATATATCATAAGTACACAATAAAGTCATTATTGACTC)"""";
     buffer_obs << t_obs.rdbuf();
 
     CPPUNIT_ASSERT_EQUAL(buffer_exp.str(),buffer_obs.str());
+}
+
+//----------------------------------------------------------------------------------------------------------
+void test_Tools::test_a_tool(std::string tool_name, std::string parameters)
+{
+    std::string obsFileName=tool_name+".outobs";
+    std::string expFileName=tool_name+".outexp";
+    std::string diff_result=tool_name+".diff";
+    std::ostringstream cmd;
+    cmd<<"../../../cmake-build-debug/src/tools/"<<tool_name;
+    cmd<<" "<<parameters<<" > "<<tool_name<<".outobs";
+    std::system(cmd.str().c_str());
+
+    std::ostringstream cmd_diff;
+    cmd_diff<<"diff --side-by-side --suppress-common-lines "<<obsFileName<<" "<<expFileName<<" > "<<diff_result;
+    std::system(cmd_diff.str().c_str());
+
+    std::ostringstream obsStr;
+    std::ifstream fin_obs(diff_result);
+    char buff[2048];
+    while(fin_obs.getline(buff,2047,'\n'))
+        obsStr<<buff<<std::endl;
+
+    bool condition=(obsStr.str()=="");
+    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
+    if(condition) {
+        std::remove(diff_result.c_str());
+        std::remove(obsFileName.c_str());
+    }
+}
+void test_Tools::test_all_tools(void)
+{
+ /*
+    TestTool hsearch "-o out ../DmelChr4.fa ../DmelChr4_refTEs.fa" out
+    TestTool hrepeat "../DmelChr4_refTEs.fa" ../DmelChr4_refTEs.fa.hrepeat.set
+*/
+
+    test_a_tool("NWalign","seq1.fa seq2.fa");
+    test_a_tool("SWalign","seq1.fa seq2.fa");
+    test_a_tool("TRsearch","DmelChr4_refTEs.fa");
+    test_a_tool("ltrsearch","DmelChr4_refTEs.fa");
+    test_a_tool("fastlalign","seq1.fa seq2.fa");
+    test_a_tool("rpt_map","seq12.fa 10 -8 4 2");
+
 }

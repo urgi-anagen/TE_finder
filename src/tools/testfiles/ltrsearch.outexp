@@ -1,0 +1,239 @@
+load sequence #1 DmelChr4-B-P0.0-Map3_classII-TIR-incomp	length=1042
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 118
+      Match Percentage : 88%
+      Number of Matches : 15
+      Number of Mismatches : 2
+      Total Length of Gaps : 0
+      Begins at (249, 199) and Ends at (265, 215)
+
+    0     .    :    .
+  249 ACTTTAAATCTATAATA
+      ||||||||  |||||||
+  199 ACTTTAAAATTATAATA
+
+	Quality=6.94118
+	(249,265)..(720,736) Length ltr=17
+	Length TE=488
+
+load sequence #2 DmelChr4-B-G11-Map20_classII-TIR-incomp	length=1240
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 108
+      Match Percentage : 87%
+      Number of Matches : 14
+      Number of Mismatches : 2
+      Total Length of Gaps : 0
+      Begins at (444, 253) and Ends at (459, 268)
+
+    0     .    :    .
+  444 AAATAAATTTCAAAAA
+      ||| |||||| |||||
+  253 AAACAAATTTTAAAAA
+
+	Quality=6.75
+	(444,459)..(873,888) Length ltr=16
+	Length TE=445
+
+load sequence #3 DmelChr4-B-G7-Map3_classII-TIR-incomp	length=1944
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 284
+      Match Percentage : 96%
+      Number of Matches : 30
+      Number of Mismatches : 1
+      Total Length of Gaps : 0
+      Begins at (509, 446) and Ends at (539, 476)
+
+    0     .    :    .    :    .    :
+  509 CAAAGACACTAGAATAATTCTAGTGTCTTTG
+      ||||||||||||||| |||||||||||||||
+  446 CAAAGACACTAGAATTATTCTAGTGTCTTTG
+
+	Quality=9.16129
+	(509,539)..(1418,1448) Length ltr=31
+	Length TE=940
+
+load sequence #4 DmelChr4-B-G1-Map3_NoCat	length=542
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 90
+      Match Percentage : 100%
+      Number of Matches : 9
+      Number of Mismatches : 0
+      Total Length of Gaps : 0
+      Begins at (132, 119) and Ends at (140, 127)
+
+    0     .
+  132 AAGAAATTT
+      |||||||||
+  119 AAGAAATTT
+
+	Quality=10
+	(132,140)..(390,398) Length ltr=9
+	Length TE=267
+
+load sequence #5 DmelChr4-B-R19-Map4_NoCat	length=705
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 100
+      Match Percentage : 100%
+      Number of Matches : 10
+      Number of Mismatches : 0
+      Total Length of Gaps : 0
+      Begins at (63, 313) and Ends at (72, 322)
+
+    0     .    :
+   63 GAAAATATTT
+      ||||||||||
+  313 GAAAATATTT
+
+	Quality=10
+	(63,72)..(666,675) Length ltr=10
+	Length TE=613
+
+load sequence #6 DmelChr4-B-R9-Map3_NoCat	length=714
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 80
+      Match Percentage : 100%
+      Number of Matches : 8
+      Number of Mismatches : 0
+      Total Length of Gaps : 0
+      Begins at (148, 350) and Ends at (155, 357)
+
+    0     .
+  148 ATCTAATG
+      ||||||||
+  350 ATCTAATG
+
+	Quality=10
+	(148,155)..(707,714) Length ltr=8
+	Length TE=567
+
+load sequence #7 DmelChr4-B-R4-Map5_NoCat	length=1067
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 112
+      Match Percentage : 75%
+      Number of Matches : 24
+      Number of Mismatches : 8
+      Total Length of Gaps : 0
+      Begins at (211, 122) and Ends at (242, 153)
+
+    0     .    :    .    :    .    :
+  211 AATATGATAAAATAAAATAATTTTTAAAAATT
+      |||||  | | ||||| | |||||| ||| ||
+  122 AATATTCTTATATAAAGTCATTTTTGAAATTT
+
+	Quality=3.5
+	(211,242)..(656,687) Length ltr=32
+	Length TE=477
+
+load sequence #8 DmelChr4-B-G9-Map3_NoCat	length=1590
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 332
+      Match Percentage : 90%
+      Number of Matches : 46
+      Number of Mismatches : 4
+      Total Length of Gaps : 1
+      Begins at (3, 306) and Ends at (53, 355)
+
+    0     .    :    .    :    .    :    .    :    .    :
+    3 CAAAGACACTAGAATAACAAGATGCGTAACGGCCATACATTGGTTTGGCA
+      |||||||||||||||||||||||||||||||-||||||  |  |||||||
+  306 CAAAGACACTAGAATAACAAGATGCGTAACG CCATACGATTTTTTGGCA
+
+   50 
+   53 C
+      |
+  355 C
+
+	Quality=6.5098
+	(3,53)..(1101,1150) Length ltr=51
+	Length TE=1148
+
+load sequence #9 DmelChr4-B-R12-Map3_NoCat	length=2284
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 114
+      Match Percentage : 92%
+      Number of Matches : 13
+      Number of Mismatches : 1
+      Total Length of Gaps : 0
+      Begins at (335, 510) and Ends at (348, 523)
+
+    0     .    :
+  335 TTGGAATATTTTTT
+      ||||| ||||||||
+  510 TTGGAGTATTTTTT
+
+	Quality=8.14286
+	(335,348)..(1652,1665) Length ltr=14
+	Length TE=1331
+
+load sequence #10 DmelChr4-B-R1-Map4_NoCat	length=2367
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 118
+      Match Percentage : 88%
+      Number of Matches : 15
+      Number of Mismatches : 2
+      Total Length of Gaps : 0
+      Begins at (479, 937) and Ends at (495, 953)
+
+    0     .    :    .
+  479 TTTTTCTTTGTTTTATT
+      ||||  |||||||||||
+  937 TTTTAATTTGTTTTATT
+
+	Quality=6.94118
+	(479,495)..(2121,2137) Length ltr=17
+	Length TE=1659
+
+load sequence #11 DmelChr4-B-R2-Map6_NoCat	length=4638
+
+
+*********************************************************
+      Number 1 Local Alignment
+      Similarity Score : 130
+      Match Percentage : 100%
+      Number of Matches : 13
+      Number of Mismatches : 0
+      Total Length of Gaps : 0
+      Begins at (694, 758) and Ends at (706, 770)
+
+    0     .    :
+  694 ATGTTTTATTTAC
+      |||||||||||||
+  758 ATGTTTTATTTAC
+
+	Quality=10
+	(694,706)..(3077,3089) Length ltr=13
+	Length TE=2396
+
+
+Sequences treated:11
+Sequences found:0 (0)

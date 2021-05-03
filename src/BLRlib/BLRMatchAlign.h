@@ -35,17 +35,17 @@ public:
     typedef std::map<Key, std::list<RangePair> > MapAlign;
 
 private:
-    BLRJoinParameter para;
+//    BLRJoinParameter para;
     MapAlign map_align;
     std::map<std::string,long> name2numQ,name2numS;
     std::map<long,std::string> num2nameQ,num2nameS;
 
 
-    void add_clean(std::list<RangePair>& rp_list,
-                   std::list<RangePair>::iterator iter);
+//    void add_clean(const BLRJoinParameter& para,std::list<RangePair>& rp_list,
+//                   std::list<RangePair>::iterator iter);
 
 public:
-
+    BLRMatchAlign(void) {};
     MapAlign::iterator begin(){ return map_align.begin();};
     MapAlign::iterator end(){ return map_align.end();};
 
@@ -60,9 +60,18 @@ public:
         std::ifstream input_align(filename);
         read(param,input_align, verbose);
     };
+    void setFromRpsList(const BLRJoinParameter& param, const std::list<RangePair>& rp_list, int verbose=0);
     void write(std::ostream& out);
 
     void clear(void){map_align.clear();};
+
+    std::list<RangePair> getRpListFromMatchAlign(void){
+        std::list<RangePair> rp_list;
+        for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++)
+            for (std::list<RangePair>::iterator l = m->second.begin(); l != m->second.end(); l++)
+                rp_list.push_back(*l);
+        return rp_list;
+    };
 
     unsigned getNbMatchesInMapAlign(void){
         unsigned nbMatches = 0;

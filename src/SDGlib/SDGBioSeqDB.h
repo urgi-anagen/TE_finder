@@ -23,17 +23,17 @@ class SDGBioSeqDB: public std::vector<SDGBioSeq>
 
  public:
 
-  SDGBioSeqDB(void){};
-  SDGBioSeqDB(SDGString fichier, int verbose=0){load(fichier,verbose);};
+  SDGBioSeqDB()= default;
+  explicit SDGBioSeqDB(SDGString fichier, int verbose=0){load(fichier,verbose);};
   void load( SDGString fichier, int verbose=0 );
 
   SDGBioSeq& find(SDGString name)
     { return operator[](name2pos[name]); };
 
-  void load_idx(void){};
-  void save_idx(void){};
-  SDGString name() { return "SDGBioSeqDB"; };
-  unsigned long getSize( void ) { return name2pos.size(); };
+//  void load_idx(void){};
+//  void save_idx(void){};
+  static SDGString name() { return "SDGBioSeqDB"; };
+  unsigned long getSize() { return name2pos.size(); };
 
   bool operator==(const SDGBioSeqDB& bd)
 	{

@@ -43,32 +43,32 @@ class BLRWUBlast: public BLRBlast
 		 {
 		 case 0: //NCBI default
 		 {
-			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000 filter=none";
-			 auto_blastnparam=" M=1 N=-3 Q=5 R=2 gapall W=11 filter=none cpus=1";
+			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000";
+			 auto_blastnparam=" M=1 N=-3 Q=5 R=2 gapall W=11";
 			 break;
 		 }
 		 case 1: //WU default
 		 {
-			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000 filter=none";
-			 auto_blastnparam=" filter=none";
+			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000";
+			 auto_blastnparam=" ";
 			 break;
 		 }
 		 case 2:
 		 {
-			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000 filter=none";
-			 auto_blastnparam=" M=10 N=-12 Q=30 R=5 gapall S2=150 gapS2=220 S=220 X=220 gapX=450 W=8 filter=none";
+			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000";
+			 auto_blastnparam=" M=10 N=-12 Q=30 R=5 gapall S2=150 gapS2=220 S=220 X=220 gapX=450 W=8";
 			 break;
 		 }
 		 case 3:
 		 {
-			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000 filter=none";
-			 auto_blastnparam=" M=10 N=-12 Q=25 R=5 gapall S2=100 gapS2=220 S=220 X=220 gapX=450 W=7 filter=none";
+			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000";
+			 auto_blastnparam=" M=10 N=-12 Q=25 R=5 gapall S2=100 gapS2=220 S=220 X=220 gapX=450 W=7";
 			 break;
 		 }
 		 case 4:
 		 {
-			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000 filter=none";
-			 auto_blastnparam=" M=10 N=-12 Q=25 R=5 gapall S2=100 gapS2=200 S=200 X=200 gapX=450 W=6 filter=none";
+			 auto_blastparam=" warnings gapE2=0.001 V=0 gapW=76 evalues hspmax=0 gspmax=0 mformat=2 B=100000000";
+			 auto_blastnparam=" M=10 N=-12 Q=25 R=5 gapall S2=100 gapS2=200 S=200 X=200 gapX=450 W=6";
 			 break;
 		 }
 		 default:

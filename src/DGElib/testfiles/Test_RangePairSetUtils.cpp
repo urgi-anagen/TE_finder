@@ -624,7 +624,7 @@ RangePairSet Test_RangePairSetUtils::createInputRangePairSetFor_test_computeScor
 RangePairSet Test_RangePairSetUtils::createExpRangePairSetFor_test_computeScoreWithLength_one_match_part(void)
 {
   // match  
-  SDGString line1 = " \t105091\t105206\t \t3351\t3238\t0\t116\t76.1062";
+  SDGString line1 = " \t105091\t105206\t \t3351\t3238\t0\t8828\t76.1062";
   RangePairSet rangePairSet1 = RangePairSet(line1);
   rangePairSet1.getRangeQ().setNumChr(1);
   rangePairSet1.getRangeQ().setNameSeq("");
@@ -633,7 +633,7 @@ RangePairSet Test_RangePairSetUtils::createExpRangePairSetFor_test_computeScoreW
   rangePairSet1.getRangeS().setNameSeq("");
   rangePairSet1.setLength(116);
   // match part
-  SDGString line11 = " \t105091\t105206\t \t3351\t3238\t0\t116\t76.1062";
+  SDGString line11 = " \t105091\t105206\t \t3351\t3238\t0\t8828\t76.1062";
   RangePair rangePair11 = RangePair(line11);
   rangePair11.getRangeQ().setNumChr(1);
   rangePair11.getRangeQ().setNameSeq("");
@@ -684,7 +684,7 @@ RangePairSet Test_RangePairSetUtils::createInputRangePairSetFor_test_computeScor
 RangePairSet Test_RangePairSetUtils::createExpRangePairSetFor_test_computeScoreWithLength_two_match_part(void)
 {
   // match 
-  SDGString line1 = " \t105085\t110398\t \t3202\t2033\t0\t683\t80.6808";
+  SDGString line1 = " \t105085\t110398\t \t3202\t2033\t0\t55055\t80.6808";
   RangePairSet rangePairSet1 = RangePairSet(line1);
   rangePairSet1.getRangeQ().setNumChr(1);
   rangePairSet1.getRangeQ().setNameSeq("");
@@ -976,8 +976,8 @@ RangePairSet Test_RangePairSetUtils::createExpRangePairSetForTest_mergeQ_score_r
   rangePairSet1.getRangeQ().setNameSeq("");
   rangePairSet1.getRangeS().setNumChr(-1);
   rangePairSet1.getRangeS().setNameSeq("-1");
-  rangePairSet1.setLength(969);
-  rangePairSet1.setScore(969);
+  rangePairSet1.setLength(77259);
+  rangePairSet1.setScore(77259);
 
   // match part   
   SDGString line11 = " \t105085\t105353\t \t3202\t2921\t0\t269\t84.8361";

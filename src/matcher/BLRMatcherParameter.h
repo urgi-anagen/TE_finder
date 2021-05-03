@@ -49,6 +49,7 @@ class BLRMatcherThreadsParameter: public BLRJoinParameter
   bool getCleanAfter(void) {return  clean_after;};
   void setCleanAfter(bool clean) {clean_after = clean;};
 
+  void setMerge(bool val){merge=val;};
   bool getMerge(void) {return merge;}
 
   int getVerbose(void) {return verbose;};

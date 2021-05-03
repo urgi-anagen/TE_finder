@@ -13,7 +13,7 @@ void BLRWUBlast::blast( int verbose )
 		SDGString blast_command=para.getType()
 		+" "+para.getBankCut()+" "+query_filename
 		+auto_blastparam+auto_blastnparam+" "+para.getOption()
-		+" O="+result_filename;
+		+" O="+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
 		if( verbose > 0 )
 			std::cout<<blast_command<<std::endl;
 		sys_return = system( blast_command );
@@ -25,31 +25,35 @@ void BLRWUBlast::blast( int verbose )
 	{
 		SDGString blast_command=para.getType()
 		+" "+para.getBankCut()+" "+query_filename
-		+auto_blastparam+" "+para.getOption()+" O="+result_filename;
+		+auto_blastparam+" "+para.getOption()+" O="+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
 		if( verbose > 0 )
 			std::cout<<blast_command<<std::endl;
 		sys_return = system( blast_command );
 	}
+    if( verbose > 0 )
+        std::cout<<"system call to blast return:"<<sys_return<<std::endl;
 
-	SDGString rm_command = "rm -f " + query_filename;
-	system( rm_command );
-
-	if( sys_return == -1 )
-		throw SDGException(NULL," fork error!, stopping program.",-1);
+    if (sys_return == -1) {
+        std::cout << std::ifstream(query_filename + "_blast.log").rdbuf();
+        std::ostringstream ostr;
+        ostr << " call to 'system()' function return 'fork()' error -1 !";
+        throw SDGException(NULL, ostr.str(), -1);
+    }
 
 	if( sys_return != 0 )
-	{
-		if( ( para.getType()!="tblastx" && para.getType()!="blastx" )
-				|| ( para.getType()=="tblastx" && sys_return!=4096 )
-				|| ( para.getType()=="blastx" && sys_return!=5888 ) )
   	{
+        std::cout << std::ifstream(query_filename+"_blast.log").rdbuf();
   		std::ostringstream ostr;
   		ostr<<" program "<<para.getType()
   		<<" return with error value: "<<sys_return
   		<<", stopping blaster";
   		throw SDGException(NULL,ostr.str(),-1);
   	}
-  }
+
+    SDGString rm_command="rm -f "+query_filename;
+    system( rm_command );
+    rm_command="rm -f "+query_filename+ "_blast.log";
+    system( rm_command );
 }
 
 void BLRWUBlast::pressdb( int verbose )

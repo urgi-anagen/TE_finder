@@ -50,7 +50,8 @@ class Range
   	Less(void){};
   	int operator () (const Range& a, const Range& b) const
   	{
-  		if(a<b) return true;
+  		if(a.getMin()<b.getMin()) return true;
+  		else if(a.getMin()==b.getMin() && a.getMax()<a.getMax()) return true;
   		return false;
   	};
   };
@@ -98,6 +99,11 @@ class Range
     	start = s;
     	end = e;
     };
+
+    void translate_comp(unsigned len_seq){
+        start=len_seq-start+1;
+        end=len_seq-end+1;
+    }
 
     ulong getStart( void ) const { return start; };
 

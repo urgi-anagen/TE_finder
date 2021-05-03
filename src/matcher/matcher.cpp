@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
      if(para.getVerbose()>0)
        para.view(std::cout);
 
-     BLRMatchMap match_map(&para);
+     BLRMatchMap match_map(para);
 
      if(para.getVerbose()>0)
        std::cout<<"Load the matches..."<<std::endl<<std::flush;
@@ -64,7 +64,8 @@ int main(int argc, char* argv[])
      SDGString parafile=filename.str()+".param";
      para.write(filename.str()+".param");
      match_map.writePath(filename.str()+".path", rps_list, para.getVerbose()-1);
-     match_map.writeBED(filename.str()+".bed", rps_list, "black", para.getVerbose()-1);
+     match_map.writeBED(filename.str()+".bed", rps_list, para.getVerbose()-1);
+     match_map.writeGFF3(filename.str()+".gff3", rps_list, para.getVerbose()-1);
      
      if(para.getBank()!="<not set!>" && para.getQuery()!="<not set>")
        match_map.writeMatch(filename.str()+".tab",para.getVerbose()-1);

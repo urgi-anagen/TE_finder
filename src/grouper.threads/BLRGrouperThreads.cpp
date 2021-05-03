@@ -280,7 +280,7 @@ void BLRGrouper::group( std::list<RangePairSet>& rp_list,  BLRGroup& gr, int ver
 		std::cout<<"Group building..."<<std::endl<<std::flush;
 
 	unsigned long nbChains=0;  // a chain is a set of connected matches
-	cover_limit = grouper_parameter->getCoverage();
+
 	if(verbose>0)
 	{
 		std::cout<<"Roam groups (coverage limit: ";
@@ -361,45 +361,21 @@ void BLRGrouper::mergeGroupsLists(  BLRGroup* gr1_ptr, BLRGroup* gr2_ptr, int ve
 				{
 					Member memb2=gr2_ptr->getRefMember(*i);
 					if(memb2.isEmpty()) continue;
-					int cover=0;
-					if( memb1.isIncluded( memb2 ) )
-					{
-						cover=(unsigned)
-						memb1.overlap_length( memb2 );
-					}
-					else if( memb1.isContained( memb2 ) )
-					{
-						cover=(unsigned)
-						memb1.overlap_length(memb2);
-					}
-					else if(// member1 and member2 overlap and member1 first
-							memb1.overlap(memb2)
-							&& memb1>memb2)
-					{
-						cover=(unsigned)
-						memb1.overlap_length(memb2);
-					}
-					else if(// member1 and member2 overlap and member 2 first
-							memb1.overlap(memb2)
-							&& (memb1<memb2
-									|| memb1==memb2))
-					{
-						cover=(unsigned)
-						memb1.overlap_length(memb2);
-					}
-					if( cover>=cover_limit)
-					{
-						GROUPLIST::iterator gr_it;
-						if(gr2_ptr->get_groupit_member_idx(*i,gr_it))
-						{
-							if(std::find(found_gr_it.begin(),found_gr_it.end(),gr_it)==found_gr_it.end()
-									&& gr_it!=gr2_ptr->end())
-							{
-								gr1_ptr->mergeWithExtGroup(group_iter1,gr_it,*gr2_ptr,member_iter1,*i);
-								found_gr_it.push_back(gr_it);
-							}
-						}
-					}
+					double cover=0;
+                    if(memb1.overlap(memb2)) {
+                        cover = (unsigned)
+                                memb1.overlap_length(memb2);
+                        if (cover/memb1.getLengthSet() >= cover_limit) {
+                            GROUPLIST::iterator gr_it;
+                            if (gr2_ptr->get_groupit_member_idx(*i, gr_it)) {
+                                if (std::find(found_gr_it.begin(), found_gr_it.end(), gr_it) == found_gr_it.end()
+                                    && gr_it != gr2_ptr->end()) {
+                                    gr1_ptr->mergeWithExtGroup(group_iter1, gr_it, *gr2_ptr, member_iter1, *i);
+                                    found_gr_it.push_back(gr_it);
+                                }
+                            }
+                        }
+                    }
 				}
 			}
 			member_iter1++;
@@ -418,7 +394,7 @@ void BLRGrouper::cluster( BLRGroup& gr, int verbose )
 {
 	if( verbose > 0 )
 		std::cout<<"Cluster building (length filter="
-		<<grouper_parameter->getGraphfilter()<<")..."
+		<<grouper_parameter.getGraphfilter()<<")..."
 		<<std::endl<<std::flush;
 
 	Graph<unsigned> graph;
@@ -483,7 +459,7 @@ void BLRGrouper::cluster( BLRGroup& gr, int verbose )
 						cover=(unsigned)
 						memb1.overlap_length(memb2);
 					}
-					if( cover>=grouper_parameter->getGraphfilter())
+					if( cover>=grouper_parameter.getGraphfilter())
 					{
 						count_gp2=0;
 						for(GROUPLIST::iterator gi=gr.begin();
@@ -517,8 +493,8 @@ void BLRGrouper::cluster( BLRGroup& gr, int verbose )
 		std::cout<<" done"<<std::endl;
 
 	std::ostringstream clus_filename;
-	clus_filename<<grouper_parameter->getPrefixFileName()<<".group.c"
-	<<grouper_parameter->getCoverage()<<".cluster.dot";
+	clus_filename<<grouper_parameter.getPrefixFileName()<<".group.c"
+	<<grouper_parameter.getCoverage()<<".cluster.dot";
 	graph.toDot( clus_filename.str() );
 
 	unsigned count=0;
@@ -569,7 +545,7 @@ void BLRGrouper::include_filter( BLRGroup& gr, int verbose )
 		}
 		if( verbose > 1 )
 			std::cout<<nbUniqMembers<<" unique member(s)"<<std::endl;
-		if( nbUniqMembers < grouper_parameter->getIncludeFilter() )
+		if( nbUniqMembers < grouper_parameter.getIncludeFilter() )
 		{
 			lGrpItToErase.push_back( it_group_list );
 			if( verbose > 1 )
@@ -604,7 +580,7 @@ void BLRGrouper::group_size_filter( BLRGroup& gr, int verbose )
 	GROUPLIST::iterator group_iter=gr.begin();
 	while( group_iter != gr.end() )
 	{
-		if( group_iter->size() < grouper_parameter->getSizefilter() )
+		if( group_iter->size() < grouper_parameter.getSizefilter() )
 		{
 			for( std::list<unsigned>::iterator m=(group_iter)->begin();
 			m!=(group_iter)->end(); m++ )

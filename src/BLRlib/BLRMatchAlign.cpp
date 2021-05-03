@@ -5,10 +5,10 @@
 #include "BLRMatchAlign.h"
 
 //---------------------------------------------------------------------------
-void BLRMatchAlign::read(const BLRJoinParameter& p, std::istream& input_align, int verbose)
+void BLRMatchAlign::read(const BLRJoinParameter& para, std::istream& input_align, int verbose)
 {
     unsigned countseqS=0,countseqQ=0;
-    para=p;
+
 
     getName2NumQ().clear();
     getName2NumS().clear();
@@ -108,6 +108,54 @@ void BLRMatchAlign::read(const BLRJoinParameter& p, std::istream& input_align, i
     }
 }
 //----------------------------------------------------------------------------
+void BLRMatchAlign::setFromRpsList(const BLRJoinParameter& param, const std::list<RangePair>& rp_list, int verbose)
+{
+    unsigned countseqS=0,countseqQ=0;
+
+    getName2NumQ().clear();
+    getName2NumS().clear();
+    getNum2NameQ().clear();
+    getNum2NameS().clear();
+
+
+    // read the others
+    for(std::list<RangePair>::const_iterator rp_it=rp_list.begin(); rp_it != rp_list.end(); rp_it++)
+    {
+
+            RangePair rp(*rp_it);
+            std::map<std::string,long>::iterator it
+                    =name2numQ.find(rp.getRangeQ().getNameSeq());
+            if(it==name2numQ.end())
+            {
+                name2numQ[rp.getRangeQ().getNameSeq()]=++countseqQ;
+                num2nameQ[countseqQ]=rp.getRangeQ().getNameSeq();
+                rp.getRangeQ().setNumChr(countseqQ);
+            }
+            else
+            rp.getRangeQ().setNumChr(it->second);
+
+
+            it=name2numS.find(rp.getRangeS().getNameSeq());
+            if(it==name2numS.end())
+            {
+                name2numS[rp.getRangeS().getNameSeq()]=++countseqS;
+                num2nameS[countseqS]=rp.getRangeS().getNameSeq();
+                rp.getRangeS().setNumChr(countseqS);
+            }
+            else
+                rp.getRangeS().setNumChr(it->second);
+
+            insert(rp);
+    }
+
+    if(verbose>0)
+    {
+        std::cout<<"nb of matches: "<<getNbMatchesInMapAlign()<<std::endl;
+        std::cout<<"nb of distinct queries: "<<getNbQseq()<<std::endl;
+        std::cout<<"nb of distinct subjects: "<<getNbSseq()<<std::endl;
+    }
+}
+//----------------------------------------------------------------------------
 void BLRMatchAlign::insert(RangePair &rangePair) {
     //insert rangePair in the right place
     std::list<RangePair> &al_list
@@ -125,59 +173,59 @@ void BLRMatchAlign::insert(RangePair &rangePair) {
         || rangePair.getIdentity() != r->getIdentity())
         al_list.insert(r, rangePair);
 }
-//----------------------------------------------------------------------------
-void BLRMatchAlign::add_clean(std::list<RangePair> &rp_list,
-                            std::list<RangePair>::iterator iter)
-//add a rangePair and post process it removing conflicting subjects
-{
-    // search for a conflicting subject
-    bool found_over = false;
-    std::list<RangePair> lrp; //list of modified and cleaned RangePair
-    lrp.push_back(*iter);
-    for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++)
-        if (m->first.first == iter->getRangeQ().getNumChr() &&
-            m->first.second != iter->getRangeS().getNumChr()) {
-            // check overlap only with a different subject
-
-            for (std::list<RangePair>::iterator lrp_it = lrp.begin();
-                 lrp_it != lrp.end();
-                 lrp_it++) {
-                for (std::list<RangePair>::iterator iter_list = m->second.begin();
-                     iter_list != m->second.end();
-                     iter_list++) {
-                    if (lrp_it->getScore() < iter_list->getScore()
-                        && lrp_it->overlapQ(*iter_list)) {
-                        found_over = true;
-                        RangePair rp = lrp_it->diffQ(*iter_list);
-                        if (!rp.empty()
-                            && rp.getRangeQ().getLength() > para.getLenFilter()) {
-                            lrp.push_back(rp);
-                        }
-                    } //end if (...)
-                } //end loop for
-            }//end loop for
-        } //end if
-
-    if (found_over) // RangePair found to overlap (conflicts!)
-    {
-        for (std::list<RangePair>::iterator lrp_it = lrp.begin();
-             lrp_it != lrp.end();
-             lrp_it++)
-
-            if (!lrp_it->empty()
-                && lrp_it->getRangeQ().getLength() > para.getLenFilter()) {
-                std::list<RangePair>::iterator it
-                        = std::lower_bound(iter, rp_list.end(),
-                                           *lrp_it,
-                                           RangePair::greaterScore); // search for the right place to insert
-                while (it != rp_list.end() && it == iter)
-                    it++;
-                rp_list.insert(it, *lrp_it);
-            }
-    } else // already cleaned RangePair
-    if (!iter->empty() && iter->getRangeQ().getLength() > para.getLenFilter() && iter->getScore() > 0)
-        insert(*iter);
-}
+////----------------------------------------------------------------------------
+//void BLRMatchAlign::add_clean(const BLRJoinParameter& para,std::list<RangePair> &rp_list,
+//                            std::list<RangePair>::iterator iter)
+////add a rangePair and post process it removing conflicting subjects
+//{
+//    // search for a conflicting subject
+//    bool found_over = false;
+//    std::list<RangePair> lrp; //list of modified and cleaned RangePair
+//    lrp.push_back(*iter);
+//    for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++)
+//        if (m->first.first == iter->getRangeQ().getNumChr() &&
+//            m->first.second != iter->getRangeS().getNumChr()) {
+//            // check overlap only with a different subject
+//
+//            for (std::list<RangePair>::iterator lrp_it = lrp.begin();
+//                 lrp_it != lrp.end();
+//                 lrp_it++) {
+//                for (std::list<RangePair>::iterator iter_list = m->second.begin();
+//                     iter_list != m->second.end();
+//                     iter_list++) {
+//                    if (lrp_it->getScore() < iter_list->getScore()
+//                        && lrp_it->overlapQ(*iter_list)) {
+//                        found_over = true;
+//                        RangePair rp = lrp_it->diffQ(*iter_list);
+//                        if (!rp.empty()
+//                            && rp.getRangeQ().getLength() > para.getLenFilter()) {
+//                            lrp.push_back(rp);
+//                        }
+//                    } //end if (...)
+//                } //end loop for
+//            }//end loop for
+//        } //end if
+//
+//    if (found_over) // RangePair found to overlap (conflicts!)
+//    {
+//        for (std::list<RangePair>::iterator lrp_it = lrp.begin();
+//             lrp_it != lrp.end();
+//             lrp_it++)
+//
+//            if (!lrp_it->empty()
+//                && lrp_it->getRangeQ().getLength() > para.getLenFilter()) {
+//                std::list<RangePair>::iterator it
+//                        = std::lower_bound(iter, rp_list.end(),
+//                                           *lrp_it,
+//                                           RangePair::greaterScore); // search for the right place to insert
+//                while (it != rp_list.end() && it == iter)
+//                    it++;
+//                rp_list.insert(it, *lrp_it);
+//            }
+//    } else // already cleaned RangePair
+//    if (!iter->empty() && iter->getRangeQ().getLength() > para.getLenFilter() && iter->getScore() > 0)
+//        insert(*iter);
+//}
 //---------------------------------------------------------------------------
 void BLRMatchAlign::write(std::ostream &out) {
     for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++) {

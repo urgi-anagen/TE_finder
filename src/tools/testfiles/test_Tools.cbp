@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="test_Tools"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\src\;CMake Files\src\BLRlib\;CMake Files\src\BLRlib\testfiles\;CMake Files\src\DGElib\;CMake Files\src\DGElib\testfiles\;CMake Files\src\SDGlib\;CMake Files\src\SDGlib\testfiles\;CMake Files\src\blaster\;CMake Files\src\matcher\;CMake Files\src\matcher\testfiles\;CMake Files\src\matcher.threads\;CMake Files\src\matcher.threads\testfiles\;CMake Files\src\grouper.threads\;CMake Files\src\grouper.threads\testfiles\;CMake Files\src\duster\;CMake Files\src\duster\testfiles\;CMake Files\src\tools\;CMake Files\src\tools\testfiles\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_Tools">
+				<Option output="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/test_Tools" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/hquesnev/src/git/github/TE_finder/src/SDGlib"/>
+					<Add directory="/Users/hquesnev/src/git/github/TE_finder/src/DGElib"/>
+					<Add directory="/Users/hquesnev/src/git/github/TE_finder/src/BLRlib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 test_Tools"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_Tools/fast">
+				<Option output="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/test_Tools" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Users/hquesnev/src/git/github/TE_finder/src/SDGlib"/>
+					<Add directory="/Users/hquesnev/src/git/github/TE_finder/src/DGElib"/>
+					<Add directory="/Users/hquesnev/src/git/github/TE_finder/src/BLRlib"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 test_Tools/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/test_Tools.cpp">
+			<Option target="test_Tools"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/test_Tools.h">
+			<Option target="test_Tools"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/tools_test_u.cpp">
+			<Option target="test_Tools"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/BLRlib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\BLRlib\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/BLRlib/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\BLRlib\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/DGElib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\DGElib\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/DGElib/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\DGElib\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/SDGlib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\SDGlib\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/SDGlib/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\SDGlib\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/blaster/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\blaster\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/matcher/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\matcher\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/matcher/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\matcher\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/matcher.threads/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\matcher.threads\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/matcher.threads/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\matcher.threads\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/grouper.threads/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\grouper.threads\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/grouper.threads/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\grouper.threads\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/duster/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\duster\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/duster/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\duster\testfiles\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/tools/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\tools\"/>
+		</Unit>
+		<Unit filename="/Users/hquesnev/src/git/github/TE_finder/src/tools/testfiles/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\tools\testfiles\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

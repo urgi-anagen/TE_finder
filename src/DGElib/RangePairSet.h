@@ -32,7 +32,7 @@ class RangePairSet: public RangePair
 
 		RangePairSet(const std::list<RangePair>& rp_list)
 		{
-			setPath(rp_list);
+			setRpsFromRpList(rp_list);
 		};
 
 		RangePairSet(const RangePair& rp) : RangePair(rp)
@@ -68,25 +68,6 @@ class RangePairSet: public RangePair
 		  path.clear();
 		}
 
-   /*
-    * \fn long getNumQuery( void )
-    * \brief return the identifier of the query of the first RangePair
-    */
-   long getNumQuery( void ) const
-   {
-  	 std::list<RangePair>::const_iterator i=path.begin();
-  	 return i->getRangeQ().getNumChr();
-   }
-
-   /*
-    * \fn long getNumSubject( void )
-    * \brief return the identifier of the subject of the first RangePair
-    */
-   long getNumSubject( void ) const
-   {
-  	 std::list<RangePair>::const_iterator i=path.begin();
-  	 return i->getRangeS().getNumChr();
-   }
 
    /*
     * \fn unsigned getNbRangePairs( void )
@@ -107,37 +88,38 @@ class RangePairSet: public RangePair
   void viewWithLabel( void );
 
   void computeScoreWithDynaProg( double mism=0.0, double gapo_p=0.0, double gape_p=0.0 );
-  void computeScoreWithLength();
+  void computeScoreWithLengthAndId();
 
-  void setPath( const std::list<RangePair> rp_list, double mism=0.0,double gapo_p=0.0,double gape_p=0.0 );
-
-  void setPath(double mism=0.0,double gapo_p=0.0,double gape_p=0.0 );
-
+  void setRpsFromRpList(const std::list<RangePair> rp_list);
+  void updateQueryFromPathList(void);
   void addPath(const RangePair& rp);
+
+  void setQSName(std::string query_name, std::string subject_name);
+  void setQSName(std::string query_name, std::string subject_name, std::map<long,std::string> num2nameS);
 
   void write( std::ostream& out, unsigned id,
   		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;
-  void writePath( std::ostream& out, unsigned id,
-  		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;
+  void write( std::ostream& out, unsigned id,
+                const std::string& nameQ, const std::string& nameS ) const;
   void writeGFF3( std::ostream& out, unsigned id,
-  		const std::string& nameQ, const std::map<long,std::string>& nameS, const std::string& source ) const;
-  void writeBED( std::ostream& out, const std::string& nameQ,  const std::map<long,std::string>& nameS, const std::string& color) const;
-
+                    const std::string& nameQ, const std::string& nameS ) const;
+  void writeGFF3( std::ostream& out, unsigned id,
+  		const std::string& nameQ, const std::map<long,std::string>& nameS ) const;
+  void writeBED( std::ostream& out, const std::string& nameQ,  const std::map<long,std::string>& nameS) const;
+  void writeRpsAttr(std::ostream& out, unsigned id, const std::string& nameQ, const std::string& nameS) const;
   void writeRpsAttr(std::ostream& out, unsigned id, const std::string& nameQ, const std::map<long,std::string>& nameS) const;
 
   bool diffQ( const RangePairSet& r );
-
+  void mergeQ(RangePairSet& rpsOther);
   bool split( const RangePairSet& r, std::list<RangePairSet>& lrp_out );
-
   bool inserted( const RangePairSet& r );
-
   unsigned overlapQ_length( const RangePairSet& r ) const;
 
-  void setPathDirectly(const std::list<RangePair> rp_list);
 
+  void setPathDirectly(const std::list<RangePair>& rp_list);
   const std::list<RangePair> getPath(){return path;};
 
-  void mergeQ(RangePairSet& rpsOther);
+
 
   void readtxt(std::istream& in);
 
@@ -145,14 +127,10 @@ class RangePairSet: public RangePair
   friend bool operator!=( const RangePairSet &rp1, const RangePairSet &rp2 );
 	
   static bool compareCoordsOnQuery(const RangePairSet &rps1, const RangePairSet &rps2);
-  static bool compareScoreDecreasing(const RangePairSet &rps1, const RangePairSet &rps2);
-  void updateQuery(void);
+
   void orientSubjects(void);
   private: 
 	void cleanConflictsOnOverlappingQuery(RangePairSet &rpsOther);
-	void mergeCurrentPathWithOtherPath(RangePairSet &rpsOther);
-	void updateSubject(RangePairSet &rpsOther);
-	void updateScoreLengthAndIdentityAndEValue(void);
 	bool doOrientOnPlusStrand(void);
 };
 #endif

@@ -7,8 +7,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "RangePair.h"
-#include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
+#include "Test_BLRUtils.h"
 
 class Test_BLRMatchJoin: public CPPUNIT_NS::TestFixture
 {
@@ -19,6 +19,7 @@ class Test_BLRMatchJoin: public CPPUNIT_NS::TestFixture
   CPPUNIT_TEST(test_merge);
   CPPUNIT_TEST(test_split);
   CPPUNIT_TEST_SUITE_END();
+
 
  public:
     void setUp();
