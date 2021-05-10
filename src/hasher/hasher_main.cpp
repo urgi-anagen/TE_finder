@@ -76,8 +76,8 @@ void show_parameter(SDGString filename1,SDGString filename2)
 };
 // search on sequence chunk, reverse sequence, and reverse complement
 void search_frag(Hasher& hsrch,
-                 const SDGBioSeq& seq, const SDGBioSeq& seq_rev,
-                 const SDGBioSeq& seq_comp, const SDGBioSeq& seq_revcomp,
+                 const BioSeq& seq, const BioSeq& seq_rev,
+                 const BioSeq& seq_comp, const BioSeq& seq_revcomp,
                  unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
                  unsigned min_frag_size, bool repeat,
                  std::list< RangePair >& frag_list,
@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
                        min_count,valid_idx_file, first_iter);
 
 
-            SDGFastaIstream in(filename1);
+            FastaIstream in(filename1);
             if (!in) {
                 std::cerr << "file:" << filename1 << " does not exist!" << std::endl;
                 return 1;
@@ -322,14 +322,14 @@ int main(int argc, char *argv[]) {
             unsigned numseq = 0;
             std::list< RangePair > frag_list, rev_frag_list, compfrag_list, rev_compfrag_list;
             while (in) {
-                SDGBioSeq seq;
+                BioSeq seq;
                 if (in)
                     in >> seq;
                 numseq++;
-                std::cout << seq.getDE() << " len:" << seq.length() << " read!" << std::endl;
-                SDGBioSeq seq_rev=seq.reverse();
-                SDGBioSeq seq_comp=seq.complement();
-                SDGBioSeq seq_revcomp=seq_comp.reverse();
+                std::cout << seq.header << " len:" << seq.length() << " read!" << std::endl;
+                BioSeq seq_rev=seq.reverse();
+                BioSeq seq_comp=seq.complement();
+                BioSeq seq_revcomp=seq_comp.reverse();
                 genome_size+=seq.length();
 
                 //Search on chunked input sequence

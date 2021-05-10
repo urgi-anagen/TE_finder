@@ -7,7 +7,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test_Hasher);
 //-------------------------------------------------------------------------
 void Test_Hasher::test_search(void ){
 
-    unsigned verbosity=1;
+    unsigned verbosity=0;
 
     std::ostringstream ostr;
     ostr<<"ATATTTATTTTAGCGTTTACGCTATGTGTTGCGTATTGCTAATCGCTATGATTATATTTATTTTAGCGTTTACGCTATG";
