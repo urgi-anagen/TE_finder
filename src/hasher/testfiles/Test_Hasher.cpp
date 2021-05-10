@@ -7,47 +7,57 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test_Hasher);
 //-------------------------------------------------------------------------
 void Test_Hasher::test_search(void ){
 
-    unsigned verbosity=0;
+    unsigned verbosity=1;
 
     std::ostringstream ostr;
     ostr<<"ATATTTATTTTAGCGTTTACGCTATGTGTTGCGTATTGCTAATCGCTATGATTATATTTATTTTAGCGTTTACGCTATG";
     ostr<<"TTACGCTATGTGTTATTTTTAGCGTTATTGCTAGCGTTTGCGATATTTATTTAATCGCTATGATTATATTTACGCTATG";
     ostr<<"ATATTTCGCGCTATGTGTTGCGATAGCGTTTATTATACCTATATCGCTATGATTATATTTATTTTTAGCGTTTTGTATG";
-    SDGBioSeq seq=newSDGMemBioSeq(ostr.str());
+    BioSeq seq=BioSeq(ostr.str());
     std::ofstream fout_query("query_test.fa");
     fout_query << ">query_test"<<std::endl<<ostr.str();
     fout_query.close();
 
-    SDGBioSeq subseq1=seq.subseq(10-1,51);
-    subseq1.setDE("test1 10..60");
+    BioSeq subseq1=seq.subseq(10-1,50);
+    subseq1.header="test1 10..59";
 
-
-    SDGBioSeq subseq2=seq.subseq(50,51);
-    subseq2.setDE("test2 comp 100..50");
+    BioSeq subseq2=seq.subseq(50-1,50);
+    subseq2.header="test2 comp 99..50";
     subseq2=subseq2.complement();
 
+    BioSeq subseq3=seq.subseq(0,50);
+    subseq3.header="test3 comp 49..1";
+    subseq3=subseq3.complement();
+
+    BioSeq subseq4=seq.subseq(0,50);
+    subseq4.header="test4 1..49";
 
     std::ostringstream str_fasta;
-    str_fasta << ">" << subseq1.getDE() << std::endl;
-    str_fasta << subseq1.toString() << std::endl;;
-    str_fasta << ">" << subseq2.getDE() << std::endl;
-    str_fasta << subseq2.toString() << std::endl;;
+    str_fasta << ">" << subseq1.header << std::endl;
+    str_fasta << subseq1 << std::endl;
+    str_fasta << ">" << subseq2.header << std::endl;
+    str_fasta << subseq2 << std::endl;
+    str_fasta << ">" << subseq3.header << std::endl;
+    str_fasta << subseq3 << std::endl;
+    str_fasta << ">" << subseq4.header << std::endl;
+    str_fasta << subseq4 << std::endl;
 
     std::ofstream fout_subject("subject_test.fa");
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=5,end=200,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
+    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
     std::list< RangePair > frag_list;
-    unsigned kmer_size=10, kmask=11, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
+    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0;
-    bool valid_idx_file = true;
+    bool valid_idx_file = false;
 
-    Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
-    hsrch.load("subject_test.fa", kmer_size, kmer_size, mask_hole_length, bkmer_size, kmer_size / 2,
+    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
+    hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
 
+    end=seq.size();
     hsrch.search(seq, start, end, numseq, connect_dist,
            min_frag_size, false, frag_list, verbosity);
 
@@ -58,7 +68,7 @@ void Test_Hasher::test_search(void ){
     }
 
     // search on complement
-    SDGBioSeq comp_seq=seq.complement();
+    BioSeq comp_seq=seq.complement();
     std::list< RangePair > compfrag_list;
     hsrch.search(comp_seq, start, end, numseq, connect_dist,
                  min_frag_size, false, compfrag_list, verbosity);
@@ -71,8 +81,10 @@ void Test_Hasher::test_search(void ){
     }
 
     if(verbosity>0){
-        std::cout<<"\nsubseq1="<<subseq1.toString()<<std::endl;
-        std::cout<<"\nsubseq2="<<subseq2.toString()<<std::endl;
+        std::cout<<"\nsubseq1="<<subseq1<<std::endl;
+        std::cout<<"subseq2="<<subseq2<<std::endl;
+        std::cout<<"subseq3="<<subseq3<<std::endl;
+        std::cout<<"subseq4="<<subseq4<<std::endl;
     }
     hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false,verbosity);
 
@@ -82,12 +94,14 @@ void Test_Hasher::test_search(void ){
     }
 
     std::ostringstream ostr_exp;
-    std::string exp="100\n100\n";
+    std::string exp="100\n100\n100\n100\n";
     ostr_exp<<exp;
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
 
-    std::system("rm query_test.fa subject_test.fa subject_test.fa.kidx");
+    remove("query_test.fa");
+    remove("subject_test.fa");
+    remove("subject_test.fa.kidx");
 }
 //------------------------------------------------------------------------------------------------------------
 void Test_Hasher::test_diagSearchDist( void )

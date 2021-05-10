@@ -557,7 +557,7 @@ void HashDNASeq::kmer_ssr_filter(unsigned wsize, std::vector<unsigned>& wcount) 
         char *s = new char[len + 1];
         char *ptr=s;
         std::strcpy(s, seq_ssr.toString().c_str());
-        for (unsigned i = 0; i <= last_pos; i++) {
+        for (unsigned i = 0; i < last_pos; i++) {
             unsigned hval=hseq(s);
             if(wcount[hval]!=0){
                 std::cout <<"kmer:"<< hseq.reverse_hash(hval) <<" count:"<< wcount[hval]<<" removed !" << std::endl;
@@ -763,7 +763,7 @@ void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
 {
   diag_map.clear();
 
-  std::string str=sequence.toString().substr(start,end-start);
+  std::string str=sequence.toString().substr(start,end-start+1);
 
   const char* seq=str.c_str();
 
@@ -771,7 +771,7 @@ void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
   if(end<=kmer_size) return;
 
   unsigned key_d=0;
-  for(unsigned i=start;i<=last_pos;i+=step_q)
+  for(unsigned i=start;i<last_pos;i+=step_q)
     {
       key_d=hseq(seq);
       auto begin_d=hash2wpos[key_d];

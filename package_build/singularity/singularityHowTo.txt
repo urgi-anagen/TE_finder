@@ -1,4 +1,7 @@
 
+https://sylabs.io/singularity/
+https://cloud.sylabs.io/library/hquesneville
+
 #Authentification for remote login
 >singularity remote login
 -copy "syslabs-token.txt" in "API Key:"

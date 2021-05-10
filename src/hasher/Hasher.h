@@ -33,7 +33,7 @@ class Hasher : public HashDNASeq
 
     unsigned algorithm;
 
-	void matchKmers(const SDGBioSeq& sequence,
+	void matchKmers(const BioSeq& sequence,
 			    unsigned start, unsigned end, bool repeat,
 				std::vector< std::list<Diag> >& diag_map);
 
@@ -57,10 +57,10 @@ class Hasher : public HashDNASeq
 
     RangePair record_frag(unsigned start, unsigned end, unsigned diag,
                         unsigned score,unsigned numseqQ,unsigned curr_seq, unsigned count) {
-        unsigned qstart = diag + start +1;
-        unsigned qend = diag + end + kmer_size +1;
+        unsigned qstart = diag + start + 1;
+        unsigned qend = diag + end + kmer_size + 1 ;
         unsigned sstart = start + 1;
-        unsigned send = end + kmer_size +1;
+        unsigned send = end + kmer_size + 1 ;
         return rangePairFactory(numseqQ, qstart, qend, curr_seq, sstart, send, score, step_q, kmer_size, count);
     }
 
@@ -91,7 +91,7 @@ class Hasher : public HashDNASeq
 		    }
 	  };
 
-  void search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
+  void search(const BioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
               unsigned min_frag_size, bool repeat, std::list< RangePair >& fmerged, unsigned verbose);
   static void fragSeqAlign(std::list< RangePair >& frag,
                               const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse, unsigned verbose);

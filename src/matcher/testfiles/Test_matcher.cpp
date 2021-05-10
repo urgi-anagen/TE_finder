@@ -29,9 +29,10 @@ void Test_matcherThreads::test_runAsScript( void ){
 	SDGString outParamFileName = "input.align.clean_match.param";
 	SDGString outMapFileName = "input.align.clean_match.map";
 	SDGString obsFileNameAttr = "input.align.clean_match.path.attr";
+    SDGString obsGFF3FileName = "input.align.clean_match.gff3";
 
     std::ostringstream cmd;
-    cmd<<"../../../cmake-build-debug/src/matcher/matcher"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd<<"../matcher"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd<<" -m "<<inputFileName<<" -j -M -x -v 1";
     std::system(cmd.str().c_str());
 
@@ -51,6 +52,7 @@ void Test_matcherThreads::test_runAsScript( void ){
 	FileUtils::removeFile(outParamFileName);
 	FileUtils::removeFile(outMapFileName);
 	FileUtils::removeFile(obsFileNameAttr);
+    FileUtils::removeFile(obsGFF3FileName);
 
 
 }

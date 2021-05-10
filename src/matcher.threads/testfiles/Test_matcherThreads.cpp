@@ -12,58 +12,6 @@ void Test_matcherThreads::setUp()
 void Test_matcherThreads::tearDown()
 {
 }
-/*void Test_matcherThreads::test_runAsProcess( void ){
-
-
-	SDGString inputFileName = "input.align";
-	std::ofstream inputFileStream(inputFileName);
-	inputFileStream<<"chunk1\t100\t500\trefTE1\t100\t500\t9.4e-19\t400\t100.00\n";
-	inputFileStream<<"chunk1\t600\t1000\trefTE1\t600\t1000\t0\t400\t100.00\n";
-	inputFileStream<<"chunk1\t1000\t2000\trefTE1\t1500\t2500\t0\t1000\t100.00\n";
-	inputFileStream.close();
-
-	std::ostringstream expStr;
-	expStr<<"1\tchunk1\t100\t500\trefTE1\t100\t500\t9.4e-19\t401\t100\n";
-	expStr<<"1\tchunk1\t600\t1000\trefTE1\t600\t1000\t0\t401\t100\n";
-	expStr<<"1\tchunk1\t1000\t2000\trefTE1\t1500\t2500\t0\t1001\t100\n";
-
-
-	//set parameters
-	BLRMatcherThreadsParameter para;
-	para.setAlignFile(inputFileName);
-	para.setPrefix_filename(inputFileName);
-	para.setMerge(true);
-	para.setJoin_frag(true);
-
-	SDGString obsFileName = "input.align.match.path";
-	SDGString obsFileNameBed = "input.align.match.bed";
-	SDGString outParamFileName = "input.align.match.param";
-//	SDGString outMapFileName = "input.align.clean_match.map";
-//	SDGString obsFileNameAttr = "input.align.clean_match.path.attr";
-
- *//*   BLRMatchMap match_map;
-    std::list<RangePair> rp_list;
-    BLRMatcherThreads matcherThreads(rp_list);
-	matcherThreads.process(para);*//*
-
-	std::ostringstream obsStr;
-	std::ifstream fin(obsFileName);
-	char buff[1024];
-	while(fin.getline(buff,1023,'\n'))
-		obsStr<<buff<<std::endl;
-
-
-	CPPUNIT_ASSERT_EQUAL(expStr.str(), obsStr.str());
-
-	FileUtils::removeFile(inputFileName);
-	FileUtils::removeFile(obsFileNameBed);
-	FileUtils::removeFile(obsFileName);
-	FileUtils::removeFile(outParamFileName);
-//	FileUtils::removeFile(outMapFileName);
-//	FileUtils::removeFile(obsFileNameAttr);
-
-
-}*/
 void Test_matcherThreads::test_runAsScript_join_simple( void ){
 	SDGString inputFileName = "input.align";
 	std::ofstream inputFileStream(inputFileName);
@@ -80,11 +28,10 @@ void Test_matcherThreads::test_runAsScript_join_simple( void ){
 	SDGString obsFileName = "input.align.clean_match.path";
 	SDGString obsFileNameBed = "input.align.clean_match.bed";
 	SDGString outParamFileName = "input.align.clean_match.param";
-//	SDGString outMapFileName = "input.align.clean_match.map";
-//	SDGString obsFileNameAttr = "input.align.clean_match.path.attr";
+    SDGString obsGFF3FileName = "input.align.clean_match.gff3";
 
     std::ostringstream cmd;
-	cmd<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+	cmd<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
 	cmd<<" -m "<<inputFileName<<" -j -M -x -v 1";
 	std::system(cmd.str().c_str());
 
@@ -101,8 +48,7 @@ void Test_matcherThreads::test_runAsScript_join_simple( void ){
 	FileUtils::removeFile(obsFileNameBed);
 	FileUtils::removeFile(obsFileName);
 	FileUtils::removeFile(outParamFileName);
-//	FileUtils::removeFile(outMapFileName);
-//	FileUtils::removeFile(obsFileNameAttr);
+    FileUtils::removeFile(obsGFF3FileName);
 }
 void Test_matcherThreads::test_runAsScript_join( void ){
     SDGString inputFileName = "blasterAthaBest.align";
@@ -112,9 +58,10 @@ void Test_matcherThreads::test_runAsScript_join( void ){
     SDGString prefixObsFileName = "obs.match";
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
+    SDGString obsGFF3FileName = prefixFileName+prefixObsFileName+".gff3";
 
     std::ostringstream cmd;
-    cmd<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd<<" -m "<<inputFileName<<" -j -B "<<prefixFileName<<"obs";
     std::system(cmd.str().c_str());
 
@@ -133,6 +80,7 @@ void Test_matcherThreads::test_runAsScript_join( void ){
     if(condition) {
         FileUtils::removeFile(diff_result);
         FileUtils::removeFile(obsFileName);
+        FileUtils::removeFile(obsGFF3FileName);
 
         SDGString file=prefixFileName+prefixObsFileName+".param";
         FileUtils::removeFile(file);
@@ -149,14 +97,16 @@ void Test_matcherThreads::test_runAsScript_join_threads( void ){
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
     SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+    SDGString obsGFF3FileName = prefixFileName+prefixObsFileName+".gff3";
+    SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
@@ -177,6 +127,8 @@ void Test_matcherThreads::test_runAsScript_join_threads( void ){
         FileUtils::removeFile(diff_result);
         FileUtils::removeFile(expFileName);
         FileUtils::removeFile(obsFileName);
+        FileUtils::removeFile(obsGFF3FileName);
+        FileUtils::removeFile(expGFF3FileName);
 
         SDGString file=prefixFileName+prefixObsFileName+".param";
         FileUtils::removeFile(file);
@@ -199,14 +151,16 @@ void Test_matcherThreads::test_runAsScript_join_clean_threads( void ){
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
     SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+    SDGString obsGFF3FileName = prefixFileName+prefixObsFileName+".gff3";
+    SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -x -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -x -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
@@ -227,6 +181,8 @@ void Test_matcherThreads::test_runAsScript_join_clean_threads( void ){
         FileUtils::removeFile(diff_result);
         FileUtils::removeFile(expFileName);
         FileUtils::removeFile(obsFileName);
+        FileUtils::removeFile(obsGFF3FileName);
+        FileUtils::removeFile(expGFF3FileName);
 
         SDGString file=prefixFileName+prefixObsFileName+".param";
         FileUtils::removeFile(file);
@@ -251,17 +207,16 @@ void Test_matcherThreads::test_runAsScript_join_merge_threads( void ){
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
     SDGString expFileName = prefixFileName+prefixExpFileName+".path";
-
+    SDGString obsGFF3FileName = prefixFileName+prefixObsFileName+".gff3";
+    SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -M -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
-
-
     std::ostringstream cmd_obs;
-    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -M -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
@@ -282,6 +237,8 @@ void Test_matcherThreads::test_runAsScript_join_merge_threads( void ){
         FileUtils::removeFile(diff_result);
         FileUtils::removeFile(expFileName);
         FileUtils::removeFile(obsFileName);
+        FileUtils::removeFile(obsGFF3FileName);
+        FileUtils::removeFile(expGFF3FileName);
 
         SDGString file=prefixFileName+prefixObsFileName+".param";
         FileUtils::removeFile(file);
@@ -306,17 +263,19 @@ void Test_matcherThreads::test_runAsScript_join_merge_clean_threads( void ){
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
     SDGString expFileName = prefixFileName+prefixExpFileName+".path";
+    SDGString obsGFF3FileName = prefixFileName+prefixObsFileName+".gff3";
+    SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -M -x -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
 
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../../../cmake-build-debug/src/matcher.threads/matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -x -M -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
@@ -337,6 +296,8 @@ void Test_matcherThreads::test_runAsScript_join_merge_clean_threads( void ){
         FileUtils::removeFile(diff_result);
         FileUtils::removeFile(expFileName);
         FileUtils::removeFile(obsFileName);
+        FileUtils::removeFile(obsGFF3FileName);
+        FileUtils::removeFile(expGFF3FileName);
 
         SDGString file=prefixFileName+prefixObsFileName+".param";
         FileUtils::removeFile(file);

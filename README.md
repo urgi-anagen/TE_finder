@@ -10,3 +10,16 @@
  See the [documentation](Documentation.md)
 
 The binaries are part of the [REPET package](http://urgi.versailles.inra.fr/Tools/REPET).
+
+## Containers
+Singularity images are available [here](https://cloud.sylabs.io/library/hquesneville)
+
+You can run by simply typing:
+
+-if the image is localy downloaded, type for example :
+
+`$ singularity run te_finder2.30.sif blaster2.30 -h`
+
+-if the image is remote, type for example :
+
+`$ singularity run library://hquesneville/default/te_finder:2.30 blaster2.30 -h`

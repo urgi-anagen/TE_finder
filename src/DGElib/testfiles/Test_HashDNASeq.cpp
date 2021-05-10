@@ -20,7 +20,7 @@ void Test_HashDNASeq::test_hashSeqCount( void )
 	for(unsigned i=0; i<size; ++i)
 		{
 			if(word_count[i]!=0)
-				ostr_obs<<"["<<i<<"]="<<word_count[i]<<std::endl;
+				ostr_obs<<"["<<i<<"="<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
 	    }
 
 	//std::cout<<"\n"<<ostr_obs.str()<<std::endl;
@@ -28,15 +28,15 @@ void Test_HashDNASeq::test_hashSeqCount( void )
 
     std::ostringstream ostr_exp;
     ostr_exp
-		<<"[1]=1\n"
-		<<"[2]=1\n" 
-		<<"[3]=3\n"
-		<<"[6]=2\n"
-		<<"[7]=1\n"
-		<<"[9]=2\n"
-		<<"[11]=1\n"
-		<<"[12]=4\n"
-		<<"[15]=7"<<std::endl;
+		<<"[1=AC]=1\n"
+		<<"[2=AG]=1\n"
+		<<"[3=AT]=3\n"
+		<<"[6=CG]=2\n"
+		<<"[7=CT]=1\n"
+		<<"[9=GC]=2\n"
+		<<"[11=GT]=1\n"
+		<<"[12=TA]=4\n"
+		<<"[15=TT]=7"<<std::endl;
 
  
 	CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());

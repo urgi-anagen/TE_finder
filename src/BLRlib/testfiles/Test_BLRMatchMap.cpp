@@ -464,16 +464,14 @@ void Test_BLRMatchMap::test_writeBED(void)
 
 	matchMap.writeBED(obs, rps_list, 0);
 
-		std::ostringstream exp;
-	exp<<"CHR1v01212004\t100\t1000\tTNAT1A,TNAT1A\t868\t+\t100\t1000\t255,127,0\t2\t151,201,\t0,700,\n";
-	exp<<"CHR1v01212004\t1050\t2000\tTNAT1A\t87\t-\t1050\t2000\t255,127,0\n";
+	std::ostringstream exp;
+    exp << "CHR1v01212004\t100\t1000\tTNAT1A,TNAT1A\t81.56\t+\t100\t1000\t2\t151,201,\t0,700,\n";
+    exp << "CHR1v01212004\t1050\t2000\tTNAT1A\t79.14\t-\t1050\t2000\n";
 
-	/* 		
-		std::ofstream obsFile("obsFileBED");
+/*		std::ofstream obsFile("obsFileBED");
 		obsFile<<obs.str();
 
 		std::ofstream expFile("expFileBED");
-		expFile<<exp.str();
-		*/
+		expFile<<exp.str();*/
 	 CPPUNIT_ASSERT_EQUAL(exp.str(),obs.str());
 }

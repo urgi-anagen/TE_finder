@@ -15,7 +15,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 	HashFuncDNASeq(unsigned w, unsigned p=0, unsigned s=1): kmer_size(w), hole_period(p), hole_size(s)
 	{
         if(hole_period<2) {
-            hole_period=w+1;
+            hole_period=w+2;
             hole_size=0;
         }
         mask.resize(kmer_size) ;

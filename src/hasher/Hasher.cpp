@@ -144,14 +144,14 @@ void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &di
 }
 //-------------------------------------------------------------------------
 // Search for alignments with word matches
-void Hasher::matchKmers(const SDGBioSeq& sequence,
+void Hasher::matchKmers(const BioSeq& sequence,
 	    unsigned start, unsigned end, bool repeat,
 		std::vector< std::list<Diag> >& diag_map)
 {
   unsigned last_pos=end-kmer_size;
   if(end<=kmer_size) return;
 
-  std::string str=sequence.toString().substr(start,end-start);
+  std::string str=sequence.substr(start,end-start+1);
   const char* seq=str.c_str();
 
   unsigned key_d,dirhit=0;
@@ -180,7 +180,7 @@ void Hasher::matchKmers(const SDGBioSeq& sequence,
 }
 //-------------------------------------------------------------------------
 // Search for Alignments
-void Hasher::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
+void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
 		unsigned min_frag_size, bool repeat, std::list< RangePair >& frag, unsigned verbose)
 {
 	clock_t clock_begin, clock_end;
@@ -288,10 +288,10 @@ void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
 {
     std::cout<<"--Filter fragments length <"<<min_len<<" ... "<<std::flush;
     auto frag_it=frag.begin();
-    while(frag_it != frag.end()) {
-        if(frag_it->getLength()<min_len){
+    while (frag_it != frag.end()) {
+        if (frag_it->getLength() < min_len) {
             frag_it = frag.erase(frag_it);
-        }else{frag_it++;}
+        } else { frag_it++; }
     }
     std::cout<<"done !"<<std::endl;
 }
