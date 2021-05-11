@@ -347,12 +347,12 @@ int main(int argc, char *argv[]) {
                     }
                     std::cout << "==>chunk #" << nb_chunk << "/" << nb_chunk << ":" << start << ".." << seq.length()
                               << std::endl;
-                    search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,seq.length(),numseq,
+                    search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,seq.length()-1,numseq,
                                 connect_dist,min_frag_size,repeat,
                                 frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
                 } else {
                     //Search on full input sequence
-                    search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,0,seq.length(),numseq,
+                    search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,0,seq.length()-1,numseq,
                                 connect_dist,min_frag_size,repeat,
                                 frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
                 }

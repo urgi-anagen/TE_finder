@@ -7,13 +7,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test_Hasher);
 //-------------------------------------------------------------------------
 void Test_Hasher::test_search(void ){
 
-    unsigned verbosity=0;
+    unsigned verbosity=1;
 
     std::ostringstream ostr;
     ostr<<"ATATTTATTTTAGCGTTTACGCTATGTGTTGCGTATTGCTAATCGCTATGATTATATTTATTTTAGCGTTTACGCTATG";
     ostr<<"TTACGCTATGTGTTATTTTTAGCGTTATTGCTAGCGTTTGCGATATTTATTTAATCGCTATGATTATATTTACGCTATG";
     ostr<<"ATATTTCGCGCTATGTGTTGCGATAGCGTTTATTATACCTATATCGCTATGATTATATTTATTTTTAGCGTTTTGTATG";
     BioSeq seq=BioSeq(ostr.str());
+    std::cout<<"\nQuery length:"<<seq.size()<<std::endl;
     std::ofstream fout_query("query_test.fa");
     fout_query << ">query_test"<<std::endl<<ostr.str();
     fout_query.close();
@@ -29,8 +30,15 @@ void Test_Hasher::test_search(void ){
     subseq3.header="test3 comp 49..1";
     subseq3=subseq3.complement();
 
-    BioSeq subseq4=seq.subseq(0,50);
-    subseq4.header="test4 1..49";
+    BioSeq subseq4=seq.subseq(237-50,50);
+    subseq4.header="test4 187..237";
+
+    BioSeq subseq5=seq.subseq(0,50);
+    subseq5.header="test5 comp 1..49";
+
+    BioSeq subseq6=seq.subseq(237-50,50);
+    subseq6.header="test6 237..188";
+    subseq6=subseq6.complement();
 
     std::ostringstream str_fasta;
     str_fasta << ">" << subseq1.header << std::endl;
@@ -41,6 +49,10 @@ void Test_Hasher::test_search(void ){
     str_fasta << subseq3 << std::endl;
     str_fasta << ">" << subseq4.header << std::endl;
     str_fasta << subseq4 << std::endl;
+    str_fasta << ">" << subseq5.header << std::endl;
+    str_fasta << subseq5 << std::endl;
+    str_fasta << ">" << subseq6.header << std::endl;
+    str_fasta << subseq6 << std::endl;
 
     std::ofstream fout_subject("subject_test.fa");
     fout_subject << str_fasta.str();
@@ -57,7 +69,7 @@ void Test_Hasher::test_search(void ){
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
 
-    end=seq.size();
+    end=seq.size()-1;
     hsrch.search(seq, start, end, numseq, connect_dist,
            min_frag_size, false, frag_list, verbosity);
 
@@ -85,6 +97,8 @@ void Test_Hasher::test_search(void ){
         std::cout<<"subseq2="<<subseq2<<std::endl;
         std::cout<<"subseq3="<<subseq3<<std::endl;
         std::cout<<"subseq4="<<subseq4<<std::endl;
+        std::cout<<"subseq5="<<subseq5<<std::endl;
+        std::cout<<"subseq6="<<subseq6<<std::endl;
     }
     hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false,verbosity);
 
@@ -94,7 +108,7 @@ void Test_Hasher::test_search(void ){
     }
 
     std::ostringstream ostr_exp;
-    std::string exp="100\n100\n100\n100\n";
+    std::string exp="100\n100\n100\n100\n100\n100\n";
     ostr_exp<<exp;
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
