@@ -223,7 +223,7 @@ int main(int argc, char* argv[])
     	repeat=true;
     	filename2=filename1;
     	if(min_count==0)
-    		min_count=1;
+    		min_count=2;
     	std::cout<<"De novo mode! min_count="<<min_count<<std::endl;
     }
 
@@ -339,11 +339,11 @@ int main(int argc, char* argv[])
 			translate_comp(frag_comp, s.length());
 			frag.insert(frag.begin(), frag_comp.begin(), frag_comp.end());
 			frag_comp.clear();
-			//dstr.fragMerge(frag, frag_connect_dist, fmerged);
+			dstr.fragMerge(frag, frag_connect_dist, fmerged);
 
-			genome_coverage+=dstr.compute_coverage(frag);
-			dstr.writeBED(s.getDE(), frag, bedout);
-			dstr.get_sequences(frag, s, seqout);
+			genome_coverage+=dstr.compute_coverage(fmerged);
+			dstr.writeBED(s.getDE(), fmerged, bedout);
+			dstr.get_sequences(fmerged, s, seqout);
 		  }
 		bedout.close();
 		seqout.close();

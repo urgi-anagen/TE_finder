@@ -780,7 +780,8 @@ void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
       {
           if (j->numSeq > 0) {
               long diag = long(i) - j->pos;
-              diag_map.push_back(Diag(diag, j->pos, j->numSeq));
+              if( !repeat || (repeat && i < j->pos ) )
+                diag_map.push_back(Diag(diag, j->pos, j->numSeq));
           }
       }
       seq+=step_q;
