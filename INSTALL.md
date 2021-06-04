@@ -4,18 +4,24 @@ Dependencies
 * cmake3 : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
     
     example (Debian): sudo apt -y install cmake
+    example (Fedora): sudo yum install cmake3
+    
 
 * C++ compiler
 
     example (Debian): sudo apt -y install g++
+    example (Fedora): sudo yum install gcc-c++
 
 * cppunit : A C++ library for unitary tests.
 
     example (Debian): sudo apt -y install libcppunit-dev
-
+    example (Fedora): sudo yum install cppunit cppunit-devel
+    
 * GIT
 
     example (Debian): sudo apt -y install git
+    example (Fedora): sudo yum install git
+    
 
 Download
 ========
