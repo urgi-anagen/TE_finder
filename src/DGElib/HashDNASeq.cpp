@@ -1,5 +1,6 @@
 #include <cstring>
 #include <memory>
+#include <limits>
 #include <SDGMemBioSeq.h>
 #include "HashDNASeq.h"
 
@@ -51,11 +52,18 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
       std::cout<<"Load kmer positions in hash table"<<std::endl;
       hash_ptr=hash2wpos;
       SDGFastaIstream inS2(filenameS);
+      unsigned count_seq=0;
       while(inS2)
 		{
 		  SDGBioSeq sS;
 		  if(inS2)
-			inS2>>sS;
+          {
+              inS2>>sS;
+              count_seq++;
+              if (count_seq==std::numeric_limits<unsigned>::max())
+                  throw Unsigned_Out_Of_Range("Number of subject sequence is out of range: ",count_seq);
+          }
+
 		  hashSeqPos(sS,kmer_count);
 		}
       inS2.close();
