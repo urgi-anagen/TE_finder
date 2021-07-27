@@ -62,10 +62,10 @@ protected:
       unsigned numSeq;
 
       KmerSpos(unsigned p=0, unsigned n=0): pos(p), numSeq(n) {
-          if (n>1000000)
+/*          if (n>1000000)
               throw Unsigned_Out_Of_Range("KmerSpos - sequence number setup out of range: n=",n);
           if(p>1000000000)
-              throw Unsigned_Out_Of_Range("KmerSpos - sequence position setup out of range: p=",p);
+              throw Unsigned_Out_Of_Range("KmerSpos - sequence position setup out of range: p=",p);*/
           pos=p;
           numSeq=n;
       };
