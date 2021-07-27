@@ -12,7 +12,7 @@
 
 
 double filter_cutoff=0.0;
-unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
+unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1, join_dist=20,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=1,algorithm=1;
 
 double count_cutoff=1.0, diversity_cutoff=0.0;
@@ -24,55 +24,63 @@ SDGString outfilename="";
     
 void help(void)
 {
-  std::cerr<<"usage: hasher"
-      <<" [<options>] <fasta query sequence> [<fasta sequence model>]."<<std::endl
-      <<" options:"<<std::endl
-      <<"   -h, --help:\n\t this help"<<std::endl
-      <<"   -w, --kmer:\n\t kmer length, default: "<<kmer_size<<std::endl
-      <<"   -S, --step_q:\n\t step on query sequence, default: "<<step_q<<std::endl
-      <<"   -k, --kmask:\n\t period of k-mer hole, default: "<<kmask<<std::endl
-      <<"   -l, --len_hole_mask:\n\t kmer mask hole length, default: "<<mask_hole_length<<std::endl
-      <<"   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
-	<<kmer_dist<<std::endl
-    <<"   -s, --min_size:\n\t min size range to report, default: "
-	<<min_size<<std::endl
-    <<"   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
-	<<count_cutoff<<std::endl
-    <<"   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability (Value [0-1]), default: "
-    <<diversity_cutoff<<std::endl
-    <<"   -m, --min_count:\n\t filter kmer with counts less than this value, default: "
-	<<min_count<<std::endl
-    <<"   -b, --background_kmer_size:\n\t kmer size to compute kmer background probability, default: "
-	<<bkmer_size<<std::endl
-	<<"   -p, --p-value:\n\t p-value, default: "<<p_value<<std::endl
-      <<"   -o, --file_out:\n\t filename for output,"<<std::endl
-      <<"   -c, --chunk_size:\n\t sequence chunk size in kb, default: None"<<std::endl
-      <<"   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-      <<"   -a, --analysis:\n\t compute kmer statistics only"<<std::endl
-      <<"   -A, --algorithm:\n\t algorithm number, default"<<algorithm<<std::endl
-  	  <<"   -v, --verbosity:\n\t verbosity level, default:"<<verbosity<<std::endl;
+    std::cerr << "usage: hasher"
+              << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
+              << " options:" << std::endl
+              << "   -h, --help:\n\t this help" << std::endl
+              << "   -w, --kmer:\n\t kmer length, default: " << kmer_size << std::endl
+              << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
+              << "   -k, --kmask:\n\t period of k-mer hole, default: " << kmask << std::endl
+              << "   -l, --len_hole_mask:\n\t kmer mask hole length, default: " << mask_hole_length << std::endl
+              << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
+              << kmer_dist << std::endl
+              << "   -j, --join_dist:\n\t distance between two matching kmer on query sequence in bp to join, default: "
+              << join_dist << std::endl
+              << "   -s, --min_size:\n\t min size range to report, default: "
+              << min_size << std::endl
+              << "   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
+              << count_cutoff << std::endl
+              << "   -D, --diversity_cutoff:\n\t filter kmer with diversity measure of kmer size used for background probability (Value [0-1]), default: "
+              << diversity_cutoff << std::endl
+              << "   -m, --min_count:\n\t filter kmer with counts less than this value, default: "
+              << min_count << std::endl
+              << "   -b, --background_kmer_size:\n\t kmer size to compute kmer background probability, default: "
+              << bkmer_size << std::endl
+              << "   -p, --p-value:\n\t p-value, default: " << p_value << std::endl
+              << "   -o, --file_out:\n\t filename for output," << std::endl
+              << "   -c, --chunk_size:\n\t sequence chunk size in kb, default: None" << std::endl
+              << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
+              << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
+              << "   -A, --algorithm:\n\t algorithm number, default" << algorithm << std::endl
+              << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
 {
-  std::cout<<"\nRun with parameters:\n"
-	  <<"Query sequences: "<<filename1<<std::endl
-	  <<"Model sequences: "<<filename2<<std::endl
-      <<"   -w, --kmer:\t kmer length: "<<kmer_size<<std::endl
-      <<"   -S, --step_q:\t step on query sequence: "<<step_q<<std::endl
-      <<"   -k, --kmask:\t period of k-mer hole: "<<kmask<<std::endl
-      <<"   -l, --len_hole_mask:\t kmer mask hole length: "<<mask_hole_length<<std::endl
-      <<"   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: "<<kmer_dist<<std::endl
-      <<"   -s, --min_size:\t min size range to report: "<<min_size<<std::endl
-      <<"   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: "<<count_cutoff<<std::endl
-      <<"   -D, --diversity_cutoff:\t filter kmer with diversity measure of kmer size used for background probability: "<<diversity_cutoff<<std::endl
-      <<"   -m, --min_count:\t filter kmer with counts less than this value: "<<min_count<<std::endl
-      <<"   -b, --background_kmer_size:\t kmer size to compute kmer background probability: "<<bkmer_size<<std::endl
-      <<"   -p, --p-value:\t p-value, default: "<<p_value<<std::endl
-      <<"   -o, --file_out:\t filename for output:"<<outfilename<<std::endl
-      <<"   -c, --chunk_size:\t sequence chunk size in kb: "<<chunk_size_kb<<std::endl
-      <<"   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-      <<"   -A, --algorithm:\t algorithm number, default: "<<algorithm<<std::endl
-  	  <<"   -v, --verbosity:\t verbosity level: "<<verbosity<<std::endl;
+    std::cout << "\nRun with parameters:\n"
+              << "Query sequences: " << filename1 << std::endl
+              << "Model sequences: " << filename2 << std::endl
+              << "   -w, --kmer:\t kmer length: " << kmer_size << std::endl
+              << "   -S, --step_q:\t step on query sequence: " << step_q << std::endl
+              << "   -k, --kmask:\t period of k-mer hole: " << kmask << std::endl
+              << "   -l, --len_hole_mask:\t kmer mask hole length: " << mask_hole_length << std::endl
+              << "   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: " << kmer_dist
+              << std::endl
+              << "   -j, --join_dist:\t distance between two matching kmer on query sequence in bp to join, default: "
+              << join_dist << std::endl
+              << "   -s, --min_size:\t min size range to report: " << min_size << std::endl
+              << "   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: " << count_cutoff
+              << std::endl
+              << "   -D, --diversity_cutoff:\t filter kmer with diversity measure of kmer size used for background probability: "
+              << diversity_cutoff << std::endl
+              << "   -m, --min_count:\t filter kmer with counts less than this value: " << min_count << std::endl
+              << "   -b, --background_kmer_size:\t kmer size to compute kmer background probability: " << bkmer_size
+              << std::endl
+              << "   -p, --p-value:\t p-value, default: " << p_value << std::endl
+              << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
+              << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
+              << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
+              << "   -A, --algorithm:\t algorithm number, default: " << algorithm << std::endl
+              << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
 };
 // search on sequence chunk, reverse sequence, and reverse complement
 void search_frag(Hasher& hsrch,
@@ -127,6 +135,7 @@ int main(int argc, char *argv[]) {
                             {"kmask",                required_argument, 0, 'k'},
                             {"len_hole_mask",        required_argument, 0, 'l'},
                             {"kmer_dist",            required_argument, 0, 'd'},
+                            {"join_dist",            required_argument, 0, 'j'},
                             {"min_size",             required_argument, 0, 's'},
                             {"filter_cutoff",        required_argument, 0, 'C'},
                             {"min_count",            required_argument, 0, 'm'},
@@ -144,7 +153,7 @@ int main(int argc, char *argv[]) {
             /* `getopt_long' stores the option index here. */
             int option_index = 0;
 
-            c = getopt_long(argc, argv, "hd:f:w:S:k:l:d:s:C:D:m:b:p:o:c:n:aA:v:",
+            c = getopt_long(argc, argv, "hd:f:w:S:k:l:d:j:s:C:D:m:b:p:o:c:n:aA:v:",
                             long_options, &option_index);
 
             /* Detect the end of the options. */
@@ -174,7 +183,10 @@ int main(int argc, char *argv[]) {
                 }
                 case 'd': {
                     kmer_dist = atoi(optarg);
-                    connect_dist=(kmer_dist + 1) * kmer_size;
+                    break;
+                }
+                case 'j': {
+                    join_dist = atoi(optarg);
                     break;
                 }
                 case 's': {
@@ -255,10 +267,9 @@ int main(int argc, char *argv[]) {
         if (filename2.empty()) {
             repeat = true;
             filename2 = filename1;
-            if (min_count == 0)
-                min_count = 1;
-            std::cout << "De novo mode! min_count=" << min_count << std::endl;
+            std::cout << "De novo mode!" <<  std::endl;
         }
+        connect_dist=(kmer_dist + 1) * kmer_size;
 
         show_parameter(filename1, filename2);
 
@@ -297,7 +308,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         }
 
-        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q, algorithm);
+        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q, join_dist, algorithm);
         bool valid_idx_file = true;
         double prev_genome_perc_coverage = 0.0;
         std::stringstream alignout_name, seqout_name ;
@@ -382,8 +393,6 @@ int main(int argc, char *argv[]) {
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
-
-
             std::cout<<"--Real fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
             if(algorithm==1) {
@@ -392,6 +401,10 @@ int main(int argc, char *argv[]) {
             }
             Hasher::fragScoreFilter(frag_list,qval_score);
             Hasher::fragScoreStat(frag_list, qtile, genome_coverage);
+            if(algorithm==2) {
+                Hasher::fragSeqAlign(frag_list, filename1, filename2, false, verbosity);
+            }
+            hsrch.fragJoin(frag_list);
             genome_coverage=Hasher::fragCoverage(frag_list);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;

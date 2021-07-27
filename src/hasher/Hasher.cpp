@@ -163,10 +163,14 @@ void Hasher::matchKmers(const BioSeq& sequence,
       auto end_d = hash2wpos[key_d + 1];
       for (auto j = begin_d; j != end_d; j++) {
           if (j->numSeq == 0) continue;
-          dirhit++;
-          long diag = long(i) - j->pos;
-          diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
-          found=true;
+          if (j->numSeq > 0) {
+              long diag = long(i) - j->pos;
+              if (!repeat || (repeat && i < j->pos)){
+                  dirhit++;
+                  diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                  found = true;
+              }
+          }
       }
       if(found){
       seq += step_q;
@@ -201,9 +205,35 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
     else
         diagSearchScore(numseq, diag_map, min_frag_size, frag, verbose);
 	diag_map.clear();
+
 	std::cout<<"ok"<<std::endl;
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
+}
+//-------------------------------------------------------------------------
+// merge found fragments
+void Hasher::fragJoin(std::list< RangePair >& frag)
+{
+    frag.sort(RangePair::less);
+
+    unsigned size=frag.size();
+    if(size>=2){
+        auto curr_frag_it=frag.begin();
+        auto next_frag_it =curr_frag_it;
+        next_frag_it++;
+        while( next_frag_it != frag.end()) {
+            if (next_frag_it->getRangeQ().getStart() - curr_frag_it->getRangeQ().getEnd() < dist_join
+            && next_frag_it->getRangeS().getStart() > curr_frag_it->getRangeS().getEnd() ) {
+                //TODO chose a subject name if different
+                curr_frag_it->merge(*next_frag_it);
+                next_frag_it = frag.erase(next_frag_it);
+            } else{
+                curr_frag_it++;
+                next_frag_it++;
+            }
+        }
+
+    }
 }
 //-------------------------------------------------------------------------
 // Merge overlapping rangePair
@@ -218,7 +248,7 @@ unsigned Hasher::fragCoverage(const std::list< RangePair >& frag)
         auto curr_frag_it=frag_sort.begin();
         auto next_frag_it =curr_frag_it;
         next_frag_it++;
-        while( next_frag_it != frag_sort.end()) {
+        while(next_frag_it != frag_sort.end()) {
             if (curr_frag_it->overlapQ(*next_frag_it)) {
                 //TODO chose a subject name if different
                 curr_frag_it->merge(*next_frag_it);

@@ -803,23 +803,19 @@ void HashDNASeq::diagSearch(std::vector< Diag >& diag_map,
       int diag=0;
 
       Diag& prev_d=diag_map[0];
-      //std::cout<<prev_d<<std::endl;
       for( unsigned i=1; i<size; ++i)
 		{
 		  Diag& curr_d=diag_map[i];
-	      //std::cout<<curr_d<<std::endl;
 		  if(prev_d.diag==curr_d.diag // Same diagonal
 			 && prev_d.wpos.numSeq==curr_d.wpos.numSeq // Same sequence
 			 && prev_d.wpos.pos+connect_dist>=curr_d.wpos.pos) // hits overlaps or close enough to be joined
 				{
 				  if(start!=0) // already extending a diagonal
 					{
-				      //std::cout<<"Extend "<<prev_d<<std::endl;
 					  end=curr_d.wpos.pos;
 					}
 				  else //create a diagonal
 					{
-					  //std::cout<<"Create "<<prev_d<<".."<<curr_d<<std::endl;
 					  diag=prev_d.diag;
 					  start=prev_d.wpos.pos;
 					  end=curr_d.wpos.pos;
@@ -828,7 +824,6 @@ void HashDNASeq::diagSearch(std::vector< Diag >& diag_map,
 			  else // too far to be joined
 				  if(start!=0) // Create a diagonal
 					{
-					  //std::cout<<"Diagonal found is "<<diag+start+1<<"-"<<diag+end+kmer_size<<std::endl;
 					  frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
 					  start=0;
 					}
@@ -836,7 +831,6 @@ void HashDNASeq::diagSearch(std::vector< Diag >& diag_map,
 		}
       if(start!=0)  //End of hits list
 		{
-		  	  //std::cout<<"Diagonal found is "<<diag+start+1<<"-"<<diag+end+kmer_size<<std::endl;
 			  frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
 		}
     }

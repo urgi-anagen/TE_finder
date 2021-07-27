@@ -22,7 +22,7 @@ class Test_Hasher : public CppUnit::TestFixture {
 	CPPUNIT_TEST( test_diagSearchDist );
 	CPPUNIT_TEST( test_diagSearchScore );
 
-//	CPPUNIT_TEST( test_fragMerge );
+    CPPUNIT_TEST( test_fragJoin );
 //    CPPUNIT_TEST( test_runAsScript );
 
 	CPPUNIT_TEST_SUITE_END();
@@ -42,8 +42,8 @@ protected:
     void test_search( void );
     void test_diagSearchDist( void );
     void test_diagSearchScore( void );
-//    void test_fragMerge( void );
-    void test_runAsScript( void );
+    void test_fragJoin( void );
+//    void test_runAsScript( void );
 
 };
 
