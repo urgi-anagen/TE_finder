@@ -54,31 +54,6 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 	  exit(EXIT_FAILURE);
 	}
 
-// 	static struct option long_options[] =
-// 	{
-// 	  {"help",no_argument, 0, 'h'},
-// 	  {"match",required_argument, 0, 'm'},
-// 	  {"all",no_argument, 0, 'a'},
-// 	  {"subject_bank",required_argument, 0, 's'},
-// 	  {"query_bank",required_argument, 0, 'q'},
-// 	  {"e-value_filter",required_argument, 0, 'E'},
-// 	  {"identity_filter",required_argument, 0, 'I'},
-// 	  {"length_filter",required_argument, 0, 'L'},
-// 	  {"join",no_argument, 0, 'j'},
-// 	  {"id_tolerance",required_argument, 0, 'i'},
-// 	  {"gap_penality",required_argument, 0, 'g'},
-// 	  {"distance_penality",required_argument, 0, 'd'},
-// 	  {"authorized_overlap",required_argument, 0, 'c'},
-// 	  {"prefix_file",required_argument, 0, 'b'},
-// 	  {"prefix_file_no_stamp",required_argument, 0, 'B'},
-// 	  {0, 0, 0, 0}
-// 	};
-// 	/* `getopt_long' stores the option index here. */
-// 	int option_index = 0;
-	
-// 	int c = getopt_long (numarg, tabarg, 
-// 			     "hm:as:q:I:E:L:ji:g:d:b:B:c:",
-// 			 long_options, &option_index);
 
 	int c = getopt (numarg, tabarg, 
  			     "hm:Mxs:q:I:E:L:ji:g:d:b:B:c:v:t:S:");

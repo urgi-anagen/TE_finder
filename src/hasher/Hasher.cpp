@@ -222,17 +222,26 @@ void Hasher::fragJoin(std::list< RangePair >& frag)
         auto next_frag_it =curr_frag_it;
         next_frag_it++;
         while( next_frag_it != frag.end()) {
-            if (next_frag_it->getRangeQ().getStart() - curr_frag_it->getRangeQ().getEnd() < dist_join
-            && next_frag_it->getRangeS().getStart() > curr_frag_it->getRangeS().getEnd() ) {
-                //TODO chose a subject name if different
-                curr_frag_it->merge(*next_frag_it);
-                next_frag_it = frag.erase(next_frag_it);
-            } else{
+            if (next_frag_it->getRangeQ().getNumChr() != curr_frag_it->getRangeQ().getNumChr()
+                && next_frag_it->getRangeS().getNumChr() != curr_frag_it->getRangeS().getNumChr()) {
                 curr_frag_it++;
+                next_frag_it = curr_frag_it;
                 next_frag_it++;
+                continue;
             }
+            if (next_frag_it->getRangeQ().getStart() - curr_frag_it->getRangeQ().getEnd() > dist_join){
+                curr_frag_it++;
+                next_frag_it = curr_frag_it;
+                next_frag_it++;
+                continue;
+            }
+            if (next_frag_it->getRangeS().getStart() < curr_frag_it->getRangeS().getEnd()){
+                    next_frag_it++;
+                    continue;
+            }
+            curr_frag_it->merge(*next_frag_it);
+            next_frag_it = frag.erase(next_frag_it);
         }
-
     }
 }
 //-------------------------------------------------------------------------
