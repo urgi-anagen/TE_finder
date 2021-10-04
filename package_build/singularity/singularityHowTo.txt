@@ -7,8 +7,8 @@ https://cloud.sylabs.io/library/hquesneville
 -copy "syslabs-token.txt" in "API Key:"
 
 # Build from recipies
->singularity build --remote TEfinder2.30.sif TEfinder2.30_recipes.def
+>singularity build --remote te_finder_2.30.sif TEfinder2.30_recipes.def
 
 # Run singularity container
-singularity exec TEfinder2.30.sif blaster2.30
+singularity exec te_finder_2.30.sif blaster2.30
 
