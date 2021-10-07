@@ -124,7 +124,7 @@ class Range
     	return getMax()-getMin()+1;
     };
 
-    const void view( void ) const
+    void view( void ) const
     {
     	std::cout<<"range: start="<<getStart()<<", end="<<getEnd()<<std::endl;
     }

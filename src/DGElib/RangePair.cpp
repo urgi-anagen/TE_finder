@@ -242,10 +242,10 @@ void RangePair::readtxt(std::istream& in)
 
 void RangePair::writetxt(std::ostream& out) const
 {
-  out<<first.getNameSeq()<<"\t";
+  out<<first.getNumChr()<<"\t";
   out<<first.getStart()<<"\t";
   out<<first.getEnd()<<"\t";
-  out<<second.getNameSeq()<<"\t";
+  out<<second.getNumChr()<<"\t";
   out<<second.getStart()<<"\t";
   out<<second.getEnd()<<"\t";
   out<<e_value<<"\t";

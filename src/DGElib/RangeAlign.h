@@ -103,7 +103,7 @@ class RangeAlign: public Range
 			return Range::distance(r);
 		};
 
-		const void view(void) const
+		void view(void) const
 		{
 		std::cout<<"num chr: "<<num_chr<<" name seq: "<<name_seq<<std::endl;
 		Range::view();

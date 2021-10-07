@@ -265,19 +265,20 @@ void Test_Hasher::test_diagSearchScore( void )
 //-------------------------------------------------------------------------
 void Test_Hasher::test_fragJoin(void)
 {
-    unsigned word_len=10;
-    unsigned word_dist=1;
-    Hasher hsrch(word_len, word_dist);
-
+    unsigned join_dist=1;
+    Hasher hsrch(10, 100, 1, 2, 1, 1,20,1, join_dist, 1);
     std::list< RangePair > frag;
 
     frag.push_back(RangePair(1, 10, 50,1,110,150,40,0.0, 0.0));
     frag.push_back(RangePair(1, 60, 150,1,160,200,40,0.0, 0.0));
     frag.push_back(RangePair(1, 10, 40,1,120,140,40,0.0, 0.0));
+    frag.push_back(RangePair(1, 10, 50,2,110,150,40,0.0, 0.0));
+    frag.push_back(RangePair(1, 60, 150,2,160,200,40,0.0, 0.0));
+    frag.push_back(RangePair(1, 10, 40,2,120,140,40,0.0, 0.0));
 
     hsrch.fragJoin(frag);
 
-    frag.sort(RangePair::greater);
+    frag.sort(RangePair::less);
     std::ostringstream ostr_obs;
     for(std::list< RangePair >::iterator rp_it=frag.begin(); rp_it!=frag.end();rp_it++)
     {
@@ -287,10 +288,12 @@ void Test_Hasher::test_fragJoin(void)
     //std::cout<<"\n"<<ostr_obs.str()<<std::endl;
     std::list< RangePair > frag_exp;
 
-    frag_exp.push_back(RangePair(1, 10, 150,1,110,200,80,0.0, 0.0));
+    frag_exp.push_back(RangePair(1, 10, 150,1,110,200,70,0.0, 0.0));
     frag_exp.push_back(RangePair(1, 10, 40,1,120,140,40,0.0, 0.0));
+    frag_exp.push_back(RangePair(1, 10, 150,2,110,200,70,0.0, 0.0));
+    frag_exp.push_back(RangePair(1, 10, 40,2,120,140,40,0.0, 0.0));
 
-    frag_exp.sort(RangePair::greater);
+    frag_exp.sort(RangePair::less);
     std::ostringstream ostr_exp;
     for(std::list< RangePair >::iterator rp_it=frag_exp.begin(); rp_it!=frag_exp.end();rp_it++)
     {

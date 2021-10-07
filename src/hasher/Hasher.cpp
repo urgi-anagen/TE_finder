@@ -1,4 +1,5 @@
 #include <SDGBioSeqDB.h>
+#include <FragAlign.h>
 #include "Hasher.h"
 
 //-------------------------------------------------------------------------
@@ -214,33 +215,23 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 // merge found fragments
 void Hasher::fragJoin(std::list< RangePair >& frag)
 {
-    frag.sort(RangePair::less);
+    //separate fragments on same query and same subject sequences
+    std::map<std::pair<unsigned,unsigned>, std::list<RangePair> > map_frag;
+    for (auto it= frag.begin(); it!=frag.end(); it++)
+    {
+        std::pair<unsigned,unsigned> key(it->getRangeQ().getNumChr(),it->getRangeS().getNumChr());
+        map_frag[key].push_back(*it);
+        frag.erase(it);
+    }
+    double gap_pen=pen_join;
+    double dist_pen=pen_join;
+    FragAlign fragAlign(dist_pen, 0, gap_pen,0);
 
-    unsigned size=frag.size();
-    if(size>=2){
-        auto curr_frag_it=frag.begin();
-        auto next_frag_it =curr_frag_it;
-        next_frag_it++;
-        while( next_frag_it != frag.end()) {
-            if (next_frag_it->getRangeQ().getNumChr() != curr_frag_it->getRangeQ().getNumChr()
-                && next_frag_it->getRangeS().getNumChr() != curr_frag_it->getRangeS().getNumChr()) {
-                curr_frag_it++;
-                next_frag_it = curr_frag_it;
-                next_frag_it++;
-                continue;
-            }
-            if (next_frag_it->getRangeQ().getStart() - curr_frag_it->getRangeQ().getEnd() > dist_join){
-                curr_frag_it++;
-                next_frag_it = curr_frag_it;
-                next_frag_it++;
-                continue;
-            }
-            if (next_frag_it->getRangeS().getStart() < curr_frag_it->getRangeS().getEnd()){
-                    next_frag_it++;
-                    continue;
-            }
-            curr_frag_it->merge(*next_frag_it);
-            next_frag_it = frag.erase(next_frag_it);
+   // merge contiguous fragments
+    for (auto & [key, lfrag] : map_frag) {
+        std::list<RangePairSet> jfrag=fragAlign.join(lfrag);
+        for(auto & f : jfrag){
+            frag.push_back(RangePair(f));
         }
     }
 }

@@ -115,7 +115,6 @@ class SDGBioSeq : public SDGReference<__SDGBioSeq>
    *********************************/
 
   SDGBioSeq(const __SDGBioSeq &obj=__SDGMemBioSeq());
-  SDGBioSeq(const SDGBioSeq &orig);
 
   /****************************************
    *
@@ -495,9 +494,6 @@ inline SDGBioSeq __SDGMemBioSeq::subseq(unsigned  long d,
 
 inline  SDGBioSeq::SDGBioSeq(const __SDGBioSeq &obj) : 
   SDGReference<__SDGBioSeq>(obj)  {};
-
-inline  SDGBioSeq::SDGBioSeq(const SDGBioSeq &orig) : 
-    SDGReference<__SDGBioSeq>(orig)  {};
 
 inline SDGBioSeq newSDGMemBioSeq(SDGBioSeq ch)
 {

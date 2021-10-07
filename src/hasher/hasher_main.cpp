@@ -11,8 +11,8 @@
 #include "Hasher.h"
 
 
-double filter_cutoff=0.0;
-unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1, join_dist=20,
+double filter_cutoff=0.0, pen_join=0.5;
+unsigned kmer_size=15, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, kmask=4, verbosity=0, overlap=0, nb_iter=1,algorithm=1;
 
 double count_cutoff=1.0, diversity_cutoff=0.0;
@@ -25,17 +25,17 @@ SDGString outfilename="";
 void help(void)
 {
     std::cerr << "usage: hasher"
-              << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
-              << " options:" << std::endl
-              << "   -h, --help:\n\t this help" << std::endl
-              << "   -w, --kmer:\n\t kmer length, default: " << kmer_size << std::endl
-              << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
-              << "   -k, --kmask:\n\t period of k-mer hole, default: " << kmask << std::endl
-              << "   -l, --len_hole_mask:\n\t kmer mask hole length, default: " << mask_hole_length << std::endl
-              << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
-              << kmer_dist << std::endl
-              << "   -j, --join_dist:\n\t distance between two matching kmer on query sequence in bp to join, default: "
-              << join_dist << std::endl
+            << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
+            << " options:" << std::endl
+            << "   -h, --help:\n\t this help" << std::endl
+            << "   -w, --kmer:\n\t kmer length, default: " << kmer_size << std::endl
+            << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
+            << "   -k, --kmask:\n\t period of k-mer hole, default: " << kmask << std::endl
+            << "   -l, --len_hole_mask:\n\t kmer mask hole length, default: " << mask_hole_length << std::endl
+            << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
+            << kmer_dist << std::endl
+            << "   -j, --pen_join:\n\t penality to join two matching kmer, default: "
+            << pen_join << std::endl
               << "   -s, --min_size:\n\t min size range to report, default: "
               << min_size << std::endl
               << "   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
@@ -65,8 +65,8 @@ void show_parameter(SDGString filename1,SDGString filename2)
               << "   -l, --len_hole_mask:\t kmer mask hole length: " << mask_hole_length << std::endl
               << "   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: " << kmer_dist
               << std::endl
-              << "   -j, --join_dist:\t distance between two matching kmer on query sequence in bp to join, default: "
-              << join_dist << std::endl
+              << "   -j, --pen_join:\t penality to join two matching kmer, default: "
+              << pen_join << std::endl
               << "   -s, --min_size:\t min size range to report: " << min_size << std::endl
               << "   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: " << count_cutoff
               << std::endl
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
                             {"kmask",                required_argument, 0, 'k'},
                             {"len_hole_mask",        required_argument, 0, 'l'},
                             {"kmer_dist",            required_argument, 0, 'd'},
-                            {"join_dist",            required_argument, 0, 'j'},
+                            {"pen_join",            required_argument, 0, 'j'},
                             {"min_size",             required_argument, 0, 's'},
                             {"filter_cutoff",        required_argument, 0, 'C'},
                             {"min_count",            required_argument, 0, 'm'},
@@ -186,7 +186,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 case 'j': {
-                    join_dist = atoi(optarg);
+                    pen_join = atof(optarg);
                     break;
                 }
                 case 's': {
@@ -308,7 +308,7 @@ int main(int argc, char *argv[]) {
             exit(EXIT_SUCCESS);
         }
 
-        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q, join_dist, algorithm);
+        Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q, pen_join, algorithm);
         bool valid_idx_file = true;
         double prev_genome_perc_coverage = 0.0;
         std::stringstream alignout_name, seqout_name ;
@@ -404,7 +404,9 @@ int main(int argc, char *argv[]) {
             if(algorithm==2) {
                 Hasher::fragSeqAlign(frag_list, filename1, filename2, false, verbosity);
             }
+            std::cout << "Join fragment with penality " << pen_join << " ..." << std::flush;
             hsrch.fragJoin(frag_list);
+            std::cout<<" done!"<<std::endl;
             genome_coverage=Hasher::fragCoverage(frag_list);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;

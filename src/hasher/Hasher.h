@@ -32,7 +32,7 @@ class Hasher : public HashDNASeq
     using HashDNASeq::search;
 
     unsigned algorithm;
-    unsigned dist_join;
+    double pen_join;
 
 	void matchKmers(const BioSeq& sequence,
 			    unsigned start, unsigned end, bool repeat,
@@ -68,11 +68,11 @@ class Hasher : public HashDNASeq
  public:
 
   Hasher(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1,
-         unsigned minsize=20,unsigned step=1, unsigned dist=20, unsigned alg=1):
+         unsigned minsize=20,unsigned step=1, double pen=0.5, unsigned alg=1):
           HashDNASeq(w, msk, mask_hole_length, bw, wd, fd, minsize, step)
     {
         algorithm=alg;
-        dist_join=dist;
+		pen_join=pen;
     };
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size,
             unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
