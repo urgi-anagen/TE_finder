@@ -35,7 +35,7 @@ void help(void)
             << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
             << kmer_dist << std::endl
             << "   -j, --pen_join:\n\t penality to join two matching kmer, default: "
-            << pen_join << std::endl
+            << pen_join << " (enter a value < 0.0 to skip this)" << std::endl
               << "   -s, --min_size:\n\t min size range to report, default: "
               << min_size << std::endl
               << "   -C, --filter_cutoff:\n\t filter kmer with counts over a percentile (Value [0-1]), default: "
@@ -66,7 +66,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
               << "   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: " << kmer_dist
               << std::endl
               << "   -j, --pen_join:\t penality to join two matching kmer, default: "
-              << pen_join << std::endl
+              << pen_join << " (enter a value < 0.0 to skip this)" << std::endl
               << "   -s, --min_size:\t min size range to report: " << min_size << std::endl
               << "   -C, --filter_cutoff:\t filter kmer with counts in the last percentile: " << count_cutoff
               << std::endl
@@ -404,9 +404,11 @@ int main(int argc, char *argv[]) {
             if(algorithm==2) {
                 Hasher::fragSeqAlign(frag_list, filename1, filename2, false, verbosity);
             }
-            std::cout << "Join fragment with penality " << pen_join << " ..." << std::flush;
-            hsrch.fragJoin(frag_list);
-            std::cout<<" done!"<<std::endl;
+            if(pen_join>0.0){
+                std::cout << "Join fragment with penality " << pen_join << " ..." << std::flush;
+                hsrch.fragJoin(frag_list);
+                std::cout<<" done!"<<std::endl;
+            }
             genome_coverage=Hasher::fragCoverage(frag_list);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;

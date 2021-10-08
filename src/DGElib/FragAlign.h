@@ -121,21 +121,42 @@ class FragAlign
 
  public:
 
-  FragAlign(double mism,double gapo_p,double gape_p, unsigned o, 
-	    unsigned l=20000) 
-    {
-      gapo_pen=gapo_p;
-      gape_pen=gape_p;
-      mism_pen=mism;
-      connect_dist_limit=l;
-      over=o;
+    FragAlign(double mism, double gapo_p, double gape_p, unsigned o,
+              unsigned l = 20000) {
+        gapo_pen = gapo_p;
+        gape_pen = gape_p;
+        mism_pen = mism;
+        connect_dist_limit = l;
+        over = o;
     };
 
-  void alignDirectDirect(std::list<RangePair>& l);
-  void alignDirectCompl(std::list<RangePair>& l);
-  void alignComplDirect(std::list<RangePair>& l);
-  void alignComplCompl(std::list<RangePair>& l);
-  std::list<RangePairSet> join(std::list<RangePair>& l);
+    void alignDirectDirect(std::list<RangePair> &l);
+
+    void alignDirectCompl(std::list<RangePair> &l);
+
+    void alignComplDirect(std::list<RangePair> &l);
+
+    void alignComplCompl(std::list<RangePair> &l);
+
+    std::list<RangePairSet> join(std::list<RangePair> &l);
+
+    void splitFromStrand(std::list<RangePair> &list_in,
+                         std::list<RangePair> &list_out_dd,
+                         std::list<RangePair> &list_out_id,
+                         std::list<RangePair> &list_out_di,
+                         std::list<RangePair> &list_out_ii);
+
+    void align_dd(std::list<RangePair> &l, std::list<RangePair> &l_out);
+
+    void align_dc(std::list<RangePair> &l, std::list<RangePair> &l_out);
+
+    void align_cd(std::list<RangePair> &l, std::list<RangePair> &l_out);
+
+    void align_cc(std::list<RangePair> &l, std::list<RangePair> &l_out);
+
+    void align_all(std::list<RangePair> &l, std::list<RangePair> &l_out);
+
+    void curr_path2rp_list(std::list<std::list<RangePair>::iterator>& curr_path, std::list<RangePair> &l_out);
 };
 #endif
 
