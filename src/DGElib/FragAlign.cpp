@@ -3,10 +3,10 @@
 //------------------------------------------------------------------------
 void FragAlign::align_all(std::list<RangePair> &l,std::list<RangePair> &finish_list) {
 
-    std::list<RangePair>& list_out_dd;
-    std::list<RangePair>& list_out_cd;
-    std::list<RangePair>& list_out_dc;
-    std::list<RangePair>& list_out_cc;
+    std::list<RangePair> list_out_dd;
+    std::list<RangePair> list_out_cd;
+    std::list<RangePair> list_out_dc;
+    std::list<RangePair> list_out_cc;
 
     splitFromStrand(l,list_out_dd,list_out_cd,list_out_dc,list_out_cc);
 
@@ -23,23 +23,23 @@ void FragAlign::splitFromStrand(std::list<RangePair>& list_in,
                                     std::list<RangePair>& list_out_cc){
     for(auto it_rp_in=list_in.begin(); it_rp_in!=list_in.end(); it_rp_in++) {
         if (it_rp_in->getRangeQ().isPlusStrand() && it_rp_in->getRangeS().isPlusStrand()){
-            list_out_dd.insert(*it_rp_in);
+            list_out_dd.push_back(*it_rp_in);
             list_in.erase(it_rp_in);
             continue;
         }
 
         if (it_rp_in->getRangeQ().isPlusStrand() && !it_rp_in->getRangeS().isPlusStrand()){
-            list_out_dc.insert(*it_rp_in);
+            list_out_dc.push_back(*it_rp_in);
             list_in.erase(it_rp_in);
             continue;
         }
         if (!it_rp_in->getRangeQ().isPlusStrand() && it_rp_in->getRangeS().isPlusStrand()){
-            list_out_cd.insert(*it_rp_in);
+            list_out_cd.push_back(*it_rp_in);
             list_in.erase(it_rp_in);
             continue;
         }
         if (!it_rp_in->getRangeQ().isPlusStrand() && !it_rp_in->getRangeS().isPlusStrand()){
-            list_out_cc.insert(*it_rp_in);
+            list_out_cc.push_back(*it_rp_in);
             list_in.erase(it_rp_in);
             continue;
         }
