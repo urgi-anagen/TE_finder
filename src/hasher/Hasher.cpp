@@ -217,7 +217,7 @@ void Hasher::fragJoin(std::list< RangePair >& frag)
 {
     //separate fragments on same query and same subject sequences
     std::map<std::pair<unsigned,unsigned>, std::list<RangePair> > map_frag;
-    for (auto it= frag.begin(); it!=frag.end(); it++)
+    for (auto it=frag.begin(); it!=frag.end(); it++)
     {
         std::pair<unsigned,unsigned> key(it->getRangeQ().getNumChr(),it->getRangeS().getNumChr());
         map_frag[key].push_back(*it);
@@ -228,8 +228,8 @@ void Hasher::fragJoin(std::list< RangePair >& frag)
     FragAlign fragAlign(dist_pen, 0, gap_pen,0);
 
    // merge contiguous fragments
-    for (auto & [key, lfrag] : map_frag) {
-        std::list<RangePairSet> jfrag=fragAlign.join(lfrag);
+    for (auto it=map_frag.begin(); it!=map_frag.end(); it++) {
+        std::list<RangePairSet> jfrag=fragAlign.join(it->second);
         for(auto & f : jfrag){
             frag.push_back(RangePair(f));
         }
