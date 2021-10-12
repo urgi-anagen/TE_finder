@@ -11,13 +11,13 @@ void Test_HashDNASeq::test_hashSeqCount( void )
 
 	SDGBioSeq seq=newSDGMemBioSeq("ATATTTATTTTAGCGTTTACGCT");
 	std::vector<unsigned> word_count;
-	word_count.resize((unsigned)pow(4,word_len)); 
+	word_count.resize((unsigned)pow(4,word_len));
 
 	hsrch.hashSeqCount(seq,word_len,word_count);
 
 	std::ostringstream ostr_obs;
 	unsigned size=word_count.size();
-	for(unsigned i=0; i<size; ++i)
+	for(unsigned i=0; i<size; i++)
 		{
 			if(word_count[i]!=0)
 				ostr_obs<<"["<<i<<"="<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
@@ -56,7 +56,7 @@ void Test_HashDNASeq::test_hashSeqCountwHole( void )
 
     std::ostringstream ostr_obs;
     unsigned size=word_count.size();
-    for(unsigned i=0; i<size; ++i)
+    for(unsigned i=0; i<size; i++)
         {
             if(word_count[i]!=0) 
                 ostr_obs<<"["<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
@@ -71,7 +71,17 @@ void Test_HashDNASeq::test_hashSeqCountwHole( void )
 
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
-} 
+}
+//------------------------------------------------------------------------------------------------------------
+void Test_HashDNASeq::test_hash( void )
+{
+    unsigned word_len=2;
+    HashDNASeq hsrch(word_len);
+
+    unsigned key=hsrch.hseq.hash("TT");
+
+    CPPUNIT_ASSERT_EQUAL(unsigned(15),key);
+}
 //------------------------------------------------------------------------------------------------------------
 void Test_HashDNASeq::test_reverse_hash( void )
 {

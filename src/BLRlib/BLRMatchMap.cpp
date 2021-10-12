@@ -901,7 +901,7 @@ void BLRMatchMap::writeMapAlign(std::ostream &out) {
             SDGString nameSeq = range_pair.getRangeQ().getNameSeq();
             //std::cout<<"Query Name Seq: "<<nameSeq<<"Query Num chr: "<<numChr<<std::endl;
             m->second.pop_back();
-            range_pair.writetxt(out);
+            range_pair.write(out);
         }
     }
 

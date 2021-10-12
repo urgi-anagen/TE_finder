@@ -240,7 +240,7 @@ void RangePair::readtxt(std::istream& in)
   setStrand();
 }
 
-void RangePair::writetxt(std::ostream& out) const
+void RangePair::write_raw(std::ostream& out) const
 {
   out<<first.getNumChr()<<"\t";
   out<<first.getStart()<<"\t";
@@ -251,6 +251,19 @@ void RangePair::writetxt(std::ostream& out) const
   out<<e_value<<"\t";
   out<<score<<"\t";
   out<<identity<<"\n";
+}
+
+void RangePair::write(std::ostream& out) const
+{
+    out<<first.getNameSeq()<<"\t";
+    out<<first.getStart()<<"\t";
+    out<<first.getEnd()<<"\t";
+    out<<second.getNameSeq()<<"\t";
+    out<<second.getStart()<<"\t";
+    out<<second.getEnd()<<"\t";
+    out<<e_value<<"\t";
+    out<<score<<"\t";
+    out<<identity<<"\n";
 }
 
 void RangePair::merge(RangePair& r)

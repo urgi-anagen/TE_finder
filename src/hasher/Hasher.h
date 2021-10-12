@@ -47,7 +47,7 @@ class Hasher : public HashDNASeq
 
     static RangePair rangePairFactory(const unsigned numseqQ, unsigned int qstart, unsigned int qend,
                                const unsigned numseqS, unsigned int sstart, unsigned int send,
-                               unsigned int score, unsigned step_q, unsigned kmer_size, unsigned id) {
+                               unsigned int score, unsigned step_q, unsigned id) {
         double kmer_density =  ((double)(score) / ((send - sstart + 1) / step_q)) * 100;
         unsigned kmer_score = score;
         RangePair rp(numseqQ,qstart,qend,numseqS,sstart,send,kmer_score,0,kmer_density, id);
@@ -57,10 +57,10 @@ class Hasher : public HashDNASeq
     RangePair record_frag(unsigned start, unsigned end, unsigned diag,
                         unsigned score,unsigned numseqQ,unsigned curr_seq, unsigned count) {
         unsigned qstart = diag + start + 1;
-        unsigned qend = diag + end + kmer_size + 1 ;
+        unsigned qend = diag + end + kmer_size ;
         unsigned sstart = start + 1;
-        unsigned send = end + kmer_size + 1 ;
-        return rangePairFactory(numseqQ, qstart, qend, curr_seq, sstart, send, score, step_q, kmer_size, count);
+        unsigned send = end + kmer_size ;
+        return rangePairFactory(numseqQ, qstart, qend, curr_seq, sstart, send, score, step_q, count);
     }
 
 	std::vector<std::string> subject_names;

@@ -1,5 +1,5 @@
 #include <SDGBioSeqDB.h>
-#include <FragAlign.h>
+#include <FragJoin.h>
 #include "Hasher.h"
 
 //-------------------------------------------------------------------------
@@ -225,11 +225,12 @@ void Hasher::fragJoin(std::list< RangePair >& frag)
     }
     double gap_pen=pen_join;
     double dist_pen=pen_join;
-    FragAlign fragAlign(dist_pen, 0, gap_pen,0);
+    FragJoin fragJoin(dist_pen, 0, gap_pen,0);
 
    // merge contiguous fragments
     for (auto it=map_frag.begin(); it!=map_frag.end(); it++) {
-        std::list<RangePairSet> jfrag=fragAlign.join(it->second);
+        std::list<RangePairSet> jfrag;
+        fragJoin.align_all(it->second,jfrag);
         for(auto & f : jfrag){
             frag.push_back(RangePair(f));
         }
@@ -442,19 +443,19 @@ void Hasher::fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfile
     fileS.close();
 
     for(auto & curr_frag_it : frag) {
-        if(curr_frag_it.getNumQuery()>num2nameQ.size()){
+        if(curr_frag_it.getNumQuery()>(long)num2nameQ.size()){
             std::cerr<<"Error query sequence number "<<curr_frag_it.getNumQuery()<<" doesn't exist!"<<std::endl;
             exit(EXIT_FAILURE);
         }
         SDGString qname=num2nameQ[curr_frag_it.getNumQuery()-1];
 
-        if(curr_frag_it.getNumSubject()>num2nameS.size()){
+        if(curr_frag_it.getNumSubject()>(long)num2nameS.size()){
             std::cerr<<"Error subject sequence number "<<curr_frag_it.getNumSubject()<<" doesn't exist!"<<std::endl;
             exit(EXIT_FAILURE);
         }
         SDGString sname=num2nameS[curr_frag_it.getNumSubject()-1];
         curr_frag_it.setQSName(qname,sname);
-        curr_frag_it.writetxt(out);
+        curr_frag_it.write(out);
     }
 }
 //-------------------------------------------------------------------------

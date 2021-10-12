@@ -20,18 +20,18 @@ void Test_Hasher::test_search(void ){
     fout_query.close();
 
     BioSeq subseq1=seq.subseq(10-1,50);
-    subseq1.header="test1 10..59";
+    subseq1.header="test1 10..60";
 
     BioSeq subseq2=seq.subseq(50-1,50);
-    subseq2.header="test2 comp 99..50";
+    subseq2.header="test2 comp 99..49";
     subseq2=subseq2.complement();
 
     BioSeq subseq3=seq.subseq(0,50);
-    subseq3.header="test3 comp 49..1";
+    subseq3.header="test3 comp 50..1";
     subseq3=subseq3.complement();
 
     BioSeq subseq4=seq.subseq(237-50,50);
-    subseq4.header="test4 187..237";
+    subseq4.header="test4 188..237";
 
     BioSeq subseq5=seq.subseq(0,50);
     subseq5.header="test5 comp 1..49";
@@ -155,9 +155,9 @@ void Test_Hasher::test_diagSearchDist( void )
 
     std::list<RangePair> frag_exp;
     // (diag+start+1,diag+end+word_size)
-    frag_exp.push_back(RangePair(RangeAlign(1,12,42),RangeAlign(0, 11,41)));
-    frag_exp.push_back(RangePair(RangeAlign(2, 132,152),RangeAlign(0, 131,151)));
-    frag_exp.push_back(RangePair(RangeAlign(1, 103,133),RangeAlign(0, 101,131)));
+    frag_exp.push_back(RangePair(RangeAlign(1,12,41),RangeAlign(0, 11,40)));
+    frag_exp.push_back(RangePair(RangeAlign(2, 132,151),RangeAlign(0, 131,150)));
+    frag_exp.push_back(RangePair(RangeAlign(1, 103,132),RangeAlign(0, 101,130)));
 
     frag_exp.sort();
     std::ostringstream ostr_exp;
@@ -207,9 +207,9 @@ void Test_Hasher::test_diagSearchScore( void )
 
     std::list<RangePair> frag_exp;
     // (diag+start+1,diag+end+word_size)
-    frag_exp.push_back(RangePair( 1,12,72,1,11,71,20,0,0,0));
-    frag_exp.push_back(RangePair( 1,132,152,2,131,151,20,0,0,0));
-    frag_exp.push_back(RangePair( 1,103,133,1,101,131,30,0,0,0));
+    frag_exp.push_back(RangePair( 1,12,71,1,11,70,20,0,0,0));
+    frag_exp.push_back(RangePair( 1,132,151,2,131,150,20,0,0,0));
+    frag_exp.push_back(RangePair( 1,103,132,1,101,130,30,0,0,0));
 
     frag_exp.sort();
     std::ostringstream ostr_exp;
@@ -282,7 +282,7 @@ void Test_Hasher::test_fragJoin(void)
     std::ostringstream ostr_obs;
     for(std::list< RangePair >::iterator rp_it=frag.begin(); rp_it!=frag.end();rp_it++)
     {
-        rp_it->writetxt(ostr_obs);
+        rp_it->write_raw(ostr_obs);
     }
 
     //std::cout<<"\n"<<ostr_obs.str()<<std::endl;
@@ -297,7 +297,7 @@ void Test_Hasher::test_fragJoin(void)
     std::ostringstream ostr_exp;
     for(std::list< RangePair >::iterator rp_it=frag_exp.begin(); rp_it!=frag_exp.end();rp_it++)
     {
-        rp_it->writetxt(ostr_exp);
+        rp_it->write_raw(ostr_exp);
     }
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());

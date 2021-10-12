@@ -665,8 +665,8 @@ unsigned HashDNASeq::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vec
   unsigned nb_kmer=0;
   if(len<=wsize) return 0;
   unsigned last_pos=len-wsize;
- char* s = const_cast<char*>(seq.toString().c_str());
-  for(unsigned i=0;i<last_pos;i++)
+  char* s = const_cast<char*>(seq.toString().c_str());
+  for(unsigned i=0;i<=last_pos;i++)
     {
 	  nb_kmer++;
       wcount[hseq(s)]++;
@@ -683,7 +683,7 @@ unsigned HashDNASeq::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
     char* s = const_cast<char*>(seq.toString().c_str());
-    for (unsigned i = 0; i < last_pos; i++) {
+    for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[bhseq(s)]++;
         s++;
@@ -699,7 +699,7 @@ unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
     char* s = const_cast<char*>(seq.toString().c_str());
-    for (unsigned i = 0; i < last_pos; i++) {
+    for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[mhseq(s)]++;
         s++;
@@ -710,7 +710,7 @@ unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std
 // Count nucleotides
 unsigned HashDNASeq::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>& wcount)
 {
-    unsigned len = seq.length();
+    unsigned len = seq.length() ;
     unsigned nb_kmer = 0;
     if (len < 1) return 0;
     char* s = const_cast<char*>(seq.toString().c_str());
@@ -730,7 +730,7 @@ void HashDNASeq::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& w
     unsigned last_pos = len - kmer_size;
     unsigned key;
     char* s = const_cast<char*>(seq.toString().c_str());
-    for (unsigned i = 0; i < last_pos; i++) {
+    for (unsigned i = 0; i <= last_pos; i++) {
         key = hseq(s);
 
         if (wcount[key] != 0) {

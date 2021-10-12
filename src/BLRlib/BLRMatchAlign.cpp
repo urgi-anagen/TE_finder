@@ -237,7 +237,7 @@ void BLRMatchAlign::write(std::ostream &out) {
             SDGString numChr = SDGString(range_pair.getRangeQ().getNumChr());
             SDGString nameSeq = range_pair.getRangeQ().getNameSeq();
             m->second.pop_back();
-            range_pair.writetxt(out);
+            range_pair.write(out);
         }
     }
 

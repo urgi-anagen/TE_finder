@@ -33,7 +33,7 @@ void Test_RangePair::test_writetxt( void )
 	std::ofstream obsFileStream;
 	FileUtils::openFile( obsFile, obsFileStream );
 	RangePair rp = RangePair( "seq1\t1\t100\tseq2\t1\t100\t1e-187\t213\t97.2" );
-	rp.writetxt( obsFileStream );
+	rp.write( obsFileStream );
 	obsFileStream.close();
 
 	bool exp = true;
@@ -42,7 +42,7 @@ void Test_RangePair::test_writetxt( void )
 
 	FileUtils::openFile( obsFile, obsFileStream );
 	rp.set( "seq2\t1\t100\tseq1\t1\t100\t1e-187\t213\t97.2" );
-	rp.writetxt( obsFileStream );
+	rp.write( obsFileStream );
 	obsFileStream.close();
 
 	exp = false;

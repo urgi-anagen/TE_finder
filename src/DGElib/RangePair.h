@@ -277,7 +277,8 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
         if(second.isPlusStrand()) std::cout<<" (+)"; else std::cout<<" (-)";
 		 std::cout<<"id "<<id<<" e_value "<<e_value<<" identity "<<identity<<" length "<<length<<" score "<<score<<std::endl;
 	};
-	void writetxt(std::ostream& out) const;
+	void write(std::ostream& out) const;
+    void write_raw(std::ostream& out) const;
 
 	void readReputer(std::istream& in);
 	void readtxt(std::istream& in);

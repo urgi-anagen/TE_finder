@@ -1,11 +1,11 @@
 /**
  *
- * FragAlign.h
+ * FragJoin.h
  *
  */
 
-#ifndef FRAGALIGN_H
-#define FRAGALIGN_H
+#ifndef FRAGJOIN_H
+#define FRAGJOIN_H
 
 #include <iostream>
 #include <iomanip>
@@ -19,7 +19,7 @@
 #include "RangePair.h"
 #include "RangePairSet.h"
 
-class FragAlign
+class FragJoin
 {
   struct bound
     {
@@ -104,12 +104,7 @@ class FragAlign
   };
 
 
-  std::list<bound> I; // list of horizontal rectangle coordinates (left and right corners)
-  unsigned nb_frag;
-  std::vector<long long> V; // vector of the best chain scores that finish in a given rectangle
-  std::list<std::list<RangePair>::iterator> curr_path, 
-    path_dd, path_cd, path_dc, path_cc; 
-  unsigned k;
+
 
   double gapo_pen;
   double gape_pen;
@@ -117,11 +112,11 @@ class FragAlign
   unsigned over;
   unsigned connect_dist_limit;
 
-  void align(void);
+  void align(unsigned nb_frag, std::list<bound>& I, std::vector<long long>& V, std::list<std::list<RangePair>::iterator>& join_path);
 
  public:
 
-    FragAlign(double mism, double gapo_p, double gape_p, unsigned o,
+    FragJoin(double mism, double gapo_p, double gape_p, unsigned o,
               unsigned l = 20000) {
         gapo_pen = gapo_p;
         gape_pen = gape_p;
@@ -130,16 +125,24 @@ class FragAlign
         over = o;
     };
 
-    void alignDirectDirect(std::list<RangePair> &l);
 
-    void alignDirectCompl(std::list<RangePair> &l);
+    void splitFromStrand(std::list<RangePair> &list_in,
+                         std::list<RangePair> &list_out_dd,
+                         std::list<RangePair> &list_out_id,
+                         std::list<RangePair> &list_out_di,
+                         std::list<RangePair> &list_out_ii);
 
-    void alignComplDirect(std::list<RangePair> &l);
+    void align_dd(std::list<RangePair> &l_in, std::list<RangePairSet> &l_out);
 
-    void alignComplCompl(std::list<RangePair> &l);
+    void align_dc(std::list<RangePair> &l_in, std::list<RangePairSet> &l_out);
 
-    std::list<RangePairSet> join(std::list<RangePair> &l);
+    void align_cd(std::list<RangePair> &l_in, std::list<RangePairSet> &l_out);
 
+    void align_cc(std::list<RangePair> &l_in, std::list<RangePairSet> &l_out);
+
+    void align_all(std::list<RangePair> &l, std::list<RangePairSet> &l_out);
+
+    void join_path2rp_list(std::list<std::list<RangePair>::iterator>& join_path, std::list<RangePair> &l_in, std::list<RangePairSet> &l_out);
 };
 #endif
 
