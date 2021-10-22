@@ -340,7 +340,7 @@ void Hasher::fragScoreFilter(std::list< RangePair >& frag, unsigned min_score)
     std::cout<<"done !"<<std::endl;
 }
 //-------------------------------------------------------------------------
-// Write a rangePair lists
+// Set rangePair score and identity
 void Hasher::fragSeqAlign(std::list< RangePair >& frag,
                           const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename, bool reverse, unsigned verbose)
 {
@@ -459,7 +459,7 @@ void Hasher::fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfile
     }
 }
 //-------------------------------------------------------------------------
-// Write a rangePair lists
+// Write a rangePair sequences
 void Hasher::fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out)
 {
     FastaIstream in(fasta_filename);

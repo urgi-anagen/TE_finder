@@ -298,7 +298,7 @@ void BLRBlaster::save_align(int verbose) {
                     && r->getRangeQ().getEnd() == r->getRangeS().getEnd())
                     continue;
             //r->view();
-            r->writetxt(align_file);
+            r->write(align_file);
             ++nbSaved;
         }
     }
