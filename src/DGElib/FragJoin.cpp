@@ -20,29 +20,33 @@ void FragJoin::splitFromStrand(std::list<RangePair>& list_in,
                                     std::list<RangePair>& list_out_dd,
                                     std::list<RangePair>& list_out_cd,
                                     std::list<RangePair>& list_out_dc,
-                                    std::list<RangePair>& list_out_cc){
-    for(auto it_rp_in=list_in.begin(); it_rp_in!=list_in.end(); it_rp_in++) {
+                                    std::list<RangePair>& list_out_cc)
+                                    {
+    auto it_rp_in=list_in.begin();
+    while(it_rp_in!=list_in.end())
+    {
         if (it_rp_in->getRangeQ().isPlusStrand() && it_rp_in->getRangeS().isPlusStrand()){
             list_out_dd.push_back(*it_rp_in);
-            list_in.erase(it_rp_in);
+            it_rp_in=list_in.erase(it_rp_in);
             continue;
         }
 
         if (it_rp_in->getRangeQ().isPlusStrand() && !it_rp_in->getRangeS().isPlusStrand()){
             list_out_dc.push_back(*it_rp_in);
-            list_in.erase(it_rp_in);
+            it_rp_in=list_in.erase(it_rp_in);
             continue;
         }
         if (!it_rp_in->getRangeQ().isPlusStrand() && it_rp_in->getRangeS().isPlusStrand()){
             list_out_cd.push_back(*it_rp_in);
-            list_in.erase(it_rp_in);
+            it_rp_in=list_in.erase(it_rp_in);
             continue;
         }
         if (!it_rp_in->getRangeQ().isPlusStrand() && !it_rp_in->getRangeS().isPlusStrand()){
             list_out_cc.push_back(*it_rp_in);
-            list_in.erase(it_rp_in);
+            it_rp_in=list_in.erase(it_rp_in);
             continue;
         }
+        it_rp_in++;
     }
 }
 //------------------------------------------------------------------------
