@@ -217,11 +217,12 @@ void Hasher::fragJoin(std::list< RangePair >& frag)
 {
     //separate fragments on same query and same subject sequences
     std::map<std::pair<unsigned,unsigned>, std::list<RangePair> > map_frag;
-    for (auto it=frag.begin(); it!=frag.end(); it++)
+    auto it=frag.begin();
+    while(it!=frag.end())
     {
         std::pair<unsigned,unsigned> key(it->getRangeQ().getNumChr(),it->getRangeS().getNumChr());
         map_frag[key].push_back(*it);
-        frag.erase(it);
+        it=frag.erase(it);
     }
     double gap_pen=pen_join;
     double dist_pen=pen_join;
