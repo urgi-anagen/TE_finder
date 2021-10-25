@@ -14,7 +14,7 @@ RangeAlign::RangeAlign(const RangeAlign *o) : Range(o)
   name_seq=o->name_seq;
 }
 
-RangeAlign::RangeAlign(RangeAlign const  &o) : Range(o)
+RangeAlign::RangeAlign(const RangeAlign &o) : Range(o)
 {
   num_chr=o.num_chr;
   name_seq=o.name_seq;
