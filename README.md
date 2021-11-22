@@ -18,8 +18,8 @@ You can run by simply typing:
 
 -if the image is localy downloaded, type for example :
 
-`$ singularity run te_finder2.30.sif blaster2.30 -h`
+`$ singularity run te_finder2.31.sif blaster2.31 -h`
 
 -if the image is remote, type for example :
 
-`$ singularity run library://hquesneville/default/te_finder:2.30 blaster2.30 -h`
+`$ singularity run library://hquesneville/default/te_finder:2.31 blaster2.31 -h`
