@@ -10,9 +10,12 @@ void Test_HashDNASeq::test_hashSeqCount( void )
 	HashDNASeq hsrch(word_len);
 
 	SDGBioSeq seq=newSDGMemBioSeq("ATATTTATTTTAGCGTTTACGCT");
-	std::vector<unsigned> word_count;
-	word_count.resize((unsigned)pow(4,word_len));
-
+	std::vector<unsigned> word_count((unsigned)pow(4,word_len),0);
+	//word_count.resize((unsigned)pow(4,word_len));
+    for(unsigned i=0; i<word_count.size(); i++)
+    {
+           std::cout<<"["<<i<<"="<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
+    }
 	hsrch.hashSeqCount(seq,word_len,word_count);
 
 	std::ostringstream ostr_obs;

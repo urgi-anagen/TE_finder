@@ -22,6 +22,8 @@ void BLRMatcherThreadsParameter::view(std::ostream& out) const
   out<<"============================================="<<std::endl; 
   out<<"MATCHER parameter:"<<std::endl;
   out<<"-----------------"<<std::endl;
+  if(clean_before)
+        out<<"Filter conflicting subjects before joining"<<std::endl;
   if(clean_after)
     out<<"Filter conflicting subjects after joining"<<std::endl;
   else
@@ -38,6 +40,7 @@ void BLRMatcherThreadsParameter::help(void)
 {  
   std::cout<<"usage: matcher.threads [option]"<<std::endl;
   BLRJoinParameter::help();
+  std::cout<<"-a:\n\tall conflicting subject, default=FALSE"<<std::endl;
   std::cout<<"-x:\n\tclean conflicts after join, default=FALSE"<<std::endl;
   std::cout<<"-M:\n\tmerge (use it with clean after join option), default=FALSE"<<std::endl;
   std::cout<<"-S:\n\tsplit input data in 'n' sets, default="<<nb_sets<<std::endl;
@@ -56,7 +59,7 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 
 
 	int c = getopt (numarg, tabarg, 
- 			     "hm:Mxs:q:I:E:L:ji:g:d:b:B:c:v:t:S:");
+ 			     "hm:Maxs:q:I:E:L:ji:g:d:b:B:c:v:t:S:");
 
 	/* Detect the end of the options. */
 	if (c == -1)
@@ -69,6 +72,12 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 	      help();
 	      exit(EXIT_FAILURE);
 	    }
+      case 'a':
+      {
+          clean_before=false;
+          clean_after=false;
+          break;
+      }
 	  case 'x':
 	    {
 	      clean_after=true;

@@ -30,6 +30,7 @@ class Test_matcherThreads: public CPPUNIT_NS::TestFixture
         void test_runAsScript_join_merge_threads(void);
         void test_runAsScript_join_merge_clean_threads(void);
 		//void test_runAsProcess(void);
+        std::string path2exec;
 };
 
 #endif

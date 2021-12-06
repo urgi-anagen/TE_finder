@@ -324,6 +324,11 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 			return first.overlap(r.first);
 		};
 
+    bool includedQ(const RangePair& r) const
+    {
+        return first.isIncluded(r.first);
+    };
+
 	RangePair diffQ(const RangePair& r);
 
 	friend std::ostream& operator<<(std::ostream& out, const RangePair& r)

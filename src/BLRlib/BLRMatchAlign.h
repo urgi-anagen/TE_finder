@@ -35,14 +35,11 @@ public:
     typedef std::map<Key, std::list<RangePair> > MapAlign;
 
 private:
-//    BLRJoinParameter para;
+    BLRJoinParameter para;
     MapAlign map_align;
     std::map<std::string,long> name2numQ,name2numS;
     std::map<long,std::string> num2nameQ,num2nameS;
 
-
-//    void add_clean(const BLRJoinParameter& para,std::list<RangePair>& rp_list,
-//                   std::list<RangePair>::iterator iter);
 
 public:
     BLRMatchAlign(void) {};
@@ -82,7 +79,9 @@ public:
     MapAlign getMapAlign(void){return map_align;};
 
     void insert(RangePair& range);
-
+    void add_clean_overlap(std::list<RangePair> &rp_list, std::list<RangePair>::iterator iter);
+    void add_clean_included(std::list<RangePair>::iterator iter);
+    void clean_conflicts(void);
 
     std::map<std::string,long> getName2NumQ(void){return name2numQ;};
     std::map<long, std::string> getNum2NameQ(void){return num2nameQ;};

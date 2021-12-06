@@ -94,7 +94,6 @@ void Test_Range::test_translate_comp( void )
     Range i = Range( 5, 10 );
     Range exp = Range( 16, 11 );
     i.translate_comp(20);
-    i.view();
     CPPUNIT_ASSERT( i == exp );
 }
 

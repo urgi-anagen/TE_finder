@@ -18,6 +18,20 @@ void BLRMatcherThreads::process(const std::list<RangePair>& rp_list) {
     if (matcher_parameter->getVerbose() > 0)
         std::cout << "...Matches were loaded." << std::endl;
 
+    if(matcher_parameter->getCleanBefore())
+    {
+        if(matcher_parameter->getVerbose()>0)
+            std::cout<<"Clean the conflicts..."<<std::endl<<std::flush;
+        begin = clock();
+        map_align.clean_conflicts();
+        end = clock();
+        if(matcher_parameter->getVerbose()>0){
+            time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+            std::cout << "... conflicts were cleaned in " << time_spent << " seconds." << std::endl;
+            std::cout<<"Number of matches = "<<map_align.getNbMatchesInMapAlign()<<std::endl;
+        }
+    }
+
     if (matcher_parameter->getJoin_frag()) {
 
         if (matcher_parameter->getVerbose() > 0)

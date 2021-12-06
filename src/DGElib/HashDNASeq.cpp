@@ -665,7 +665,8 @@ unsigned HashDNASeq::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vec
   unsigned nb_kmer=0;
   if(len<=wsize) return 0;
   unsigned last_pos=len-wsize;
-  char* s = const_cast<char*>(seq.toString().c_str());
+  std::string str = seq.toString().c_str(); // to be optimized
+  const char *s=str.c_str();
   for(unsigned i=0;i<=last_pos;i++)
     {
 	  nb_kmer++;
@@ -682,7 +683,8 @@ unsigned HashDNASeq::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    char* s = const_cast<char*>(seq.toString().c_str());
+    std::string str = seq.toString().c_str(); // to be optimized
+    const char *s=str.c_str();
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[bhseq(s)]++;
@@ -698,7 +700,8 @@ unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    char* s = const_cast<char*>(seq.toString().c_str());
+    std::string str = seq.toString().c_str(); // to be optimized
+    const char *s=str.c_str();
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[mhseq(s)]++;
@@ -713,7 +716,8 @@ unsigned HashDNASeq::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>
     unsigned len = seq.length() ;
     unsigned nb_kmer = 0;
     if (len < 1) return 0;
-    char* s = const_cast<char*>(seq.toString().c_str());
+    std::string str = seq.toString().c_str(); // to be optimized
+    const char *s=str.c_str();
     for (unsigned i = 0; i < len; i++) {
         nb_kmer++;
         wcount[nhseq(s)]++;
@@ -729,7 +733,8 @@ void HashDNASeq::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& w
     if (len <= kmer_size) return;
     unsigned last_pos = len - kmer_size;
     unsigned key;
-    char* s = const_cast<char*>(seq.toString().c_str());
+    std::string str = seq.toString().c_str(); // to be optimized
+    const char *s=str.c_str();
     for (unsigned i = 0; i <= last_pos; i++) {
         key = hseq(s);
 

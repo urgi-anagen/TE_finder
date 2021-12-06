@@ -38,6 +38,7 @@ class BLRMatcherThreadsParameter: public BLRJoinParameter
     {
       BLRJoinParameter::reset();
       clean_after=false;
+      clean_before=true;
       merge=false;
       nb_sets=1;
       verbose=0;
@@ -47,12 +48,16 @@ class BLRMatcherThreadsParameter: public BLRJoinParameter
   void view(std::ostream& out) const;
   void write(const SDGString& filename) const;
 
-  void setMerge(bool set_merge){ merge=set_merge;}
+  void setMerge(bool set_merge){ merge=set_merge;};
+
+  bool getCleanBefore(void) {return  clean_before;};
+  void setCleanBefore(bool clean) {clean_before = clean;};
 
   bool getCleanAfter(void) {return  clean_after;};
   void setCleanAfter(bool clean) {clean_after = clean;};
-  unsigned getNbSets(void) {return nb_sets;}
-  bool getMerge(void) {return merge;}
+
+  unsigned getNbSets(void) {return nb_sets;};
+  bool getMerge(void) {return merge;};
 
   int getVerbose(void) const {return verbose;};
 

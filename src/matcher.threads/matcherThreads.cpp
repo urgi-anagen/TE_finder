@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
     try {
         std::cout << "Beginning Matcher (version " << VERSION << ")" << std::endl << std::flush;
         clock_t start, finish;
-        double time_spent;
+        double total_time_spent;
         start = clock();
 
         BLRMatcherThreadsParameter para;
@@ -107,6 +107,9 @@ int main(int argc, char *argv[]) {
             loadFromAlignFile(para,match_align);
         else
             std::cerr << "No file :" << para.getLoad_path()  << std::endl << std::flush;
+
+
+
 
         std::list<RangePair> rp_list = match_align.getRpListFromMatchAlign();
         if(para.getVerbose()>0) std::cout<<"list size="<<rp_list.size()<<std::endl;
@@ -164,7 +167,7 @@ int main(int argc, char *argv[]) {
 
         //Write the results
         std::ostringstream filename;
-        if (para.getCleanAfter())
+        if (para.getCleanBefore() || para.getCleanAfter())
             filename << para.getPrefixFileName() << ".clean_match";
         else
             filename << para.getPrefixFileName() << ".match";
@@ -186,8 +189,8 @@ int main(int argc, char *argv[]) {
             std::cout << "Results were written." << std::endl << std::flush;
 
         finish = clock();
-        time_spent = (double) (finish - start) / CLOCKS_PER_SEC;
-        std::cout << "End Matcher in " << time_spent << " second. (version " << VERSION << ")" << std::endl;
+        total_time_spent = (double) (finish - start) / CLOCKS_PER_SEC;
+        std::cout << "End Matcher in " << total_time_spent << " second. (version " << VERSION << ")" << std::endl;
         exit(EXIT_SUCCESS);
     }// end try
 

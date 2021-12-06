@@ -7,6 +7,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( Test_matcherThreads );
 
 void Test_matcherThreads::setUp()
 {
+    path2exec="../../../cmake-build-debug/src/matcher.threads/";
 }
 
 void Test_matcherThreads::tearDown()
@@ -31,7 +32,7 @@ void Test_matcherThreads::test_runAsScript_join_simple( void ){
     SDGString obsGFF3FileName = "input.align.clean_match.gff3";
 
     std::ostringstream cmd;
-	cmd<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+	cmd<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
 	cmd<<" -m "<<inputFileName<<" -j -M -x -v 1";
 	std::system(cmd.str().c_str());
 
@@ -52,16 +53,16 @@ void Test_matcherThreads::test_runAsScript_join_simple( void ){
 }
 void Test_matcherThreads::test_runAsScript_join( void ){
     SDGString inputFileName = "blasterAthaBest.align";
-    SDGString expFileName = "blasterAthaBestNoMerge.match.path";
+    SDGString expFileName = "blasterAthaBestNoMerge.clean_match.path";
 
     SDGString prefixFileName = "test_runAsScript_join_threads_";
-    SDGString prefixObsFileName = "obs.match";
+    SDGString prefixObsFileName = "obs.clean_match";
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
     SDGString obsGFF3FileName = prefixFileName+prefixObsFileName+".gff3";
 
     std::ostringstream cmd;
-    cmd<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd<<" -m "<<inputFileName<<" -j -B "<<prefixFileName<<"obs";
     std::system(cmd.str().c_str());
 
@@ -92,8 +93,8 @@ void Test_matcherThreads::test_runAsScript_join( void ){
 void Test_matcherThreads::test_runAsScript_join_threads( void ){
     SDGString inputFileName = "blasterAthaBest.align";
     SDGString prefixFileName = "test_runAsScript_join_threads_";
-    SDGString prefixObsFileName = "obs.match";
-    SDGString prefixExpFileName = "exp.match";
+    SDGString prefixObsFileName = "obs.clean_match";
+    SDGString prefixExpFileName = "exp.clean_match";
     SDGString obsFileName = prefixFileName+prefixObsFileName+".path";
     SDGString diff_result = prefixFileName+"result.txt";
     SDGString expFileName = prefixFileName+prefixExpFileName+".path";
@@ -101,12 +102,12 @@ void Test_matcherThreads::test_runAsScript_join_threads( void ){
     SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
@@ -155,12 +156,12 @@ void Test_matcherThreads::test_runAsScript_join_clean_threads( void ){
     SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -x -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -x -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
@@ -211,13 +212,13 @@ void Test_matcherThreads::test_runAsScript_join_merge_threads( void ){
     SDGString expGFF3FileName = prefixFileName+prefixExpFileName+".gff3";
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
-    cmd_exp<<" -m "<<inputFileName<<" -j -M -B "<<prefixFileName<<"exp";
+    cmd_exp<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<" -m "<<inputFileName<<" -a -j -M -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
-    cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -M -B "<<prefixFileName<<"obs";
+    cmd_obs<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<" -m "<<inputFileName<<" -a -t 2 -j -M -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 
     std::ostringstream cmd_diff;
@@ -268,14 +269,14 @@ void Test_matcherThreads::test_runAsScript_join_merge_clean_threads( void ){
 
 
     std::ostringstream cmd_exp;
-    cmd_exp<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_exp<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_exp<<" -m "<<inputFileName<<" -j -M -x -B "<<prefixFileName<<"exp";
     std::system(cmd_exp.str().c_str());
 
 
 
     std::ostringstream cmd_obs;
-    cmd_obs<<"../matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
+    cmd_obs<<path2exec<<"matcherThreads"<<std::fixed<<std::setprecision(2)<<VERSION;
     cmd_obs<<" -m "<<inputFileName<<" -t 2 -j -x -M -B "<<prefixFileName<<"obs";
     std::system(cmd_obs.str().c_str());
 

@@ -51,7 +51,7 @@ void help(void)
               << "   -c, --chunk_size:\n\t sequence chunk size in kb, default: None" << std::endl
               << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
               << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
-              << "   -A, --algorithm:\n\t algorithm number, default:" << algorithm << std::endl
+              << "   -A, --algorithm:\n\t algorithm number (1: max distance between kmers to be connected, 2: scoring scheme to connect two kmers), default:" << algorithm << std::endl
               << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
@@ -79,7 +79,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
               << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
               << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
               << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-              << "   -A, --algorithm:\t algorithm number (1: max distance between kmers to be connected, 2: scoring scheme to connect two kmers), default: " << algorithm << std::endl
+              << "   -A, --algorithm:\t algorithm number (1: max distance between kmers to be connected, 2: scoring scheme to connect two kmers) : " << algorithm << std::endl
               << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
 };
 // search on sequence chunk, reverse sequence, and reverse complement
