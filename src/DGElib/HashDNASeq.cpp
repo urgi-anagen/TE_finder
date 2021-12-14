@@ -126,21 +126,25 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmer_size, uns
 {
   std::cout<<"Counting kmer of size "<<kmer_size<<" ... "<<std::flush;
 
-  SDGFastaIstream inS(filenameS);
-  unsigned count_seq=0;
-
-  while(inS)
-	{
-      SDGBioSeq sS;
-	  if(inS) inS>>sS;
-	  std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::flush;
-	  nb_kmer+=hashSeqCount(sS,kmer_size, wcount);
-	  nb_bkmer+=hashSeqBackgroundCount(sS,bkmer_size, bcount);
-	  nb_mkmer+=hashSeqModelCount(sS,mkmer_size, mcount);
-	  nb_nuc+=hashSeqNucCount(sS, ncount);
-	}
-  inS.close();
-  std::cout<<"\nNumber of kmers="<<nb_kmer<<std::endl;
+  try {
+      SDGFastaIstream inS(filenameS);
+      unsigned count_seq=0;
+      while(inS)
+        {
+          SDGBioSeq sS;
+          if(inS) inS>>sS;
+          std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::flush;
+          nb_kmer+=hashSeqCount(sS,kmer_size, wcount);
+          nb_bkmer+=hashSeqBackgroundCount(sS,bkmer_size, bcount);
+          nb_mkmer+=hashSeqModelCount(sS,mkmer_size, mcount);
+          nb_nuc+=hashSeqNucCount(sS, ncount);
+        }
+      inS.close();
+      std::cout<<"\nNumber of kmers="<<nb_kmer<<std::endl;
+  }
+  catch (const std::ifstream::failure& e) {
+      std::cout<<"Error opening file "<<filenameS<<std::endl;
+  }
 }
 //-------------------------------------------------------------------------
 //

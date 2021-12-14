@@ -383,16 +383,17 @@ int main(int argc, char* argv[])
       std::system(cmd2.str().c_str());
 	exit( EXIT_SUCCESS );
   }
-	catch( SDGException e )
-	{
-		std::cout<<"******Exception catched: "<<e.message<<" ******"<<std::endl;
-		exit( EXIT_FAILURE );
-	}
-	catch(...)
-	{
-		std::cout<<"****** unknown exception catch !!! ******"<<std::endl;
-		exit( EXIT_FAILURE );
-	}
+  catch (SDGException e) {
+      std::cout << "******Exception catched: " << e.message << " ******" << std::endl;
+      exit(EXIT_FAILURE);
+  }
+  catch (const std::exception &e) {
+      std::cout << "Caught exception \"" << e.what() << "\"\n";
+  }
+  catch (...) {
+      std::cout << "****** unknown exception catch !!! ******" << std::endl;
+      exit(EXIT_FAILURE);
+  }
 }
 
 

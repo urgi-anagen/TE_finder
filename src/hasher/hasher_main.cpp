@@ -481,10 +481,8 @@ int main(int argc, char *argv[]) {
         std::cerr << "******Exception catched: " << e.message << " ******" << std::endl;
         exit(EXIT_FAILURE);
     }
-    catch (std::exception& e)
-    {
-        std::cerr << "standard exception catched: "<< e.what() << std::endl;
-        exit(EXIT_FAILURE);
+    catch (const std::exception &e) {
+        std::cout << "Caught exception \"" << e.what() << "\"\n";
     }
     catch (const char* msg) {
         std::cerr << msg << std::endl;

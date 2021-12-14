@@ -7,10 +7,11 @@
 void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
                             unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
                             std::list< RangePair >& frag, unsigned verbose) {
-    unsigned count = 0;
 
+    unsigned count = 0;
     unsigned curr_seq = 0;
     for (auto &iter_seq : diag_map) {
+        count = 0;
         unsigned size = iter_seq.size();
         if (size > 2) {
             iter_seq.sort();
@@ -18,7 +19,7 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
             unsigned start = 0;
             unsigned end = 0;
             unsigned score = 0;
-            int diag = 0;
+            long diag = 0;
 
             auto iter_diag = iter_seq.begin();
             Diag prev_d = *iter_diag;
@@ -73,29 +74,30 @@ void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &di
                              unsigned min_frag_size,
                              std::list<RangePair> &frag, unsigned verbose) {
     double penalty = (double)1/wdist;
-    unsigned count = 0;
+    unsigned count;
 
-    for (auto &iter_seq : diag_map) { // iter on subject sequence
+    for (auto &iter_seq : diag_map) { // iter diagonals
         unsigned size = iter_seq.size();
+        count=0;
         if (size > 2) {
             iter_seq.sort();
             bool extending = false;
             unsigned start = 0;
             unsigned end = 0;
             unsigned score = kmer_size;
-            int diag = 0;
+            long diag = 0;
 
             auto iter_diag = iter_seq.begin();
             Diag curr_d, prev_d = *iter_diag;
             while (++iter_diag != iter_seq.end()) {
                 curr_d = *iter_diag;
                 if (prev_d.diag == curr_d.diag) {
-                    int extended_score = 0;
-                    int dist = curr_d.wpos.pos - prev_d.wpos.pos - kmer_size;
+                    long extended_score;
+                    long dist = curr_d.wpos.pos - prev_d.wpos.pos - kmer_size;
                     if (dist < 0 )
                         extended_score = score + step_q;
                     else
-                        extended_score = score + kmer_size - (unsigned) std::floor((double) (dist * penalty));
+                        extended_score = score + kmer_size - (unsigned) std::floor(((double)dist * penalty));
                     if (extended_score > 0) {
                         if (!extending){ //first hit (2 kmers found at correct distance)
                             diag = curr_d.diag;
@@ -213,7 +215,7 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 }
 //-------------------------------------------------------------------------
 // merge found fragments
-void Hasher::fragJoin(std::list< RangePair >& frag)
+void Hasher::fragJoin(std::list< RangePair >& frag) const
 {
     //separate fragments on same query and same subject sequences
     std::map<std::pair<unsigned,unsigned>, std::list<RangePair> > map_frag;
@@ -229,11 +231,11 @@ void Hasher::fragJoin(std::list< RangePair >& frag)
     FragJoin fragJoin(dist_pen, 0, gap_pen,0);
 
    // merge contiguous fragments
-    for (auto it=map_frag.begin(); it!=map_frag.end(); it++) {
+    for (auto & item : map_frag) {
         std::list<RangePairSet> jfrag;
-        fragJoin.align_all(it->second,jfrag);
+        fragJoin.align_all(item.second, jfrag);
         for(auto & f : jfrag){
-            frag.push_back(RangePair(f));
+            frag.emplace_back(f);
         }
     }
 }
@@ -284,7 +286,7 @@ unsigned Hasher::fragScoreStat(const std::list< RangePair >& frag, double quanti
     unsigned nb_frag=score_list.size();
     unsigned min_score=score_list.front();
     unsigned max_score=score_list.back();
-    unsigned qval=score_list[(int)std::floor(score_list.size() * quantile)];
+    unsigned qval=score_list[(int)std::floor((double)score_list.size() * quantile)];
     std::cout << "Frag number=" << nb_frag << " / "
               << "min score=" << min_score << " / "
               << "max score=" << max_score << " / "
@@ -306,7 +308,7 @@ unsigned Hasher::fragLengthStat(const std::list< RangePair >& frag, double quant
     unsigned nb_frag=length_list.size();
     unsigned min_score=length_list.front();
     unsigned max_score=length_list.back();
-    unsigned qval=length_list[(int)std::floor(length_list.size() * quantile)];
+    unsigned qval=length_list[(int)std::floor((double)length_list.size() * quantile)];
     std::cout << "Frag number=" << nb_frag << " / "
               << "min length=" << min_score << " / "
               << "max length=" << max_score << " / "
@@ -404,9 +406,9 @@ void Hasher::fragSeqAlign(std::list< RangePair >& frag,
                     if(qseq[i]==fragsseq[i]) count++;
                 }
 
-                curr_frag_it.setIdentity(((float)count)/qlen*100);
+                curr_frag_it.setIdentity(((double)count)/qlen*100);
                 curr_frag_it.setScore(count);
-                if(verbose>0) std::cout << "Score = " << count<<" identity = " << ((float)count)/qlen * 100<< std::endl;
+                if(verbose>0) std::cout << "Score = " << count<<" identity = " << ((double)count)/qlen * 100<< std::endl;
             }
         }
     }

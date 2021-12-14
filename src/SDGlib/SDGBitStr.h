@@ -20,10 +20,10 @@
 #ifndef SDGBITSTR_H
 #define SDGBITSTR_H
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <iostream>
-#include <limits.h>
+#include <climits>
 #include <math.h>
 
 #include <SDGReference.h>

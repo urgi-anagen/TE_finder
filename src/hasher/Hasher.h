@@ -109,7 +109,7 @@ class Hasher : public HashDNASeq
   static void fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfilename, const SDGString& sfilename, std::ostream& out);
   static void fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out);
 
-    void fragJoin(std::list< RangePair >& frag);
+    void fragJoin(std::list< RangePair >& frag) const;
 };
 
 
