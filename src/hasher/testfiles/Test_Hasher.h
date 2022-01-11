@@ -18,7 +18,8 @@ class Test_Hasher : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST_SUITE(Test_Hasher);
 
-	CPPUNIT_TEST( test_search );
+	CPPUNIT_TEST(test_searchWHole );
+    CPPUNIT_TEST(test_searchMinimizer );
 	CPPUNIT_TEST( test_diagSearchDist );
 	CPPUNIT_TEST( test_diagSearchScore );
 
@@ -39,7 +40,8 @@ public:
 	}
 
 protected:
-    void test_search( void );
+    void test_searchWHole(void );
+    void test_searchMinimizer(void );
     void test_diagSearchDist( void );
     void test_diagSearchScore( void );
     void test_fragJoin( void );

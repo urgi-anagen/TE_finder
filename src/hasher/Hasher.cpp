@@ -91,7 +91,7 @@ void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &di
             Diag curr_d, prev_d = *iter_diag;
             while (++iter_diag != iter_seq.end()) {
                 curr_d = *iter_diag;
-                if (prev_d.diag == curr_d.diag) {
+                if (prev_d.diag == curr_d.diag && prev_d.wpos.numSeq == curr_d.wpos.numSeq) {
                     long extended_score;
                     long dist = curr_d.wpos.pos - prev_d.wpos.pos - kmer_size;
                     if (dist < 0 )
@@ -147,9 +147,9 @@ void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &di
 }
 //-------------------------------------------------------------------------
 // Search for alignments with word matches
-void Hasher::matchKmers(const BioSeq& sequence,
-	    unsigned start, unsigned end, bool repeat,
-		std::vector< std::list<Diag> >& diag_map)
+void Hasher::matchKmersHole(const BioSeq& sequence,
+                            unsigned start, unsigned end, bool repeat,
+                            std::vector< std::list<Diag> >& diag_map)
 {
   unsigned last_pos=end-kmer_size;
   if(end<=kmer_size) return;
@@ -186,6 +186,46 @@ void Hasher::matchKmers(const BioSeq& sequence,
   std::cout<<dirhit<<" hits found / ";
 }
 //-------------------------------------------------------------------------
+// Search for alignments with word matches
+void Hasher::matchKmersMinimizer(const BioSeq& sequence,
+                            unsigned start, unsigned end, bool repeat,
+                            std::vector< std::list<Diag> >& diag_map)
+{
+    unsigned last_pos=end-kmer_size;
+    if(end<=kmer_size) return;
+
+    std::string str=sequence.substr(start,end-start+1);
+    const char* seq=str.c_str();
+
+    unsigned key_d,dirhit=0;
+    unsigned i=start;
+    while(i<=last_pos) {
+        bool found=false;
+        key_d = mseq(seq);
+        auto begin_d = hash2wpos[key_d];
+        auto end_d = hash2wpos[key_d + 1];
+        for (auto j = begin_d; j != end_d; j++) {
+            if (j->numSeq == 0) continue;
+            if (j->numSeq > 0) {
+                long diag = long(i) - j->pos;
+                if (!repeat || (repeat && i < j->pos)){
+                    dirhit++;
+                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                    found = true;
+                }
+            }
+        }
+        if(found){
+            seq += step_q;
+            i+=step_q;
+        } else {
+            seq += 1;
+            i += 1;
+        }
+    }
+    std::cout<<dirhit<<" hits found / ";
+}
+//-------------------------------------------------------------------------
 // Search for Alignments
 void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
 		unsigned min_frag_size, bool repeat, std::list< RangePair >& frag, unsigned verbose)
@@ -196,17 +236,18 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 
 	std::vector< std::list<Diag> > diag_map;
 	diag_map.resize(subject_names.size()+1);
-	matchKmers(sequence, start, end, repeat, diag_map);
+    if(algorithm==1)
+        matchKmersHole(sequence, start, end, repeat, diag_map);
+    else
+        matchKmersMinimizer(sequence, start, end, repeat, diag_map);
 
 	clock_end = clock();
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
-    if(algorithm==1)
-        diagSearchDist(numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose);
-    else
-        diagSearchScore(numseq, diag_map, min_frag_size, frag, verbose);
+    diagSearchDist(numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose-1);
+
 	diag_map.clear();
 
 	std::cout<<"ok"<<std::endl;

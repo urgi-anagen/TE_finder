@@ -34,9 +34,13 @@ class Hasher : public HashDNASeq
     unsigned algorithm;
     double pen_join;
 
-	void matchKmers(const BioSeq& sequence,
-			    unsigned start, unsigned end, bool repeat,
-				std::vector< std::list<Diag> >& diag_map);
+	void matchKmersHole(const BioSeq& sequence,
+                        unsigned start, unsigned end, bool repeat,
+                        std::vector< std::list<Diag> >& diag_map);
+
+    void matchKmersMinimizer(const BioSeq& sequence,
+                        unsigned start, unsigned end, bool repeat,
+                        std::vector< std::list<Diag> >& diag_map);
 
     void diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
                         unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
@@ -69,7 +73,7 @@ class Hasher : public HashDNASeq
 
   Hasher(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1,
          unsigned minsize=20,unsigned step=1, double pen=0.5, unsigned alg=1):
-          HashDNASeq(w, msk, mask_hole_length, bw, wd, fd, minsize, step)
+          HashDNASeq(w, msk, mask_hole_length, alg,bw, wd, fd, minsize, step)
     {
         algorithm=alg;
 		pen_join=pen;

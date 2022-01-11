@@ -10,44 +10,44 @@ void Test_Duster::test_search(void ){
     ostr<<"ATATTTATTTTAGCGTTTACGCTATGTGTTGCGTATTGCTAATCGCTATGATTATATTTATTTTAGCGTTTACGCTATG";
     ostr<<"TTACGCTATGTGTTATTTTTAGCGTTATTGCTAGCGTTTGCGATATTTATTTAATCGCTATGATTATATTTACGCTATG";
     ostr<<"ATATTTCGCGCTATGTGTTGCGATAGCGTTTATTATACCTATATCGCTATGATTATATTTATTTTTAGCGTTTTGTATG";
-    SDGBioSeq seq=newSDGMemBioSeq(ostr.str());
+    BioSeq seq=ostr.str();
     std::ofstream fout_query("query_test.fa");
     fout_query << ">query_test"<<std::endl<<ostr.str();
     fout_query.close();
 
-    SDGBioSeq subseq1=seq.subseq(10-1,51);
-    subseq1.setDE("test1 10..60");
-    SDGBioSeq subseq3=seq.subseq(110-1,51);
-    subseq3.setDE("test1 110..160");
-    SDGBioSeq subseq2=seq.subseq(50-1,51);
-    subseq2.setDE("test2 comp 100..50");
+    BioSeq subseq1=seq.subseq(10-1,51);
+    subseq1.header="test1 10..60";
+    BioSeq subseq3=seq.subseq(110-1,51);
+    subseq3.header="test1 110..160";
+    BioSeq subseq2=seq.subseq(50-1,51);
+    subseq2.header="test2 comp 100..50";
     subseq2=subseq2.complement();
 
     std::ostringstream str_fasta;
-    str_fasta << ">" << subseq1.getDE() << std::endl;
-    str_fasta << subseq1.toString() << std::endl;
-    str_fasta << ">" << subseq2.getDE() << std::endl;
-    str_fasta << subseq2.toString() << std::endl;
-    str_fasta << ">" << subseq3.getDE() << std::endl;
-    str_fasta << subseq3.toString() << std::endl;
+    str_fasta << ">" << subseq1.header << std::endl;
+    str_fasta << subseq1 << std::endl;
+    str_fasta << ">" << subseq2.header << std::endl;
+    str_fasta << subseq2 << std::endl;
+    str_fasta << ">" << subseq3.header << std::endl;
+    str_fasta << subseq3 << std::endl;
 
 
     std::ofstream fout_subject("subject_test.fa");
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=5,end=200,numseq=1,connect_dist=20,min_frag_size=35,verbosity=0,min_count=0;
+    unsigned start=5,end=200,numseq=1,min_frag_size=35,verbosity=0,min_count=0;
     std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
     unsigned kmer_size=10, kmask=12, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0;
     bool valid_idx_file = true;
 
     Duster dstr(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
-    dstr.load("subject_test.fa", kmer_size, kmer_size, mask_hole_length, bkmer_size, kmer_size / 2,
+    dstr.load("subject_test.fa", kmer_size, kmask, mask_hole_length, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
 
-    dstr.search(seq, start, end, numseq, false, fmerged);
+    dstr.search(seq, start, end, numseq, fmerged, verbosity);
 
     for (  std::vector< std::pair<unsigned,unsigned> >::iterator it = fmerged.begin();
          it!=fmerged.end(); it++){

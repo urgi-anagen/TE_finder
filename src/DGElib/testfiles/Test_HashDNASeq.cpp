@@ -9,14 +9,9 @@ void Test_HashDNASeq::test_hashSeqCount( void )
 	unsigned word_len=2;
 	HashDNASeq hsrch(word_len);
 
-	SDGBioSeq seq=newSDGMemBioSeq("ATATTTATTTTAGCGTTTACGCT");
+	BioSeq seq=BioSeq("ATATTTATTTTAGCGTTTACGCT");
 	std::vector<unsigned> word_count((unsigned)pow(4,word_len),0);
-	//word_count.resize((unsigned)pow(4,word_len));
-    for(unsigned i=0; i<word_count.size(); i++)
-    {
-           std::cout<<"["<<i<<"="<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
-    }
-	hsrch.hashSeqCount(seq,word_len,word_count);
+    hsrch.hashSeqCountWHole(seq, word_len, word_count);
 
 	std::ostringstream ostr_obs;
 	unsigned size=word_count.size();
@@ -51,11 +46,11 @@ void Test_HashDNASeq::test_hashSeqCountwHole( void )
     unsigned kmask=2;
     HashDNASeq hsrch(word_len, kmask);
 
-    SDGBioSeq seq=newSDGMemBioSeq("CTCTAT");
+    BioSeq seq=BioSeq("CTCTAT");
     std::vector<unsigned> word_count;
     word_count.resize((unsigned)pow(4,hsrch.getEffectiveKmerSize()));
- 
-    hsrch.hashSeqCount(seq,word_len,word_count);
+
+    hsrch.hashSeqCountWHole(seq, word_len, word_count);
 
     std::ostringstream ostr_obs;
     unsigned size=word_count.size();
@@ -111,37 +106,37 @@ void Test_HashDNASeq::test_reverse_hashwHole( void )
     CPPUNIT_ASSERT_EQUAL(std::string("C-T-A-T-G-"),kmer);
 }
 //------------------------------------------------------------------------------------------------------------
-void Test_HashDNASeq::test_diagSearch( void )
+void Test_HashDNASeq::test_diagSearchDist( void )
 {
 	unsigned word_len=10;
 	unsigned word_dist=1;
 	HashDNASeq hsrch(word_len, word_dist, 1);
 
-	std::vector< HashDNASeq::Diag > diag_map;
+    std::vector< std::list<HashDNASeq::Diag> > diag_map(3,std::list<HashDNASeq::Diag>(0));
 
 	//HashDNASeq::Diag(diag,pos,seq)
-	diag_map.push_back(HashDNASeq::Diag(1, 10, 1));
-	diag_map.push_back(HashDNASeq::Diag(1, 10, 1));
-	diag_map.push_back(HashDNASeq::Diag(1, 20, 1));
-	diag_map.push_back(HashDNASeq::Diag(1, 30, 1));
-	diag_map.push_back(HashDNASeq::Diag(1, 30, 1));
-	diag_map.push_back(HashDNASeq::Diag(1, 60, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(1, 10, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(1, 10, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(1, 20, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(1, 30, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(1, 30, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(1, 60, 1));
 
-	diag_map.push_back(HashDNASeq::Diag(1, 70, 2));
-	diag_map.push_back(HashDNASeq::Diag(1, 100, 2));
-	diag_map.push_back(HashDNASeq::Diag(1, 130, 2));
-	diag_map.push_back(HashDNASeq::Diag(1, 140, 2));
+	diag_map[2].push_back(HashDNASeq::Diag(1, 70, 2));
+	diag_map[2].push_back(HashDNASeq::Diag(1, 100, 2));
+	diag_map[2].push_back(HashDNASeq::Diag(1, 130, 2));
+	diag_map[2].push_back(HashDNASeq::Diag(1, 140, 2));
 
-	diag_map.push_back(HashDNASeq::Diag(2, 100, 1));
-	diag_map.push_back(HashDNASeq::Diag(2, 100, 1));
-	diag_map.push_back(HashDNASeq::Diag(2, 110, 1));
-	diag_map.push_back(HashDNASeq::Diag(2, 120, 1));
-	diag_map.push_back(HashDNASeq::Diag(2, 120, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(2, 100, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(2, 100, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(2, 110, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(2, 120, 1));
+	diag_map[1].push_back(HashDNASeq::Diag(2, 120, 1));
 
 
 
 	std::vector< std::pair<unsigned,unsigned> > frag;
-	hsrch.diagSearch(diag_map,(unsigned)((word_dist+1)*word_len),word_len,frag);
+    hsrch.diagSearchDist(diag_map, (unsigned) ((word_dist + 1) * word_len), word_len, frag);
 
     sort(frag.begin(),frag.end());
 	std::ostringstream ostr_obs;
@@ -168,4 +163,16 @@ void Test_HashDNASeq::test_diagSearch( void )
 	    }
 
 	CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+}
+//------------------------------------------------------------------------------------------------------------
+void Test_HashDNASeq::test_minimizer( void )
+{
+    unsigned kmer=5;
+    unsigned window=15;
+    MinimizerFuncDNASeq mini(kmer,window);
+
+    unsigned key1=mini.minimizer("ATAGCTTAGTATATCCGGACGTA");
+    unsigned key2=mini.minimizer("TACGTAATCGGACTATATATGTA");
+
+    CPPUNIT_ASSERT_EQUAL(key1,key2);
 }

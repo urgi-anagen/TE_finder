@@ -51,11 +51,11 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
       //Load hash table with kmer positions
       std::cout<<"Load kmer positions in hash table"<<std::endl;
       hash_ptr=hash2wpos;
-      SDGFastaIstream inS2(filenameS);
+      FastaIstream inS2(filenameS);
       unsigned count_seq=0;
       while(inS2)
 		{
-		  SDGBioSeq sS;
+		  BioSeq sS;
 		  if(inS2)
           {
               inS2>>sS;
@@ -63,14 +63,17 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
               if (count_seq==std::numeric_limits<unsigned>::max())
                   throw Unsigned_Out_Of_Range("Number of subject sequence is out of range: ",count_seq);
           }
-
-		  hashSeqPos(sS,kmer_count);
+            if(hash_algorithm==1)
+                hashSeqPosWHole(sS, kmer_count);
+            else
+                hashSeqPosMinimizer(sS, kmer_count);
 		}
       inS2.close();
       hash_ptr.clear();
       save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,mask_hole_length,kmer_count);
       valid_idx_file=true;
     }
+
   std::cout<<"end preparation of subjects";
   end = clock();
   std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
@@ -127,18 +130,20 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmer_size, uns
   std::cout<<"Counting kmer of size "<<kmer_size<<" ... "<<std::flush;
 
   try {
-      SDGFastaIstream inS(filenameS);
+      FastaIstream inS(filenameS);
       unsigned count_seq=0;
-      while(inS)
-        {
-          SDGBioSeq sS;
-          if(inS) inS>>sS;
-          std::cout<<"\n"<<++count_seq<<"->"<<sS.getDE()<<std::flush;
-          nb_kmer+=hashSeqCount(sS,kmer_size, wcount);
-          nb_bkmer+=hashSeqBackgroundCount(sS,bkmer_size, bcount);
-          nb_mkmer+=hashSeqModelCount(sS,mkmer_size, mcount);
-          nb_nuc+=hashSeqNucCount(sS, ncount);
-        }
+      while (inS) {
+          BioSeq sS;
+          if (inS) inS >> sS;
+          std::cout << "\n" << ++count_seq << "->" << sS.header << std::flush;
+          if (hash_algorithm == 1)
+              nb_kmer += hashSeqCountWHole(sS, kmer_size, wcount);
+          else
+              nb_kmer += hashSeqCountMinimizer(sS, kmer_size, wcount);
+          nb_bkmer += hashSeqBackgroundCount(sS, bkmer_size, bcount);
+          nb_mkmer += hashSeqModelCount(sS, mkmer_size, mcount);
+          nb_nuc += hashSeqNucCount(sS, ncount);
+      }
       inS.close();
       std::cout<<"\nNumber of kmers="<<nb_kmer<<std::endl;
   }
@@ -162,17 +167,17 @@ void HashDNASeq::kmer_count_percentiles(const std::list< Info_kmer >& list_infok
     copy(lower_bound(distr.begin(),distr.end(),(unsigned)1), distr.end(),back_inserter(clean_distr));
     std::cout<<" min="<<clean_distr.front()<<std::endl;
     std::cout<<" 1st quartile="
-	       << clean_distr[(unsigned)floor(0.25*clean_distr.size())]<<std::endl;
+	       << clean_distr[(unsigned)floor(0.25*(double)clean_distr.size())]<<std::endl;
     std::cout<<" median="
-	       << clean_distr[(unsigned)floor(0.5*clean_distr.size())]<<std::endl;
+	       << clean_distr[(unsigned)floor(0.5*(double)clean_distr.size())]<<std::endl;
     std::cout<<" 3st quartile="
-	       << clean_distr[(unsigned)floor(0.75*clean_distr.size())]<<std::endl;
+	       << clean_distr[(unsigned)floor(0.75*(double)clean_distr.size())]<<std::endl;
     std::cout<<" 95 percentile="
-	       << clean_distr[(unsigned)floor(0.95*clean_distr.size())]<<std::endl;
+	       << clean_distr[(unsigned)floor(0.95*(double)clean_distr.size())]<<std::endl;
     std::cout<<" 99 percentile="
-	       << clean_distr[(unsigned)floor(0.99*clean_distr.size())]<<std::endl;
+	       << clean_distr[(unsigned)floor(0.99*(double)clean_distr.size())]<<std::endl;
     std::cout<<" max="<< clean_distr.back()<<std::endl;
-    long threshold_index=(long)(cutoff*distr.size())-1;
+    long threshold_index=(long)(cutoff*(double)distr.size())-1;
     if(threshold_index<0) threshold_index=0;
     kmer_threshold.count=distr[threshold_index];
 
@@ -200,17 +205,17 @@ void HashDNASeq::kmer_entropy_percentiles(const std::list< Info_kmer >& list_inf
 
     std::cout<<" min="<<distr.front()<<std::endl;
     std::cout<<" 1st quartile="
-	       << distr[(unsigned)floor(0.25*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.25*(double)distr.size())]<<std::endl;
     std::cout<<" median="
-	       << distr[(unsigned)floor(0.5*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.5*(double)distr.size())]<<std::endl;
     std::cout<<" 3st quartile="
-	       << distr[(unsigned)floor(0.75*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.75*(double)distr.size())]<<std::endl;
     std::cout<<" 95 percentile="
-	       << distr[(unsigned)floor(0.95*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.95*(double)distr.size())]<<std::endl;
     std::cout<<" 99 percentile="
-	       << distr[(unsigned)floor(0.99*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.99*(double)distr.size())]<<std::endl;
     std::cout<<" max="<< distr.back()<<std::endl;
-    long threshold_index=(long)(cutoff_entropy*distr.size())-1;
+    long threshold_index=(long)(cutoff_entropy*(double)distr.size())-1;
     if(threshold_index<0) threshold_index=0;
     kmer_threshold.entropy=distr[threshold_index];
 
@@ -238,15 +243,15 @@ void HashDNASeq::kmer_diversity_percentiles(const std::list< Info_kmer >& list_i
 
     std::cout<<" min="<<distr.front()<<std::endl;
     std::cout<<" 1st quartile="
-	       << distr[(unsigned)floor(0.25*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.25*(double)distr.size())]<<std::endl;
     std::cout<<" median="
-	       << distr[(unsigned)floor(0.5*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.5*(double)distr.size())]<<std::endl;
     std::cout<<" 3st quartile="
-	       << distr[(unsigned)floor(0.75*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.75*(double)distr.size())]<<std::endl;
     std::cout<<" 95 percentile="
-	       << distr[(unsigned)floor(0.95*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.95*(double)distr.size())]<<std::endl;
     std::cout<<" 99 percentile="
-	       << distr[(unsigned)floor(0.99*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.99*(double)distr.size())]<<std::endl;
     std::cout<<" max="<< distr.back()<<std::endl;
 
 
@@ -276,15 +281,15 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 
     std::cout<<" min="<<distr.front()<<std::endl;
     std::cout<<" 1st quartile="
-	       << distr[(unsigned)floor(0.25*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.25*(double)distr.size())]<<std::endl;
     std::cout<<" median="
-	       << distr[(unsigned)floor(0.5*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.5*(double)distr.size())]<<std::endl;
     std::cout<<" 3st quartile="
-	       << distr[(unsigned)floor(0.75*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.75*(double)distr.size())]<<std::endl;
     std::cout<<" 95 percentile="
-	       << distr[(unsigned)floor(0.95*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.95*(double)distr.size())]<<std::endl;
     std::cout<<" 99 percentile="
-	       << distr[(unsigned)floor(0.99*distr.size())]<<std::endl;
+	       << distr[(unsigned)floor(0.99*(double)distr.size())]<<std::endl;
     std::cout<<" max="<< distr.back()<<std::endl;
 
 
@@ -308,17 +313,20 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
 		std::list< Info_kmer >& list_infokmer)
 {
 	std::cout<<"\nCompute kmer stats ... "<<std::endl;
-    HashDNASeq h(wsize,mask,mask_hole_length,bwsize, 0);
+    HashDNASeq h(wsize,mask,mask_hole_length,hash_algorithm, bwsize, 0);
 	std::cout<<"kmer size="<<wsize
 			<<"\tmask period="<<mask
-            <<"\tmask hole size="<<mask_hole_length
-			<<"\teffective kmer size="<<h.hseq.getEffectiveKmerSize()<<std::endl;
+            <<"\tmask hole size="<<mask_hole_length<<std::flush;
+    if(hash_algorithm==1)
+        std::cout<<"\teffective kmer size="<<h.hseq.getEffectiveKmerSize()<<std::endl;
+    else
+        std::cout<<"\teffective kmer size="<<h.mseq.getEffectiveKmerSize()<<std::endl;
 
 	std::cout<<"\nSequence composition:\n";
 
 	//Compute nucleotide probabilities
-	unsigned max_key_bkmer=pow(4,bwsize);
-	unsigned max_key_mkmer=pow(4,mwsize);
+	unsigned max_key_bkmer=(unsigned)pow(4,bwsize);
+	unsigned max_key_mkmer=(unsigned)pow(4,mwsize);
 
     std::vector<double> bprob(max_key_bkmer,0),prob_ind(max_key_bkmer,0),bprob_cond(max_key_bkmer,0),nprob(4,0),
     		mprob(max_key_mkmer,0),mprob_cond(max_key_mkmer,0);
@@ -605,6 +613,10 @@ bool HashDNASeq::read_idx(const SDGString& filename, double count_cutoff , doubl
   in>>fval;
   if(fval!=diversity_cutoff) return false;
 
+  in>>val;
+  if(val!=nbseqS) return false;
+  nbseqS=val;
+
   std::cout<<"Read existing idx file:"<<filename+".kidx"<<std::endl;
   in>>val;
   for(unsigned i=0;i<val;i++)
@@ -649,6 +661,7 @@ void HashDNASeq::save_idx(const SDGString& filename, double count_cutoff, double
   fout<<min_count<<std::endl;
   fout<<count_cutoff<<std::endl;
   fout<<diversity_cutoff<<std::endl;
+  fout<<nbseqS<<std::endl;
   fout<<kmer_pos.size()<<std::endl;
   for(std::vector<KmerSpos>::iterator i=kmer_pos.begin();i!=kmer_pos.end();i++)
     {
@@ -663,14 +676,13 @@ void HashDNASeq::save_idx(const SDGString& filename, double count_cutoff, double
 }
 //-------------------------------------------------------------------------
 // Count kmers
-unsigned HashDNASeq::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
+unsigned HashDNASeq::hashSeqCountWHole(const BioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
 {
   unsigned len=seq.length();
   unsigned nb_kmer=0;
   if(len<=wsize) return 0;
   unsigned last_pos=len-wsize;
-  std::string str = seq.toString().c_str(); // to be optimized
-  const char *s=str.c_str();
+  const char *s=seq.c_str();
   for(unsigned i=0;i<=last_pos;i++)
     {
 	  nb_kmer++;
@@ -680,15 +692,31 @@ unsigned HashDNASeq::hashSeqCount(const SDGBioSeq& seq, unsigned wsize, std::vec
   return nb_kmer;
 }
 //-------------------------------------------------------------------------
+// Count kmers
+unsigned HashDNASeq::hashSeqCountMinimizer(const BioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
+{
+    unsigned len=seq.length();
+    unsigned nb_kmer=0;
+    if(len<=wsize) return 0;
+    unsigned last_pos=len-wsize;
+    const char *s=seq.c_str();
+    for(unsigned i=0;i<=last_pos;i++)
+    {
+        nb_kmer++;
+        wcount[mseq(s)]++;
+        s++;
+    }
+    return nb_kmer;
+}
+//-------------------------------------------------------------------------
 // Count background kmers
-unsigned HashDNASeq::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
+unsigned HashDNASeq::hashSeqBackgroundCount(const BioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
 {
     unsigned len = seq.length();
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    std::string str = seq.toString().c_str(); // to be optimized
-    const char *s=str.c_str();
+    const char *s=seq.c_str();
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[bhseq(s)]++;
@@ -698,14 +726,13 @@ unsigned HashDNASeq::hashSeqBackgroundCount(const SDGBioSeq& seq, unsigned wsize
 }
 //-------------------------------------------------------------------------
 // Count background kmers
-unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
+unsigned HashDNASeq::hashSeqModelCount(const BioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
 {
     unsigned len = seq.length();
     unsigned nb_kmer = 0;
     if (len <= wsize) return 0;
     unsigned last_pos = len - wsize;
-    std::string str = seq.toString().c_str(); // to be optimized
-    const char *s=str.c_str();
+    const char *s=seq.c_str();
     for (unsigned i = 0; i <= last_pos; i++) {
         nb_kmer++;
         wcount[mhseq(s)]++;
@@ -715,13 +742,12 @@ unsigned HashDNASeq::hashSeqModelCount(const SDGBioSeq& seq, unsigned wsize, std
 }
 //-------------------------------------------------------------------------
 // Count nucleotides
-unsigned HashDNASeq::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>& wcount)
+unsigned HashDNASeq::hashSeqNucCount(const BioSeq& seq, std::vector<unsigned>& wcount)
 {
     unsigned len = seq.length() ;
     unsigned nb_kmer = 0;
     if (len < 1) return 0;
-    std::string str = seq.toString().c_str(); // to be optimized
-    const char *s=str.c_str();
+    const char *s=seq.c_str();
     for (unsigned i = 0; i < len; i++) {
         nb_kmer++;
         wcount[nhseq(s)]++;
@@ -730,15 +756,14 @@ unsigned HashDNASeq::hashSeqNucCount(const SDGBioSeq& seq, std::vector<unsigned>
     return nb_kmer;
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& wcount)
+void HashDNASeq::hashSeqPosWHole(const BioSeq& seq, const std::vector<unsigned>& wcount)
 {
     nbseqS++;
     unsigned len = seq.length();
     if (len <= kmer_size) return;
     unsigned last_pos = len - kmer_size;
     unsigned key;
-    std::string str = seq.toString().c_str(); // to be optimized
-    const char *s=str.c_str();
+    const char *s=seq.c_str();
     for (unsigned i = 0; i <= last_pos; i++) {
         key = hseq(s);
 
@@ -750,13 +775,33 @@ void HashDNASeq::hashSeqPos(const SDGBioSeq& seq, const std::vector<unsigned>& w
     }
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::search(const SDGBioSeq& sequence, unsigned start, unsigned end, unsigned numseq, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged)
+void HashDNASeq::hashSeqPosMinimizer(const BioSeq& seq, const std::vector<unsigned>& wcount)
+{
+    nbseqS++;
+    unsigned len = seq.length();
+    if (len <= kmer_size) return;
+    unsigned last_pos = len - kmer_size;
+    unsigned key;
+    const char *s=seq.c_str();
+    for (unsigned i = 0; i <= last_pos; i++) {
+        key = mseq(s);
+
+        if (wcount[key] != 0) {
+            *(hash_ptr[key]) = KmerSpos(i, nbseqS);
+            hash_ptr[key]++;
+        }
+        s++;
+    }
+}
+//-------------------------------------------------------------------------
+void HashDNASeq::search(const BioSeq& sequence, unsigned start, unsigned end, bool repeat,
+                        std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose)
 {
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
 	std::cout<<"hashing query sequence..."<<std::flush;
-	std::vector< Diag > diag_map;
-	matchKmers(sequence, start, end, numseq, repeat, diag_map);
+	std::vector< std::list<Diag> > diag_map;
+    matchKmersHole(sequence, start, end, repeat, diag_map);
 	std::cout<<"ok"<<std::endl;
 	std::cout<<diag_map.size()<<" hits found";
 	clock_end = clock();
@@ -764,8 +809,8 @@ void HashDNASeq::search(const SDGBioSeq& sequence, unsigned start, unsigned end,
 
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
-	std::vector< std::pair<unsigned,unsigned> > frag;
-	diagSearch(diag_map,(wdist+1)*kmer_size,kmer_size,frag);
+	//diagSearchDist(diag_map,kmer_size,frag,verbose-1);
+    diagSearchDist(diag_map,(kmer_size+1)*wdist,kmer_size,frag);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
 	std::cout<<frag.size()<<" fragments found";
@@ -774,82 +819,202 @@ void HashDNASeq::search(const SDGBioSeq& sequence, unsigned start, unsigned end,
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
-void HashDNASeq::matchKmers(const SDGBioSeq& sequence,
-		unsigned start, unsigned end, unsigned numseq, bool repeat,
-		std::vector< Diag >& diag_map)
+void HashDNASeq::matchKmersHole(const BioSeq& sequence,
+                                unsigned start, unsigned end, bool repeat,
+                                std::vector< std::list<Diag> >& diag_map)
 {
-  diag_map.clear();
+    unsigned last_pos=end-kmer_size;
+    if(end<=kmer_size) return;
 
-  std::string str=sequence.toString().substr(start,end-start+1);
+    std::string str=sequence.substr(start,end-start+1);
+    const char* seq=str.c_str();
 
-  const char* seq=str.c_str();
-
-  unsigned last_pos=end-kmer_size;
-  if(end<=kmer_size) return;
-
-  unsigned key_d=0;
-  for(unsigned i=start;i<last_pos;i+=step_q)
-    {
-      key_d=hseq(seq);
-      auto begin_d=hash2wpos[key_d];
-      auto end_d=hash2wpos[key_d+1];
-      for(auto j=begin_d;j!=end_d;j++)
-      {
-          if (j->numSeq > 0) {
-              long diag = long(i) - j->pos;
-              if( !repeat || (repeat && i < j->pos ) )
-                diag_map.push_back(Diag(diag, j->pos, j->numSeq));
-          }
-      }
-      seq+=step_q;
+    unsigned key_d,dirhit=0;
+    unsigned i=start;
+    while(i<=last_pos) {
+        bool found=false;
+        key_d = hseq(seq);
+        auto begin_d = hash2wpos[key_d];
+        auto end_d = hash2wpos[key_d + 1];
+        for (auto j = begin_d; j != end_d; j++) {
+            if (j->numSeq == 0) continue;
+            if (j->numSeq > 0) {
+                long diag = long(i) - j->pos;
+                if (!repeat || (repeat && i < j->pos)){
+                    dirhit++;
+                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                    found = true;
+                }
+            }
+        }
+        if(found){
+            seq += step_q;
+            i+=step_q;
+        } else {
+            seq += 1;
+            i += 1;
+        }
     }
+    std::cout<<dirhit<<" hits found / ";
+}
+//-------------------------------------------------------------------------
+// Search for alignments with kmer matches
+void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
+                                unsigned start, unsigned end, bool repeat,
+                                std::vector< std::list<Diag> >& diag_map)
+{
+    unsigned last_pos=end-kmer_size;
+    if(end<=kmer_size) return;
+
+    std::string str=sequence.substr(start,end-start+1);
+    const char* seq=str.c_str();
+
+    unsigned key_d,dirhit=0;
+    unsigned i=start;
+    while(i<=last_pos) {
+        bool found=false;
+        key_d = mseq(seq);
+        auto begin_d = hash2wpos[key_d];
+        auto end_d = hash2wpos[key_d + 1];
+        for (auto j = begin_d; j != end_d; j++) {
+            if (j->numSeq == 0) continue;
+            if (j->numSeq > 0) {
+                long diag = long(i) - j->pos;
+                if (!repeat || (repeat && i < j->pos)){
+                    dirhit++;
+                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                    found = true;
+                }
+            }
+        }
+        if(found){
+            seq += step_q;
+            i+=step_q;
+        } else {
+            seq += 1;
+            i += 1;
+        }
+    }
+    std::cout<<dirhit<<" hits found / ";
 }
 //-------------------------------------------------------------------------
 // Search for diagonal of kmer matches
-void HashDNASeq::diagSearch(std::vector< Diag >& diag_map,
-		unsigned connect_dist, unsigned kmer_size,
-		std::vector< std::pair<unsigned,unsigned> >& frag)
+void HashDNASeq::diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
+                                unsigned connect_dist, unsigned kmer_size,
+                                std::vector< std::pair<unsigned,unsigned> >& frag)
 {
-  unsigned size=diag_map.size();
-  if(size>=2)
-    {
-      sort(diag_map.begin(),diag_map.end());
+    for (auto &iter_seq : diag_map) { // iter diagonals
+        unsigned size = iter_seq.size();
+        if (size > 2) {
+            iter_seq.sort();
 
-      unsigned start=0;
-      unsigned end=0;
-      int diag=0;
+            unsigned start = 0;
+            unsigned end = 0;
+            int diag = 0;
 
-      Diag& prev_d=diag_map[0];
-      for( unsigned i=1; i<size; ++i)
-		{
-		  Diag& curr_d=diag_map[i];
-		  if(prev_d.diag==curr_d.diag // Same diagonal
-			 && prev_d.wpos.numSeq==curr_d.wpos.numSeq // Same sequence
-			 && prev_d.wpos.pos+connect_dist>=curr_d.wpos.pos) // hits overlaps or close enough to be joined
-				{
-				  if(start!=0) // already extending a diagonal
-					{
-					  end=curr_d.wpos.pos;
-					}
-				  else //create a diagonal
-					{
-					  diag=prev_d.diag;
-					  start=prev_d.wpos.pos;
-					  end=curr_d.wpos.pos;
-					}
-				}
-			  else // too far to be joined
-				  if(start!=0) // Create a diagonal
-					{
-					  frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
-					  start=0;
-					}
-		  prev_d=curr_d;
-		}
-      if(start!=0)  //End of hits list
-		{
-			  frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
-		}
+            auto iter_diag = iter_seq.begin();
+            Diag curr_d, prev_d = *iter_diag;
+            while (++iter_diag != iter_seq.end()) {
+                curr_d = *iter_diag;
+                if (prev_d.diag == curr_d.diag // Same diagonal
+                    && prev_d.wpos.numSeq == curr_d.wpos.numSeq // Same sequence
+                    && prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos) // hits overlaps or close enough to be joined
+                {
+                    if (start != 0) // already extending a diagonal
+                    {
+                        end = curr_d.wpos.pos;
+                    } else //create a diagonal
+                    {
+                        diag = prev_d.diag;
+                        start = prev_d.wpos.pos;
+                        end = curr_d.wpos.pos;
+                    }
+                } else // too far to be joined
+                if (start != 0) // Create a diagonal
+                {
+                    frag.push_back(std::pair<unsigned, unsigned>(diag + start + 1, diag + end + kmer_size));
+                    start = 0;
+                }
+                prev_d = curr_d;
+            }
+            if (start != 0)  //End of hits list
+            {
+                frag.push_back(std::pair<unsigned, unsigned>(diag + start + 1, diag + end + kmer_size));
+            }
+        }
+    }
+}
+//-------------------------------------------------------------------------
+// Search for diagonal of word matches with score and penalty
+void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
+         unsigned kmer_size,std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose){
+    double penalty = (double)1/wdist;
+    unsigned count;
+
+    for (auto &iter_seq : diag_map) { // iter diagonals
+        unsigned size = iter_seq.size();
+        count=0;
+        if (size > 2) {
+            iter_seq.sort();
+            bool extending = false;
+            unsigned start = 0;
+            unsigned end = 0;
+            unsigned score = kmer_size;
+            long diag = 0;
+
+            auto iter_diag = iter_seq.begin();
+            Diag curr_d, prev_d = *iter_diag;
+            while (++iter_diag != iter_seq.end()) {
+                curr_d = *iter_diag;
+                if (prev_d.diag == curr_d.diag && prev_d.wpos.numSeq == curr_d.wpos.numSeq) {
+                    long extended_score;
+                    long dist = curr_d.wpos.pos - prev_d.wpos.pos - kmer_size;
+                    if (dist < 0 )
+                        extended_score = score + step_q;
+                    else
+                        extended_score = score + kmer_size - (unsigned) std::floor(((double)dist * penalty));
+                    if (extended_score > 0) {
+                        if (!extending){ //first hit (2 kmers found at correct distance)
+                            diag = curr_d.diag;
+                            start = prev_d.wpos.pos;
+                            end = curr_d.wpos.pos;
+                            extending = true;
+                            score = extended_score;
+                        } else { //extending
+                            end = curr_d.wpos.pos;
+                            score = extended_score;
+                        }
+                    } else //stop extension score to join two kmers < 0
+                    if (extending) {
+                        if (end + kmer_size - start - 1 >= min_size) {
+                            count++;
+                            frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
+                        }
+                        extending = false;
+                        score=kmer_size;
+                    }
+
+                } else //stop extension diag or seq are different
+                if (extending) {
+                    if (end + kmer_size - start - 1 >= min_size) {
+                        count++;
+                        frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
+                    }
+                    extending = false;
+                    score=kmer_size;
+                }
+                prev_d = curr_d;
+            } //end size>2, diag_map loop
+            if (extending) // Record hit at the end of the loop
+                if (end + kmer_size - start - 1 >= min_size) {
+                    count++;
+                    frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
+                }
+        }
+
+        if (verbose > 0) {
+            std::cout << "Fragments number founds:" << count << std::endl;
+        }
     }
 }
 

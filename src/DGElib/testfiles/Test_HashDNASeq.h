@@ -10,6 +10,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "HashDNASeq.h"
+#include "MinimizerFuncDNASeq.h"
 #include <list>
 #include <vector>
 
@@ -22,7 +23,8 @@ class Test_HashDNASeq : public CppUnit::TestFixture {
 	CPPUNIT_TEST( test_reverse_hash );
 	CPPUNIT_TEST( test_hash );
 	CPPUNIT_TEST( test_reverse_hashwHole );
-	CPPUNIT_TEST( test_diagSearch );
+	CPPUNIT_TEST( test_diagSearchDist );
+    CPPUNIT_TEST( test_minimizer );
 
 	CPPUNIT_TEST_SUITE_END();
 
@@ -43,7 +45,8 @@ protected:
 	void test_reverse_hash(void);
     void test_hash(void);
 	void test_reverse_hashwHole(void);
-	void test_diagSearch( void );
+	void test_diagSearchDist( void );
+    void test_minimizer(void);
 };
 
 

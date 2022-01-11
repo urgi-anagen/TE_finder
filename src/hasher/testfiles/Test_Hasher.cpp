@@ -5,7 +5,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_Hasher);
 
 //-------------------------------------------------------------------------
-void Test_Hasher::test_search(void ){
+void Test_Hasher::test_searchWHole(void ){
 
     unsigned verbosity=1;
 
@@ -61,10 +61,11 @@ void Test_Hasher::test_search(void ){
     unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
     std::list< RangePair > frag_list;
     unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
-    double count_cutoff=1.0, diversity_cutoff=0.0;
+    double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
     bool valid_idx_file = false;
+    unsigned alg=1;
 
-    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
+    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q, gap_pen,alg);
     hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
@@ -117,7 +118,126 @@ void Test_Hasher::test_search(void ){
     remove("subject_test.fa");
     remove("subject_test.fa.kidx");
 }
-//------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+void Test_Hasher::test_searchMinimizer(void ){
+
+    unsigned verbosity=1;
+
+    std::ostringstream ostr;
+    ostr<<"ATATTTATTTTAGCGTTTACGCTATGTGTTGCGTATTGCTAATCGCTATGATTATATTTATTTTAGCGTTTACGCTATG";
+    ostr<<"TTACGCTATGTGTTATTTTTAGCGTTATTGCTAGCGTTTGCGATATTTATTTAATCGCTATGATTATATTTACGCTATG";
+    ostr<<"ATATTTCGCGCTATGTGTTGCGATAGCGTTTATTATACCTATATCGCTATGATTATATTTATTTTTAGCGTTTTGTATG";
+    BioSeq seq=BioSeq(ostr.str());
+    std::cout<<"\nQuery length:"<<seq.size()<<std::endl;
+    std::ofstream fout_query("query_test.fa");
+    fout_query << ">query_test"<<std::endl<<ostr.str();
+    fout_query.close();
+
+    BioSeq subseq1=seq.subseq(10-1,50);
+    subseq1.header="test1 10..60";
+
+    BioSeq subseq2=seq.subseq(50-1,50);
+    subseq2.header="test2 comp 99..49";
+    subseq2=subseq2.complement();
+
+    BioSeq subseq3=seq.subseq(0,50);
+    subseq3.header="test3 comp 50..1";
+    subseq3=subseq3.complement();
+
+    BioSeq subseq4=seq.subseq(237-50,50);
+    subseq4.header="test4 188..237";
+
+    BioSeq subseq5=seq.subseq(0,50);
+    subseq5.header="test5 comp 1..49";
+
+    BioSeq subseq6=seq.subseq(237-50,50);
+    subseq6.header="test6 237..188";
+    subseq6=subseq6.complement();
+
+    std::ostringstream str_fasta;
+    str_fasta << ">" << subseq1.header << std::endl;
+    str_fasta << subseq1 << std::endl;
+    str_fasta << ">" << subseq2.header << std::endl;
+    str_fasta << subseq2 << std::endl;
+    str_fasta << ">" << subseq3.header << std::endl;
+    str_fasta << subseq3 << std::endl;
+    str_fasta << ">" << subseq4.header << std::endl;
+    str_fasta << subseq4 << std::endl;
+    str_fasta << ">" << subseq5.header << std::endl;
+    str_fasta << subseq5 << std::endl;
+    str_fasta << ">" << subseq6.header << std::endl;
+    str_fasta << subseq6 << std::endl;
+
+    std::ofstream fout_subject("subject_test.fa");
+    fout_subject << str_fasta.str();
+    fout_subject.close();
+
+    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
+    std::list< RangePair > frag_list;
+    unsigned kmer_size=15, mask_hole_period=0, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=10;
+    double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
+    bool valid_idx_file = false;
+    unsigned alg=2;
+
+    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q, gap_pen,alg);
+    hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_size / 2,
+               count_cutoff, diversity_cutoff,
+               min_count,valid_idx_file, true);
+
+    end=seq.size()-1;
+    hsrch.search(seq, start, end, numseq, connect_dist,
+                 min_frag_size, false, frag_list, verbosity);
+
+    if(verbosity>0) {
+        for (const auto &it : frag_list) {
+            it.view();
+        }
+    }
+
+    // search on complement
+    BioSeq comp_seq=seq.complement();
+    std::list< RangePair > compfrag_list;
+    hsrch.search(comp_seq, start, end, numseq, connect_dist,
+                 min_frag_size, false, compfrag_list, verbosity);
+
+
+    for (auto rp : compfrag_list) {
+        rp.getRangeQ().translate_comp(comp_seq.length());
+        if (verbosity > 0) rp.view();
+        frag_list.push_back(rp);
+    }
+
+    if(verbosity>0){
+        std::cout<<"\nsubseq1="<<subseq1<<std::endl;
+        std::cout<<"subseq2="<<subseq2<<std::endl;
+        std::cout<<"subseq3="<<subseq3<<std::endl;
+        std::cout<<"subseq4="<<subseq4<<std::endl;
+        std::cout<<"subseq5="<<subseq5<<std::endl;
+        std::cout<<"subseq6="<<subseq6<<std::endl;
+    }
+    double pen_join=0.01;
+    hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false,verbosity);
+
+    if(pen_join>0.0){
+        std::cout << "Join fragment with penality " << pen_join << " ..." << std::flush;
+        hsrch.fragJoin(frag_list);
+        std::cout<<" done!"<<std::endl;
+    }
+    std::ostringstream ostr_obs;
+    for(auto f: frag_list){
+        ostr_obs<<f.getIdentity()<<std::endl;
+    }
+
+    std::ostringstream ostr_exp;
+    std::string exp="100\n100\n100\n100\n100\n100\n";
+    ostr_exp<<exp;
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+
+    remove("query_test.fa");
+    remove("subject_test.fa");
+    remove("subject_test.fa.kidx");
+}//------------------------------------------------------------------------------------------------------------
 void Test_Hasher::test_diagSearchDist( void )
 {
     unsigned word_len=10;

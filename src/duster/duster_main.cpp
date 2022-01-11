@@ -4,9 +4,9 @@
 #include <list>
 
 #include "SDGString.h"
-#include "SDGFastaIstream.h"
-#include "SDGFastaOstream.h"
-#include "SDGMemBioSeq.h"
+#include "BioSeq.h"
+#include "FastaIstream.h"
+#include "FastaOstream.h"
 
 #include "Duster.h"
 
@@ -49,7 +49,7 @@ void help(void)
           << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
           << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
 };
-void show_parameter(SDGString filename1,SDGString filename2)
+void show_parameter(const SDGString& filename1,const SDGString& filename2)
 {
   std::cout<<"\nRun with parameters:\n"
           << "Query sequences: " << filename1 << std::endl
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 		exit(EXIT_SUCCESS);
       } 
     int c;
-    while (1)
+    while (true)
       {
 		static struct option long_options[] =
 		{
@@ -193,10 +193,8 @@ int main(int argc, char* argv[])
                   help();
                   break;
               }
-                  return 1;
               default: {
                   abort();
-                  break;
               }
           }
 
@@ -287,10 +285,10 @@ int main(int argc, char* argv[])
 		bedout.open(bedout_name.str());
 
 
-		SDGFastaOstream seqout;
+		FastaOstream seqout;
 		seqout.open(seqout_name.str());
 	
-		SDGFastaIstream in(filename1);
+		FastaIstream in(filename1);
 		if(!in)
 		{
 			std::cerr<<"file:"<<filename1<<" does not exist!"<<std::endl;
@@ -301,13 +299,13 @@ int main(int argc, char* argv[])
 		unsigned numseq=0;
 		while(in)
 		  {
-			SDGBioSeq s;
+			BioSeq s;
 			if(in)
 			  in>>s;
 			numseq++;
 			genome_size+=s.length();
-			std::cout<<s.getDE()<<" len:"<<s.length()<<" read!"<<std::endl;
-			SDGBioSeq comp_s=s.complement();
+			std::cout<<s.header<<" len:"<<s.length()<<" read!"<<std::endl;
+			BioSeq comp_s=s.complement();
 			std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
 			if(chunk_size_kb!=0)
 			{
@@ -318,22 +316,22 @@ int main(int argc, char* argv[])
 				{
 					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 					std::cout<<"---direct strand---"<<std::endl;
-					dstr.search(s, start, start + chunk_size - 1, numseq, repeat, frag);
+					dstr.search(s, start, start + chunk_size - 1, repeat, frag, verbosity);
 					std::cout<<"---reverse strand---"<<std::endl;
-					dstr.search(comp_s, start, start + chunk_size - 1, numseq, repeat, frag_comp);
+					dstr.search(comp_s, start, start + chunk_size - 1, repeat, frag_comp, verbosity);
 					start=start+chunk_size;
 				}
 				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				dstr.search(s, start, s.length(), numseq, repeat, frag);
+				dstr.search(s, start, s.length(), repeat, frag, verbosity);
 				std::cout<<"---reverse strand---"<<std::endl;
-				dstr.search(comp_s, start, s.length(), numseq, repeat, frag_comp);
+				dstr.search(comp_s, start, s.length(), repeat, frag_comp, verbosity);
 			}else
 			{
 				std::cout<<"---direct strand---"<<std::endl;
-				dstr.search(s, 1, s.length(), numseq, repeat, frag);
+				dstr.search(s, 1, s.length(), repeat, frag, verbosity);
 				std::cout<<"---reverse strand---"<<std::endl;
-				dstr.search(comp_s, 1, s.length(), numseq, repeat, frag_comp);
+				dstr.search(comp_s, 1, s.length(), repeat, frag_comp, verbosity);
 
 			}
 			translate_comp(frag_comp, s.length());
@@ -342,16 +340,16 @@ int main(int argc, char* argv[])
 			dstr.fragMerge(frag, frag_connect_dist, fmerged);
 
 			genome_coverage+=dstr.compute_coverage(fmerged);
-			dstr.writeBED(s.getDE(), fmerged, bedout);
+			dstr.writeBED(s.header, fmerged, bedout);
 			dstr.get_sequences(fmerged, s, seqout);
 		  }
 		bedout.close();
 		seqout.close();
-		std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
-				<<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
+		std::cout<<"Coverage="<<genome_coverage<<" ("<<(double)genome_coverage/genome_size<<")"
+				<<" coverage % difference="<<fabs(((double)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 		if(genome_coverage==0) break;
-		if(fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<0.01 && nb_iter==0 && iter>1) break;
-		prev_genome_perc_coverage=(float)genome_coverage/genome_size;
+		if(fabs(((double)genome_coverage/genome_size)-prev_genome_perc_coverage)<0.01 && nb_iter==0 && iter>1) break;
+		prev_genome_perc_coverage=(double)genome_coverage/genome_size;
 		filename2=seqout_name.str();
 		//count_cutoff=1.0;
 		min_count=0;
@@ -366,7 +364,7 @@ int main(int argc, char* argv[])
       //Write final results
       std::stringstream alignout_final_name;
       std::stringstream seqout_final_name;
-      if (outfilename != "") {
+      if (!outfilename.empty()) {
           alignout_final_name << outfilename << ".final.bed";
           seqout_final_name << outfilename << ".final.fa";
       } else {
@@ -383,7 +381,7 @@ int main(int argc, char* argv[])
       std::system(cmd2.str().c_str());
 	exit( EXIT_SUCCESS );
   }
-  catch (SDGException e) {
+  catch (const SDGException &e) {
       std::cout << "******Exception catched: " << e.message << " ******" << std::endl;
       exit(EXIT_FAILURE);
   }

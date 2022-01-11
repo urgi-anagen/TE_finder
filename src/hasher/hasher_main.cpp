@@ -51,7 +51,7 @@ void help(void)
               << "   -c, --chunk_size:\n\t sequence chunk size in kb, default: None" << std::endl
               << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
               << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
-              << "   -A, --algorithm:\n\t algorithm number (1: max distance between kmers to be connected, 2: scoring scheme to connect two kmers), default:" << algorithm << std::endl
+              << "   -A, --algorithm:\n\t algorithm number (1: kmers with hole, 2: kmer minimizer ), default:" << algorithm << std::endl
               << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
 };
 void show_parameter(SDGString filename1,SDGString filename2)
@@ -79,7 +79,7 @@ void show_parameter(SDGString filename1,SDGString filename2)
               << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
               << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
               << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-              << "   -A, --algorithm:\t algorithm number (1: max distance between kmers to be connected, 2: scoring scheme to connect two kmers) : " << algorithm << std::endl
+              << "   -A, --algorithm:\t algorithm number (1: kmers with hole, 2: kmer minimizer ) : " << algorithm << std::endl
               << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
 };
 // search on sequence chunk, reverse sequence, and reverse complement
@@ -292,7 +292,7 @@ int main(int argc, char *argv[]) {
         if (stat_only) {
             std::cout << "\nCompute kmer stat only!" << std::endl;
             for (unsigned bw = 1; bw <= bkmer_size; bw++) {
-                HashDNASeq hsrch(kmer_size, kmask, mask_hole_length, bw, kmer_dist, 0, min_size, step_q);
+                HashDNASeq hsrch(kmer_size, kmask, mask_hole_length, algorithm,bw, kmer_dist, 0, min_size, step_q);
                 std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
                 std::list<Info_kmer> list_infokmer;
                 Info_kmer kmer_threshold;
@@ -383,27 +383,24 @@ int main(int argc, char *argv[]) {
             std::cout<<"--Random fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
 
-            if(algorithm==1)
-            {
-                qval_len=Hasher::fragLengthStat(rev_frag_list, qtile);
-                Hasher::fragLenFilter(rev_frag_list,qval_len);
-                Hasher::fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
-            }
+
+            qval_len=Hasher::fragLengthStat(rev_frag_list, qtile);
+            Hasher::fragLenFilter(rev_frag_list,qval_len);
+            Hasher::fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
+
             qval_score=Hasher::fragScoreStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
             std::cout<<"--Real fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
-            if(algorithm==1) {
-                Hasher::fragLenFilter(frag_list,qval_len);
-                Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
-            }
+
+            Hasher::fragLenFilter(frag_list,qval_len);
+            Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
+
             Hasher::fragScoreFilter(frag_list,qval_score);
             Hasher::fragScoreStat(frag_list, qtile, genome_coverage);
-            if(algorithm==2) {
-                Hasher::fragSeqAlign(frag_list, filename1, filename2, false, verbosity);
-            }
+
             if(pen_join>0.0){
                 std::cout << "Join fragment with penality " << pen_join << " ..." << std::flush;
                 hsrch.fragJoin(frag_list);
