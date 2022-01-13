@@ -170,9 +170,10 @@ void Test_HashDNASeq::test_minimizer( void )
     unsigned kmer=5;
     unsigned window=15;
     MinimizerFuncDNASeq mini(kmer,window);
+    const char *pos;
 
-    unsigned key1=mini.minimizer("ATAGCTTAGTATATCCGGACGTA");
-    unsigned key2=mini.minimizer("TACGTAATCGGACTATATATGTA");
+    unsigned key1=mini.minimizer("ATAGCTTAGTATATCCGGACGTA",pos);
+    unsigned key2=mini.minimizer("TACGTAATCGGACTATATATGTA",pos);
 
     CPPUNIT_ASSERT_EQUAL(key1,key2);
 }
