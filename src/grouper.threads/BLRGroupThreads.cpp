@@ -420,9 +420,9 @@ void BLRGroup::save( void )
 	if(verbose>0)
 		std::cout<<"Writing 'fasta' file..."<<std::flush;
 	SDGString seqfile = filename.str() + ".fa";
-	membmap.writeSeq( seqfile, match_map.getRefQueryDB() );
+	membmap.writeSeq( seqfile, grouper_parameter.getQuery() );
 	if( !samedb && grouper_parameter.getQuery()!="<not set>")
-		membmap.writeSeq( seqfile, match_map.getRefSubjectDB() );
+		membmap.writeSeq( seqfile, grouper_parameter.getBank() );
 	if(verbose>0)
 		std::cout<<" done"<<std::endl;
 

@@ -16,6 +16,10 @@
 #include <SDGFastaIstream.h>
 #include <SDGFastaOstream.h>
 
+#include <FastaIstream.h>
+#include <FastaOstream.h>
+#include <FastaIstream.h>
+#include <BioSeq.h>
 //#include "SkipList.h"
 #include "RangeSeq.h"
 #include "SDGBioSeqDB.h"
@@ -52,7 +56,7 @@ class RangeMap
   void merge(void);
   void extend(unsigned size_flank);
   void selectSrcSeq(const SDGString& outfname,const SDGBioSeqDB& db);
-  void writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const;
+  void writeSeq(const SDGString& outfname,const SDGString& fastaDB_filename) const;
   void writeCutSeq( const SDGString& outfname, const std::string& fasta_filename, int verbose=0 );
   void writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose=0 );
   void writeFlank53Seq(const SDGString& outfname,const SDGBioSeqDB& db,

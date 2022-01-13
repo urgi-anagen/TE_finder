@@ -700,10 +700,16 @@ unsigned HashDNASeq::hashSeqCountMinimizer(const BioSeq& seq, unsigned wsize, st
     if(len<=wsize) return 0;
     unsigned last_pos=len-wsize;
     const char *s=seq.c_str();
+    const char *pos=NULL, *prev_pos=NULL;
     for(unsigned i=0;i<=last_pos;i++)
     {
         nb_kmer++;
-        wcount[mseq(s)]++;
+        unsigned h=mseq(s,pos);
+        if(pos!=prev_pos){
+            prev_pos=pos;
+            wcount[h]++;
+        }
+
         s++;
     }
     return nb_kmer;
@@ -782,11 +788,12 @@ void HashDNASeq::hashSeqPosMinimizer(const BioSeq& seq, const std::vector<unsign
     if (len <= kmer_size) return;
     unsigned last_pos = len - kmer_size;
     unsigned key;
-    const char *s=seq.c_str();
+    const char *s=seq.c_str(), *pos=NULL, *prev_pos=NULL;
     for (unsigned i = 0; i <= last_pos; i++) {
-        key = mseq(s);
+        key = mseq(s, pos);
 
-        if (wcount[key] != 0) {
+        if (wcount[key] != 0 && pos != prev_pos) {
+            prev_pos=pos;
             *(hash_ptr[key]) = KmerSpos(i, nbseqS);
             hash_ptr[key]++;
         }
@@ -873,17 +880,21 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
     unsigned i=start;
     while(i<=last_pos) {
         bool found=false;
-        key_d = mseq(seq);
-        auto begin_d = hash2wpos[key_d];
-        auto end_d = hash2wpos[key_d + 1];
-        for (auto j = begin_d; j != end_d; j++) {
-            if (j->numSeq == 0) continue;
-            if (j->numSeq > 0) {
-                long diag = long(i) - j->pos;
-                if (!repeat || (repeat && i < j->pos)){
-                    dirhit++;
-                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
-                    found = true;
+        const char *pos=NULL, *prev_pos=NULL;
+        key_d = mseq(seq, pos);
+        if(pos!= prev_pos){
+            prev_pos=pos;
+            auto begin_d = hash2wpos[key_d];
+            auto end_d = hash2wpos[key_d + 1];
+            for (auto j = begin_d; j != end_d; j++) {
+                if (j->numSeq == 0) continue;
+                if (j->numSeq > 0) {
+                    long diag = long(i) - j->pos;
+                    if (!repeat || (repeat && i < j->pos)){
+                        dirhit++;
+                        diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                        found = true;
+                    }
                 }
             }
         }

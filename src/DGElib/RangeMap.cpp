@@ -173,9 +173,54 @@ void RangeMap::extend(unsigned size_flank)
     }
 }
 //-------------------------------------------------------------------
-void RangeMap::writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const
+void RangeMap::writeSeq(const SDGString& outfname, const SDGString& fastaDB_filename) const
 {
-  SDGFastaOstream out(outfname);
+    FastaOstream out(outfname);
+    FastaIstream in(fastaDB_filename);
+    if (!in) {
+        std::cerr << "file:" << fastaDB_filename << " does not exist!" << std::endl;
+    }
+
+    while (in) {
+        BioSeq seq;
+        if (in)
+            in >> seq;
+        std::cout << seq.header << " len:" << seq.size() << " read!" << std::endl;
+        for (const auto & map_item : *this) {
+            auto list_item=map_item.second;
+            for (const auto & rangeSet_item : list_item) {
+                if (rangeSet_item.getChr() == seq.header) {
+                    BioSeq sseq,rseq;
+                    std::ostringstream name;
+
+                    name << rangeSet_item.getName() << " " << seq.header << ":";
+
+                    bool first=true;
+                    for(auto range_item= rangeSet_item.getRangeSet().begin();
+                        range_item != rangeSet_item.getRangeSet().end(); range_item++)
+                    {
+                        ulong rs=range_item->getStart();
+                        ulong re=range_item->getEnd();
+                        if(range_item->isPlusStrand())
+                            rseq=seq.subseq(rs - 1, re - rs + 1);
+                        else
+                        {
+                            rseq=seq.subseq(re - 1, rs - re + 1);
+                            rseq=rseq.complement();
+                        }
+                        sseq+=rseq;
+                        if(!first) name<<",";
+                        else first=false;
+                        name<<rs<<".."<<re;
+                    }
+
+                    sseq.header=name.str();
+                    out << sseq;
+                }
+            }
+        }
+    }
+/*  SDGFastaOstream out(outfname);
   int count_skip=0;
 
   for(SDGBioSeqDB::const_iterator db_it=db.begin();
@@ -253,7 +298,7 @@ void RangeMap::writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const
 	}
     }
   if(count_skip>0)
-	  std::cout<<count_skip<<" skipped!"<<std::endl;
+	  std::cout<<count_skip<<" skipped!"<<std::endl;*/
 }
 //-------------------------------------------------------------------
 void RangeMap::writeCutSeq( const SDGString& outfname, const std::string& fasta_filename, int verbose )

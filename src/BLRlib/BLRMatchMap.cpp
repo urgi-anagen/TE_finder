@@ -882,7 +882,7 @@ RangeMap BLRMatchMap::writeMap(const SDGString &filename, int verbose) {
 void BLRMatchMap::writeSeq(const RangeMap &matchmap, const SDGString &filename, int verbose) {
     if (verbose > 0)
         std::cout << "writing 'fasta' file..." << std::endl;
-    matchmap.writeSeq(filename, query_db);
+    matchmap.writeSeq(filename, para.getQuery());
     if (verbose > 0)
         std::cout << " done" << std::endl;
 }

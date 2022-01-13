@@ -8,10 +8,9 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
                             unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
                             std::list< RangePair >& frag, unsigned verbose) {
 
-    unsigned count = 0;
+    unsigned count_frag = 0;
     unsigned curr_seq = 0;
     for (auto &iter_seq : diag_map) {
-        count = 0;
         unsigned size = iter_seq.size();
         if (size > 2) {
             iter_seq.sort();
@@ -45,9 +44,9 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
                 } else //stop extension if distance between kmer too long
                 if (extending) {
                     if (end + kmer_size - start - 1 >= min_frag_size) {
-                        count++;
+                        count_frag++;
                         frag.push_back(record_frag(start, end, diag,
-                                                   score, numseqQ, curr_seq, count));
+                                                   score, numseqQ, curr_seq, count_frag));
                     }
                     extending=false;
                 }
@@ -56,16 +55,16 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
             if (extending) // Record hit at the end of the loop
             {
                 if (end + kmer_size - start - 1 >= min_frag_size) {
-                    count++;
+                    count_frag++;
                     frag.push_back(record_frag(start, end, diag,
-                                               score, numseqQ, curr_seq, count));
+                                               score, numseqQ, curr_seq, count_frag));
                 }
             }
         } //end size>2, diag_map loop
     }
 
     if (verbose > 0) {
-        std::cout << "Fragments number founds:" << count << std::endl;
+        std::cout << "Fragments number founds:" << count_frag << std::endl;
     }
 }
 //-------------------------------------------------------------------------
@@ -201,17 +200,20 @@ void Hasher::matchKmersMinimizer(const BioSeq& sequence,
     unsigned i=start;
     while(i<=last_pos) {
         bool found=false;
-        key_d = mseq(seq);
-        auto begin_d = hash2wpos[key_d];
-        auto end_d = hash2wpos[key_d + 1];
-        for (auto j = begin_d; j != end_d; j++) {
-            if (j->numSeq == 0) continue;
-            if (j->numSeq > 0) {
-                long diag = long(i) - j->pos;
-                if (!repeat || (repeat && i < j->pos)){
-                    dirhit++;
-                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
-                    found = true;
+        const char *pos=NULL, *prev_pos=NULL;
+        key_d = mseq(seq, pos);
+        if(pos!= prev_pos){
+            auto begin_d = hash2wpos[key_d];
+            auto end_d = hash2wpos[key_d + 1];
+            for (auto j = begin_d; j != end_d; j++) {
+                if (j->numSeq == 0) continue;
+                if (j->numSeq > 0) {
+                    long diag = long(i) - j->pos;
+                    if (!repeat || (repeat && i < j->pos)){
+                        dirhit++;
+                        diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                        found = true;
+                    }
                 }
             }
         }
@@ -517,22 +519,22 @@ void Hasher::fragSeqWrite(const std::list< RangePair >& frag, const SDGString& f
             in >> seq;
         numseq++;
         std::cout << seq.header << " len:" << seq.size() << " read!" << std::endl;
-        for (const auto & curr_frag_it : frag) {
-            if (curr_frag_it.getRangeQ().getNumChr() == numseq) {
+        for (const auto & curr_frag : frag) {
+            if (curr_frag.getRangeQ().getNumChr() == numseq) {
                 BioSeq sseq;
-                if (curr_frag_it.getRangeQ().isPlusStrand()) {
-                    sseq = seq.subseq(curr_frag_it.getRangeQ().getStart(), curr_frag_it.getRangeQ().getEnd() - curr_frag_it.getRangeQ().getStart() + 1);
+                if (curr_frag.getRangeQ().isPlusStrand()) {
+                    sseq = seq.subseq(curr_frag.getRangeQ().getStart(), curr_frag.getRangeQ().getEnd() - curr_frag.getRangeQ().getStart() + 1);
                 } else {
-                    sseq = seq.subseq(curr_frag_it.getRangeQ().getEnd(), curr_frag_it.getRangeQ().getStart() - curr_frag_it.getRangeQ().getEnd() + 1);
+                    sseq = seq.subseq(curr_frag.getRangeQ().getEnd(), curr_frag.getRangeQ().getStart() - curr_frag.getRangeQ().getEnd() + 1);
                     sseq = sseq.complement();
                 }
-                std::istringstream subject_name(curr_frag_it.getRangeS().getNameSeq());
+                std::istringstream subject_name(curr_frag.getRangeS().getNameSeq());
                 std::string prefix_name;
                 subject_name>>prefix_name;
                 std::ostringstream name;
-                name << prefix_name << " " <<seq.header << ":"
-                    << curr_frag_it.getRangeQ().getStart() << ".."
-                    << curr_frag_it.getRangeQ().getEnd();
+                name << prefix_name << " " << seq.header << ":"
+                     << curr_frag.getRangeQ().getStart() << ".."
+                     << curr_frag.getRangeQ().getEnd();
                 sseq.header=name.str();
                 out << sseq;
             }
