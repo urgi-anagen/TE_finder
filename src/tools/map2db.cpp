@@ -122,8 +122,7 @@ int main( int argc, char* argv[] )
     dbname = dbname.afterlast("/")+".flank_size"+SDGString(flank_size)+".fa";
     if( verbose > 0 )
     	std::cout<<"write sequences"<<std::endl<<std::flush;
-    SDGBioSeqDB db(fasta_filename);
-    range_container.writeSeq( dbname, db );
+    range_container.writeSeq( dbname, fasta_filename );
   }
 
   catch(SDGException e)
