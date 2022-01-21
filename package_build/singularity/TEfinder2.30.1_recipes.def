@@ -84,7 +84,37 @@ Usage:
     cd ..
     mkdir bin
     cp TE_finder/bin/* bin
-    cp TE_finder/src/tools/* bin
+    cp TE_finder/src/tools/cutterDB bin
+    cp TE_finder/src/tools/NWalign bin
+    cp TE_finder/src/tools/SWalign bin
+    cp TE_finder/src/tools/TRsearch bin
+    cp TE_finder/src/tools/TSDsearch bin
+    cp TE_finder/src/tools/align2piler bin
+    cp TE_finder/src/tools/align2recon bin
+    cp TE_finder/src/tools/fastlalign bin
+    cp TE_finder/src/tools/filterAlign bin
+    cp TE_finder/src/tools/halign bin
+    cp TE_finder/src/tools/hrepeat bin
+    cp TE_finder/src/tools/hsearch bin
+    cp TE_finder/src/tools/itrsearch bin
+    cp TE_finder/src/tools/ltrsearch bin
+    cp TE_finder/src/tools/map2db bin
+    cp TE_finder/src/tools/map2flank3 bin
+    cp TE_finder/src/tools/map2flank5 bin
+    cp TE_finder/src/tools/map2flank53 bin
+    cp TE_finder/src/tools/mapOp bin
+    cp TE_finder/src/tools/mapdist bin
+    cp TE_finder/src/tools/mapsize bin
+    cp TE_finder/src/tools/mapview bin
+    cp TE_finder/src/tools/orienter bin
+    cp TE_finder/src/tools/mapOp bin
+    cp TE_finder/src/tools/pathnum2id bin
+    cp TE_finder/src/tools/polyAtail bin
+    cp TE_finder/src/tools/refalign bin
+    cp TE_finder/src/tools/rpt_map bin
+    cp TE_finder/src/tools/setnum2id bin
+    cp TE_finder/src/tools/statalign bin
+    cp TE_finder/src/tools/tabnum2id bin
     rm -rf TE_finder
 
     #cleanup
