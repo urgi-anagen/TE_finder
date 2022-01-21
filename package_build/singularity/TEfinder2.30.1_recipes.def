@@ -84,7 +84,7 @@ Usage:
     cd ..
     mkdir bin
     cp TE_finder/bin/* bin
-    cp TE_finder/src/tools/cutterDB bin
+    cp TE_finder/src/tools/* bin
     rm -rf TE_finder
 
     #cleanup
