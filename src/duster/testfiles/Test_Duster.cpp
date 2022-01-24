@@ -45,7 +45,7 @@ void Test_Duster::test_search(void ){
     Duster dstr(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
     dstr.load("subject_test.fa", kmer_size, kmask, mask_hole_length, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
-               min_count,valid_idx_file, true);
+               min_count,valid_idx_file, true, true);
 
     dstr.search(seq, start, end, numseq, fmerged, verbosity);
 
