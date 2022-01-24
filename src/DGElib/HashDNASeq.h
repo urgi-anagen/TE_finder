@@ -139,7 +139,7 @@ protected:
         };
     };
 
-    void kmer_counts(const SDGString &filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size,
+    void kmer_counts(const SDGString &filenameS, unsigned kmerSize, unsigned bkmerSize, unsigned mkmerSize,
                      std::vector<unsigned> &wcount, unsigned &nb_kmer,
                      std::vector<unsigned> &bcount, unsigned &nb_bkmer,
                      std::vector<unsigned> &mcount, unsigned &nb_mkmer,
@@ -150,21 +150,21 @@ protected:
                    const std::vector<unsigned> &bcount, unsigned nb_bkmer,
                    const std::vector<unsigned> &mcount, unsigned nb_mkmer,
                    const std::vector<unsigned> &ncount, unsigned nb_nuc,
-                   std::list<Info_kmer> &list_infokmer);
+                   std::list<Info_kmer> &list_infokmer) const;
 
-    void kmer_count_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_count,
+    static void kmer_count_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_count,
                                 Info_kmer &kmer_threshold);
 
-    void kmer_entropy_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_entropy,
+    static void kmer_entropy_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_entropy,
                                   Info_kmer &kmer_threshold);
 
-    void kmer_diversity_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_diversity,
+    static void kmer_diversity_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_diversity,
                                     Info_kmer &kmer_threshold);
 
-    void kmer_goodkmer_percentiles(const std::list<Info_kmer> &list_infokmer);
+    static void kmer_goodkmer_percentiles(const std::list<Info_kmer> &list_infokmer);
 
     void kmer_filter(const std::list<Info_kmer> &list_infokmer, const Info_kmer &kmer_threshold, unsigned min_count,
-                     std::vector<unsigned> &wcount, bool first_iter);
+                     std::vector<unsigned> &wcount, bool first_iter) const;
 
     void kmer_ssr_filter(unsigned wsize, std::vector<unsigned> &wcount);
 
@@ -191,12 +191,12 @@ protected:
     void matchKmersMinimizer(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
                         std::vector<std::list<Diag>> &diag_map);
 
-    void diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
-                        unsigned connect_dist, unsigned kmer_size,
+    static void diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
+                        unsigned connect_dist, unsigned kmerSize,
                         std::vector<std::pair<unsigned, unsigned> > &frag);
 
-    void diagSearchScore(std::vector<std::list<Diag>> &diag_map,unsigned kmer_size,
-                    std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose);
+    void diagSearchScore(std::vector<std::list<Diag>> &diag_map,unsigned kmerSize,
+                    std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose) const;
 public:
 
     HashDNASeq(unsigned w = 10, unsigned msk = 100, unsigned mask_hole_length = 1, unsigned alg=1, unsigned bw = 2, unsigned wd = 1,
@@ -219,13 +219,13 @@ public:
     virtual unsigned getEffectiveKmerSize() { return hseq.getEffectiveKmerSize(); };
 
     virtual void
-    load(const SDGString &filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size,
-         unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
+    load(const SDGString &filenameS, unsigned kmerSize, unsigned mask, unsigned mask_hole_length, unsigned bkmerSize,
+         unsigned mkmerSize, double count_cutoff, double diversity_cutoff,
          unsigned min_count,
-         bool &valid_idx_file, bool first_iter);
+         bool &valid_idx_file, bool first_iter, bool filter_ssr);
 
-    void kmer_analysis(const SDGString &filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length,
-                       unsigned bkmer_size, unsigned mkmer_size,
+    void kmer_analysis(const SDGString &filenameS, unsigned kmerSize, unsigned mask, unsigned mask_hole_length,
+                       unsigned bkmerSize, unsigned mkmerSize,
                        double count_cutoff, double diversity_cutoff,
                        std::vector<unsigned> &wcount,
                        unsigned &nb_kmer,

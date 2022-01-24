@@ -5,8 +5,9 @@
 #include "HashDNASeq.h"
 
 //-------------------------------------------------------------------------
-void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
-		unsigned min_count,bool & valid_idx_file, bool first_iter)
+void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned kmask, unsigned mask_hole_length,
+                      unsigned bkmerSize, unsigned mkmerSize, double count_cutoff, double diversity_cutoff,
+                      unsigned min_count, bool & valid_idx_file, bool first_iter, bool filter_ssr)
 {
 
   nbseqS=0;
@@ -25,9 +26,9 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
 	  unsigned nb_kmer=0;
 	  std::list< Info_kmer > list_infokmer;
 	  Info_kmer kmer_threshold;
-	  kmer_analysis(filenameS,kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size, count_cutoff,
-                 diversity_cutoff, kmer_count, nb_kmer, list_infokmer,kmer_threshold);
-	  kmer_ssr_filter(kmer_size, kmer_count);
+	  kmer_analysis(filenameS, kmerSize, kmask, mask_hole_length, bkmerSize, mkmerSize, count_cutoff,
+                    diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
+	  if(filter_ssr) kmer_ssr_filter(kmerSize, kmer_count);
       kmer_filter(list_infokmer, kmer_threshold, min_count, kmer_count, first_iter);
       end = clock();
       std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
@@ -39,11 +40,11 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
       kmer_pos.clear();
       kmer_pos.resize(nb_kmer);
       unsigned k=0;
-      std::vector<KmerSpos>::iterator last_it=kmer_pos.begin();
-      for(std::vector<unsigned>::iterator i=kmer_count.begin(); i!=kmer_count.end();i++)
+      auto last_it=kmer_pos.begin();
+      for(unsigned int & i : kmer_count)
 		{
 		  hash2wpos[k]=last_it;
-		  last_it=last_it+(*i);
+		  last_it=last_it+i;
 		  k++;
 		}
       hash2wpos[k]=last_it;
@@ -79,13 +80,14 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmer_size, unsigned k
   std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, unsigned mask, unsigned mask_hole_length, unsigned bkmer_size, unsigned mkmer_size,
-		double count_cutoff, double diversity_cutoff, std::vector<unsigned>& kmer_count, unsigned& nb_kmer,
-		std::list< Info_kmer >& list_infokmer, Info_kmer& kmer_threshold)
+void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmerSize, unsigned mask, unsigned mask_hole_length,
+                               unsigned bkmerSize, unsigned mkmerSize,
+                               double count_cutoff, double diversity_cutoff, std::vector<unsigned>& kmer_count, unsigned& nb_kmer,
+                               std::list< Info_kmer >& list_infokmer, Info_kmer& kmer_threshold)
 {
 
-	  std::vector<unsigned> background_count((unsigned)pow(4,bkmer_size),0);
-	  std::vector<unsigned> model_count((unsigned)pow(4,mkmer_size),0);
+	  std::vector<unsigned> background_count((unsigned)pow(4, bkmerSize), 0);
+	  std::vector<unsigned> model_count((unsigned)pow(4, mkmerSize), 0);
 	  std::vector<unsigned> nuc_count(4,0);
 
   unsigned nb_bkmer=0;
@@ -93,23 +95,23 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, u
   unsigned nb_nuc=0;
   nb_kmer=0;
 
-  kmer_counts(filenameS,kmer_size,bkmer_size,mkmer_size,
-		  kmer_count, nb_kmer,
-		  background_count, nb_bkmer,
-		  model_count, nb_mkmer,
-		  nuc_count, nb_nuc);
+  kmer_counts(filenameS, kmerSize, bkmerSize, mkmerSize,
+              kmer_count, nb_kmer,
+              background_count, nb_bkmer,
+              model_count, nb_mkmer,
+              nuc_count, nb_nuc);
 
   if(nb_kmer==0)
       throw "Error: No more kmer to use!";
 
 
   kmer_count[0]=0; //remove kmers AAAAAA... NNNNNN.... XXXXX....
-  kmer_prob(kmer_size, bkmer_size, mkmer_size,mask, mask_hole_length,
-		  kmer_count,nb_kmer,
-		  background_count, nb_bkmer,
-		  model_count, nb_mkmer,
-		  nuc_count, nb_nuc,
-		  list_infokmer);
+  kmer_prob(kmerSize, bkmerSize, mkmerSize, mask, mask_hole_length,
+            kmer_count, nb_kmer,
+            background_count, nb_bkmer,
+            model_count, nb_mkmer,
+            nuc_count, nb_nuc,
+            list_infokmer);
 
   kmer_count_percentiles(list_infokmer, count_cutoff, kmer_threshold);
 
@@ -121,13 +123,13 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmer_size, u
 
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmer_size, unsigned bkmer_size, unsigned mkmer_size,
-		std::vector<unsigned>& wcount, unsigned& nb_kmer,
-		std::vector<unsigned>& bcount, unsigned& nb_bkmer,
-		std::vector<unsigned>& mcount, unsigned& nb_mkmer,
-		std::vector<unsigned>& ncount, unsigned& nb_nuc)
+void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmerSize, unsigned bkmerSize, unsigned mkmerSize,
+                             std::vector<unsigned>& wcount, unsigned& nb_kmer,
+                             std::vector<unsigned>& bcount, unsigned& nb_bkmer,
+                             std::vector<unsigned>& mcount, unsigned& nb_mkmer,
+                             std::vector<unsigned>& ncount, unsigned& nb_nuc)
 {
-  std::cout<<"Counting kmer of size "<<kmer_size<<" ... "<<std::flush;
+  std::cout << "Counting kmer of size " << kmerSize << " ... " << std::flush;
 
   try {
       FastaIstream inS(filenameS);
@@ -137,11 +139,11 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmer_size, uns
           if (inS) inS >> sS;
           std::cout << "\n" << ++count_seq << "->" << sS.header << std::flush;
           if (hash_algorithm == 1)
-              nb_kmer += hashSeqCountWHole(sS, kmer_size, wcount);
+              nb_kmer += hashSeqCountWHole(sS, kmerSize, wcount);
           else
-              nb_kmer += hashSeqCountMinimizer(sS, kmer_size, wcount);
-          nb_bkmer += hashSeqBackgroundCount(sS, bkmer_size, bcount);
-          nb_mkmer += hashSeqModelCount(sS, mkmer_size, mcount);
+              nb_kmer += hashSeqCountMinimizer(sS, kmerSize, wcount);
+          nb_bkmer += hashSeqBackgroundCount(sS, bkmerSize, bcount);
+          nb_mkmer += hashSeqModelCount(sS, mkmerSize, mcount);
           nb_nuc += hashSeqNucCount(sS, ncount);
       }
       inS.close();
@@ -159,8 +161,8 @@ void HashDNASeq::kmer_count_percentiles(const std::list< Info_kmer >& list_infok
 	std::cout<<"\nCount percentiles:"<<std::endl;
 
     std::vector<unsigned> distr;
-	for(std::list< Info_kmer >::const_iterator i=list_infokmer.begin(); i!=list_infokmer.end(); i++)
-    	distr.push_back(i->count);
+	for(const auto & i : list_infokmer)
+    	distr.emplace_back(i.count);
     sort(distr.begin(),distr.end());
 
     std::vector<unsigned> clean_distr;
@@ -182,9 +184,9 @@ void HashDNASeq::kmer_count_percentiles(const std::list< Info_kmer >& list_infok
     kmer_threshold.count=distr[threshold_index];
 
 	unsigned count=0;
-	for(std::vector<unsigned>::iterator it=distr.begin(); it!=distr.end(); it++)
+	for(unsigned int & it : distr)
 	{
-		if(*it>kmer_threshold.count)
+		if(it>kmer_threshold.count)
 			count++;
 	}
     std::cout<<"=>cut-off="<<cutoff<<". Kmers occuring more than "<<kmer_threshold.count
@@ -199,8 +201,8 @@ void HashDNASeq::kmer_entropy_percentiles(const std::list< Info_kmer >& list_inf
 	std::cout<<"\nEntropy percentiles:"<<std::endl;
 
 	std::vector<double> distr;
-	for(std::list< Info_kmer >::const_iterator i=list_infokmer.begin(); i!=list_infokmer.end(); i++)
-    	distr.push_back(i->entropy);
+	for(const auto & i : list_infokmer)
+    	distr.emplace_back(i.entropy);
     sort(distr.begin(),distr.end());
 
     std::cout<<" min="<<distr.front()<<std::endl;
@@ -220,9 +222,9 @@ void HashDNASeq::kmer_entropy_percentiles(const std::list< Info_kmer >& list_inf
     kmer_threshold.entropy=distr[threshold_index];
 
 	unsigned count=0;
-	for(std::vector<double>::iterator it=distr.begin(); it!=distr.end(); it++)
+	for(double & it : distr)
 	{
-		if(*it>kmer_threshold.entropy)
+		if(it>kmer_threshold.entropy)
 			count++;
 	}
     std::cout<<"=>cut-off="<<cutoff_entropy<<". Kmers with entropy greater than "<<kmer_threshold.entropy
@@ -237,8 +239,8 @@ void HashDNASeq::kmer_diversity_percentiles(const std::list< Info_kmer >& list_i
 	std::cout<<"\nDiversity percentiles:"<<std::endl;
 
 	std::vector<double> distr;
-	for(std::list< Info_kmer >::const_iterator i=list_infokmer.begin(); i!=list_infokmer.end(); i++)
-    	distr.push_back(i->diversity);
+	for(const auto & i : list_infokmer)
+    	distr.emplace_back(i.diversity);
     sort(distr.begin(),distr.end());
 
     std::cout<<" min="<<distr.front()<<std::endl;
@@ -257,9 +259,9 @@ void HashDNASeq::kmer_diversity_percentiles(const std::list< Info_kmer >& list_i
 
 	kmer_threshold.diversity=diversity_cutoff;
 	unsigned count=0;
-	for(std::vector<double>::iterator it=distr.begin(); it!=distr.end(); it++)
+	for(double & it : distr)
 	{
-		if(*it>=kmer_threshold.diversity)
+		if(it>=kmer_threshold.diversity)
 			break;
 		count++;
 	}
@@ -275,8 +277,8 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 	std::cout<<"\nGood kmer percentiles:"<<std::endl;
 
 	std::vector<double> distr;
-	for(std::list< Info_kmer >::const_iterator i=list_infokmer.begin(); i!=list_infokmer.end(); i++)
-    	distr.push_back(i->good_kmer);
+	for(const auto & i : list_infokmer)
+    	distr.emplace_back(i.good_kmer);
     sort(distr.begin(),distr.end());
 
     std::cout<<" min="<<distr.front()<<std::endl;
@@ -294,9 +296,9 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 
 
 	unsigned count=0;
-	for(std::vector<double>::iterator it=distr.begin(); it!=distr.end(); it++)
+	for(double & it : distr)
 	{
-		if(*it>0.0)
+		if(it>0.0)
 			break;
 		count++;
 	}
@@ -310,23 +312,21 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
 		const std::vector<unsigned>& bcount, unsigned nb_bkmer,
 		const std::vector<unsigned>& mcount, unsigned nb_mkmer,
 		const std::vector<unsigned>& ncount, unsigned nb_nuc,
-		std::list< Info_kmer >& list_infokmer)
+		std::list< Info_kmer >& list_infokmer) const
 {
 	std::cout<<"\nCompute kmer stats ... "<<std::endl;
     HashDNASeq h(wsize,mask,mask_hole_length,hash_algorithm, bwsize, 0);
 	std::cout<<"kmer size="<<wsize
 			<<"\tmask period="<<mask
             <<"\tmask hole size="<<mask_hole_length<<std::flush;
-    if(hash_algorithm==1)
-        std::cout<<"\teffective kmer size="<<h.hseq.getEffectiveKmerSize()<<std::endl;
-    else
-        std::cout<<"\teffective kmer size="<<h.mseq.getEffectiveKmerSize()<<std::endl;
+    if (hash_algorithm == 1) { std::cout << "\teffective kmer size=" << h.hseq.getEffectiveKmerSize() << std::endl; }
+    else { std::cout << "\teffective kmer size=" << h.mseq.getEffectiveKmerSize() << std::endl; }
 
 	std::cout<<"\nSequence composition:\n";
 
 	//Compute nucleotide probabilities
-	unsigned max_key_bkmer=(unsigned)pow(4,bwsize);
-	unsigned max_key_mkmer=(unsigned)pow(4,mwsize);
+	auto max_key_bkmer=(unsigned)pow(4,bwsize);
+	auto max_key_mkmer=(unsigned)pow(4,mwsize);
 
     std::vector<double> bprob(max_key_bkmer,0),prob_ind(max_key_bkmer,0),bprob_cond(max_key_bkmer,0),nprob(4,0),
     		mprob(max_key_mkmer,0),mprob_cond(max_key_mkmer,0);
@@ -376,7 +376,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     	sum_prob+=bprob[h.bhseq(s)];
 
     	bprob_cond[k]=bprob[k]/sum_prob;
-    	list_prob.push_back(std::make_pair(bprob[k],k));
+    	list_prob.emplace_back(bprob[k],k);
 
     	prob_ind[k]=1;
     	for(unsigned n=0; n<bwsize; n++)
@@ -390,7 +390,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     list_prob.sort();
     unsigned prob2display=0,maxProb2display=20;
     std::cout<<"\nBackground frequency and probabilities\n";
-    for(std::list< std::pair<double,unsigned> >::reverse_iterator i=list_prob.rbegin()  ; i!=list_prob.rend() && prob2display < maxProb2display; i++)
+    for(auto i=list_prob.rbegin()  ; i!=list_prob.rend() && prob2display < maxProb2display; i++)
          {
     		unsigned k=i->second;
     		std::cout<<"freq("<<h.bhseq.reverse_hash(k)<<")="<<bprob[k]
@@ -467,7 +467,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     	}
     	double belong2model=log10(prob_mkmer)-log10(prob_bkmer);
 
-    	list_infokmer.push_back(Info_kmer(k,wcount[k],ecount,entropy*-1,diversity,belong2model));
+    	list_infokmer.emplace_back(k,wcount[k],ecount,entropy*-1,diversity,belong2model);
     	khi2+=pow((wcount[k]-ecount),2)/(ecount);
     	if(wcount[k]==0) continue;
     	//count_kmer++;
@@ -479,7 +479,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     std::cout<<"\nDisplay most abundant kmers (count/expected in parenthesis):\n";
     long double khi2_most_abundant=0;
     unsigned count2display=0,maxCount2display=20;
-    for(std::list< Info_kmer >::reverse_iterator i=list_infokmer.rbegin(); i!=list_infokmer.rend() && count2display < maxCount2display; i++)
+    for(auto i=list_infokmer.rbegin(); i!=list_infokmer.rend() && count2display < maxCount2display; i++)
       {
        	unsigned c=i->count;
         double bc=i->expected_count;
@@ -494,7 +494,7 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
     std::cout<<"\nDisplay less abundant kmers (count/expected in parenthesis):\n";
     long double khi2_less_abundant=0;
     count2display=0,maxCount2display=20;
-    for(std::list< Info_kmer >::iterator i=list_infokmer.begin(); i!=list_infokmer.end() && count2display < maxCount2display; i++)
+    for(auto i=list_infokmer.begin(); i!=list_infokmer.end() && count2display < maxCount2display; i++)
       {
     	unsigned c=i->count;
     	double bc=i->expected_count;
@@ -509,37 +509,37 @@ void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsi
 //-------------------------------------------------------------------------
 //
 void HashDNASeq::kmer_filter(const std::list< Info_kmer >& list_infokmer, const Info_kmer& kmer_threshold, unsigned min_count,
-			std::vector<unsigned>& wcount, bool first_iter)
+			std::vector<unsigned>& wcount, bool first_iter) const
 {
     std::cout<<"\nFilter kmers ... "<<std::flush;
     unsigned nb_kmer=0;
     unsigned nb_removed=1; // 1 for AAAAAA...
-    for(std::list< Info_kmer >::const_iterator i=list_infokmer.begin();i!=list_infokmer.end();i++)
+    for(const auto & i : list_infokmer)
     {
-    	unsigned k=i->hash_key;
+    	unsigned k=i.hash_key;
     	if(wcount[k]==0) continue;
     	nb_kmer++;
-    	if(i->count<min_count*(i->expected_count))
+    	if(i.count<min_count*(i.expected_count))
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->count>kmer_threshold.count)
+    	if(i.count>kmer_threshold.count)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->entropy>kmer_threshold.entropy)
+    	if(i.entropy>kmer_threshold.entropy)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(i->diversity<kmer_threshold.diversity)
+    	if(i.diversity<kmer_threshold.diversity)
     	{
     		wcount[k]=0;
     		nb_removed++;
     	}
-    	if(!first_iter && i->good_kmer<0.0)
+    	if(!first_iter && i.good_kmer<0.0)
     	{
     		wcount[k]=0;
     		nb_removed++;
@@ -561,14 +561,13 @@ void HashDNASeq::kmer_ssr_filter(unsigned wsize, std::vector<unsigned>& wcount) 
     for(unsigned i=0; i<64; i++)
     {list_ssr.push_back(h3.hseq.reverse_hash(i));}
 
-    std::ostringstream oseq;
-    for(std::list<std::string>::iterator it=list_ssr.begin();it!=list_ssr.end();it++)
+    for(auto & it : list_ssr)
     {
         unsigned l = 0;
         std::ostringstream oseq;
         while (l < 18) {
-            oseq << *it;
-            l += it->size();
+            oseq << it;
+            l += it.size();
         }
         SDGBioSeq seq_ssr = newSDGMemBioSeq(oseq.str());
         unsigned len = seq_ssr.length();
@@ -638,11 +637,11 @@ bool HashDNASeq::read_idx(const SDGString& filename, double count_cutoff , doubl
 
   std::cout<<"Prepare hash table pointers"<<std::endl;
   unsigned k=0;
-  std::vector<KmerSpos>::iterator last_it=kmer_pos.begin();
-  for(std::vector<unsigned>::iterator i=kmer_count.begin(); i!=kmer_count.end();i++)
+  auto last_it=kmer_pos.begin();
+  for(unsigned int & i : kmer_count)
     {
       hash2wpos[k]=last_it;
-      last_it=last_it+(*i);
+      last_it=last_it+i;
       k++;
     }
   hash2wpos[k]=last_it;
@@ -663,15 +662,14 @@ void HashDNASeq::save_idx(const SDGString& filename, double count_cutoff, double
   fout<<diversity_cutoff<<std::endl;
   fout<<nbseqS<<std::endl;
   fout<<kmer_pos.size()<<std::endl;
-  for(std::vector<KmerSpos>::iterator i=kmer_pos.begin();i!=kmer_pos.end();i++)
+  for(auto & kmer_po : kmer_pos)
     {
-      fout<<i->pos<<" "<<i->numSeq<<"\t";
+      fout<<kmer_po.pos<<" "<<kmer_po.numSeq<<"\t";
     }
   fout<<wcount.size()<<std::endl;
-  for(std::vector<unsigned>::const_iterator i=wcount.begin();
-      i!=wcount.end();i++)
+  for(unsigned int i : wcount)
     {
-      fout<<*i<<"\t";
+      fout<<i<<"\t";
     }
 }
 //-------------------------------------------------------------------------
@@ -700,12 +698,12 @@ unsigned HashDNASeq::hashSeqCountMinimizer(const BioSeq& seq, unsigned wsize, st
     if(len<=wsize) return 0;
     unsigned last_pos=len-wsize;
     const char *s=seq.c_str();
-    const char *pos=NULL, *prev_pos=NULL;
+    unsigned pos=0, prev_pos=0;
     for(unsigned i=0;i<=last_pos;i++)
     {
         nb_kmer++;
-        unsigned h=mseq(s,pos);
-        if(pos!=prev_pos){
+        unsigned h=mseq(s,i,pos);
+        if(pos!=prev_pos || i==0){
             prev_pos=pos;
             wcount[h]++;
         }
@@ -788,13 +786,14 @@ void HashDNASeq::hashSeqPosMinimizer(const BioSeq& seq, const std::vector<unsign
     if (len <= kmer_size) return;
     unsigned last_pos = len - kmer_size;
     unsigned key;
-    const char *s=seq.c_str(), *pos=NULL, *prev_pos=NULL;
+    const char *s=seq.c_str();
+    unsigned pos=0, prev_pos=0;
     for (unsigned i = 0; i <= last_pos; i++) {
-        key = mseq(s, pos);
+        key = mseq(s,i, pos);
 
         if (wcount[key] != 0 && pos != prev_pos) {
             prev_pos=pos;
-            *(hash_ptr[key]) = KmerSpos(i, nbseqS);
+            *(hash_ptr[key]) = KmerSpos(pos, nbseqS);
             hash_ptr[key]++;
         }
         s++;
@@ -880,17 +879,17 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
     unsigned i=start;
     while(i<=last_pos) {
         bool found=false;
-        const char *pos=NULL, *prev_pos=NULL;
-        key_d = mseq(seq, pos);
-        if(pos!= prev_pos){
+        unsigned pos=0, prev_pos=0;
+        key_d = mseq(seq,i, pos);
+        if(pos!= prev_pos || i==start){
             prev_pos=pos;
             auto begin_d = hash2wpos[key_d];
             auto end_d = hash2wpos[key_d + 1];
             for (auto j = begin_d; j != end_d; j++) {
                 if (j->numSeq == 0) continue;
                 if (j->numSeq > 0) {
-                    long diag = long(i) - j->pos;
-                    if (!repeat || (repeat && i < j->pos)){
+                    long diag = long(pos) - j->pos;
+                    if (!repeat || (repeat && pos < j->pos)){
                         dirhit++;
                         diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
                         found = true;
@@ -911,7 +910,7 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
 //-------------------------------------------------------------------------
 // Search for diagonal of kmer matches
 void HashDNASeq::diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
-                                unsigned connect_dist, unsigned kmer_size,
+                                unsigned connect_dist, unsigned kmerSize,
                                 std::vector< std::pair<unsigned,unsigned> >& frag)
 {
     for (auto &iter_seq : diag_map) { // iter diagonals
@@ -941,16 +940,18 @@ void HashDNASeq::diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
                         end = curr_d.wpos.pos;
                     }
                 } else // too far to be joined
-                if (start != 0) // Create a diagonal
                 {
-                    frag.push_back(std::pair<unsigned, unsigned>(diag + start + 1, diag + end + kmer_size));
-                    start = 0;
+                    if (start != 0) // Create a diagonal
+                    {
+                        frag.emplace_back(diag + start + 1, diag + end + kmerSize);
+                        start = 0;
+                    };
                 }
                 prev_d = curr_d;
             }
             if (start != 0)  //End of hits list
             {
-                frag.push_back(std::pair<unsigned, unsigned>(diag + start + 1, diag + end + kmer_size));
+                frag.emplace_back(diag + start + 1, diag + end + kmerSize);
             }
         }
     }
@@ -958,7 +959,7 @@ void HashDNASeq::diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
 //-------------------------------------------------------------------------
 // Search for diagonal of word matches with score and penalty
 void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
-         unsigned kmer_size,std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose){
+                                 unsigned kmerSize, std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose) const{
     double penalty = (double)1/wdist;
     unsigned count;
 
@@ -970,7 +971,7 @@ void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
             bool extending = false;
             unsigned start = 0;
             unsigned end = 0;
-            unsigned score = kmer_size;
+            unsigned score = kmerSize;
             long diag = 0;
 
             auto iter_diag = iter_seq.begin();
@@ -979,13 +980,13 @@ void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
                 curr_d = *iter_diag;
                 if (prev_d.diag == curr_d.diag && prev_d.wpos.numSeq == curr_d.wpos.numSeq) {
                     long extended_score;
-                    long dist = curr_d.wpos.pos - prev_d.wpos.pos - kmer_size;
-                    if (dist < 0 )
+                    long dist = curr_d.wpos.pos - prev_d.wpos.pos - kmerSize;
+                    if (dist < 0)
                         extended_score = score + step_q;
                     else
-                        extended_score = score + kmer_size - (unsigned) std::floor(((double)dist * penalty));
+                        extended_score = score + kmerSize - (unsigned) std::floor(((double) dist * penalty));
                     if (extended_score > 0) {
-                        if (!extending){ //first hit (2 kmers found at correct distance)
+                        if (!extending) { //first hit (2 kmers found at correct distance)
                             diag = curr_d.diag;
                             start = prev_d.wpos.pos;
                             end = curr_d.wpos.pos;
@@ -997,29 +998,31 @@ void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
                         }
                     } else //stop extension score to join two kmers < 0
                     if (extending) {
-                        if (end + kmer_size - start - 1 >= min_size) {
+                        if (end + kmerSize - start - 1 >= min_size) {
                             count++;
-                            frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
+                            frag.emplace_back(diag + start + 1, diag + end + kmerSize);
                         }
                         extending = false;
-                        score=kmer_size;
+                        score = kmerSize;
                     }
 
                 } else //stop extension diag or seq are different
-                if (extending) {
-                    if (end + kmer_size - start - 1 >= min_size) {
-                        count++;
-                        frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
-                    }
-                    extending = false;
-                    score=kmer_size;
+                {
+                    if (extending) {
+                        if (end + kmerSize - start - 1 >= min_size) {
+                            count++;
+                            frag.emplace_back(diag + start + 1, diag + end + kmerSize);
+                        }
+                        extending = false;
+                        score = kmerSize;
+                    };
                 }
                 prev_d = curr_d;
             } //end size>2, diag_map loop
             if (extending) // Record hit at the end of the loop
-                if (end + kmer_size - start - 1 >= min_size) {
+                if (end + kmerSize - start - 1 >= min_size) {
                     count++;
-                    frag.push_back(std::pair<unsigned,unsigned>(diag+start+1,diag+end+kmer_size));
+                    frag.emplace_back(diag+start+1, diag + end + kmerSize);
                 }
         }
 

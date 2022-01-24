@@ -20,6 +20,7 @@
 #include "FragAlign.h"
 #include "RangeSeq.h"
 #include "BLRBioSeqDB.h"
+#include "SDGBioSeqDB.h"
 #include "../matcher/BLRMatcherParameter.h"
 #include "Graph.h"
 

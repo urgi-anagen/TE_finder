@@ -1,5 +1,4 @@
 #include <getopt.h>
-#include <fstream>
 #include <cstdlib>
 #include <list>
 
@@ -14,7 +13,7 @@
 unsigned kmer_size=15, step_q=7, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
 min_size=20, chunk_size_kb=100, nb_iter=0, min_count=0, kmask=4, verbosity=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
-bool repeat=false, stat_only=false;
+bool repeat=false, stat_only=false, filter_ssr=true;
 
 SDGString outfilename="";
 
@@ -47,7 +46,9 @@ void help(void)
           << "   -n, --nb_iter:\n\t number of iteration. A value of 0 make iteration stop if coverage variation is less than 1%."
           << " default:" << nb_iter << std::endl
           << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
-          << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
+          << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl
+          << "   -x, --filter_ssr_no:\n\t suppress SSR filter: " ;
+    if(filter_ssr) std::cout<<"No"<< std::endl; else std::cout<<"Yes"<< std::endl;
 };
 void show_parameter(const SDGString& filename1,const SDGString& filename2)
 {
@@ -70,12 +71,14 @@ void show_parameter(const SDGString& filename1,const SDGString& filename2)
           << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
           << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
           << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-          << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
+          << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl
+          << "   -x, --filter_ssr_no:\t suppress SSR filter: " ;
+  if(filter_ssr) std::cout<<"No"<< std::endl; else std::cout<<"Yes"<< std::endl;
 };
 void translate_comp(std::vector< std::pair<unsigned,unsigned> >& frag, unsigned len_seq){
-    for(std::vector< std::pair<unsigned,unsigned> >::iterator it=frag.begin(); it!=frag.end();it++){
-        it->first=len_seq-it->first+1;
-        it->second=len_seq-it->second+1;
+    for(auto & it : frag){
+        it.first=len_seq-it.first+1;
+        it.second=len_seq-it.second+1;
     }
 }
 int main(int argc, char* argv[])
@@ -111,13 +114,14 @@ int main(int argc, char* argv[])
 		  {"chunk_size",required_argument, 0, 'c'},
 		  {"nb_iter",required_argument, 0, 'n'},
 		  {"analysis",no_argument, 0, 'a'},
-		  {"verbosity",no_argument, 0, 'v'},
+		  {"verbosity",required_argument, 0, 'v'},
+          {"filter_ssr_no",no_argument, 0, 'x'},
 		  {0, 0, 0, 0}
 		};
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:av:",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:av:x",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -187,6 +191,10 @@ int main(int argc, char* argv[])
               }
               case 'v': {
                   verbosity = atoi(optarg);
+                  break;
+              }
+              case 'x': {
+                  filter_ssr = false;
                   break;
               }
               case '?': {
@@ -266,7 +274,7 @@ int main(int argc, char* argv[])
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
 		dstr.load(filename2, kmer_size, kmask, 1, bkmer_size, kmer_size / 2 , count_cutoff,
-                  diversity_cutoff, min_count, valid_idx_file, first_iter);
+                  diversity_cutoff, min_count, valid_idx_file, first_iter, filter_ssr);
 
         std::ofstream bedout;
         bedout_name.str("");
@@ -339,9 +347,9 @@ int main(int argc, char* argv[])
 			frag_comp.clear();
 			dstr.fragMerge(frag, frag_connect_dist, fmerged);
 
-			genome_coverage+=dstr.compute_coverage(fmerged);
-			dstr.writeBED(s.header, fmerged, bedout);
-			dstr.get_sequences(fmerged, s, seqout);
+			genome_coverage+=Duster::compute_coverage(fmerged);
+			Duster::writeBED(s.header, fmerged, bedout);
+			Duster::get_sequences(fmerged, s, seqout);
 		  }
 		bedout.close();
 		seqout.close();

@@ -15,6 +15,7 @@
 #include "BLRMatchAlign.h"
 #include "BLRJoinParameter.h"
 #include "BLRBioSeqDB.h"
+#include "SDGBioSeqDB.h"
 
 class BLRMatchPath {
 

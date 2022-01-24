@@ -20,7 +20,7 @@ struct MinimizerFuncDNASeq // Compute hashing value of a word
     virtual ~MinimizerFuncDNASeq() {
     }
     unsigned getEffectiveKmerSize(void){return kmer_size;};
-    unsigned minimizer(const char *p, const char* &pos) {
+    unsigned minimizer(const char *p, unsigned pos_start, unsigned &pos) {
 
         const char *w = p;
         unsigned val, min_val = 0, min_h = 0;
@@ -29,11 +29,11 @@ struct MinimizerFuncDNASeq // Compute hashing value of a word
             if (i == 0 || val < min_val) {
                 min_h = h;
                 min_val = val;
-                pos=w;
+                pos=pos_start+i;
             } else if(val == min_val && h < min_h)
             {
                 min_h = h;
-                pos=w;
+                pos=pos_start+i;
             }
         }
         return min_h;
@@ -84,6 +84,6 @@ struct MinimizerFuncDNASeq // Compute hashing value of a word
         return h;
     };
 
-    unsigned operator()(const char *p, const char* &pos) { return minimizer(p,pos); };
+    unsigned operator()(const char *p, unsigned pos_start, unsigned &pos) { return minimizer(p,pos_start,pos); };
 };
 #endif //TE_FINDER_MINIMIZERFUNCDNASEQ_H
