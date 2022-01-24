@@ -80,10 +80,10 @@ class Hasher : public HashDNASeq
     };
   void load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size,
             unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
-            unsigned min_count, bool & valid_idx_file, bool first_iter) override
+            unsigned min_count, bool & valid_idx_file, bool first_iter, bool filter_ssr=true) override
 	  {
 		  HashDNASeq::load(filenameS, kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size , count_cutoff,
-                     diversity_cutoff, min_count, valid_idx_file, first_iter);
+                     diversity_cutoff, min_count, valid_idx_file, first_iter, filter_ssr);
 		  std::string line;
 		   std::ifstream myfile (filenameS);
           subject_names.clear();

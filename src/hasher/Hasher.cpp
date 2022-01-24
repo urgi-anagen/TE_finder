@@ -200,8 +200,8 @@ void Hasher::matchKmersMinimizer(const BioSeq& sequence,
     unsigned i=start;
     while(i<=last_pos) {
         bool found=false;
-        const char *pos=NULL, *prev_pos=NULL;
-        key_d = mseq(seq, pos);
+        unsigned pos=0, prev_pos=0;
+        key_d = mseq(seq, i, pos);
         if(pos!= prev_pos){
             auto begin_d = hash2wpos[key_d];
             auto end_d = hash2wpos[key_d + 1];
