@@ -13,12 +13,11 @@ FastaIstream &FastaIstream::operator>>(BioSeq &p) {
             if (line[0] == '>') {
                 line.erase(0, 1);
                 line.erase(line.find_last_not_of("\t\n\v\f\r ") + 1);
-                titre = line;
-                buffstr.str("");
-                buffstr.clear();
+                p.header = line;
+                p.clear();
                 found = true;
             } else {
-                buffstr << line;
+                p+=line;
             }
             if (peek() == '>' || peek() == EOF) {
                 break;
@@ -43,8 +42,6 @@ FastaIstream &FastaIstream::operator>>(BioSeq &p) {
 //            }
 //        }
     }
-    p = buffstr.str();
-    p.header=titre;
     return *this;
 }
 
