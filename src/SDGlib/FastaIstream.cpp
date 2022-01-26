@@ -7,14 +7,15 @@ FastaIstream &FastaIstream::operator>>(BioSeq &p) {
     std::ostringstream buffstr;
     bool found = false;
     std::string titre;
+    std::string line;
     if (this->is_open()) {
         while (*this) {
-            std::string line;
             if (peek() == '>') {
                 if (!found) {
                     if (std::getline(*this, line)) {
-                        titre = line.substr(1);
-                        titre = titre.erase(titre.find_last_not_of("\t\n\v\f\r ") + 1);
+                        line.erase(0,1);
+                        line.erase(line.find_last_not_of("\t\n\v\f\r ") + 1);
+                        titre=line;
                     }
                     found = true;
                 } else
