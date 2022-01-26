@@ -16,6 +16,8 @@ FastaIstream &FastaIstream::operator>>(BioSeq &p) {
                         line.erase(0,1);
                         line.erase(line.find_last_not_of("\t\n\v\f\r ") + 1);
                         titre=line;
+                        buffstr.str("");
+                        buffstr.clear();
                     }
                     found = true;
                 } else
