@@ -134,8 +134,8 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmerSize, unsi
   try {
       FastaIstream inS(filenameS);
       unsigned count_seq=0;
+      BioSeq sS;
       while (inS) {
-          BioSeq sS;
           if (inS) inS >> sS;
           std::cout << "\n" << ++count_seq << "->" << sS.header << std::flush;
           if (hash_algorithm == 1)
