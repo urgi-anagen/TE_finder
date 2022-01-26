@@ -24,7 +24,7 @@ class Duster : public HashDNASeq
  public:
 
   explicit Duster(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1, unsigned minsize=20, unsigned step=1):
-    HashDNASeq(w, msk, mask_hole_length, bw, wd, fd, minsize,step)
+    HashDNASeq(w, msk, mask_hole_length, 1,bw, wd, fd, minsize,step)
     {};
 
   unsigned getEffectiveKmerSize() override {return hseq.getEffectiveKmerSize();};
