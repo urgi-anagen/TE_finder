@@ -284,30 +284,38 @@ void Hasher::fragJoin(std::list< RangePair >& frag) const
 }
 //-------------------------------------------------------------------------
 // Merge overlapping rangePair
-unsigned Hasher::fragCoverage(const std::list< RangePair >& frag)
+void Hasher::fragMerge(const std::list< RangePair >& frag, std::list< RangePair >& frag_merge)
 {
-    unsigned coverage=0;
-    std::list< RangePair > frag_sort(frag);
-    frag_sort.sort(RangePair::less);
+    frag_merge=frag;
+    frag_merge.sort(RangePair::less);
 
-    unsigned size=frag_sort.size();
+    unsigned size=frag_merge.size();
     if(size>=2){
-        auto curr_frag_it=frag_sort.begin();
+        auto curr_frag_it=frag_merge.begin();
         auto next_frag_it =curr_frag_it;
         next_frag_it++;
-        while(next_frag_it != frag_sort.end()) {
+
+        while(next_frag_it != frag_merge.end()) {
             if (curr_frag_it->overlapQ(*next_frag_it)) {
                 //TODO chose a subject name if different
                 curr_frag_it->merge(*next_frag_it);
-                next_frag_it = frag_sort.erase(next_frag_it);
+                next_frag_it = frag_merge.erase(next_frag_it);
             } else{
                 curr_frag_it++;
                 next_frag_it++;
             }
         }
-
     }
-    for(auto & it : frag_sort)
+}
+//-------------------------------------------------------------------------
+// Merge overlapping rangePair
+unsigned Hasher::fragCoverage(const std::list< RangePair >& frag)
+{
+    unsigned coverage=0;
+    std::list< RangePair > frag_merge;
+    fragMerge(frag,frag_merge);
+
+    for(auto & it : frag_merge)
         coverage+=it.getLength();
     return coverage;
 }
@@ -463,40 +471,39 @@ void Hasher::fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfile
     std::vector<std::string> num2nameQ,num2nameS;
 
     std::ifstream fileQ(qfilename);
-    char buff[2048];
-
-    while (fileQ) {
-        fileQ.getline(buff, 2048);
-        if (*(buff) == '>') {
-            SDGString chr_name(&buff[1]);
-            chr_name = chr_name.trimL();
-            chr_name = chr_name.trimR();
-            num2nameQ.push_back(chr_name);
+    std::string line;
+    if (fileQ.is_open()) {
+        while (std::getline(fileQ, line)) {
+            if (line[0] == '>') {
+                line.erase(0, 1);
+                line.erase(line.find_last_not_of("\t\n\v\f\r ") + 1);
+                num2nameQ.push_back(line);
+            }
         }
     }
     fileQ.close();
 
     std::ifstream fileS(sfilename);
-    while (fileS) {
-        fileS.getline(buff, 2048);
-        if (*(buff) == '>') {
-            SDGString chr_name(&buff[1]);
-            chr_name = chr_name.trimL();
-            chr_name = chr_name.trimR();
-            num2nameS.push_back(chr_name);
+    if (fileS.is_open()) {
+        while (std::getline(fileS, line)) {
+            if (line[0] == '>') {
+                line.erase(0, 1);
+                line.erase(line.find_last_not_of("\t\n\v\f\r ") + 1);
+                num2nameS.push_back(line);
+            }
         }
     }
     fileS.close();
 
     for(auto & curr_frag_it : frag) {
         if(curr_frag_it.getNumQuery()>(long)num2nameQ.size()){
-            std::cerr<<"Error query sequence number "<<curr_frag_it.getNumQuery()<<" doesn't exist!"<<std::endl;
+            std::cerr<<"Error query sequence "<<curr_frag_it.getRangeQ().getNameSeq()<<" number "<<curr_frag_it.getNumQuery()<<" doesn't exist!"<<std::endl;
             exit(EXIT_FAILURE);
         }
         SDGString qname=num2nameQ[curr_frag_it.getNumQuery()-1];
 
         if(curr_frag_it.getNumSubject()>(long)num2nameS.size()){
-            std::cerr<<"Error subject sequence number "<<curr_frag_it.getNumSubject()<<" doesn't exist!"<<std::endl;
+            std::cerr<<"Error subject sequence "<<curr_frag_it.getRangeS().getNameSeq()<<" number "<<curr_frag_it.getNumSubject()<<" doesn't exist!"<<std::endl;
             exit(EXIT_FAILURE);
         }
         SDGString sname=num2nameS[curr_frag_it.getNumSubject()-1];
@@ -540,4 +547,12 @@ void Hasher::fragSeqWrite(const std::list< RangePair >& frag, const SDGString& f
             }
         }
     }
+}
+//-------------------------------------------------------------------------
+// Write a rangePair sequences
+void Hasher::fragMergeSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out)
+{
+    std::list< RangePair > frag_merge;
+    fragMerge(frag,frag_merge);
+    fragSeqWrite(frag_merge,fasta_filename,out);
 }

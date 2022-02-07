@@ -199,9 +199,9 @@ protected:
                     std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose) const;
 public:
 
-    HashDNASeq(unsigned w = 10, unsigned msk = 100, unsigned mask_hole_length = 1, unsigned alg=1, unsigned bw = 2, unsigned wd = 1,
+    HashDNASeq(unsigned w = 10, unsigned msk = 10, unsigned mask_hole_length = 1, unsigned alg=1, unsigned bw = 2, unsigned wd = 1,
                unsigned fd = 1, unsigned minsize = 20, unsigned step = 1) :
-            hseq(w, msk, mask_hole_length),mseq(w,w-4),
+            hseq(w, msk, mask_hole_length),mseq(msk,w),
             bhseq(bw, 0, 0),mhseq(w / 2, 0, 0),nhseq(1, 0, 0),
             kmer_size(w),bkmer_size(bw),mkmer_size(w / 2),
             wdist(wd),

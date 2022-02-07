@@ -71,8 +71,8 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned km
 		}
       inS2.close();
       hash_ptr.clear();
-      save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,mask_hole_length,kmer_count);
-      valid_idx_file=true;
+//      save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,mask_hole_length,kmer_count);
+//      valid_idx_file=true;
     }
 
   std::cout<<"end preparation of subjects";

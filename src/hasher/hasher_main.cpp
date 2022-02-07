@@ -309,9 +309,11 @@ int main(int argc, char *argv[]) {
         }
 
         Hasher hsrch(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_size, step_q, pen_join, algorithm);
-        bool valid_idx_file = true;
+        //bool valid_idx_file = true;
+        bool valid_idx_file = false; // suppress kidx file
         double prev_genome_perc_coverage = 0.0;
         std::stringstream alignout_name, seqout_name ;
+        std::list< RangePair > frag_list;
         for (unsigned iter = 1; iter <= nb_iter || nb_iter == 0; iter++) {
             bool first_iter=false;
             if (iter==1){
@@ -331,7 +333,9 @@ int main(int argc, char *argv[]) {
             unsigned genome_coverage=0;
             min_frag_size = min_size;
             unsigned numseq = 0;
-            std::list< RangePair > frag_list, rev_frag_list, compfrag_list, rev_compfrag_list;
+            std::list< RangePair > rev_frag_list, compfrag_list, rev_compfrag_list;
+            frag_list.clear();
+
             while (in) {
                 BioSeq seq;
                 if (in)
@@ -434,7 +438,7 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Write fasta in "<<seqout_name.str()<<" ... "<<std::flush;
             seqout.open(seqout_name.str());
-            Hasher::fragSeqWrite(frag_list, filename1, seqout);
+            Hasher::fragMergeSeqWrite(frag_list, filename1, seqout);
             seqout.close();
             std::cout<<"done!"<<std::endl;
 
@@ -469,8 +473,10 @@ int main(int argc, char *argv[]) {
         cmd1<<"cp "<<alignout_name.str()<<" "<<alignout_final_name.str();
         std::system(cmd1.str().c_str());
 
-        cmd2<<"cp "<<seqout_name.str()<<" "<<seqout_final_name.str();
-        std::system(cmd2.str().c_str());
+        FastaOstream seqout;
+        std::cout<<"--Write final fasta in "<<seqout_final_name.str()<<" ... "<<std::flush;
+        seqout.open(seqout_name.str());
+        Hasher::fragSeqWrite(frag_list, filename1, seqout);
 
         exit(EXIT_SUCCESS);
     }

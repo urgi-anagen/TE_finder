@@ -174,12 +174,13 @@ void Test_Hasher::test_searchMinimizer(void ){
 
     unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
     std::list< RangePair > frag_list;
-    unsigned kmer_size=15, mask_hole_period=0, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=10;
+    unsigned kmer_size=15, mask_hole_period=10, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=10;
     double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
     bool valid_idx_file = false;
     unsigned alg=2;
 
-    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q, gap_pen,alg);
+    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist,
+                 0, min_frag_size, step_q, gap_pen,alg);
     hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
