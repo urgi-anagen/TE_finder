@@ -71,18 +71,18 @@ class Hasher : public HashDNASeq
 
  public:
 
-  Hasher(unsigned w=10, unsigned msk=100, unsigned mask_hole_length=1, unsigned bw=2, unsigned wd=1, unsigned fd=1,
-         unsigned minsize=20,unsigned step=1, double pen=0.5, unsigned alg=1):
-          HashDNASeq(w, msk, mask_hole_length, alg,bw, wd, fd, minsize, step)
+  Hasher(unsigned kmer_size=10, unsigned mask_hole_period=100, unsigned mask_hole_length=1, unsigned kmer_window=20, unsigned bw=2, unsigned wd=1, unsigned fd=1,
+         unsigned minsize=20, unsigned step=1, double pen=0.5, unsigned alg=1):
+          HashDNASeq(kmer_size, mask_hole_period, mask_hole_length, kmer_window, alg, bw, wd, fd, minsize, step)
     {
         algorithm=alg;
 		pen_join=pen;
     };
-  void load(const SDGString& filenameS, unsigned kmer_size, unsigned kmask, unsigned mask_hole_length, unsigned bkmer_size,
+  void load(const SDGString& filenameS, unsigned kmer_size, unsigned mask_hole_period, unsigned mask_hole_length, unsigned kmer_window, unsigned bkmer_size,
             unsigned mkmer_size, double count_cutoff, double diversity_cutoff,
             unsigned min_count, bool & valid_idx_file, bool first_iter, bool filter_ssr=true) override
 	  {
-		  HashDNASeq::load(filenameS, kmer_size, kmask, mask_hole_length, bkmer_size, mkmer_size , count_cutoff,
+		  HashDNASeq::load(filenameS, kmer_size, mask_hole_period, mask_hole_length, kmer_window,bkmer_size, mkmer_size , count_cutoff,
                      diversity_cutoff, min_count, valid_idx_file, first_iter, filter_ssr);
 		  std::string line;
 		   std::ifstream myfile (filenameS);

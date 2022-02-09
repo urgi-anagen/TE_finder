@@ -38,12 +38,12 @@ void Test_Duster::test_search(void ){
 
     unsigned start=5,end=200,numseq=1,min_frag_size=35,verbosity=0,min_count=0;
     std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
-    unsigned kmer_size=10, kmask=12, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
+    unsigned kmer_size=10, kmask=12, mask_hole_length=1, kmer_window=0, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0;
     bool valid_idx_file = true;
 
     Duster dstr(kmer_size, kmask, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q);
-    dstr.load("subject_test.fa", kmer_size, kmask, mask_hole_length, bkmer_size, kmer_size / 2,
+    dstr.load("subject_test.fa", kmer_size, kmask, mask_hole_length, kmer_window, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true, true);
 

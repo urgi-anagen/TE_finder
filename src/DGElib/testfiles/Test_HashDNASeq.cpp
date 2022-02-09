@@ -168,7 +168,7 @@ void Test_HashDNASeq::test_diagSearchDist( void )
 void Test_HashDNASeq::test_minimizer( void )
 {
     unsigned kmer=5;
-    unsigned window=10;
+    unsigned window=24;
     MinimizerFuncDNASeq mini(kmer,window);
     unsigned pos1,pos2;
 

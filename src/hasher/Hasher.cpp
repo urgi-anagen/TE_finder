@@ -190,26 +190,27 @@ void Hasher::matchKmersMinimizer(const BioSeq& sequence,
                             unsigned start, unsigned end, bool repeat,
                             std::vector< std::list<Diag> >& diag_map)
 {
-    unsigned last_pos=end-kmer_size;
-    if(end<=kmer_size) return;
+    unsigned last_pos=end-window_size;
+    if(end<=window_size) return;
 
     std::string str=sequence.substr(start,end-start+1);
     const char* seq=str.c_str();
 
     unsigned key_d,dirhit=0;
     unsigned i=start;
+    unsigned pos=0, prev_pos=0;
     while(i<=last_pos) {
         bool found=false;
-        unsigned pos=0, prev_pos=0;
         key_d = mseq(seq, i, pos);
-        if(pos!= prev_pos){
+        if(pos!= prev_pos || i==start){
+            prev_pos=pos;
             auto begin_d = hash2wpos[key_d];
             auto end_d = hash2wpos[key_d + 1];
             for (auto j = begin_d; j != end_d; j++) {
                 if (j->numSeq == 0) continue;
                 if (j->numSeq > 0) {
-                    long diag = long(i) - j->pos;
-                    if (!repeat || (repeat && i < j->pos)){
+                    long diag = long(pos) - j->pos;
+                    if (!repeat || (repeat && pos < j->pos)){
                         dirhit++;
                         diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
                         found = true;

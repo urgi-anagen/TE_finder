@@ -34,10 +34,10 @@ void Test_Hasher::test_searchWHole(void ){
     subseq4.header="test4 188..237";
 
     BioSeq subseq5=seq.subseq(0,50);
-    subseq5.header="test5 comp 1..49";
+    subseq5.header="test5 1..49";
 
     BioSeq subseq6=seq.subseq(237-50,50);
-    subseq6.header="test6 237..188";
+    subseq6.header="test6 comp 237..188";
     subseq6=subseq6.complement();
 
     std::ostringstream str_fasta;
@@ -60,13 +60,13 @@ void Test_Hasher::test_searchWHole(void ){
 
     unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
     std::list< RangePair > frag_list;
-    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=1;
+    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=1, kmer_window=0, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
     bool valid_idx_file = false;
     unsigned alg=1;
 
-    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist, 0, min_frag_size, step_q, gap_pen,alg);
-    hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_size / 2,
+    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, kmer_window, bkmer_size, kmer_dist, 0, min_frag_size, step_q, gap_pen,alg);
+    hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, kmer_window, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
 
@@ -148,10 +148,10 @@ void Test_Hasher::test_searchMinimizer(void ){
     subseq4.header="test4 188..237";
 
     BioSeq subseq5=seq.subseq(0,50);
-    subseq5.header="test5 comp 1..49";
+    subseq5.header="test5 1..49";
 
     BioSeq subseq6=seq.subseq(237-50,50);
-    subseq6.header="test6 237..188";
+    subseq6.header="test6 comp 237..188";
     subseq6=subseq6.complement();
 
     std::ostringstream str_fasta;
@@ -172,16 +172,16 @@ void Test_Hasher::test_searchMinimizer(void ){
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=35,min_count=0;
+    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=30,min_count=0;
     std::list< RangePair > frag_list;
-    unsigned kmer_size=15, mask_hole_period=10, mask_hole_length=1, kmer_dist=1, bkmer_size=2, step_q=10;
+    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=0, kmer_window=20, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
     bool valid_idx_file = false;
     unsigned alg=2;
 
-    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_dist,
+    Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, kmer_window, bkmer_size, kmer_dist,
                  0, min_frag_size, step_q, gap_pen,alg);
-    hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length, bkmer_size, kmer_size / 2,
+    hsrch.load("subject_test.fa", kmer_size, mask_hole_period, mask_hole_length,kmer_window, bkmer_size, kmer_size / 2,
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true);
 

@@ -128,7 +128,7 @@ protected:
 
 
     std::vector<SDGString> subjectName;
-    unsigned kmer_size, bkmer_size, mkmer_size, wdist, fdist, min_size, step_q, max_key, nfrag;
+    unsigned kmer_size, window_size, bkmer_size, mkmer_size, wdist, fdist, min_size, step_q, max_key, nfrag;
     unsigned nbseqQ, nbseqS;
     unsigned hash_algorithm;
 
@@ -145,7 +145,7 @@ protected:
                      std::vector<unsigned> &mcount, unsigned &nb_mkmer,
                      std::vector<unsigned> &ncount, unsigned &nb_nuc);
 
-    void kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize, unsigned mask, unsigned mask_hole_length,
+    void kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize, unsigned mask_hole_period, unsigned mask_hole_length,unsigned kmer_window,
                    const std::vector<unsigned> &wcount, unsigned nb_kmer,
                    const std::vector<unsigned> &bcount, unsigned nb_bkmer,
                    const std::vector<unsigned> &mcount, unsigned nb_mkmer,
@@ -169,10 +169,10 @@ protected:
     void kmer_ssr_filter(unsigned wsize, std::vector<unsigned> &wcount);
 
     bool read_idx(const SDGString &filename, double count_cutoff, double diversity_cutoff, unsigned min_count,
-                  unsigned kmask, unsigned mask_hole_length);
+                  unsigned mask_hole_period, unsigned mask_hole_length);
 
     void save_idx(const SDGString &filename, double count_cutoff, double diversity_cutoff, unsigned min_count,
-                  unsigned kmask, unsigned mask_hole_length, const std::vector<unsigned> &wcount);
+                  unsigned mask_hole_period, unsigned mask_hole_length, const std::vector<unsigned> &wcount);
 
     unsigned hashSeqCountWHole(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
     unsigned hashSeqCountMinimizer(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
@@ -199,11 +199,12 @@ protected:
                     std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose) const;
 public:
 
-    HashDNASeq(unsigned w = 10, unsigned msk = 10, unsigned mask_hole_length = 1, unsigned alg=1, unsigned bw = 2, unsigned wd = 1,
+    HashDNASeq(unsigned kmer_size = 10, unsigned mask_hole_period = 10, unsigned mask_hole_length = 1,
+               unsigned kmer_window=20, unsigned alg=1, unsigned bw = 2, unsigned wd = 1,
                unsigned fd = 1, unsigned minsize = 20, unsigned step = 1) :
-            hseq(w, msk, mask_hole_length),mseq(msk,w),
-            bhseq(bw, 0, 0),mhseq(w / 2, 0, 0),nhseq(1, 0, 0),
-            kmer_size(w),bkmer_size(bw),mkmer_size(w / 2),
+            hseq(kmer_size, mask_hole_period, mask_hole_length), mseq(kmer_size, kmer_window),
+            bhseq(bw, 0, 0), mhseq(kmer_size / 2, 0, 0), nhseq(1, 0, 0),
+            kmer_size(kmer_size), window_size(kmer_window),bkmer_size(bw), mkmer_size(kmer_size / 2),
             wdist(wd),
             fdist(fd),
             min_size(minsize),
@@ -219,16 +220,17 @@ public:
     virtual unsigned getEffectiveKmerSize() { return hseq.getEffectiveKmerSize(); };
 
     virtual void
-    load(const SDGString &filenameS, unsigned kmerSize, unsigned mask, unsigned mask_hole_length, unsigned bkmerSize,
+    load(const SDGString &filenameS, unsigned kmerSize, unsigned mask_hole_period, unsigned mask_hole_length, unsigned kmer_window, unsigned bkmerSize,
          unsigned mkmerSize, double count_cutoff, double diversity_cutoff,
          unsigned min_count,
          bool &valid_idx_file, bool first_iter, bool filter_ssr);
 
-    void kmer_analysis(const SDGString &filenameS, unsigned kmerSize, unsigned mask, unsigned mask_hole_length,
+    void kmer_analysis(const SDGString &filenameS,
+                       unsigned kmerSize, unsigned mask_hole_period, unsigned mask_hole_length,
+                       unsigned kmer_window,
                        unsigned bkmerSize, unsigned mkmerSize,
                        double count_cutoff, double diversity_cutoff,
-                       std::vector<unsigned> &wcount,
-                       unsigned &nb_kmer,
+                       std::vector<unsigned> &wcount,unsigned &nb_kmer,
                        std::list<Info_kmer> &list_infokmer, Info_kmer &kmer_threshold);
 
     void search(const BioSeq &seq, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose);

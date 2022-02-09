@@ -5,7 +5,7 @@
 #include "HashDNASeq.h"
 
 //-------------------------------------------------------------------------
-void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned kmask, unsigned mask_hole_length,
+void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned mask_hole_period, unsigned mask_hole_length, unsigned kmer_window,
                       unsigned bkmerSize, unsigned mkmerSize, double count_cutoff, double diversity_cutoff,
                       unsigned min_count, bool & valid_idx_file, bool first_iter, bool filter_ssr)
 {
@@ -16,17 +16,25 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned km
   begin = clock();
 
 
-  std::cout<<"Kmer mask :"<<hseq.getMask()<<" -> Effective Kmer size (without kmer mask size):"<<hseq.getEffectiveKmerSize()<<std::endl;
-  if(valid_idx_file)
-	  valid_idx_file=read_idx(filenameS,count_cutoff,diversity_cutoff, min_count,kmask,mask_hole_length);
+    if (hash_algorithm == 1)
+        std::cout<<"Kmer mask :"<<hseq.getMask()<<" -> Effective Kmer size (without kmer mask size):"<<hseq.getEffectiveKmerSize()<<std::endl;
+    else
+        std::cout<<"Effective Kmer size (without kmer mask size):"<<mseq.getEffectiveKmerSize()<<std::endl;
+
+    if(valid_idx_file)
+	  valid_idx_file=read_idx(filenameS, count_cutoff, diversity_cutoff, min_count, mask_hole_period, mask_hole_length);
   if(!valid_idx_file)
     {
 	  //Count kmers and filters
-	  std::vector<unsigned> kmer_count((unsigned)pow(4,hseq.getEffectiveKmerSize()),0);
+      std::vector<unsigned> kmer_count;
+        if (hash_algorithm == 1)
+            kmer_count.resize((unsigned) pow(4, hseq.getEffectiveKmerSize()), 0);
+        else
+            kmer_count.resize((unsigned) pow(4,mseq.getEffectiveKmerSize()),0);
 	  unsigned nb_kmer=0;
 	  std::list< Info_kmer > list_infokmer;
 	  Info_kmer kmer_threshold;
-	  kmer_analysis(filenameS, kmerSize, kmask, mask_hole_length, bkmerSize, mkmerSize, count_cutoff,
+	  kmer_analysis(filenameS, kmerSize, mask_hole_period, mask_hole_length, kmer_window, bkmerSize, mkmerSize, count_cutoff,
                     diversity_cutoff, kmer_count, nb_kmer, list_infokmer, kmer_threshold);
 	  if(filter_ssr) kmer_ssr_filter(kmerSize, kmer_count);
       kmer_filter(list_infokmer, kmer_threshold, min_count, kmer_count, first_iter);
@@ -71,7 +79,7 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned km
 		}
       inS2.close();
       hash_ptr.clear();
-//      save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,kmask,mask_hole_length,kmer_count);
+//      save_idx(filenameS,count_cutoff,diversity_cutoff,min_count,mask_hole_period,mask_hole_length,kmer_count);
 //      valid_idx_file=true;
     }
 
@@ -80,9 +88,12 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned km
   std::cout<<" --> Time spent: "<<(double)(end-begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmerSize, unsigned mask, unsigned mask_hole_length,
+void HashDNASeq::kmer_analysis(const SDGString& filenameS,
+                               unsigned kmerSize, unsigned mask_hole_period, unsigned mask_hole_length,
+                               unsigned kmer_window,
                                unsigned bkmerSize, unsigned mkmerSize,
-                               double count_cutoff, double diversity_cutoff, std::vector<unsigned>& kmer_count, unsigned& nb_kmer,
+                               double count_cutoff, double diversity_cutoff,
+                               std::vector<unsigned>& kmer_count, unsigned& nb_kmer,
                                std::list< Info_kmer >& list_infokmer, Info_kmer& kmer_threshold)
 {
 
@@ -106,7 +117,7 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS, unsigned kmerSize, un
 
 
   kmer_count[0]=0; //remove kmers AAAAAA... NNNNNN.... XXXXX....
-  kmer_prob(kmerSize, bkmerSize, mkmerSize, mask, mask_hole_length,
+  kmer_prob(kmerSize, bkmerSize, mkmerSize, mask_hole_period, mask_hole_length, kmer_window,
             kmer_count, nb_kmer,
             background_count, nb_bkmer,
             model_count, nb_mkmer,
@@ -141,7 +152,7 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmerSize, unsi
           if (hash_algorithm == 1)
               nb_kmer += hashSeqCountWHole(sS, kmerSize, wcount);
           else
-              nb_kmer += hashSeqCountMinimizer(sS, kmerSize, wcount);
+              nb_kmer += hashSeqCountMinimizer(sS, window_size, wcount);
           nb_bkmer += hashSeqBackgroundCount(sS, bkmerSize, bcount);
           nb_mkmer += hashSeqModelCount(sS, mkmerSize, mcount);
           nb_nuc += hashSeqNucCount(sS, ncount);
@@ -307,18 +318,18 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 }
 //-------------------------------------------------------------------------
 //
-void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize,unsigned mwsize, unsigned mask,unsigned mask_hole_length,
-		const std::vector<unsigned>& wcount, unsigned nb_kmer,
-		const std::vector<unsigned>& bcount, unsigned nb_bkmer,
-		const std::vector<unsigned>& mcount, unsigned nb_mkmer,
-		const std::vector<unsigned>& ncount, unsigned nb_nuc,
-		std::list< Info_kmer >& list_infokmer) const
+void HashDNASeq::kmer_prob(unsigned wsize, unsigned bwsize, unsigned mwsize, unsigned mask_hole_period, unsigned mask_hole_length, unsigned kmer_window,
+                           const std::vector<unsigned>& wcount, unsigned nb_kmer,
+                           const std::vector<unsigned>& bcount, unsigned nb_bkmer,
+                           const std::vector<unsigned>& mcount, unsigned nb_mkmer,
+                           const std::vector<unsigned>& ncount, unsigned nb_nuc,
+                           std::list< Info_kmer >& list_infokmer) const
 {
 	std::cout<<"\nCompute kmer stats ... "<<std::endl;
-    HashDNASeq h(wsize,mask,mask_hole_length,hash_algorithm, bwsize, 0);
-	std::cout<<"kmer size="<<wsize
-			<<"\tmask period="<<mask
-            <<"\tmask hole size="<<mask_hole_length<<std::flush;
+    HashDNASeq h(wsize, mask_hole_period, mask_hole_length, kmer_window, hash_algorithm, bwsize, 0);
+	std::cout << "kmer size=" << wsize
+              << "\tmask_hole_period period=" << mask_hole_period
+            <<"\tmask_hole_period hole size="<<mask_hole_length<<std::flush;
     if (hash_algorithm == 1) { std::cout << "\teffective kmer size=" << h.hseq.getEffectiveKmerSize() << std::endl; }
     else { std::cout << "\teffective kmer size=" << h.mseq.getEffectiveKmerSize() << std::endl; }
 
@@ -783,15 +794,14 @@ void HashDNASeq::hashSeqPosMinimizer(const BioSeq& seq, const std::vector<unsign
 {
     nbseqS++;
     unsigned len = seq.length();
-    if (len <= kmer_size) return;
-    unsigned last_pos = len - kmer_size;
+    if (len <= window_size) return;
+    unsigned last_pos = len - window_size;
     unsigned key;
     const char *s=seq.c_str();
     unsigned pos=0, prev_pos=0;
     for (unsigned i = 0; i <= last_pos; i++) {
         key = mseq(s,i, pos);
-
-        if (wcount[key] != 0 && pos != prev_pos) {
+        if (wcount[key] != 0 && (pos != prev_pos || i==0)) {
             prev_pos=pos;
             *(hash_ptr[key]) = KmerSpos(pos, nbseqS);
             hash_ptr[key]++;
@@ -869,8 +879,8 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
                                 unsigned start, unsigned end, bool repeat,
                                 std::vector< std::list<Diag> >& diag_map)
 {
-    unsigned last_pos=end-kmer_size;
-    if(end<=kmer_size) return;
+    unsigned last_pos=end-window_size;
+    if(end<=window_size) return;
 
     std::string str=sequence.substr(start,end-start+1);
     const char* seq=str.c_str();

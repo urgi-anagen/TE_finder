@@ -10,8 +10,8 @@
 #include "Duster.h"
 
 
-unsigned kmer_size=15, step_q=7, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
-min_size=20, chunk_size_kb=100, nb_iter=0, min_count=0, kmask=4, verbosity=0;
+unsigned kmer_size=15, step_q=7, kmer_window=0, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
+min_size=20, chunk_size_kb=100, nb_iter=0, min_count=0, mask_hole_period=4, verbosity=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false, filter_ssr=true;
 
@@ -20,13 +20,13 @@ SDGString outfilename="";
     
 void help(void)
 {
-  std::cerr<<"usage: duster"
-          << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
-          << " options:" << std::endl
-          << "   -h, --help:\n\t this help" << std::endl
-          << "   -w, --kmer:\n\t kmer length (<16), default: " << kmer_size << std::endl
-          << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
-          << "   -k, --kmask:\n\t period of k-mer mask, default: " << kmask << std::endl
+  std::cerr << "usage: duster"
+            << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
+            << " options:" << std::endl
+            << "   -h, --help:\n\t this help" << std::endl
+            << "   -w, --kmer:\n\t kmer length (<16), default: " << kmer_size << std::endl
+            << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
+            << "   -k, --mask_hole_period:\n\t period of k-mer mask, default: " << mask_hole_period << std::endl
           << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
           << kmer_dist << std::endl
           << "   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
@@ -52,12 +52,12 @@ void help(void)
 };
 void show_parameter(const SDGString& filename1,const SDGString& filename2)
 {
-  std::cout<<"\nRun with parameters:\n"
-          << "Query sequences: " << filename1 << std::endl
-          << "Model sequences: " << filename2 << std::endl
-          << "   -w, --kmer:\t kmer length (<16): " << kmer_size << std::endl
-          << "   -S, --step_q:\t step on query sequence: " << step_q << std::endl
-          << "   -k, --kmask:\t length of k-mer mask: " << kmask << std::endl
+  std::cout << "\nRun with parameters:\n"
+            << "Query sequences: " << filename1 << std::endl
+            << "Model sequences: " << filename2 << std::endl
+            << "   -w, --kmer:\t kmer length (<16): " << kmer_size << std::endl
+            << "   -S, --step_q:\t step on query sequence: " << step_q << std::endl
+            << "   -k, --mask_hole_period:\t length of k-mer mask: " << mask_hole_period << std::endl
           << "   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: " << kmer_dist << std::endl
           << "   -f, --frag_connect_dist:\n\t max distance between two fragments to connect: "
           << frag_connect_dist << std::endl
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
 		  {"help",no_argument, 0, 'h'},
 		  {"kmer",required_argument, 0, 'w'},
 		  {"step_q",required_argument, 0, 'S'},
-		  {"kmask",required_argument, 0, 'k'},
+		  {"mask_hole_period",required_argument, 0, 'k'},
 		  {"kmer_dist",required_argument, 0, 'd'},
 		  {"frag_connect_dist",required_argument, 0, 'f'},
 		  {"min_size",required_argument, 0, 's'},
@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
                   break;
               }
               case 'k': {
-                  kmask = atoi(optarg);
+                  mask_hole_period = atoi(optarg);
                   break;
               }
               case 'd': {
@@ -250,7 +250,7 @@ int main(int argc, char* argv[])
       if (stat_only) {
           std::cout << "\nCompute kmer stat only!" << std::endl;
           for (unsigned bw = 1; bw <= bkmer_size; bw++) {
-              HashDNASeq hsrch(kmer_size, kmask, 1, bw, kmer_dist, frag_connect_dist, min_size, step_q);
+              HashDNASeq hsrch(kmer_size, mask_hole_period, 1, bw, kmer_dist, frag_connect_dist, min_size, step_q);
               std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
               std::list<Info_kmer> list_infokmer;
               Info_kmer kmer_threshold;
@@ -259,21 +259,21 @@ int main(int argc, char* argv[])
               std::cout << "\n======Compute kmer background probability for " << bw - 1 << " Markov's chain order======"
                         << std::endl;
 
-              hsrch.kmer_analysis(filename2, kmer_size, kmask, 1,bw, kmer_size / 2, count_cutoff, diversity_cutoff,
+              hsrch.kmer_analysis(filename2, kmer_size, mask_hole_period, 1,kmer_window, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
                                   kmer_count, nb_kmer, list_infokmer, kmer_threshold);
           }
           std::cout << "\nEnd Duster (version " << VERSION << ")" << std::endl;
           exit(EXIT_SUCCESS);
       }
 
-    Duster dstr(kmer_size, kmask, 1, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
+    Duster dstr(kmer_size, mask_hole_period, 1, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
 	std::stringstream bedout_name, seqout_name ;
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
-		dstr.load(filename2, kmer_size, kmask, 1, bkmer_size, kmer_size / 2 , count_cutoff,
+		dstr.load(filename2, kmer_size, mask_hole_period, 1, kmer_window,bkmer_size, kmer_size / 2 , count_cutoff,
                   diversity_cutoff, min_count, valid_idx_file, first_iter, filter_ssr);
 
         std::ofstream bedout;
