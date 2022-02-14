@@ -107,10 +107,10 @@ class Hasher : public HashDNASeq
                               bool reverse, unsigned verbose);
   static void fragMerge(const std::list< RangePair >& frag, std::list< RangePair >& frag_merge);
   static unsigned fragCoverage(const std::list< RangePair >& frag);
-  static unsigned fragScoreStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);
+  static unsigned fragScoreIdentityStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);
   static unsigned fragLengthStat(const std::list< RangePair >& frag, double quantile);
   static void fragLenFilter(std::list< RangePair >& frag, unsigned min_len);
-  static void fragScoreFilter(std::list< RangePair >& frag, unsigned min_score);
+  static void fragScoreIdentityFilter(std::list< RangePair >& frag, unsigned min_score, double min_identity);
   static void fragAlignWrite(std::list< RangePair >& frag, const SDGString& qfilename, const SDGString& sfilename, std::ostream& out);
   static void fragSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out);
   static void fragMergeSeqWrite(const std::list< RangePair >& frag, const SDGString& fasta_filename, FastaOstream& out);

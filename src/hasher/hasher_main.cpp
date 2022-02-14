@@ -13,7 +13,7 @@ double filter_cutoff=0.0, pen_join=0.5;
 unsigned kmer_size=15, kmer_window=20, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
 min_size=20, min_frag_size, chunk_size_kb=0, min_count=0, mask_hole_period=4, verbosity=0, overlap=0, nb_iter=1,algorithm=1;
 
-double count_cutoff=1.0, diversity_cutoff=0.0;
+double count_cutoff=1.0, diversity_cutoff=0.0, min_identity=75.0;
 bool repeat=false, stat_only=false;
 double p_value=0.05;
 
@@ -44,6 +44,7 @@ void help(void) {
               << min_count << std::endl
               << "   -b, --background_kmer_size:\n\t kmer size to compute kmer background probability, default: "
               << bkmer_size << std::endl
+              << "   -i, --identity:\n\t minimum identity, default: " << min_identity << std::endl
               << "   -p, --p-value:\n\t p-value, default: " << p_value << std::endl
               << "   -o, --file_out:\n\t filename for output," << std::endl
               << "   -c, --chunk_size:\n\t sequence chunk size in kb, default: None" << std::endl
@@ -74,6 +75,7 @@ void show_parameter(SDGString filename1,SDGString filename2) {
               << "   -m, --min_count:\t filter kmer with counts less than this value: " << min_count << std::endl
               << "   -b, --background_kmer_size:\t kmer size to compute kmer background probability: " << bkmer_size
               << std::endl
+              << "   -i, --identity:\t minimum identity, default: " << min_identity << std::endl
               << "   -p, --p-value:\t p-value, default: " << p_value << std::endl
               << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
               << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
@@ -140,6 +142,7 @@ int main(int argc, char *argv[]) {
                             {"min_count",            required_argument, 0, 'm'},
                             {"diversity_cutoff",     required_argument, 0, 'D'},
                             {"background_kmer_size", required_argument, 0, 'b'},
+                            {"identity",              required_argument, 0, 'i'},
                             {"p_value",              required_argument, 0, 'p'},
                             {"file_out",             required_argument, 0, 'o'},
                             {"chunk_size",           required_argument, 0, 'c'},
@@ -152,7 +155,7 @@ int main(int argc, char *argv[]) {
             /* `getopt_long' stores the option index here. */
             int option_index = 0;
 
-            c = getopt_long(argc, argv, "hd:f:w:W:S:k:l:d:j:s:C:D:m:b:p:o:c:n:aA:v:",
+            c = getopt_long(argc, argv, "hd:f:w:W:S:k:l:d:j:s:C:D:m:b:i:p:o:c:n:aA:v:",
                             long_options, &option_index);
 
             /* Detect the end of the options. */
@@ -210,6 +213,10 @@ int main(int argc, char *argv[]) {
                 }
                 case 'b': {
                     bkmer_size = atoi(optarg);
+                    break;
+                }
+                case 'i': {
+                    min_identity = atof(optarg);
                     break;
                 }
                 case 'p': {
@@ -396,7 +403,7 @@ int main(int argc, char *argv[]) {
             Hasher::fragLenFilter(rev_frag_list,qval_len);
             Hasher::fragSeqAlign(rev_frag_list,filename1,filename2,true,verbosity);
 
-            qval_score=Hasher::fragScoreStat(rev_frag_list, qtile, genome_coverage);
+            qval_score=Hasher::fragScoreIdentityStat(rev_frag_list, qtile, genome_coverage);
             std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
@@ -406,8 +413,8 @@ int main(int argc, char *argv[]) {
             Hasher::fragLenFilter(frag_list,qval_len);
             Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
 
-            Hasher::fragScoreFilter(frag_list,qval_score);
-            Hasher::fragScoreStat(frag_list, qtile, genome_coverage);
+            Hasher::fragScoreIdentityFilter(frag_list,qval_score,min_identity);
+            Hasher::fragScoreIdentityStat(frag_list, qtile, genome_coverage);
 
             if(pen_join>0.0){
                 std::cout << "Join fragment with penality " << pen_join << " ..." << std::flush;

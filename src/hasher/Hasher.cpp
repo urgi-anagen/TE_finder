@@ -51,7 +51,7 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
                     extending=false;
                 }
                 prev_d = curr_d;
-            } //end for
+            } //end while
             if (extending) // Record hit at the end of the loop
             {
                 if (end + kmer_size - start - 1 >= min_frag_size) {
@@ -322,29 +322,39 @@ unsigned Hasher::fragCoverage(const std::list< RangePair >& frag)
 }
 //-------------------------------------------------------------------------
 // Stats on rangePair lists
-unsigned Hasher::fragScoreStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage)
+unsigned Hasher::fragScoreIdentityStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage)
 {
     coverage=0;
     if(frag.empty()){
         return 0;
     }
     std::vector<unsigned> score_list;
+    std::vector<double> identity_list;
     for(const auto & curr_frag_it : frag) {
         unsigned len=curr_frag_it.getLength();
         coverage+=len;
         score_list.push_back(curr_frag_it.getScore());
+        identity_list.push_back(curr_frag_it.getIdentity());
     }
     sort(score_list.begin(), score_list.end());
     unsigned nb_frag=score_list.size();
     unsigned min_score=score_list.front();
     unsigned max_score=score_list.back();
-    unsigned qval=score_list[(int)std::floor((double)score_list.size() * quantile)];
+    unsigned qval_score=score_list[(int)std::floor((double)score_list.size() * quantile)];
     std::cout << "Frag number=" << nb_frag << " / "
               << "min score=" << min_score << " / "
               << "max score=" << max_score << " / "
-             <<"quantile ("<<quantile<<")="<<qval
+              << "quantile score (" << quantile << ")=" << qval_score
              <<std::endl;
-    return qval;
+    sort(identity_list.begin(), identity_list.end());
+    unsigned min_identity=identity_list.front();
+    unsigned max_identity=identity_list.back();
+    unsigned qval_identity=identity_list[(int)std::floor((double)identity_list.size() * quantile)];
+    std::cout << "     min identity=" << min_identity << " / "
+              << "max identity=" << max_identity << " / "
+              << "quantile identity (" << quantile << ")=" << qval_identity
+              <<std::endl;
+    return qval_score;
 }
 //-------------------------------------------------------------------------
 unsigned Hasher::fragLengthStat(const std::list< RangePair >& frag, double quantile)
@@ -383,12 +393,12 @@ void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
 }
 //-------------------------------------------------------------------------
 // Filter score on rangePair lists
-void Hasher::fragScoreFilter(std::list< RangePair >& frag, unsigned min_score)
+void Hasher::fragScoreIdentityFilter(std::list< RangePair >& frag, unsigned min_score, double min_identity)
 {
-    std::cout<<"--Filter fragments score <"<<min_score<<" ... "<<std::flush;
+    std::cout<<"--Filter fragments score <"<<min_score<<" and identity < "<<min_identity<<" ... "<<std::flush;
     auto frag_it=frag.begin();
     while(frag_it != frag.end()) {
-        if(frag_it->getScore()<min_score){
+        if(frag_it->getScore()<min_score || frag_it->getIdentity()<min_identity){
             frag_it = frag.erase(frag_it);
         }else{frag_it++;}
     }
