@@ -18,8 +18,9 @@ class Test_HashDNASeq : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST_SUITE(Test_HashDNASeq);
 	
-	CPPUNIT_TEST( test_hashSeqCount );
+	CPPUNIT_TEST(test_hashSeqCountWHoleNoHole );
 	CPPUNIT_TEST( test_hashSeqCountwHole );
+    CPPUNIT_TEST(test_hashSeqCount );
 	CPPUNIT_TEST( test_reverse_hash );
 	CPPUNIT_TEST( test_hash );
 	CPPUNIT_TEST( test_reverse_hashwHole );
@@ -40,8 +41,9 @@ public:
 	}
 
 protected:
-	void test_hashSeqCount(void);
+	void test_hashSeqCountWHoleNoHole(void);
 	void test_hashSeqCountwHole(void);
+    void test_hashSeqCount(void);
 	void test_reverse_hash(void);
     void test_hash(void);
 	void test_reverse_hashwHole(void);

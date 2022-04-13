@@ -9,6 +9,7 @@
 #include <string>
 #include <cmath>
 #include <list>
+#include <set>
 #include <tuple>
 #include <unordered_map>
 #include "HashFuncDNASeq.h"
@@ -175,21 +176,28 @@ protected:
                   unsigned mask_hole_period, unsigned mask_hole_length, const std::vector<unsigned> &wcount);
 
     unsigned hashSeqCountWHole(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
-    unsigned hashSeqCountMinimizer(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
+    unsigned hashSeqCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
 
-    unsigned hashSeqBackgroundCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
+/*    unsigned hashSeqBackgroundCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
 
     unsigned hashSeqModelCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
 
-    unsigned hashSeqNucCount(const BioSeq &seq, std::vector<unsigned> &wcount);
+    unsigned hashSeqNucCount(const BioSeq &seq, std::vector<unsigned> &wcount);*/
 
-    void hashSeqPosWHole(const BioSeq &seq, const std::vector<unsigned> &wcount);
-    void hashSeqPosMinimizer(const BioSeq &seq, const std::vector<unsigned> &wcount);
+    void hashSubjectSeqPosWHole(const BioSeq &seq, const std::vector<unsigned> &wcount);
+    void hashSubjectSeqPos(const BioSeq &seq, unsigned num_seq, unsigned wsize, const std::vector<unsigned> &wcount);
+    void hashSubjectSeqPosMinimizer(const BioSeq &seq, unsigned num_seq, unsigned wsize, const std::vector<unsigned> &wcount);
+    void hashSeqPos(const BioSeq &seq, unsigned wsize, std::list<std::pair<unsigned,unsigned>>& kmer_pos_list);
 
     void matchKmersHole(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
                         std::vector<std::list<Diag>> &diag_map);
-    void matchKmersMinimizer(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void matchKmers(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
                         std::vector<std::list<Diag>> &diag_map);
+    void matchKmersMinimizer(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+                    std::vector<std::list<Diag>> &diag_map);
+
+    void minimize(unsigned window_size, std::list<std::pair<unsigned, unsigned>> kmer_pos_list,
+                  std::set<std::pair<unsigned, unsigned>> &minimized_kmer_pos_list);
 
     static void diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
                         unsigned connect_dist, unsigned kmerSize,
@@ -233,7 +241,8 @@ public:
                        std::vector<unsigned> &wcount,unsigned &nb_kmer,
                        std::list<Info_kmer> &list_infokmer, Info_kmer &kmer_threshold);
 
-    void search(const BioSeq &seq, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose);
+    void search(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+                std::vector<std::pair<unsigned, unsigned> > &frag);
 };
 
 

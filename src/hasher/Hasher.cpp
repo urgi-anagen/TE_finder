@@ -144,6 +144,37 @@ void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &di
         }
     }
 }
+/*//-------------------------------------------------------------------------
+// Search for alignments with word matches
+void Hasher::matchKmers(const BioSeq& sequence,
+                            unsigned start, unsigned end, bool repeat,
+                            std::vector< std::list<Diag> >& diag_map)
+{
+    unsigned dirhit=0;
+
+    std::list<std::pair<unsigned,unsigned>> kmer_pos_list;
+    BioSeq subseq=sequence.substr(start,end-start+1);
+    hashSeqPos(subseq,kmer_size,kmer_pos_list);
+
+    for(auto &iter_pos : kmer_pos_list){
+        unsigned pos=start+iter_pos.second;
+        unsigned key_d=iter_pos.first;
+
+        auto begin_d = hash2wpos[key_d];
+        auto end_d = hash2wpos[key_d + 1];
+        for (auto j = begin_d; j != end_d; j++) {
+            if (j->numSeq == 0) continue;
+            if (j->numSeq > 0) {
+                long diag = long(pos) - j->pos;
+                if (!repeat || (repeat && pos < j->pos)){
+                    dirhit++;
+                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                }
+            }
+        }
+    }
+    std::cout<<dirhit<<" hits found / ";
+}
 //-------------------------------------------------------------------------
 // Search for alignments with word matches
 void Hasher::matchKmersHole(const BioSeq& sequence,
@@ -190,44 +221,32 @@ void Hasher::matchKmersMinimizer(const BioSeq& sequence,
                             unsigned start, unsigned end, bool repeat,
                             std::vector< std::list<Diag> >& diag_map)
 {
-    unsigned last_pos=end-window_size;
-    if(end<=window_size) return;
+    unsigned dirhit=0;
 
-    std::string str=sequence.substr(start,end-start+1);
-    const char* seq=str.c_str();
+    std::list<std::pair<unsigned,unsigned>> kmer_pos_list,minimized_kmer_pos_list;
+    BioSeq subseq=sequence.substr(start,end-start+1);
+    hashSeqPos(subseq,kmer_size,kmer_pos_list);
+    minimize(window_size,kmer_pos_list,minimized_kmer_pos_list)
 
-    unsigned key_d,dirhit=0;
-    unsigned i=start;
-    unsigned pos=0, prev_pos=0;
-    while(i<=last_pos) {
-        bool found=false;
-        key_d = mseq(seq, i, pos);
-        if(pos!= prev_pos || i==start){
-            prev_pos=pos;
-            auto begin_d = hash2wpos[key_d];
-            auto end_d = hash2wpos[key_d + 1];
-            for (auto j = begin_d; j != end_d; j++) {
-                if (j->numSeq == 0) continue;
-                if (j->numSeq > 0) {
-                    long diag = long(pos) - j->pos;
-                    if (!repeat || (repeat && pos < j->pos)){
-                        dirhit++;
-                        diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
-                        found = true;
-                    }
+    for(auto &iter_pos : minimized_kmer_pos_list){
+        unsigned pos=start+iter_pos.second;
+        unsigned key_d=iter_pos.first;
+
+        auto begin_d = hash2wpos[key_d];
+        auto end_d = hash2wpos[key_d + 1];
+        for (auto j = begin_d; j != end_d; j++) {
+            if (j->numSeq == 0) continue;
+            if (j->numSeq > 0) {
+                long diag = long(pos) - j->pos;
+                if (!repeat || (repeat && pos < j->pos)){
+                    dirhit++;
+                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
                 }
             }
         }
-        if(found){
-            seq += step_q;
-            i+=step_q;
-        } else {
-            seq += 1;
-            i += 1;
-        }
     }
     std::cout<<dirhit<<" hits found / ";
-}
+}*/
 //-------------------------------------------------------------------------
 // Search for Alignments
 void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsigned numseq, unsigned connect_dist,
@@ -239,9 +258,11 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 
 	std::vector< std::list<Diag> > diag_map;
 	diag_map.resize(subject_names.size()+1);
-    if(algorithm==1)
+    if(algorithm==0)
+        matchKmers(sequence, start, end, repeat, diag_map);
+    else if(algorithm==1)
         matchKmersHole(sequence, start, end, repeat, diag_map);
-    else
+    else if(algorithm==2)
         matchKmersMinimizer(sequence, start, end, repeat, diag_map);
 
 	clock_end = clock();

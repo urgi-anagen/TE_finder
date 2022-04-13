@@ -34,13 +34,17 @@ class Hasher : public HashDNASeq
     unsigned algorithm;
     double pen_join;
 
+/*	void matchKmers(const BioSeq& sequence,
+						unsigned start, unsigned end, bool repeat,
+						std::vector< std::list<Diag> >& diag_map);
+
 	void matchKmersHole(const BioSeq& sequence,
                         unsigned start, unsigned end, bool repeat,
                         std::vector< std::list<Diag> >& diag_map);
 
     void matchKmersMinimizer(const BioSeq& sequence,
                         unsigned start, unsigned end, bool repeat,
-                        std::vector< std::list<Diag> >& diag_map);
+                        std::vector< std::list<Diag> >& diag_map);*/
 
     void diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
                         unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,

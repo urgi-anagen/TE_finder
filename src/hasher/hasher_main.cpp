@@ -50,7 +50,7 @@ void help(void) {
               << "   -c, --chunk_size:\n\t sequence chunk size in kb, default: None" << std::endl
               << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
               << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
-              << "   -A, --algorithm:\n\t algorithm number (1: kmers with hole, 2: kmer minimizer ), default:"
+              << "   -A, --algorithm:\n\t algorithm number (0: simple kmers, 1: kmers with hole, 2: kmer minimizer ), default:"
               << algorithm << std::endl
               << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
 };
@@ -80,7 +80,7 @@ void show_parameter(SDGString filename1,SDGString filename2) {
               << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
               << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
               << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-              << "   -A, --algorithm:\t algorithm number (1: kmers with hole, 2: kmer minimizer ) : " << algorithm
+              << "   -A, --algorithm:\t algorithm number (0: simple kmers, 1: kmers with hole, 2: kmer minimizer ) : " << algorithm
               << std::endl
               << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
 };

@@ -4,7 +4,7 @@
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_HashDNASeq);
 //------------------------------------------------------------------------------------------------------------
-void Test_HashDNASeq::test_hashSeqCount( void )
+void Test_HashDNASeq::test_hashSeqCountWHoleNoHole(void )
 {
 	unsigned word_len=2;
 	HashDNASeq hsrch(word_len);
@@ -26,15 +26,15 @@ void Test_HashDNASeq::test_hashSeqCount( void )
 
     std::ostringstream ostr_exp;
     ostr_exp
-		<<"[1=AC]=1\n"
-		<<"[2=AG]=1\n"
-		<<"[3=AT]=3\n"
-		<<"[6=CG]=2\n"
-		<<"[7=CT]=1\n"
-		<<"[9=GC]=2\n"
-		<<"[11=GT]=1\n"
-		<<"[12=TA]=4\n"
-		<<"[15=TT]=7"<<std::endl;
+            <<"[1=AT]=3\n"
+            <<"[2=AG]=1\n"
+            <<"[3=AC]=1\n"
+            <<"[4=TA]=4\n"
+            <<"[5=TT]=7\n"
+            <<"[9=GT]=1\n"
+            <<"[11=GC]=2\n"
+            <<"[13=CT]=1\n"
+            <<"[14=CG]=2"<<std::endl;
 
  
 	CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
@@ -62,11 +62,46 @@ void Test_HashDNASeq::test_hashSeqCountwHole( void )
 
     std::ostringstream ostr_exp;
     ostr_exp
+        <<"[T-T]=2\n"
         <<"[C-A]=1\n"
-        <<"[C-C]=1\n"
-        <<"[T-T]=2"
+        <<"[C-C]=1"
         <<std::endl;
 
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+}
+//------------------------------------------------------------------------------------------------------------
+void Test_HashDNASeq::test_hashSeqCount(void )
+{
+    unsigned word_len=2;
+    HashDNASeq hsrch(word_len);
+
+    BioSeq seq=BioSeq("ATATTTATTTTAGCGTTTACGCT");
+    std::vector<unsigned> word_count((unsigned)pow(4,word_len),0);
+    hsrch.hashSeqCount(seq, word_len, word_count);
+
+    std::ostringstream ostr_obs;
+    unsigned size=word_count.size();
+    for(unsigned i=0; i<size; i++)
+    {
+        if(word_count[i]!=0)
+            ostr_obs<<"["<<i<<"="<<hsrch.hseq.reverse_hash(i)<<"]="<<word_count[i]<<std::endl;
+    }
+
+    //std::cout<<"\n"<<ostr_obs.str()<<std::endl;
+
+
+    std::ostringstream ostr_exp;
+    ostr_exp
+            <<"[1=AT]=3\n"
+            <<"[2=AG]=1\n"
+            <<"[3=AC]=1\n"
+            <<"[4=TA]=4\n"
+            <<"[5=TT]=7\n"
+            <<"[9=GT]=1\n"
+            <<"[11=GC]=2\n"
+            <<"[13=CT]=1\n"
+            <<"[14=CG]=2"<<std::endl;
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
 }
@@ -78,7 +113,7 @@ void Test_HashDNASeq::test_hash( void )
 
     unsigned key=hsrch.hseq.hash("TT");
 
-    CPPUNIT_ASSERT_EQUAL(unsigned(15),key);
+    CPPUNIT_ASSERT_EQUAL(unsigned(5),key);
 }
 //------------------------------------------------------------------------------------------------------------
 void Test_HashDNASeq::test_reverse_hash( void )
@@ -167,13 +202,34 @@ void Test_HashDNASeq::test_diagSearchDist( void )
 //------------------------------------------------------------------------------------------------------------
 void Test_HashDNASeq::test_minimizer( void )
 {
-    unsigned kmer=5;
-    unsigned window=24;
-    MinimizerFuncDNASeq mini(kmer,window);
-    unsigned pos1,pos2;
+    unsigned window=5, word_len=2,word_dist=1;
+    std::list<std::pair<unsigned, unsigned>> kmer_pos_list;
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(9,0));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(12,1));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(11,2));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(1,3));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(1,4));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(2,5));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(8,6));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(9,7));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(3,8));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(4,9));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(16,10));
+    kmer_pos_list.push_back(std::pair<unsigned,unsigned>(12,11));
 
-    unsigned key1=mini.minimizer("ATAGCTTAGTATATACCGGACGTA",0,pos1);
-    unsigned key2=mini.minimizer("TACGTAATCGGACTATATATGTCA",0,pos2);
+    std::set<std::pair<unsigned, unsigned>> minimized_kmer_pos_list;
 
-    CPPUNIT_ASSERT_EQUAL(key1,key2);
+    HashDNASeq hsrch(word_len, word_dist, 1);
+    hsrch.minimize(window,kmer_pos_list,minimized_kmer_pos_list);
+
+    std::ostringstream ostr_exp,ostr_obs;
+    for(auto r : minimized_kmer_pos_list){
+        ostr_obs<<"hash="<<r.first<<", pos="<<r.second<<std::endl;
+    }
+    ostr_exp<<"hash=1, pos=3"<<std::endl
+        <<"hash=1, pos=4"<<std::endl
+        <<"hash=2, pos=5"<<std::endl
+        <<"hash=3, pos=8"<<std::endl;
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
 }

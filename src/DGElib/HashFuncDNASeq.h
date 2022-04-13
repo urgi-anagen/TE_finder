@@ -66,7 +66,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 
 				  case 'C':
 				  {
-					  val_nuc=1;
+					  val_nuc=3;
 					  break;
 				  }
 				  case 'G':
@@ -76,12 +76,12 @@ struct HashFuncDNASeq // Compute hashing value of a word
 				  }
 				  case 'T':
 				  {
-					  val_nuc=3;
+					  val_nuc=1;
 					  break;
 				  }
 				  case 'c':
 				  {
-					  val_nuc=1;
+					  val_nuc=3;
 					  break;
 				  }
 				  case 'g':
@@ -91,7 +91,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 				  }
 				  case 't':
 				  {
-					  val_nuc=3;
+					  val_nuc=1;
 					  break;
 				  }
 				  default:
@@ -129,7 +129,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 			  key>>=2;
 			  switch(val)
 			  {
-				  case 1:
+				  case 3:
 				  {
 					  car='C';
 					  break;
@@ -139,7 +139,7 @@ struct HashFuncDNASeq // Compute hashing value of a word
 					  car='G';
 					  break;
 				  }
-				  case 3:
+				  case 1:
 				  {
 					  car='T';
 					  break;
