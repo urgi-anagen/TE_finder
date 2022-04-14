@@ -55,7 +55,7 @@ void BLRNCBIBlastPlus::blast( int verbose )
     if (sys_return == -1) {
         std::cout << std::ifstream(query_filename + "_blast.log").rdbuf();
         std::ostringstream ostr;
-        ostr << " call to 'system()' function return 'fork()' error -1 !";
+        ostr << " call to 'system()' function return error -1 !";
         throw SDGException(NULL, ostr.str(), -1);
     }
 
@@ -70,8 +70,10 @@ void BLRNCBIBlastPlus::blast( int verbose )
 
     SDGString rm_command="rm -f "+query_filename;
     system( rm_command );
-    rm_command="rm -f "+query_filename+ "_blast.log";
-    system( rm_command );
+    if(para.getCleanTmpFiles()){
+        rm_command="rm -f "+query_filename+ "_blast.log";
+        system( rm_command );
+    }
 }
 
 void BLRNCBIBlastPlus::pressdb( int verbose )

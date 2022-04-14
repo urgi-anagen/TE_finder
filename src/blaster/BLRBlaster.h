@@ -132,28 +132,6 @@ public:
 			  {
 				  isWuBeforeBlastPlus = true;
 			  }
-//			  std::system("blastn -h 2&> helpBlastn.log");
-//			  std::ifstream file("helpBlastn.log");
-//			  if (file)
-//			  {
-//				  std::stringstream buffer;
-//				  buffer << file.rdbuf();
-//				  file.close();
-//				  remove("helpBlastn.log");
-//
-//				  std::string output;
-//				  output = buffer.str();
-//				  std::transform(output.begin(), output.end(), output.begin(), ::tolower);
-//
-//				  std::size_t found = output.find("washu");
-//				  if (found != std::string::npos)
-//				  {
-//					  isWuBeforeBlastPlus = true;
-//				  }
-//			  }
-//			  else {
-//				  throw SDGException(NULL, "Fatal error, when trying to select blast executable", -1);
-//			  }
 		  }
 
 		  if ((isBlastPlusInPath and !isWublastInPath) or (isBlastPlusInPath and isWublastInPath and !isWuBeforeBlastPlus)){
