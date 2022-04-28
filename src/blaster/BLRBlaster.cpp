@@ -109,8 +109,8 @@ void BLRBlaster::run(int verbose) {
         if (verbose > 1)
             std::cout << "read file '" << matchfile << "': ";
         match_list.read_blast_results(matchfile,
-                                      para.get_is_wuBlast(),
-                                      para.getEvalFilter(), para.getLenFilter(),para.getIdFilter() );
+                                      para.getEvalFilter(), para.getLenFilter(),para.getIdFilter() ,
+                                      para.get_is_wuBlast() );
         if (verbose > 1)
             std::cout << match_list.getSize() << " HSPs" << std::endl;
         SDGString rm_cmd = "rm -f " + matchfile;
