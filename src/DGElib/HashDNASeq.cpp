@@ -119,7 +119,7 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS,
       throw "Error: No more kmer to use!";
 
 
-  kmer_count[0]=0; //remove kmers AAAAAA... NNNNNN.... XXXXX....
+  kmer_count[0]=0; //remove_self_hits kmers AAAAAA... NNNNNN.... XXXXX....
   kmer_prob(kmerSize, bkmerSize, mkmerSize, mask_hole_period, mask_hole_length, kmer_window,
             kmer_count, nb_kmer,
             background_count, nb_bkmer,
@@ -204,7 +204,7 @@ void HashDNASeq::kmer_count_percentiles(const std::list< Info_kmer >& list_infok
 			count++;
 	}
     std::cout<<"=>cut-off="<<cutoff<<". Kmers occuring more than "<<kmer_threshold.count
-	       <<" will be removed! Will remove "<<count<<" kmers."<<std::endl;
+	       <<" will be removed! Will remove_self_hits "<<count<<" kmers."<<std::endl;
 }
 //-------------------------------------------------------------------------
 //
@@ -242,7 +242,7 @@ void HashDNASeq::kmer_entropy_percentiles(const std::list< Info_kmer >& list_inf
 			count++;
 	}
     std::cout<<"=>cut-off="<<cutoff_entropy<<". Kmers with entropy greater than "<<kmer_threshold.entropy
-	       <<" will be removed! Will remove "<<count<<" kmers."<<std::endl;
+	       <<" will be removed! Will remove_self_hits "<<count<<" kmers."<<std::endl;
 }
 //-------------------------------------------------------------------------
 //
@@ -280,7 +280,7 @@ void HashDNASeq::kmer_diversity_percentiles(const std::list< Info_kmer >& list_i
 		count++;
 	}
 	std::cout<<"=>diversity_cutoff="<<kmer_threshold.diversity<<". Kmers with diversity less than "<<kmer_threshold.diversity
-		   <<" will be removed! Will remove "<<count<<" kmers."<<std::endl;
+		   <<" will be removed! Will remove_self_hits "<<count<<" kmers."<<std::endl;
 
 }
 //-------------------------------------------------------------------------
@@ -316,7 +316,7 @@ void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_in
 			break;
 		count++;
 	}
-	std::cout<<"Kmers with poor model probability will be removed ! Will remove "<<count<<" kmers."<<std::endl;
+	std::cout<<"Kmers with poor model probability will be removed ! Will remove_self_hits "<<count<<" kmers."<<std::endl;
 
 }
 //-------------------------------------------------------------------------

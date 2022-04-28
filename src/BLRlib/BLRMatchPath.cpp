@@ -63,7 +63,7 @@ void BLRMatchPath::read(const BLRJoinParameter& para, std::istream& input_path, 
                 rp.getRangeS().setNumChr(it->second);
 
 
-            //remove sequence name to gain space
+            //remove_self_hits sequence name to gain space
             rp.getRangeQ().setNameSeq("");
             rp.getRangeS().setNameSeq("");
 
@@ -128,7 +128,7 @@ void BLRMatchPath::setFromRpsList(const BLRJoinParameter& para, const std::list<
                 rps.getRangeS().setNumChr(it->second);
         } else {rps.getRangeS().setNumChr(-1);}
 
-        //remove sequence name to gain space
+        //remove_self_hits sequence name to gain space
         rps.getRangeQ().setNameSeq("");
         rps.getRangeS().setNameSeq("");
 
@@ -159,7 +159,7 @@ void BLRMatchPath::setFromRpsList(const BLRJoinParameter& para, const std::list<
                 rp.getRangeS().setNumChr(it->second);
 
 
-            //remove sequence name to gain space
+            //remove_self_hits sequence name to gain space
             rp.getRangeQ().setNameSeq("");
             rp.getRangeS().setNameSeq("");
             rp_list.push_back(rp);

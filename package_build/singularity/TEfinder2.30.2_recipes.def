@@ -46,7 +46,7 @@ Usage:
 %post
 
     #essential stuff but minimal
-    apt update
+    apt update_seqtreatedfile
     #for security fixe:
     #apt upgrade -y
     apt install -y wget bzip2

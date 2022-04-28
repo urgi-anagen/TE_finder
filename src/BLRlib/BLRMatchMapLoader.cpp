@@ -203,7 +203,7 @@ void BLRMatchMapLoader::readPath(BLRMatchMap& blrmm, std::istream& input_path, i
 					rp.getRangeS().setNumChr(it->second);
 			}
 
-			//remove sequence name to gain space
+			//remove_self_hits sequence name to gain space
 			rp.getRangeQ().setNameSeq("");
 			rp.getRangeS().setNameSeq("");
 

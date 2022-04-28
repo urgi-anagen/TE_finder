@@ -29,8 +29,7 @@ class Duster : public HashDNASeq
 
   unsigned getEffectiveKmerSize() override {return hseq.getEffectiveKmerSize();};
 
-  void search(const BioSeq &seq, unsigned start, unsigned end, bool repeat,
-              std::vector<std::pair<unsigned, unsigned> > &fmerged);
+  void search(const BioSeq& sequence, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged, unsigned verbose);
   static void writeBED(const SDGString& qname, const std::vector< std::pair<unsigned,unsigned> >& frag, std::ostream& out);
   static unsigned compute_coverage(const std::vector< std::pair<unsigned,unsigned> >& frag);
   void fragMerge(std::vector< std::pair<unsigned,unsigned> >& frag,

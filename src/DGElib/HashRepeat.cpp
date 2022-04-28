@@ -97,7 +97,7 @@ void HashRepeat::prepare(double cutoff)
   for(unsigned k=0;k<max_key;k++)
     if(word_count[k]>max_count)
       word_count[k]=0;
-  word_count[0]=0; //remove words AAAAAA... NNNNNN.... XXXXX....
+  word_count[0]=0; //remove_self_hits words AAAAAA... NNNNNN.... XXXXX....
   word_pos.resize(nb_word);
   unsigned k=0;
   std::vector<unsigned>::iterator last_it=word_pos.begin();

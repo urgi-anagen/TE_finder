@@ -40,7 +40,7 @@ void HashSearch::load(SDGString& filenameS)
   for(unsigned k=0;k<max_key;k++)
     if(word_count[k]>max_count)
       word_count[k]=0;
-  word_count[0]=0; //remove words AAAAAA... NNNNNN.... XXXXX.... 
+  word_count[0]=0; //remove_self_hits words AAAAAA... NNNNNN.... XXXXX....
   std::cout<<"Prepare hash table pointers"<<std::endl;
   word_pos.resize(nb_word);
   unsigned k=0;

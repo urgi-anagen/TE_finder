@@ -313,7 +313,7 @@ void small_pass(int count);
 /* Add a new node into list.  */
 int addnode(int c, int ci, int cj, int i, int j, int K, int cost);
 
-/* Find and remove the largest score in list */
+/* Find and remove_self_hits the largest score in list */
  vertexptr findmax();
 
 /* return 1 if no node in LIST share vertices with the area */

@@ -60,7 +60,7 @@ class BLRBlaster
   std::list<unsigned> waiting_seq;
   SDGString update_filename;
 
-  void update(const std::list<unsigned>& nseq);
+  void update_seqtreatedfile(const std::list<unsigned>& nseq);
 
   SDGString listfilenamecut,bank_name,query_name;
   SDGBioSeqDB query_db,subject_db;

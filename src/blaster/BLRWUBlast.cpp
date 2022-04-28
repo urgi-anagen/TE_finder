@@ -7,29 +7,28 @@
 
 void BLRWUBlast::blast( int verbose )
 {
-	int sys_return = 0;
-	if( para.getType() == "blastn" )
-	{
-		SDGString blast_command=para.getType()
-		+" "+para.getBankCut()+" "+query_filename
-		+auto_blastparam+auto_blastnparam+" "+para.getOption()
-		+" O="+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
-		if( verbose > 0 )
-			std::cout<<blast_command<<std::endl;
-		sys_return = system( blast_command );
-	}
-	if( para.getType() == "blastx"
-			|| para.getType() == "tblastx"
-			|| para.getType() == "tblastn"
-			||para.getType() == "blastp" )
-	{
-		SDGString blast_command=para.getType()
-		+" "+para.getBankCut()+" "+query_filename
-		+auto_blastparam+" "+para.getOption()+" O="+result_filename+" 1> "+query_filename+"_blast.log 2>&1";
-		if( verbose > 0 )
-			std::cout<<blast_command<<std::endl;
-		sys_return = system( blast_command );
-	}
+    int sys_return = 0;
+    std::string blast_command;
+    if (para.getType() == "blastn") {
+        blast_command = para.getType()
+                        + " " + para.getBankCut() + " " + query_filename
+                        + auto_blastparam + auto_blastnparam + " " + para.getOption()
+                        + " O=" + result_filename + " > " + query_filename + "_blast.log 2>&1";
+    }
+    if (para.getType() == "blastx"
+        || para.getType() == "tblastx"
+        || para.getType() == "tblastn"
+        || para.getType() == "blastp") {
+        blast_command = para.getType()
+                        + " " + para.getBankCut() + " " + query_filename
+                        + auto_blastparam + " " + para.getOption() + " O=" + result_filename + " > " + query_filename +
+                        "_blast.log 2>&1";
+    }
+    if (verbose > 0)
+        std::cout << blast_command << std::endl;
+
+    sys_return = system( blast_command.c_str() );
+
     if( verbose > 0 )
         std::cout<<"system call to blast return:"<<sys_return<<std::endl;
 

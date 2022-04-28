@@ -87,11 +87,6 @@ class BLRNCBIBlastPlus: public BLRBlast
 
 	 void pressdb( int verbose=0 );
 
-	 Reference<BLRMatchList> getList()
-	 {
-		 return new BLRMatchList(alist);
-	 };
-
 };
 
 #endif

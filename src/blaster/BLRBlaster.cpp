@@ -51,12 +51,13 @@ void BLRBlaster::run(int verbose) {
         return;
     }
 
-    std::list<SDGBioSeq> lseq;
     std::list<unsigned> batch_num_seq;
+
+    // for all remaining sequences
     while (!waiting_seq.empty()) {
-        lseq.clear();
         batch_num_seq.clear();
 
+        //build batch of sequence to reach the total length of para.getLength()
         unsigned sum_len = 0;
         unsigned num_seq = 0, first_num_seq = 0;
         while ((para.getLength() == 0 || sum_len < para.getLength()) && !waiting_seq.empty()) {
@@ -76,7 +77,6 @@ void BLRBlaster::run(int verbose) {
                 }
             }
             if (!waiting_seq.empty()) {
-                lseq.push_back(newSDGMemBioSeq(s));
                 batch_num_seq.push_back(num_seq);
                 waiting_seq.pop_front();
                 sum_len += s.length();
@@ -91,35 +91,40 @@ void BLRBlaster::run(int verbose) {
        if(waiting_seq.empty() && verbose > 1) {
            std::cout << "no more sequences !" << std::endl;
        }
-        if (lseq.empty()){
+        if (batch_num_seq.empty()){
             if (verbose > 1) {
                 std::cout << "empty batch !" << std::endl;
             }
             break;
         }
 
-        blasting->prepblast(lseq, first_num_seq);
+        //run blast
+        blasting->prepblast(batch_num_seq, query_db, first_num_seq);
         blasting->blast(verbose);
-        SDGString matchfile = query_name + "_" + bank_name.afterlast("/")
+
+        //read results
+        std::string matchfile = query_name + "_" + bank_name.afterlast("/")
                               + "_" + SDGString(first_num_seq) + ".res";
         BLRMatchList match_list;
         if (verbose > 1)
             std::cout << "read file '" << matchfile << "': ";
-        if (para.get_is_wuBlast())
-            match_list.fill_wulist(matchfile);
-        else
-            match_list.fill_ncbilist(matchfile);
+        match_list.read_blast_results(matchfile,
+                                      para.get_is_wuBlast(),
+                                      para.getEvalFilter(), para.getLenFilter(),para.getIdFilter() );
         if (verbose > 1)
             std::cout << match_list.getSize() << " HSPs" << std::endl;
         SDGString rm_cmd = "rm -f " + matchfile;
         system(rm_cmd);
 
-        match_list.remove(para);
+        if (para.getBankCut() == para.getQueryCut()) //  remove_self_hits self hits when all-by-all
+            match_list.remove_self_hits(para.getLength(),para.getOver());
+
+        // save results in a file
         match_list.save_list(listfilenamecut, count_treated);
         count_treated++;
         if (verbose > 1)
             std::cout << "treated=" << count_treated << std::endl;
-        update(batch_num_seq);
+        update_seqtreatedfile(batch_num_seq); // update_seqtreatedfile seq_treated file list
     }
 
     if (verbose > 0)
@@ -139,13 +144,14 @@ void BLRBlaster::run(int verbose) {
     para.write(para.getParameterFileName());
 }
 
-void BLRBlaster::update(const std::list<unsigned> &nseq) {
+
+void BLRBlaster::update_seqtreatedfile(const std::list<unsigned> &nseq) {
     std::ofstream file(update_filename, std::ios::app);
     if (file)
         for (std::list<unsigned>::const_iterator i = nseq.begin(); i != nseq.end(); i++)
             file << *i << std::endl;
     else
-        std::cerr << "Can't update batch " << nseq.front() << " !!" << std::endl;
+        std::cerr << "Can't update_seqtreatedfile batch " << nseq.front() << " !!" << std::endl;
 }
 
 void BLRBlaster::insert(RangePair &rangePair) {
@@ -317,7 +323,7 @@ void BLRBlaster::view_align(void) {
 }
 
 void BLRBlaster::clean_self(int verbose)
-// remove matches when query fragments are the same
+// remove_self_hits matches when query fragments are the same
 {
     if (para.getBank() != para.getQuery()) return;
     for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++) {

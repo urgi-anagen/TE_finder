@@ -487,15 +487,15 @@ void Test_Hasher::test_diagSearchScore( void )
 //    bool condition=(obsStr.str()=="");
 //    CPPUNIT_ASSERT_MESSAGE("Files "+obsFileName+" and "+expFileName+" are differents",condition);
 //    if(condition) {
-//        remove(diff_result.c_str());
-//        remove(obsFileName.c_str());
+//        remove_self_hits(diff_result.c_str());
+//        remove_self_hits(obsFileName.c_str());
 
 //        SDGString file=inputFileNameGenome+".1.duster.bed";
-//        remove(file.c_str());
+//        remove_self_hits(file.c_str());
 //        file=inputFileNameGenome+".1.duster.bed.fa";
-//        remove(file.c_str());
+//        remove_self_hits(file.c_str());
 //        file=inputFileNameTE+".kidx";
-//        remove(file.c_str());
+//        remove_self_hits(file.c_str());
 //    }
 //}
 //-------------------------------------------------------------------------
