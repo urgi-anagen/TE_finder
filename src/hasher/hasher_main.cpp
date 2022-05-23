@@ -94,7 +94,7 @@ void search_frag(Hasher& hsrch,
                  std::list< RangePair >& rev_frag_list,
                  std::list< RangePair >& compfrag_list,
                  std::list< RangePair >& rev_compfrag_list,
-                 unsigned verbose)
+                 unsigned verbosity)
 {
     hsrch.search(seq, start, end, numseq, Kmer_connect_dist,
                  min_fragment_size, denovo_mode, frag_list, verbosity);
@@ -421,6 +421,12 @@ int main(int argc, char *argv[]) {
                 hsrch.fragJoin(frag_list);
                 std::cout<<" done!"<<std::endl;
             }
+
+            std::cout << "Align fragments" << " ..." << std::flush;
+            unsigned ext_len=20;
+            hsrch.fragSeqAlignExt(frag_list,ext_len,filename1,filename2,false,verbosity);
+            std::cout<<" done!"<<std::endl;
+
             genome_coverage=Hasher::fragCoverage(frag_list);
             std::cout<<"**Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
                      <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;

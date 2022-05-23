@@ -3,9 +3,16 @@
  */
 
 #include <sys/stat.h>
+#include <ctime>
 #include "BLRBlaster.h"
+#include "BioSeqDB.h"
 
 void BLRBlaster::run(int verbose) {
+
+    clock_t begin, end;
+    double time_spent;
+    begin = clock();
+
     if (verbose > 0) {
         std::cout << "subjects: " << para.getBankCut() << std::endl;
         std::cout << "queries: " << para.getQueryCut() << std::endl;
@@ -13,7 +20,7 @@ void BLRBlaster::run(int verbose) {
 
     if (verbose > 0)
         std::cout << "loading query bank..." << std::flush;
-    SDGBioSeqDB query_db(para.getQueryCut());
+    BioSeqDB query_db(para.getQueryCut());
     if (verbose > 0)
         std::cout << " done" << std::endl;
 
@@ -23,7 +30,7 @@ void BLRBlaster::run(int verbose) {
     if (verbose > 0)
         std::cout << "nb of queries to process: " << waiting_seq.size() << std::endl;
 
-    count_treated = 0;
+    count_seq_treated = 0;
     update_filename = para.getBlasterFileName() + ".seq_treated";
     std::ifstream file(update_filename);
     if (verbose > 0)
@@ -36,11 +43,11 @@ void BLRBlaster::run(int verbose) {
             break;
         num = atoi(buff);
         waiting_seq.remove(num);
-        count_treated++;
+        count_seq_treated++;
     }
     if (verbose > 0)
-        std::cout << count_treated << std::endl;
-    if (!count_treated)
+        std::cout << count_seq_treated << std::endl;
+    if (!count_seq_treated)
         blasting->pressdb(verbose);
 
     if (para.getPrepare())
@@ -54,55 +61,58 @@ void BLRBlaster::run(int verbose) {
     std::list<unsigned> batch_num_seq;
 
     // for all remaining sequences
+    unsigned count_batch_treated = 0;
     while (!waiting_seq.empty()) {
         batch_num_seq.clear();
-
         //build batch of sequence to reach the total length of para.getLength()
         unsigned sum_len = 0;
         unsigned num_seq = 0, first_num_seq = 0;
         while ((para.getLength() == 0 || sum_len < para.getLength()) && !waiting_seq.empty()) {
-            bool len_ok = false;
-            SDGBioSeq s;
-            while (!len_ok && !waiting_seq.empty()) {
-                len_ok = true;
-                num_seq = waiting_seq.front();
-                if (sum_len == 0) first_num_seq = num_seq;
-                s = query_db[num_seq - 1];
-                if (s.length() < min_len) {
-                    waiting_seq.pop_front();
-                    len_ok = false;
-                    if (verbose > 1)
-                        std::cout << "skip sequence #" << num_seq
-                                  << " < " << min_len << "bp" << std::endl;
-                }
-            }
-            if (!waiting_seq.empty()) {
+            num_seq=waiting_seq.front();
+            if (sum_len == 0) first_num_seq = num_seq;
+
+            unsigned seqlen = query_db[num_seq-1].size();
+            if (seqlen >= min_len)
                 batch_num_seq.push_back(num_seq);
-                waiting_seq.pop_front();
-                sum_len += s.length();
-                if (verbose > 1) {
-                    std::cout << "add sequence #" << num_seq
-                              << " to batch #" << first_num_seq
-                              << ", len=" << s.length();
-                    std::cout << " sum=" << sum_len << std::endl;
-                }
+            else if (verbose > 1)
+                std::cout << "skip sequence #" << num_seq
+                          << " < " << min_len << "bp" << std::endl;
+
+            waiting_seq.pop_front();
+
+            sum_len += seqlen;
+            if (verbose > 1) {
+                std::cout << "add sequence #" << num_seq
+                          << " to batch #" << first_num_seq
+                          << ", len=" << seqlen;
+                std::cout << " sum=" << sum_len << std::endl;
             }
         }
-       if(waiting_seq.empty() && verbose > 1) {
-           std::cout << "no more sequences !" << std::endl;
-       }
-        if (batch_num_seq.empty()){
+        if (waiting_seq.empty() && verbose > 1) {
+            std::cout << "no more sequences !" << std::endl;
+        }
+        if (batch_num_seq.empty()) {
             if (verbose > 1) {
                 std::cout << "empty batch !" << std::endl;
             }
             break;
         }
 
+
         //run blast
         blasting->prepblast(batch_num_seq, query_db, first_num_seq);
+        end = clock();
+        time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+        if (verbose > 0) std::cout << "====> Prepare blast time: " << time_spent << " second(s)"<<std::endl;
+
+        begin = clock();
         blasting->blast(verbose);
+        end = clock();
+        time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+        if (verbose > 0) std::cout << "====>Blast run time: " << time_spent << " second(s)" << std::endl;
 
         //read results
+        begin = clock();
         std::string matchfile = query_name + "_" + bank_name.afterlast("/")
                               + "_" + SDGString(first_num_seq) + ".res";
         BLRMatchList match_list;
@@ -120,25 +130,50 @@ void BLRBlaster::run(int verbose) {
             match_list.remove_self_hits(para.getLength(),para.getOver());
 
         // save results in a file
-        match_list.save_list(listfilenamecut, count_treated);
-        count_treated++;
+        match_list.save_list(listfilenamecut, count_batch_treated);
+        match_list.clear();
+        count_batch_treated++;
         if (verbose > 1)
-            std::cout << "treated=" << count_treated << std::endl;
+            std::cout << "batch treated=" << count_batch_treated << std::endl;
         update_seqtreatedfile(batch_num_seq); // update_seqtreatedfile seq_treated file list
+        end = clock();
+        time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+        if (verbose > 0) std::cout << "====>Save blast results time: " << time_spent << " second(s)" << std::endl;
     }
 
+    begin = clock();
     if (verbose > 0)
         std::cout << "loading raw HSPs..." << std::endl;
     load_raw(verbose);
+    end = clock();
+    time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose > 0) std::cout << "====> Load time: " << time_spent << " second(s)" << std::endl;
+
+    begin = clock();
     if (verbose > 0)
         std::cout << "gluing HSPs..." << std::endl;
     glue(verbose);
+    end = clock();
+    time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose > 0) std::cout << "====> Glue time: " << time_spent << " second(s)" << std::endl;
+
+    begin = clock();
     if (verbose > 0)
         std::cout << "clean self HSPs..." << std::endl;
     clean_self(verbose);
+    end = clock();
+    time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose > 0) std::cout << "====> Clean self time: " << time_spent << " second(s)" << std::endl;
+
+    begin = clock();
     if (verbose > 0)
         std::cout << "saving HSPs..." << std::endl;
     save_align(verbose);
+    end = clock();
+    time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
+    if (verbose > 0) std::cout << "====> Save results time: " << time_spent << " second(s)" << std::endl;
+
+
     if (verbose > 0)
         std::cout << "Blaster was run." << std::endl;
     para.write(para.getParameterFileName());

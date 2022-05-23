@@ -19,7 +19,11 @@ public:
     }
 
     BioSeq subseq(unsigned start, unsigned len){
-        BioSeq sseq=substr(start,len);
+        BioSeq sseq;
+        if(start+len<=size())
+            sseq=substr(start,len);
+        else
+            sseq=substr(start);
         std::ostringstream head;
         head<<header<<"("<<start<<","<<len<<")";
         sseq.header=head.str();

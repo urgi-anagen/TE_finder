@@ -24,6 +24,7 @@ void SDGBioSeqDB::load(SDGString fichier, int verbose) {
             name2pos[back().getDE()] = count++;
             if (verbose > 0)
                 std::cout << back().getDE() << " length:" << back().length() << " ...loaded!" << std::endl;
+            seqlen.push_back(back().length());
         }
         file.get();
     }

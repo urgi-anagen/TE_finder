@@ -109,6 +109,11 @@ class Hasher : public HashDNASeq
   static void fragSeqAlign(std::list< RangePair >& frag,
                               const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename,
                               bool reverse, unsigned verbose);
+
+  static void fragSeqAlignExt(std::list<RangePair> &frag, unsigned ext_len,
+                                const SDGString &fasta_queryfilename, const SDGString &fasta_subjectfilename,
+                                bool reverse, unsigned verbose);
+
   static void fragMerge(const std::list< RangePair >& frag, std::list< RangePair >& frag_merge);
   static unsigned fragCoverage(const std::list< RangePair >& frag);
   static unsigned fragScoreIdentityStat(const std::list< RangePair >& frag, double quantile, unsigned& coverage);

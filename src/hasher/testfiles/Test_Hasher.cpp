@@ -58,7 +58,7 @@ void Test_Hasher::test_search(void ){
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=0,min_count=0;
+    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=25,min_count=0;
     std::list< RangePair > frag_list;
     unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=0, kmer_window=20, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
@@ -110,13 +110,16 @@ void Test_Hasher::test_search(void ){
         hsrch.fragJoin(frag_list);
         std::cout<<" done!"<<std::endl;
     }
+    unsigned ext_len=20;
+    hsrch.fragSeqAlignExt(frag_list,ext_len,"query_test.fa","subject_test.fa",false,verbosity);
+
     std::ostringstream ostr_obs;
     for(auto f: frag_list){
         ostr_obs<<f.getIdentity()<<std::endl;
     }
 
     std::ostringstream ostr_exp;
-    std::string exp="100\n100\n100\n100\n100\n100\n";
+    std::string exp="100\n100\n100\n100\n100\n100\n100\n100\n100\n";
     ostr_exp<<exp;
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
@@ -179,7 +182,7 @@ void Test_Hasher::test_searchWHole(void ){
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=0,min_count=0;
+    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=25,min_count=0;
     std::list< RangePair > frag_list;
     unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=1, kmer_window=0, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
@@ -223,6 +226,9 @@ void Test_Hasher::test_searchWHole(void ){
         std::cout<<"subseq6="<<subseq6<<std::endl;
     }
     hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false,verbosity);
+    hsrch.fragJoin(frag_list);
+    unsigned ext_len=20;
+    hsrch.fragSeqAlignExt(frag_list,ext_len,"query_test.fa","subject_test.fa",false,verbosity);
 
     std::ostringstream ostr_obs;
     for(auto f: frag_list){
@@ -230,7 +236,7 @@ void Test_Hasher::test_searchWHole(void ){
     }
 
     std::ostringstream ostr_exp;
-    std::string exp="100\n100\n100\n100\n100\n100\n";
+    std::string exp="100\n100\n100\n100\n100\n100\n100\n100\n100\n";
     ostr_exp<<exp;
 
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
@@ -293,9 +299,9 @@ void Test_Hasher::test_searchMinimizer(void ){
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=0,min_count=0;
+    unsigned start=0,end,numseq=1,connect_dist=20,min_frag_size=25,min_count=0;
     std::list< RangePair > frag_list;
-    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=0, kmer_window=20, kmer_dist=10, bkmer_size=2, step_q=1;
+    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=0, kmer_window=15, kmer_dist=10, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
     bool valid_idx_file = false;
     unsigned alg=2;
@@ -337,6 +343,9 @@ void Test_Hasher::test_searchMinimizer(void ){
         std::cout<<"subseq6="<<subseq6<<std::endl;
     }
     hsrch.fragSeqAlign(frag_list,"query_test.fa","subject_test.fa",false,verbosity);
+    hsrch.fragJoin(frag_list);
+    unsigned ext_len=20;
+    hsrch.fragSeqAlignExt(frag_list,ext_len,"query_test.fa","subject_test.fa",false,verbosity);
 
     std::ostringstream ostr_obs;
     for(auto f: frag_list){

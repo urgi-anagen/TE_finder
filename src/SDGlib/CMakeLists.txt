@@ -29,4 +29,4 @@ add_library(
 
         BioSeq.cpp BioSeq.h
         FastaIstream.cpp FastaIstream.h
-        FastaOstream.cpp FastaOstream.h)
+        FastaOstream.cpp FastaOstream.h BioSeqDB.cpp BioSeqDB.h)

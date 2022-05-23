@@ -22,6 +22,7 @@ class Test_SDGlib : public CppUnit::TestFixture {
     CPPUNIT_TEST(test_BioSeq_reverse);
     CPPUNIT_TEST(test_FastaIstream);
     CPPUNIT_TEST(test_FastaOstream);
+    CPPUNIT_TEST( test_BioSeqDB );
 
 	CPPUNIT_TEST( test_SDGMemBioSeq );
 	CPPUNIT_TEST( test_SDGMemBioSeq_subseq );
@@ -49,6 +50,7 @@ protected:
     void test_BioSeq_reverse(void);
     void test_FastaIstream( void );
     void test_FastaOstream( void );
+    void test_BioSeqDB( void );
 
 	void test_SDGMemBioSeq(void);
     void test_SDGMemBioSeq_subseq(void);

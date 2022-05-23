@@ -71,32 +71,8 @@ void BLRMatchList::remove_self_hits(unsigned cut_length, unsigned cut_over) {
         if ((iter_list->getQuery_num() == iter_list->getSubject_num())
             && (iter_list->getQuery_strt() == iter_list->getSubject_strt())
             && (iter_list->getQuery_end() == iter_list->getSubject_end())) {
-            remove = true;
-        } else if (
-                ((iter_list->getQuery_num() == iter_list->getSubject_num() - 1)
-                 &&
-                 (iter_list->getQuery_strt() == (cut_length - cut_over + 1)
-                  && iter_list->getQuery_end() == cut_length)
-                 &&
-                 (iter_list->getSubject_strt() == 1
-                  && iter_list->getSubject_end() == cut_length)
-                 &&
-                 (cut_length > 0 && cut_over > 0))
-                ||
-                ((iter_list->getQuery_num() - 1 == iter_list->getSubject_num())
-                 &&
-                 (iter_list->getSubject_strt() == (cut_length - cut_over + 1)
-                  && iter_list->getSubject_end() == cut_length)
-                 &&
-                 (iter_list->getQuery_strt() == 1
-                  && iter_list->getQuery_end() == cut_over)
-                 &&
-                 (cut_length > 0 && cut_over > 0))
-                ) {
-            remove = true;
-        }
-        if (remove)
             iter_list = match_list.erase(iter_list);
+        }
         else
             iter_list++;
     }
@@ -114,7 +90,7 @@ void BLRMatchList::show_list() {
     }
 }
 
-void BLRMatchList::save_list(SDGString name, int flag) {
+void BLRMatchList::save_list(SDGString name, unsigned flag) {
     // -----------------------------------------------------
     /*!- Function to save the matchlist
       /param  name is file to save

@@ -56,7 +56,7 @@ class BLRBlaster
 
   unsigned min_len;
 
-  unsigned count_treated;
+  unsigned count_seq_treated;
   std::list<unsigned> waiting_seq;
   SDGString update_filename;
 

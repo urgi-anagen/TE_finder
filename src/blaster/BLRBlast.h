@@ -9,7 +9,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include "Reference.h"
-#include "SDGBioSeqDB.h"
+#include "BioSeqDB.h"
 #include "BioSeq.h"
 #include "SDGFastaOstream.h"
 #include "FastaOstream.h"
@@ -47,14 +47,15 @@ class BLRBlast
    * \param lquery list of SDGBioSeq instances
    * \param first_num_seq number of the first sequence
    */
-  void prepblast(const std::list<unsigned>& batch_num_seq, const SDGBioSeqDB& query_db,
+  void prepblast(const std::list<unsigned>& batch_num_seq, const BioSeqDB& query_db,
 		  unsigned first_num_seq)
   {
     query_filename=query_name+"_query"+SDGString(first_num_seq)+".fa";
-    SDGFastaOstream fastout(query_filename);
+    FastaOstream fastout(query_filename);
+    BioSeq s;
     for(std::list<unsigned>::const_iterator i=batch_num_seq.begin();
 	i!=batch_num_seq.end(); i++){
-        SDGBioSeq s = query_db[(*i) - 1];
+        s = query_db[(*i) - 1];
         fastout<<s;
     }
 

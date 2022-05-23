@@ -35,7 +35,7 @@ class BLRMatchList
   void remove_self_hits(unsigned cut_length, unsigned cut_over);
   void show_list();
   //!- Function to save the matchlist
-  void save_list(SDGString, int flag);
+  void save_list(SDGString, unsigned flag);
   //!- function to get size of the membre of matchlist
   void savebin(std::ostream& out);
   void writetxt(std::ostream& out);

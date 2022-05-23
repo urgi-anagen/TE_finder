@@ -11,9 +11,9 @@
 #include   <vector>
 #include   <deque>
 #include   "CountStat.h"
-//#include   "Alea.h"
 #include   <SDGString.h>
 #include   <SDGMemBioSeq.h>
+#include   <BioSeq.h>
 
 class FastLalign
 {
@@ -93,18 +93,18 @@ public:
    {
      setMismatch(1,3);
      setGap(5,2,50);
-     A=B=NULL;
+     A=B=nullptr;
      M=N=0;
-     path=NULL;
+     path=nullptr;
    };
 
  FastLalign(const FastLalign& a)
    {
      setMismatch(a.match,a.mismh);
      setGap(a.q,a.r,a.gaplen);
-     A=B=NULL;
+     A=B=nullptr;
      M=N=0;
-     path=NULL;
+     path=nullptr;
 
      name1=a.name1;
      name2=a.name2;
@@ -123,7 +123,7 @@ public:
 	 strcpy(B,a.B);
        }
 
-     if(a.path!=NULL)
+     if(a.path!=nullptr)
        {
 	 path=new int[(N+2)*(M+2)];
 	 memcpy(path,a.path,(N+2)*(M+2)*sizeof(int));
@@ -151,11 +151,11 @@ public:
  void reset_align(void)
    {
      alignment.clear();
-     if(A!=NULL)
+     if(A!=nullptr)
        delete[] A;
-     if(B!=NULL)
+     if(B!=nullptr)
        delete[] B;
-     if(path!=NULL)
+     if(path!=nullptr)
        delete[] path;
      len_ali=0;
      score=0;
@@ -221,6 +221,22 @@ public:
      path=new int[(N+2)*(M+2)];
    };
 
+    void setSeq(BioSeq s1, BioSeq s2)
+    {
+        reset_align();
+        name1=s1.header;
+        M=s1.size();
+        A=new char[M+2];
+        strcpy(&A[1],s1.c_str());
+
+        name2=s2.header;
+        N=s2.size();
+        B=new char[N+2];
+        strcpy(&B[1],s2.c_str());
+
+        path=new int[(N+2)*(M+2)];
+    };
+
  void align(void)
    {
      if(gaplen==0)
@@ -244,7 +260,7 @@ public:
  void align_pass_long_gap(void);
  int score_pass_long_gap(void);
  void traceback(void);
- // double z_score(int nbrep);
+
  void view(void);
 
  int getStartSeq1(){return starti;};

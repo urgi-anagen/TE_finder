@@ -2,6 +2,8 @@
 #include <BioSeq.h>
 #include <FastaIstream.h>
 #include <FastaOstream.h>
+#include <BioSeqDB.h>
+
 #include <SDGFastaBioSeq.h>
 #include <SDGFastaIstream.h>
 #include <SDGBioSeqDB.h>
@@ -135,7 +137,54 @@ void Test_SDGlib::test_FastaOstream( void )
     CPPUNIT_ASSERT_EQUAL(seq1exp, seq1obs);
     CPPUNIT_ASSERT_EQUAL(seq2exp, seq2obs);
 }
+//------------------------------------------------------------------------------------------------------------
+void Test_SDGlib::test_BioSeqDB( void )
+{
 
+    char titre1[]=">test seq1";
+    char str11[]="ATATTTATTTTAGCGTTTACGCT";
+    char str12[]="CAATCTTGTGCAAATGGCTGTGA";
+    char str13[]="AG";
+
+    char titre2[]=">test seq2";
+    char str21[]="GCAGTTTTGGATTTAAGTGAATG";
+    char str22[]="CTTCCTCTGGTGACTTTAGTAAG";
+    char str23[]="CCCCATTTT";
+
+    std::ofstream fout("test.fa");
+    fout<<titre1<<std::endl
+        <<str11<<std::endl
+        <<str12<<std::endl
+        <<str13<<std::endl;
+    fout<<titre2<<std::endl
+        <<str21<<std::endl
+        <<str22<<std::endl
+        <<str23<<std::endl;
+    fout.close();
+
+    std::ostringstream ostr_exp1;
+    ostr_exp1<<str11<<str12<<str13;
+
+    std::ostringstream ostr_exp2;
+    ostr_exp2<<str21<<str22<<str23;
+
+    int verbose=1;
+    BioSeqDB db("test.fa",verbose);
+    std::vector<BioSeq> vSeq;
+    for (BioSeqDB::iterator db_it = db.begin(); db_it != db.end(); db_it++) {
+
+        BioSeq seq = (*db_it);
+        vSeq.push_back(seq);
+    }
+
+
+    std::ostringstream ostr_obs1,ostr_obs2;
+    ostr_obs1<<vSeq[0];
+    ostr_obs2<<vSeq[1];
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp1.str(),ostr_obs1.str());
+    CPPUNIT_ASSERT_EQUAL(ostr_exp2.str(),ostr_obs2.str());
+}
 
 //------------------------------------------------------------------------------------------------------------
 void Test_SDGlib::test_SDGMemBioSeq( void )
