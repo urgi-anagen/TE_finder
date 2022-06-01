@@ -204,7 +204,7 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 	char *p_dirs=getenv("BLASTER_BANK_DIRS");
 	if(p_dirs!=NULL)
 	  {
-	    std::cout<<"search bank:"<<bankQuery_name<<"..."<<std::flush;
+	    std::cout<<"run_test_search_wSW bank:"<<bankQuery_name<<"..."<<std::flush;
 	    std::string dirs=p_dirs;
 	    std::istringstream stream(dirs);
 	    SDGString path, pathfile;
@@ -229,7 +229,7 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
 	char *p_dirs=getenv("BLASTER_BANK_DIRS");
 	if(p_dirs!=NULL)
 	  {
-	    std::cout<<"search bank:"<<bank_name<<"..."<<std::flush;
+	    std::cout<<"run_test_search_wSW bank:"<<bank_name<<"..."<<std::flush;
 	    std::string dirs=p_dirs;
 	    std::istringstream stream(dirs);
 	    SDGString path, pathfile;

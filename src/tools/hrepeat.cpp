@@ -14,7 +14,7 @@ void help(void)
       <<" [<options>] <fasta sequence database>"<<std::endl
       <<" options:"<<std::endl
       <<"   -h, --help:\n\t this help"<<std::endl
-      <<"   -r, --reputer:\n\t reputer search"<<std::endl
+      <<"   -r, --reputer:\n\t reputer run_test_search_wSW"<<std::endl
       <<"   -x, --extend:\n\t max size for boundaries extension, default: "
       <<extend<<std::endl
 	   <<"   -w, --word:\n\t word length, default: "<<word_len<<std::endl;

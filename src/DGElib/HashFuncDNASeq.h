@@ -28,6 +28,20 @@ struct HashFuncDNASeq // Compute hashing value of a word
     virtual ~HashFuncDNASeq() {
     }
 
+    void set(unsigned w, unsigned p=0, unsigned s=0){
+        kmer_size=w;
+        hole_period=p;
+        hole_size=s;
+        if(hole_period<2) {
+            hole_period=w+2;
+            hole_size=0;
+        }
+        mask.resize(kmer_size) ;
+        effectiveKmerSize=0;
+        build_mask_spaced_hole();
+        if(effectiveKmerSize>15)
+            throw SDGException(NULL,"HashDNASeq: Effective word size must be < 16 !!");
+    }
     void build_mask_spaced_hole(void){
         unsigned i=0;
         while(i<kmer_size)

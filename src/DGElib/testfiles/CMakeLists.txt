@@ -25,7 +25,7 @@ add_executable(
 
         ${source_files}
 
-        Test_Graph.cpp Test_Graph.h)
+        Test_Graph.cpp Test_Graph.h Test_FastExtAlign.cpp Test_FastExtAlign.h)
 
 target_link_libraries(
         test_DGE

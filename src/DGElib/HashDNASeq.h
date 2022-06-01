@@ -123,7 +123,6 @@ protected:
     MinimizerFuncDNASeq mseq;
     HashFuncDNASeq bhseq, mhseq, nhseq;
 
-    //std::vector< std::vector<KmerSpos>::iterator > hash2wpos, hash_ptr;
     std::unordered_map<unsigned, std::vector<KmerSpos>::iterator> hash2wpos, hash_ptr;
     std::vector<KmerSpos> kmer_pos;
 
@@ -153,8 +152,8 @@ protected:
                    const std::vector<unsigned> &ncount, unsigned nb_nuc,
                    std::list<Info_kmer> &list_infokmer) const;
 
-    static void kmer_count_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_count,
-                                Info_kmer &kmer_threshold);
+    static void kmer_occurrence_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff,
+                                            Info_kmer &kmer_threshold);
 
     static void kmer_entropy_percentiles(const std::list<Info_kmer> &list_infokmer, double cutoff_entropy,
                                   Info_kmer &kmer_threshold);
@@ -177,12 +176,6 @@ protected:
 
     unsigned hashSeqCountWHole(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
     unsigned hashSeqCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
-
-/*    unsigned hashSeqBackgroundCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
-
-    unsigned hashSeqModelCount(const BioSeq &seq, unsigned wsize, std::vector<unsigned> &wcount);
-
-    unsigned hashSeqNucCount(const BioSeq &seq, std::vector<unsigned> &wcount);*/
 
     void hashSubjectSeqPosWHole(const BioSeq &seq, const std::vector<unsigned> &wcount);
     void hashSubjectSeqPos(const BioSeq &seq, unsigned num_seq, unsigned wsize, const std::vector<unsigned> &wcount);
@@ -220,6 +213,9 @@ public:
             nbseqQ(0),
             nbseqS(0),
             hash_algorithm(alg){
+        if(alg==2){
+            hseq.set(kmer_size,0,0);
+        }
         if (hseq.getEffectiveKmerSize() > 16)
             throw SDGException(NULL, "HashDNASeq: Kmer size must be <= 16 !!");
         max_key = (unsigned) pow(4, hseq.getEffectiveKmerSize());

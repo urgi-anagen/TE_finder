@@ -23,7 +23,7 @@ void Test_HashAlign::test_search_on_loop(void){
 		{
 			HashAlign al;
 			al.setSeq(*i,*j);
-			al.search();
+			al.run_test_search_wSW();
 		}
 	}*/
 }

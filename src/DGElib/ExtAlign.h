@@ -10,7 +10,6 @@
 #include   <vector>
 #include   <deque>
 #include   "CountStat.h"
-//#include   "Alea.h"
 #include   <SDGString.h>
 #include   <SDGMemBioSeq.h>
 

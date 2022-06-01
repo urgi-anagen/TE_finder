@@ -15,7 +15,7 @@ void Duster::search(const BioSeq& sequence, unsigned start, unsigned end, bool r
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 
 	clock_begin = clock();
-	std::cout<<"search fragments..."<<std::flush;
+	std::cout<<"run_test_search_wSW fragments..."<<std::flush;
 	std::vector< std::pair<unsigned,unsigned> > frag;
     //diagSearchScore(diag_map,kmer_size,frag,verbose-1);
 	diagSearchDist(diag_map,(kmer_size+1)*wdist,kmer_size,frag);
@@ -47,7 +47,7 @@ void Duster::fragMerge(std::vector< std::pair<unsigned,unsigned> >& frag,
 
     if(size>=2)
       {
-		//search for consecutive kmer matches on direct strand
+		//run_test_search_wSW for consecutive kmer matches on direct strand
 		unsigned prev_start=frag[0].first;
 		unsigned prev_end=frag[0].second;
 		unsigned curr_start;

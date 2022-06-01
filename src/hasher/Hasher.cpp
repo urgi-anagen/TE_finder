@@ -2,6 +2,7 @@
 #include <FragJoin.h>
 #include <Lalign.h>
 #include <FastLalign.h>
+#include <FastExtAlign.h>
 #include "Hasher.h"
 
 //-------------------------------------------------------------------------
@@ -30,7 +31,9 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
 
                 if (prev_d.diag == curr_d.diag
                     && prev_d.wpos.numSeq == curr_d.wpos.numSeq
-                    && prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos) {
+                    && (prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos
+                        && prev_d.wpos.pos + diag + connect_dist >= curr_d.wpos.pos + diag)
+                        ) {
                     if (extending) //extending
                     {
                         end = curr_d.wpos.pos;
@@ -256,7 +259,7 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 {
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
-	std::cout<<"hashing query sequence..."<<std::flush;
+	std::cout<<"hashing query sequence #"<<numseq<<" from "<<start<<" to "<<end<<" ..."<<std::flush;
 
 	std::vector< std::list<Diag> > diag_map;
 	diag_map.resize(subject_names.size()+1);
@@ -271,7 +274,7 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 
 	clock_begin = clock();
-	std::cout<<"search fragments..."<<std::flush;
+	std::cout<<"run_test_search_wSW fragments..."<<std::flush;
     diagSearchDist(numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose-1);
 
 	diag_map.clear();
@@ -397,7 +400,7 @@ unsigned Hasher::fragLengthStat(const std::list< RangePair >& frag, double quant
     std::cout << "Frag number=" << nb_frag << " / "
               << "min length=" << min_score << " / "
               << "max length=" << max_score << " / "
-              <<"quantile ("<<quantile<<")="<<qval
+              <<"quantile length ("<<quantile<<")="<<qval
               <<std::endl;
     return qval;
 }
@@ -416,12 +419,12 @@ void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
 }
 //-------------------------------------------------------------------------
 // Filter score on rangePair lists
-void Hasher::fragScoreIdentityFilter(std::list< RangePair >& frag, unsigned min_score, double min_identity)
+void Hasher::fragScoreFilter(std::list< RangePair >& frag, unsigned min_score)
 {
-    std::cout<<"--Filter fragments score <"<<min_score<<" and identity < "<<min_identity<<" ... "<<std::flush;
+    std::cout<<"--Filter fragments score <"<<min_score<<" ... "<<std::flush;
     auto frag_it=frag.begin();
     while(frag_it != frag.end()) {
-        if(frag_it->getScore()<min_score || frag_it->getIdentity()<min_identity){
+        if(frag_it->getScore()<min_score){
             frag_it = frag.erase(frag_it);
         }else{frag_it++;}
     }
@@ -487,23 +490,25 @@ void Hasher::fragSeqAlign(std::list< RangePair >& frag,
                 unsigned slen=fragsseq.size();
                 if(verbose>0) std::cout << "subject:" << fragsseq << "-" << slen << std::endl;
                 unsigned count=0;
-                for(unsigned i=0;i<qlen;i++)
+
+                unsigned len_align=std::min(qlen,slen);
+                for(unsigned i=0;i<len_align;i++)
                 {
                     if(qseq[i]==fragsseq[i]) count++;
                 }
 
-                curr_frag_it.setIdentity(((double)count)/qlen*100);
+                curr_frag_it.setIdentity(((double)count)/len_align*100);
                 curr_frag_it.setScore(count);
-                if(verbose>0) std::cout << "Score = " << count<<" identity = " << ((double)count)/qlen * 100<< std::endl;
+                if(verbose>0) std::cout << "Score = " << count<<" identity = " << ((double)count)/len_align * 100<< std::endl;
             }
         }
     }
 }
 //-------------------------------------------------------------------------
-// Set rangePair score and identity
-void Hasher::fragSeqAlignExt(std::list< RangePair >& frag, unsigned ext_len,
-                             const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename,
-                             bool reverse, unsigned verbose)
+// SW Align rangePair
+void Hasher::fragSeqSWAlign(std::list< RangePair >& frag, unsigned ext_len,
+                            const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename,
+                            bool reverse, unsigned verbose)
 {
     //Lalign lalign(1);
     FastLalign lalign;
@@ -528,6 +533,7 @@ void Hasher::fragSeqAlignExt(std::list< RangePair >& frag, unsigned ext_len,
     }
 
     unsigned numseq=0;
+    unsigned nb_align=0;
     while (query_in) {
         BioSeq qseq;
         if (query_in)
@@ -592,6 +598,7 @@ void Hasher::fragSeqAlignExt(std::list< RangePair >& frag, unsigned ext_len,
                 slen=fragsseq.size();
 
                 if(verbose>0) std::cout<<"aligning sequence of length : "<<qlen<<" ... "<<std::flush;
+                if(++nb_align % 100 ==0) std::cout<<std::endl;
                 std::cout<<"."<<std::flush;
                 lalign.setSeq(fragqseq, fragsseq);
                 lalign.align();
@@ -602,7 +609,6 @@ void Hasher::fragSeqAlignExt(std::list< RangePair >& frag, unsigned ext_len,
                     curr_frag_it.setIdentity(lalign.getIdentity()*100);
                     curr_frag_it.setScore(lalign.getScore());
                     curr_frag_it.setLength(lalign.getLength());
-                    //curr_frag_it.setLength(lalign.getAlignmentLength());
 
                     if(curr_frag_it.getRangeQ().isPlusStrand()){
                         curr_frag_it.getRangeQ().setStart(lalign.getStartSeq1()+qstart);
@@ -622,7 +628,138 @@ void Hasher::fragSeqAlignExt(std::list< RangePair >& frag, unsigned ext_len,
                 }
 
                 if(verbose>0) {
-                    std::cout << "-------------->";
+                    std::cout << "----result---->";
+                    curr_frag_it.view(); }
+                if(verbose>0) std::cout << "Score = " << curr_frag_it.getScore()<<" identity = " << curr_frag_it.getIdentity()<< std::endl;
+            }
+        }
+    }
+}
+//-------------------------------------------------------------------------
+// Extend boundaries by alignment
+void Hasher::fragSeqExtAlign(std::list< RangePair >& frag, unsigned ext_len,
+                            const SDGString& fasta_queryfilename, const SDGString& fasta_subjectfilename,
+                            bool reverse, unsigned verbose)
+{
+    FastExtAlign align;
+    align.setMismatch(5,4);
+
+    FastaIstream query_in(fasta_queryfilename);
+    if (!query_in) {
+        std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
+    }
+
+    std::vector<BioSeq> subject_db;
+    FastaIstream subject_in(fasta_subjectfilename);
+    if (!subject_in) {
+        std::cerr << "file:" << fasta_queryfilename << " does not exist!" << std::endl;
+    }
+    while (subject_in) {
+        BioSeq seq;
+        if (subject_in) {
+            subject_in >> seq;
+            subject_db.push_back(seq);
+        }
+    }
+
+    unsigned numseq=0;
+    unsigned nb_align=0;
+    while (query_in) {
+        BioSeq qseq;
+        if (query_in)
+            query_in >> qseq;
+        if(reverse){
+            qseq=qseq.reverse();
+        }
+        numseq++;
+        if(verbose>0) std::cout << qseq.header << " len:" << qseq.size() << " read!" << std::endl;
+        for (auto & curr_frag_it : frag) {
+            if (curr_frag_it.getRangeQ().getNumChr() == numseq) {
+                if(verbose>0) {
+                    curr_frag_it.view(); }
+                // RangePair on the current query sequence
+                BioSeq fragqseq;
+                unsigned qstart,qlen;
+
+                if(curr_frag_it.getRangeQ().getMin()-1<ext_len)
+                    qstart=0;
+                else
+                    qstart=curr_frag_it.getRangeQ().getMin()-1-ext_len;
+
+                if(curr_frag_it.getRangeQ().getLength()+2*ext_len > qseq.size()){
+                    qlen= qseq.size() - qstart;
+                }
+                else{
+                    qlen=curr_frag_it.getRangeQ().getLength()+2*ext_len;
+                }
+
+                fragqseq = qseq.subseq(qstart, qlen);
+
+                if (!curr_frag_it.getRangeQ().isPlusStrand()) {
+                    fragqseq = fragqseq.complement();
+                }
+                qlen=fragqseq.size();
+
+                // Get subject sequence
+
+                BioSeq sseq = subject_db[curr_frag_it.getRangeS().getNumChr()-1];
+
+                BioSeq fragsseq;
+                unsigned sstart,slen;
+
+                if(curr_frag_it.getRangeS().getMin()-1<ext_len)
+                    sstart=0;
+                else
+                    sstart=curr_frag_it.getRangeS().getMin()-1-ext_len;
+
+                if(curr_frag_it.getRangeS().getLength()+2*ext_len > sseq.size()){
+                    slen=sseq.size()-sstart;
+                }
+                else{
+                    slen=curr_frag_it.getRangeS().getLength()+2*ext_len;
+                }
+
+
+                fragsseq = sseq.subseq(sstart,slen);
+                if (!curr_frag_it.getRangeS().isPlusStrand()) {
+                    fragsseq = fragsseq.complement();
+                }
+
+                slen=fragsseq.size();
+
+                if(verbose>0) std::cout<<"aligning sequence of length : "<<qlen<<" ... "<<std::flush;
+                if(++nb_align % 100 ==0) std::cout<<std::endl;
+                std::cout<<"."<<std::flush;
+                align.setSeq(fragqseq, fragsseq);
+                align.setStart(fragqseq.size()-ext_len,fragsseq.size()-ext_len,ext_len);
+                unsigned score_dir=align.extend_dir(curr_frag_it.getScore());
+                unsigned end_seq1=align.getEndSeq1();
+                unsigned end_seq2=align.getEndSeq2();
+
+                align.reset_align();
+                align.setSeq(fragqseq, fragsseq);
+
+                align.setStart(ext_len,ext_len,ext_len);
+                unsigned score_rev=align.extend_rev(curr_frag_it.getScore());
+                unsigned start_seq1=align.getEndSeq1();
+                unsigned start_seq2=align.getEndSeq2();
+                if(verbose>0) std::cout<<" done !"<<std::endl;
+
+                curr_frag_it.setScore(curr_frag_it.getScore()+score_dir+score_rev);
+
+                if(curr_frag_it.getRangeQ().isPlusStrand()){
+                    curr_frag_it.getRangeQ().setStart(start_seq1+qstart);
+                    curr_frag_it.getRangeQ().setEnd(end_seq1+qstart);
+                }else{
+                    curr_frag_it.getRangeQ().setEnd(fragqseq.size() - end_seq1 + qstart + 1);
+                    curr_frag_it.getRangeQ().setStart(fragqseq.size() - start_seq1 + qstart + 1);
+                }
+                curr_frag_it.getRangeS().setStart(start_seq2+sstart);
+                curr_frag_it.getRangeS().setEnd(end_seq2+sstart);
+
+
+                if(verbose>0) {
+                    std::cout << "----result---->";
                     curr_frag_it.view(); }
                 if(verbose>0) std::cout << "Score = " << curr_frag_it.getScore()<<" identity = " << curr_frag_it.getIdentity()<< std::endl;
             }

@@ -1,6 +1,6 @@
 # TE Finder 2.31
 
- The TE Finder suite gathers C++ programs developed for transposable element search and their annotation in 
+ The TE Finder suite gathers C++ programs developed for transposable element run_test_search_wSW and their annotation in 
  large eukaryotic genome sequence. But we think that the tools are generic enough to be used in other contexts.
  
  The suite is mainly composed by four programs BLASTER, MATCHER, GROUPER, DUSTER, and HASHER. 

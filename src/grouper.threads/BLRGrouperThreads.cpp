@@ -197,21 +197,21 @@ void BLRGrouper::roam_group( RangePairSet& align, BLRGroup& gr, int verbose )
 	std::cout<<"nb S overlapping members: "<<idS.size()<<std::endl;
 	*/
 
-	// search on query
+	// run_test_search_wSW on query
 	std::vector<unsigned> idQ = gr.search_member( alignQ.getNumChr(),
 			alignQ.getMin(),
 			alignQ.getMax() );
 	if(verbose>0)
 		std::cout<<"nb overlapping members: "<<idQ.size()<<std::endl;
-	// end search on query
+	// end run_test_search_wSW on query
 
-	// search on subject
+	// run_test_search_wSW on subject
 	std::vector<unsigned> idS=gr.search_member(alignS.getNumChr(),
 				alignS.getMin(),
 				alignS.getMax());
 		if(verbose>0)
 			std::cout<<"nb overlapping members: "<<idS.size()<<std::endl;
-	// end search on subject
+	// end run_test_search_wSW on subject
 
 	for( std::vector<unsigned>::iterator i=idQ.begin();
 	i!=idQ.end(); i++ )

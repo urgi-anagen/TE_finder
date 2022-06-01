@@ -127,7 +127,7 @@ void HashDNASeq::kmer_analysis(const SDGString& filenameS,
             nuc_count, nb_nuc,
             list_infokmer);
 
-  kmer_count_percentiles(list_infokmer, count_cutoff, kmer_threshold);
+    kmer_occurrence_percentiles(list_infokmer, count_cutoff, kmer_threshold);
 
   double cutoff_entropy=1.0;
   kmer_entropy_percentiles(list_infokmer, cutoff_entropy, kmer_threshold);
@@ -169,10 +169,10 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmerSize, unsi
 }
 //-------------------------------------------------------------------------
 //
-void HashDNASeq::kmer_count_percentiles(const std::list< Info_kmer >& list_infokmer, double cutoff,
-		Info_kmer& kmer_threshold)
+void HashDNASeq::kmer_occurrence_percentiles(const std::list< Info_kmer >& list_infokmer, double cutoff,
+                                             Info_kmer& kmer_threshold)
 {
-	std::cout<<"\nCount percentiles:"<<std::endl;
+	std::cout<<"\nKmer occurrence percentiles:"<<std::endl;
 
     std::vector<unsigned> distr;
 	for(const auto & i : list_infokmer)
@@ -203,7 +203,7 @@ void HashDNASeq::kmer_count_percentiles(const std::list< Info_kmer >& list_infok
 		if(it>kmer_threshold.count)
 			count++;
 	}
-    std::cout<<"=>cut-off="<<cutoff<<". Kmers occuring more than "<<kmer_threshold.count
+    std::cout<<"=>cut-off="<<cutoff<<". Kmers occurring more than "<<kmer_threshold.count
 	       <<" will be removed! Will remove_self_hits "<<count<<" kmers."<<std::endl;
 }
 //-------------------------------------------------------------------------
@@ -250,7 +250,7 @@ void HashDNASeq::kmer_diversity_percentiles(const std::list< Info_kmer >& list_i
 		Info_kmer& kmer_threshold)
 {
 
-	std::cout<<"\nDiversity percentiles:"<<std::endl;
+	std::cout<<"\nDiversity (# of different background kmers / # of background kmer in kmer) percentiles:"<<std::endl;
 
 	std::vector<double> distr;
 	for(const auto & i : list_infokmer)
@@ -288,7 +288,7 @@ void HashDNASeq::kmer_diversity_percentiles(const std::list< Info_kmer >& list_i
 void HashDNASeq::kmer_goodkmer_percentiles(const std::list< Info_kmer >& list_infokmer)
 {
 
-	std::cout<<"\nGood kmer percentiles:"<<std::endl;
+	std::cout<<"\nGood kmer (kmer model log-likelihood) percentiles:"<<std::endl;
 
 	std::vector<double> distr;
 	for(const auto & i : list_infokmer)
@@ -763,53 +763,7 @@ unsigned HashDNASeq::hashSeqCount(const BioSeq& seq, unsigned wsize, std::vector
     }
     return nb_kmer;
 }
-/*//-------------------------------------------------------------------------
-// Count background kmers
-unsigned HashDNASeq::hashSeqBackgroundCount(const BioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
-{
-    unsigned len = seq.length();
-    unsigned nb_kmer = 0;
-    if (len <= wsize) return 0;
-    unsigned last_pos = len - wsize;
-    const char *s=seq.c_str();
-    for (unsigned i = 0; i <= last_pos; i++) {
-        nb_kmer++;
-        wcount[bhseq(s)]++;
-        s++;
-    }
-    return nb_kmer;
-}
-//-------------------------------------------------------------------------
-// Count background kmers
-unsigned HashDNASeq::hashSeqModelCount(const BioSeq& seq, unsigned wsize, std::vector<unsigned>& wcount)
-{
-    unsigned len = seq.length();
-    unsigned nb_kmer = 0;
-    if (len <= wsize) return 0;
-    unsigned last_pos = len - wsize;
-    const char *s=seq.c_str();
-    for (unsigned i = 0; i <= last_pos; i++) {
-        nb_kmer++;
-        wcount[mhseq(s)]++;
-        s++;
-    }
-    return nb_kmer;
-}
-//-------------------------------------------------------------------------
-// Count nucleotides
-unsigned HashDNASeq::hashSeqNucCount(const BioSeq& seq, std::vector<unsigned>& wcount)
-{
-    unsigned len = seq.length() ;
-    unsigned nb_kmer = 0;
-    if (len < 1) return 0;
-    const char *s=seq.c_str();
-    for (unsigned i = 0; i < len; i++) {
-        nb_kmer++;
-        wcount[nhseq(s)]++;
-        s++;
-    }
-    return nb_kmer;
-}*/
+
 //-------------------------------------------------------------------------
 void HashDNASeq::hashSubjectSeqPosWHole(const BioSeq& seq, const std::vector<unsigned>& wcount)
 {
@@ -899,14 +853,10 @@ void HashDNASeq::hashSubjectSeqPosMinimizer(const BioSeq &seq, unsigned num_seq,
     for(auto &iter_pos : minimized_kmer_pos_list) {
         unsigned pos = iter_pos.second;
         unsigned key_d = iter_pos.first;
-
- /*       if (wcount[key_d] != 0) {
+        if (wcount[key_d] != 0) {
             *(hash_ptr[key_d]) = KmerSpos(pos, num_seq);
             hash_ptr[key_d]++;
-        }*/
-
-        *(hash_ptr[key_d]) = KmerSpos(pos, num_seq);
-        hash_ptr[key_d]++;
+        }
 
     }
 }
@@ -985,7 +935,7 @@ void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bo
 	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
 
 	clock_begin = clock();
-	std::cout<<"search fragments..."<<std::flush;
+	std::cout<<"run_test_search_wSW fragments..."<<std::flush;
     diagSearchDist(diag_map,(kmer_size+1)*wdist,kmer_size,frag);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
