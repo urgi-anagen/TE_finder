@@ -98,18 +98,18 @@ void search_frag(Hasher& hsrch,
                  std::list< RangePair >& rev_compfrag_list,
                  unsigned verbosity)
 {
-    std::cout<<"++> run_test_search_wSW on direct sequence."<<std::endl;
+    std::cout<<"++> run search on direct sequence."<<std::endl;
     hsrch.search(seq, start, end, numseq, Kmer_connect_dist,
                  min_fragment_size, denovo_mode, frag_list, verbosity);
-    std::cout<<"++> run_test_search_wSW on direct reversed (random) sequence."<<std::endl;
+    std::cout<<"++> run search on direct reversed (random) sequence."<<std::endl;
     hsrch.search(seq_rev, start, end, numseq, Kmer_connect_dist,
                  min_fragment_size, denovo_mode, rev_frag_list, verbosity);
     unsigned rev_start=seq_comp.size()-1-end;
     unsigned rev_end=seq_comp.size()-1-start;
-    std::cout<<"++> run_test_search_wSW on reverse complementary sequence."<<std::endl;
+    std::cout<<"++> run search on reverse complementary sequence."<<std::endl;
     hsrch.search(seq_comp, rev_start, rev_end, numseq, Kmer_connect_dist,
                  min_fragment_size, denovo_mode, compfrag_list, verbosity);
-    std::cout<<"++> run_test_search_wSW on reverse complementary reversed (random) sequence."<<std::endl;
+    std::cout<<"++> run search on reverse complementary reversed (random) sequence."<<std::endl;
     hsrch.search(seq_revcomp, rev_start, rev_end, numseq, Kmer_connect_dist,
                  min_fragment_size, denovo_mode, rev_compfrag_list, verbosity);
 }
@@ -130,7 +130,7 @@ void range_substract(unsigned num_chr, Range query_range, const std::list<RangeP
             for(std::list<Range>::iterator it_q=substracted_query_range.begin(); it_q!=substracted_query_range.end(); it_q++){
                 Range new_range=it_q->diff(it_m->getRangeQ());
                 if(!new_range.empty()) substracted_query_range.emplace_back(new_range);
-                if(it_q->empty()) it_q=substracted_query_range.erase(it_q);
+                if(it_q->empty() || it_q->getLength()<min_frag_size) it_q=substracted_query_range.erase(it_q);
             }
         }
     }
@@ -394,7 +394,6 @@ int main(int argc, char *argv[]) {
                     unsigned end = it_r->getEnd()-1;
                     //Search on chunked input sequence
                     if (chunk_size_kb != 0) {
-
                         unsigned nb_chunk = it_r->getLength() / chunk_size;
                         for (unsigned i = 1; i < nb_chunk; i++) {
                             std::cout << "==>chunk #" << i << "/" << nb_chunk << ":" << start << ".."
@@ -404,11 +403,13 @@ int main(int argc, char *argv[]) {
                                         frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
                             start = start + chunk_size;
                         }
-                        std::cout << "==>chunk #" << nb_chunk << "/" << nb_chunk << ":" << start << ".." << end
-                                  << std::endl;
-                        search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,end,numseq,
-                                    connect_dist,min_frag_size,repeat,
-                                    frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
+                        if(end-start>min_frag_size){
+                            std::cout << "==>chunk #" << nb_chunk << "/" << nb_chunk << ":" << start << ".." << end
+                                      << std::endl;
+                            search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,end,numseq,
+                                        connect_dist,min_frag_size,repeat,
+                                        frag_list,rev_frag_list,compfrag_list,rev_compfrag_list,verbosity);
+                        }
                     } else {
                         //Search on full input sequence
                         search_frag(hsrch,seq,seq_rev,seq_comp,seq_revcomp,start,start + it_r->getLength()-1,numseq,
@@ -499,7 +500,7 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Write fasta in "<<seqout_name.str()<<" ... "<<std::flush;
             seqout.open(seqout_name.str());
-            Hasher::fragMergeSeqWrite(frag_list, filename1, seqout);
+            Hasher::fragMergeSeqWrite(all_frag_list, filename1, seqout);
             seqout.close();
             std::cout<<"done!"<<std::endl;
 
