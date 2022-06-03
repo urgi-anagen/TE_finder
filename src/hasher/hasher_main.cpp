@@ -494,7 +494,7 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Write coord in "<<alignout_name.str()<<" ... "<<std::flush;
             alignout.open(alignout_name.str());
-            Hasher::fragAlignWrite(frag_list, filename1, filename2, alignout);
+            Hasher::fragAlignWrite(all_frag_list, filename1, filename2, alignout);
             alignout.close();
             std::cout<<"done!"<<std::endl;
 
