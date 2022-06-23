@@ -353,7 +353,10 @@ int main(int argc, char *argv[]) {
                 first_iter=true;
             }
             Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, kmer_window, bkmer_size, kmer_dist, 0, min_size, step_q, pen_join, algorithm);
-
+            if(hsrch.getEffectiveKmerSize()<7){
+                std::cout << "\nkmer effective size = " << hsrch.getEffectiveKmerSize() << " < 7, stopping search !" << std::endl;
+                break;
+            }
             hsrch.load(filename2, kmer_size, mask_hole_period, mask_hole_length, kmer_window, bkmer_size, kmer_size / 2, count_cutoff, diversity_cutoff,
                        min_count, valid_idx_file, first_iter);
 
@@ -512,7 +515,6 @@ int main(int argc, char *argv[]) {
             prev_genome_perc_coverage=(float)genome_coverage/genome_size;
             filename2=seqout_name.str();
             kmer_size--;
-
         }
         std::cout << "\nEnd Hasher (version " << VERSION << ")" << std::endl;
         end = clock();
