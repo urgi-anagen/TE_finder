@@ -921,7 +921,7 @@ void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bo
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
 	std::cout<<"hashing query sequence..."<<std::flush;
-	std::vector< std::list<Diag> > diag_map;
+	Diag_map diag_map;
     if(hash_algorithm==1)
         matchKmersHole(sequence, start, end, repeat, diag_map);
     else if(hash_algorithm==0)
@@ -947,7 +947,7 @@ void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bo
 // Search for alignments with kmer matches
 void HashDNASeq::matchKmersHole(const BioSeq& sequence,
                                 unsigned start, unsigned end, bool repeat,
-                                std::vector< std::list<Diag> >& diag_map)
+                                Diag_map& diag_map)
 {
     unsigned last_pos=end-kmer_size;
     if(end<=kmer_size) return;
@@ -968,7 +968,7 @@ void HashDNASeq::matchKmersHole(const BioSeq& sequence,
                 long diag = long(i) - j->pos;
                 if (!repeat || (repeat && i < j->pos)){
                     dirhit++;
-                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[Diag_map_key (j->numSeq,diag)].push_back(Diag(diag, j->pos, j->numSeq));
                     found = true;
                 }
             }
@@ -987,7 +987,7 @@ void HashDNASeq::matchKmersHole(const BioSeq& sequence,
 // Search for alignments with kmer matches
 void HashDNASeq::matchKmers(const BioSeq& sequence,
                             unsigned start, unsigned end, bool repeat,
-                            std::vector< std::list<Diag> >& diag_map)
+                            Diag_map& diag_map)
 {
     unsigned dirhit=0;
 
@@ -1007,7 +1007,7 @@ void HashDNASeq::matchKmers(const BioSeq& sequence,
                 long diag = long(pos) - j->pos;
                 if (!repeat || (repeat && pos < j->pos)){
                     dirhit++;
-                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[Diag_map_key (j->numSeq,diag)].push_back(Diag(diag, j->pos, j->numSeq));
                 }
             }
         }
@@ -1018,7 +1018,7 @@ void HashDNASeq::matchKmers(const BioSeq& sequence,
 // Search for alignments with kmer matches
 void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
                             unsigned start, unsigned end, bool repeat,
-                            std::vector< std::list<Diag> >& diag_map)
+                                     Diag_map& diag_map)
 {
     unsigned dirhit=0;
 
@@ -1041,7 +1041,7 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
                 long diag = long(pos) - j->pos;
                 if (!repeat || (repeat && pos < j->pos)){
                     dirhit++;
-                    diag_map[j->numSeq].push_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[Diag_map_key (j->numSeq,diag)].push_back(Diag(diag, j->pos, j->numSeq));
                 }
             }
         }
@@ -1070,22 +1070,22 @@ void HashDNASeq::minimize(unsigned window_size, std::list<std::pair<unsigned, un
 }
 //-------------------------------------------------------------------------
 // Search for diagonal of kmer matches
-void HashDNASeq::diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
+void HashDNASeq::diagSearchDist(Diag_map & diag_map,
                                 unsigned connect_dist, unsigned kmerSize,
                                 std::vector< std::pair<unsigned,unsigned> >& frag)
 {
     for (auto &iter_seq : diag_map) { // iter diagonals
-        unsigned size = iter_seq.size();
+        unsigned size = iter_seq.second.size();
         if (size > 2) {
-            iter_seq.sort();
+            iter_seq.second.sort();
 
             unsigned start = 0;
             unsigned end = 0;
             int diag = 0;
 
-            auto iter_diag = iter_seq.begin();
+            auto iter_diag = iter_seq.second.begin();
             Diag curr_d, prev_d = *iter_diag;
-            while (++iter_diag != iter_seq.end()) {
+            while (++iter_diag != iter_seq.second.end()) {
                 curr_d = *iter_diag;
                 if (prev_d.diag == curr_d.diag // Same diagonal
                     && prev_d.wpos.numSeq == curr_d.wpos.numSeq // Same sequence
@@ -1119,7 +1119,7 @@ void HashDNASeq::diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
 }
 //-------------------------------------------------------------------------
 // Search for diagonal of word matches with score and penalty
-void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
+/*void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
                                  unsigned kmerSize, std::vector< std::pair<unsigned,unsigned> >& frag, unsigned verbose) const{
     double penalty = (double)1/wdist;
     unsigned count;
@@ -1191,7 +1191,7 @@ void HashDNASeq::diagSearchScore(std::vector< std::list<Diag>  >& diag_map,
             std::cout << "Fragments number founds:" << count << std::endl;
         }
     }
-}
+}*/
 
 
 

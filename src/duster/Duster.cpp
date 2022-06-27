@@ -7,7 +7,7 @@ void Duster::search(const BioSeq& sequence, unsigned start, unsigned end, bool r
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
 	std::cout<<"hashing query sequence..."<<std::flush;
-	std::vector< std::list<Diag> > diag_map(nbseqS+1,std::list<Diag>(0));
+	Diag_map diag_map;
     matchKmersHole(sequence, start, end, repeat, diag_map);
 	std::cout<<"ok"<<std::endl;
 	std::cout<<diag_map.size()<<" hits found";

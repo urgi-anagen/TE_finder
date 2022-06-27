@@ -7,25 +7,25 @@
 
 //-------------------------------------------------------------------------
 // Search for diagonal of word matches with distance
-void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+void Hasher::diagSearchDist(unsigned numseqQ, Diag_map &diag_map,
                             unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
                             std::list< RangePair >& frag, unsigned verbose) {
 
     unsigned count_frag = 0;
     unsigned curr_seq = 0;
     for (auto &iter_seq : diag_map) {
-        unsigned size = iter_seq.size();
+        unsigned size = iter_seq.second.size();
         if (size > 2) {
-            iter_seq.sort();
+            iter_seq.second.sort();
             bool extending=false;
             unsigned start = 0;
             unsigned end = 0;
             unsigned score = 0;
             long diag = 0;
 
-            auto iter_diag = iter_seq.begin();
+            auto iter_diag = iter_seq.second.begin();
             Diag prev_d = *iter_diag;
-            while (++iter_diag != iter_seq.end()) {
+            while (++iter_diag != iter_seq.second.end()) {
                 Diag curr_d = *iter_diag;
                 curr_seq = curr_d.wpos.numSeq;
 
@@ -72,7 +72,7 @@ void Hasher::diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &dia
         std::cout << "Fragments number founds:" << count_frag << std::endl;
     }
 }
-//-------------------------------------------------------------------------
+/*//-------------------------------------------------------------------------
 // Search for diagonal of word matches with score and penalty
 void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
                              unsigned min_frag_size,
@@ -148,7 +148,7 @@ void Hasher::diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &di
             std::cout << "Fragments number founds:" << count << std::endl;
         }
     }
-}
+}*/
 /*//-------------------------------------------------------------------------
 // Search for alignments with word matches
 void Hasher::matchKmers(const BioSeq& sequence,
@@ -261,8 +261,10 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 	clock_begin = clock();
 	std::cout<<"hashing query sequence #"<<numseq<<" from "<<start<<" to "<<end<<" ..."<<std::flush;
 
-	std::vector< std::list<Diag> > diag_map;
-	diag_map.resize(subject_names.size()+1);
+	//std::vector< std::list<Diag> > diag_map;
+    //diag_map.resize(subject_names.size()+1);
+
+    Diag_map diag_map;
     if(algorithm==0)
         matchKmers(sequence, start, end, repeat, diag_map);
     else if(algorithm==1)

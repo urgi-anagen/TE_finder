@@ -352,6 +352,10 @@ int main(int argc, char *argv[]) {
             if (iter==1){
                 first_iter=true;
             }
+            else if (iter==2){
+                min_count++;
+            }
+
             Hasher hsrch(kmer_size, mask_hole_period, mask_hole_length, kmer_window, bkmer_size, kmer_dist, 0, min_size, step_q, pen_join, algorithm);
             if(hsrch.getEffectiveKmerSize()<7){
                 std::cout << "\nkmer effective size = " << hsrch.getEffectiveKmerSize() << " < 7, stopping search !" << std::endl;

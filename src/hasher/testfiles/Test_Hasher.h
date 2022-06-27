@@ -9,6 +9,7 @@
 #define TEST_HASHER_H_
 #include <cppunit/extensions/HelperMacros.h>
 
+#include "HashDNASeq.h"
 #include "Hasher.h"
 #include <list>
 #include <vector>
@@ -27,7 +28,7 @@ class Test_Hasher : public CppUnit::TestFixture {
     CPPUNIT_TEST(test_searchMinimizer_wExt );
 
 	CPPUNIT_TEST( test_diagSearchDist );
-	CPPUNIT_TEST( test_diagSearchScore );
+	//CPPUNIT_TEST( test_diagSearchScore );
 
     CPPUNIT_TEST( test_fragJoin );
 
@@ -107,7 +108,7 @@ protected:
     void test_searchMinimizer_wExt(void );
 
     void test_diagSearchDist( void );
-    void test_diagSearchScore( void );
+    //void test_diagSearchScore( void );
     void test_fragJoin( void );
 
     void run_test_search_wSW(unsigned int alg, unsigned int verbosity, unsigned int start, unsigned int end, unsigned int numseq,

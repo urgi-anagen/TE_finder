@@ -27,6 +27,7 @@ class Test_Hasher;
 
 class Hasher : public HashDNASeq
 {
+
 	friend class Test_Hasher;
 
     using HashDNASeq::search;
@@ -46,12 +47,12 @@ class Hasher : public HashDNASeq
                         unsigned start, unsigned end, bool repeat,
                         std::vector< std::list<Diag> >& diag_map);*/
 
-    void diagSearchDist(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+    void diagSearchDist(unsigned numseqQ, Diag_map &diag_map,
                         unsigned connect_dist, unsigned kmer_size, unsigned min_frag_size,
                         std::list<RangePair> &frag, unsigned verbose);
-    void diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
+/*    void diagSearchScore(unsigned numseqQ, std::vector<std::list<Diag> > &diag_map,
                         unsigned min_frag_size,
-                        std::list<RangePair> &frag, unsigned verbose);
+                        std::list<RangePair> &frag, unsigned verbose);*/
 
     static RangePair rangePairFactory(const unsigned numseqQ, unsigned int qstart, unsigned int qend,
                                const unsigned numseqS, unsigned int sstart, unsigned int send,

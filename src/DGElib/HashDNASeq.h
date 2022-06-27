@@ -12,6 +12,9 @@
 #include <set>
 #include <tuple>
 #include <unordered_map>
+#include <map>
+#include <type_traits>
+
 #include "HashFuncDNASeq.h"
 #include "MinimizerFuncDNASeq.h"
 
@@ -126,6 +129,8 @@ protected:
     std::unordered_map<unsigned, std::vector<KmerSpos>::iterator> hash2wpos, hash_ptr;
     std::vector<KmerSpos> kmer_pos;
 
+    typedef std::pair<unsigned,long> Diag_map_key;
+    typedef std::map<Diag_map_key,std::list<Diag> > Diag_map;
 
     std::vector<SDGString> subjectName;
     unsigned kmer_size, window_size, bkmer_size, mkmer_size, wdist, fdist, min_size, step_q, max_key, nfrag;
@@ -183,21 +188,21 @@ protected:
     void hashSeqPos(const BioSeq &seq, unsigned wsize, std::list<std::pair<unsigned,unsigned>>& kmer_pos_list);
 
     void matchKmersHole(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
-                        std::vector<std::list<Diag>> &diag_map);
+                        Diag_map &diag_map);
     void matchKmers(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
-                        std::vector<std::list<Diag>> &diag_map);
+                    Diag_map &diag_map);
     void matchKmersMinimizer(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
-                    std::vector<std::list<Diag>> &diag_map);
+                             Diag_map &diag_map);
 
     void minimize(unsigned window_size, std::list<std::pair<unsigned, unsigned>> kmer_pos_list,
                   std::set<std::pair<unsigned, unsigned>> &minimized_kmer_pos_list);
 
-    static void diagSearchDist(std::vector< std::list<Diag>  >& diag_map,
+    static void diagSearchDist(Diag_map& diag_map,
                         unsigned connect_dist, unsigned kmerSize,
                         std::vector<std::pair<unsigned, unsigned> > &frag);
 
-    void diagSearchScore(std::vector<std::list<Diag>> &diag_map,unsigned kmerSize,
-                    std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose) const;
+ /*   void diagSearchScore(std::vector<std::list<Diag>> &diag_map,unsigned kmerSize,
+                    std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose) const;*/
 public:
 
     HashDNASeq(unsigned kmer_size = 10, unsigned mask_hole_period = 10, unsigned mask_hole_length = 1,
