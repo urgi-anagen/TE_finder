@@ -121,6 +121,14 @@ protected:
         };
     };
 
+    struct Diag_map : public std::vector< std::unordered_map<long,std::list<Diag> > >{
+
+            Diag_map(unsigned size){this->resize(size+1);};
+            void insert(unsigned numseq, long diag, Diag val){
+                this->at(numseq)[diag].emplace_back(val);
+            }
+    };
+
 
     HashFuncDNASeq hseq;
     MinimizerFuncDNASeq mseq;
@@ -128,9 +136,6 @@ protected:
 
     std::unordered_map<unsigned, std::vector<KmerSpos>::iterator> hash2wpos, hash_ptr;
     std::vector<KmerSpos> kmer_pos;
-
-    typedef std::pair<unsigned,long> Diag_map_key;
-    typedef std::map<Diag_map_key,std::list<Diag> > Diag_map;
 
     std::vector<SDGString> subjectName;
     unsigned kmer_size, window_size, bkmer_size, mkmer_size, wdist, fdist, min_size, step_q, max_key, nfrag;

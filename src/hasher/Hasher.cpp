@@ -13,60 +13,62 @@ void Hasher::diagSearchDist(unsigned numseqQ, Diag_map &diag_map,
 
     unsigned count_frag = 0;
     unsigned curr_seq = 0;
-    for (auto &iter_seq : diag_map) {
-        unsigned size = iter_seq.second.size();
-        if (size > 2) {
-            iter_seq.second.sort();
-            bool extending=false;
-            unsigned start = 0;
-            unsigned end = 0;
-            unsigned score = 0;
-            long diag = 0;
+    for (auto &iter_seq : diag_map) { // iter seq
+        for (auto iter_diag_map=iter_seq.begin(); iter_diag_map != iter_seq.end() ;iter_diag_map++) { // iter diagonals
+            unsigned size = iter_diag_map->second.size();
+            if (size > 2) {
+                iter_diag_map->second.sort();
+                bool extending = false;
+                unsigned start = 0;
+                unsigned end = 0;
+                unsigned score = 0;
+                long diag = 0;
 
-            auto iter_diag = iter_seq.second.begin();
-            Diag prev_d = *iter_diag;
-            while (++iter_diag != iter_seq.second.end()) {
-                Diag curr_d = *iter_diag;
-                curr_seq = curr_d.wpos.numSeq;
+                auto iter_diag = iter_diag_map->second.begin();
+                Diag prev_d = *iter_diag;
+                while (++iter_diag != iter_diag_map->second.end()) {
+                    Diag curr_d = *iter_diag;
+                    curr_seq = curr_d.wpos.numSeq;
 
-                if (prev_d.diag == curr_d.diag
-                    && prev_d.wpos.numSeq == curr_d.wpos.numSeq
-                    && (prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos
-                        && prev_d.wpos.pos + diag + connect_dist >= curr_d.wpos.pos + diag)
-                        ) {
-                    if (extending) //extending
-                    {
-                        end = curr_d.wpos.pos;
-                        score++;
-                    } else //first hit (2 kmers found at correct distance)
-                    {
-                        diag = prev_d.diag;
-                        start = prev_d.wpos.pos;
-                        end = curr_d.wpos.pos;
-                        extending=true;
-                        score = 1;
+                    if (prev_d.diag == curr_d.diag
+                        && prev_d.wpos.numSeq == curr_d.wpos.numSeq
+                        && (prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos
+                            && prev_d.wpos.pos + diag + connect_dist >= curr_d.wpos.pos + diag)
+                            ) {
+                        if (extending) //extending
+                        {
+                            end = curr_d.wpos.pos;
+                            score++;
+                        } else //first hit (2 kmers found at correct distance)
+                        {
+                            diag = prev_d.diag;
+                            start = prev_d.wpos.pos;
+                            end = curr_d.wpos.pos;
+                            extending = true;
+                            score = 1;
+                        }
+                    } else //stop extension if distance between kmer too long
+                    if (extending) {
+                        if (end + kmer_size - start - 1 >= min_frag_size) {
+                            count_frag++;
+                            frag.push_back(record_frag(start, end, diag,
+                                                       score, numseqQ, curr_seq, count_frag));
+                        }
+                        extending = false;
                     }
-                } else //stop extension if distance between kmer too long
-                if (extending) {
+                    prev_d = curr_d;
+                } //end while
+                if (extending) // Record hit at the end of the loop
+                {
                     if (end + kmer_size - start - 1 >= min_frag_size) {
                         count_frag++;
                         frag.push_back(record_frag(start, end, diag,
                                                    score, numseqQ, curr_seq, count_frag));
                     }
-                    extending=false;
                 }
-                prev_d = curr_d;
-            } //end while
-            if (extending) // Record hit at the end of the loop
-            {
-                if (end + kmer_size - start - 1 >= min_frag_size) {
-                    count_frag++;
-                    frag.push_back(record_frag(start, end, diag,
-                                               score, numseqQ, curr_seq, count_frag));
-                }
-            }
-        } //end size>2, diag_map loop
-    }
+            } //end size>2,
+        }  // diag loop
+    } // seq loop
 
     if (verbose > 0) {
         std::cout << "Fragments number founds:" << count_frag << std::endl;
@@ -264,7 +266,7 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 	//std::vector< std::list<Diag> > diag_map;
     //diag_map.resize(subject_names.size()+1);
 
-    Diag_map diag_map;
+    Diag_map diag_map(subject_names.size());
     if(algorithm==0)
         matchKmers(sequence, start, end, repeat, diag_map);
     else if(algorithm==1)

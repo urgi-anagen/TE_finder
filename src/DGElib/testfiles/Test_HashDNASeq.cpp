@@ -147,23 +147,23 @@ void Test_HashDNASeq::test_diagSearchDist( void )
 	unsigned word_dist=1;
 	HashDNASeq hsrch(word_len, word_dist, 1);
 
-    HashDNASeq::Diag_map diag_map;
+    HashDNASeq::Diag_map diag_map(2);
 
 	//HashDNASeq::Diag(diag,pos,seq)
-    diag_map[HashDNASeq::Diag_map_key(1,1)].push_back(HashDNASeq::Diag(1, 10, 1));
-    diag_map[HashDNASeq::Diag_map_key(1,1)].push_back(HashDNASeq::Diag(1, 20, 1));
-    diag_map[HashDNASeq::Diag_map_key(1,1)].push_back(HashDNASeq::Diag(1, 30, 1));
-    diag_map[HashDNASeq::Diag_map_key(1,1)].push_back(HashDNASeq::Diag(1, 30, 1));
-    diag_map[HashDNASeq::Diag_map_key(1,1)].push_back(HashDNASeq::Diag(1, 60, 1));
+    diag_map.insert(1,1,HashDNASeq::Diag(1, 10, 1));
+    diag_map.insert(1,1,HashDNASeq::Diag(1, 20, 1));
+    diag_map.insert(1,1,HashDNASeq::Diag(1, 30, 1));
+    diag_map.insert(1,1,HashDNASeq::Diag(1, 30, 1));
+    diag_map.insert(1,1,HashDNASeq::Diag(1, 60, 1));
 
-    diag_map[HashDNASeq::Diag_map_key(2,1)].push_back(HashDNASeq::Diag(1, 70, 2));
-    diag_map[HashDNASeq::Diag_map_key(2,1)].push_back(HashDNASeq::Diag(1, 100, 2));
-    diag_map[HashDNASeq::Diag_map_key(2,1)].push_back(HashDNASeq::Diag(1, 130, 2));
-    diag_map[HashDNASeq::Diag_map_key(2,1)].push_back(HashDNASeq::Diag(1, 140, 2));
+    diag_map.insert(2,1,HashDNASeq::Diag(1, 70, 2));
+    diag_map.insert(2,1,HashDNASeq::Diag(1, 100, 2));
+    diag_map.insert(2,1,HashDNASeq::Diag(1, 130, 2));
+    diag_map.insert(2,1,HashDNASeq::Diag(1, 140, 2));
 
-    diag_map[HashDNASeq::Diag_map_key(1,2)].push_back(HashDNASeq::Diag(2, 100, 1));
-    diag_map[HashDNASeq::Diag_map_key(1,2)].push_back(HashDNASeq::Diag(2, 110, 1));
-    diag_map[HashDNASeq::Diag_map_key(1,2)].push_back(HashDNASeq::Diag(2, 120, 1));
+    diag_map.insert(1,2,HashDNASeq::Diag(2, 100, 1));
+    diag_map.insert(1,2,HashDNASeq::Diag(2, 110, 1));
+    diag_map.insert(1,2,HashDNASeq::Diag(2, 120, 1));
 
 
 
