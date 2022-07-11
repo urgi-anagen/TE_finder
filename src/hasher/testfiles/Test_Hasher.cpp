@@ -289,23 +289,23 @@ void Test_Hasher::test_diagSearchDist( void )
     unsigned word_dist=1;
     Hasher hsrch(word_len, word_dist, 1);
 
-    HashDNASeq::Diag_map diag_map(2);
+    HashDNASeq::Diag_map diag_map(3);
 
     //HashDNASeq::Diag(diag,pos,seq)
-    diag_map.insert(1,1,HashDNASeq::Diag(1, 10, 1));
-    diag_map.insert(1,1,HashDNASeq::Diag(1, 20, 1));
-    diag_map.insert(1,1,HashDNASeq::Diag(1, 30, 1));
-    diag_map.insert(1,1,HashDNASeq::Diag(1, 30, 1));
-    diag_map.insert(1,1,HashDNASeq::Diag(1, 60, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(1, 10, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(1, 20, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(1, 30, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(1, 30, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(1, 60, 1));
 
-    diag_map.insert(2,1,HashDNASeq::Diag(1, 70, 2));
-    diag_map.insert(2,1,HashDNASeq::Diag(1, 100, 2));
-    diag_map.insert(2,1,HashDNASeq::Diag(1, 130, 2));
-    diag_map.insert(2,1,HashDNASeq::Diag(1, 140, 2));
+    diag_map[2].emplace_back(HashDNASeq::Diag(1, 70, 2));
+    diag_map[2].emplace_back(HashDNASeq::Diag(1, 100, 2));
+    diag_map[2].emplace_back(HashDNASeq::Diag(1, 130, 2));
+    diag_map[2].emplace_back(HashDNASeq::Diag(1, 140, 2));
 
-    diag_map.insert(1,2,HashDNASeq::Diag(2, 100, 1));
-    diag_map.insert(1,2,HashDNASeq::Diag(2, 110, 1));
-    diag_map.insert(1,2,HashDNASeq::Diag(2, 120, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(2, 100, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(2, 110, 1));
+    diag_map[1].emplace_back(HashDNASeq::Diag(2, 120, 1));
 
     std::list<RangePair> frag;
     unsigned numseq=1, dist=20, min_frag_len=0,verbose=0;

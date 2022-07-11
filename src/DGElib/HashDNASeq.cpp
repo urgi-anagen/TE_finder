@@ -969,7 +969,7 @@ void HashDNASeq::matchKmersHole(const BioSeq& sequence,
                 long diag = long(i) - j->pos;
                 if (!repeat || (repeat && i < j->pos)){
                     dirhit++;
-                    diag_map.insert(j->numSeq,diag,Diag(diag, j->pos, j->numSeq));
+                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
                     found = true;
                 }
             }
@@ -1008,7 +1008,7 @@ void HashDNASeq::matchKmers(const BioSeq& sequence,
                 long diag = long(pos) - j->pos;
                 if (!repeat || (repeat && pos < j->pos)){
                     dirhit++;
-                    diag_map.insert(j->numSeq,diag,Diag(diag, j->pos, j->numSeq));
+                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
                 }
             }
         }
@@ -1042,7 +1042,7 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
                 long diag = long(pos) - j->pos;
                 if (!repeat || (repeat && pos < j->pos)){
                     dirhit++;
-                    diag_map.insert(j->numSeq,diag,Diag(diag, j->pos, j->numSeq));
+                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
                 }
             }
         }
@@ -1076,47 +1076,42 @@ void HashDNASeq::diagSearchDist(Diag_map & diag_map,
                                 std::vector< std::pair<unsigned,unsigned> >& frag)
 {
     for (auto &iter_seq : diag_map) { // iter seq
-        for (auto iter_diag_map=iter_seq.begin(); iter_diag_map != iter_seq.end() ;iter_diag_map++) { // iter diagonals
-            unsigned size = iter_diag_map->second.size();
-            if (size > 2) {
-                iter_diag_map->second.sort();
-
-                unsigned start = 0;
-                unsigned end = 0;
-                int diag = 0;
-
-                auto iter_diag = iter_diag_map->second.begin();
-                Diag curr_d, prev_d = *iter_diag;
-                while (++iter_diag != iter_diag_map->second.end()) {
-                    curr_d = *iter_diag;
-                    if (prev_d.diag == curr_d.diag // Same diagonal
-                        && prev_d.wpos.numSeq == curr_d.wpos.numSeq // Same sequence
-                        &&
-                        prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos) // hits overlaps or close enough to be joined
-                    {
-                        if (start != 0) // already extending a diagonal
-                        {
-                            end = curr_d.wpos.pos;
-                        } else //create a diagonal
-                        {
-                            diag = prev_d.diag;
-                            start = prev_d.wpos.pos;
-                            end = curr_d.wpos.pos;
-                        }
-                    } else // too far to be joined
-                    {
-                        if (start != 0) // Create a diagonal
-                        {
-                            frag.emplace_back(diag + start + 1, diag + end + kmerSize);
-                            start = 0;
-                        };
-                    }
-                    prev_d = curr_d;
-                }
-                if (start != 0)  //End of hits list
+        if (iter_seq.size() > 2) {
+            iter_seq.sort();
+            auto iter_diag = iter_seq.begin();
+            Diag prev_d = *iter_diag;
+            unsigned start = 0;
+            unsigned end = 0;
+            int diag = 0;
+            while (++iter_diag != iter_seq.end()) {
+                Diag curr_d = *iter_diag;
+                if (prev_d.diag == curr_d.diag // Same diagonal
+                    && prev_d.wpos.numSeq == curr_d.wpos.numSeq // Same sequence
+                    &&
+                    prev_d.wpos.pos + connect_dist >= curr_d.wpos.pos) // hits overlaps or close enough to be joined
                 {
-                    frag.emplace_back(diag + start + 1, diag + end + kmerSize);
+                    if (start != 0) // already extending a diagonal
+                    {
+                        end = curr_d.wpos.pos;
+                    } else //create a diagonal
+                    {
+                        diag = prev_d.diag;
+                        start = prev_d.wpos.pos;
+                        end = curr_d.wpos.pos;
+                    }
+                } else // too far to be joined
+                {
+                    if (start != 0) // Create a diagonal
+                    {
+                        frag.emplace_back(diag + start + 1, diag + end + kmerSize);
+                        start = 0;
+                    };
                 }
+                prev_d = curr_d;
+            }
+            if (start != 0)  //End of hits list
+            {
+                frag.emplace_back(diag + start + 1, diag + end + kmerSize);
             }
         }
     }

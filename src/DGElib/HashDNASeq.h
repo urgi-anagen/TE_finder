@@ -121,14 +121,14 @@ protected:
         };
     };
 
-    struct Diag_map : public std::vector< std::unordered_map<long,std::list<Diag> > >{
+/*    struct Diag_map : public std::vector< std::unordered_map<long,std::list<Diag> > >{
 
             Diag_map(unsigned size){this->resize(size+1);};
             void insert(unsigned numseq, long diag, Diag val){
                 this->at(numseq)[diag].emplace_back(val);
             }
-    };
-
+    };*/
+    typedef std::vector< std::list<Diag> > Diag_map;
 
     HashFuncDNASeq hseq;
     MinimizerFuncDNASeq mseq;
