@@ -1,7 +1,11 @@
 #include <getopt.h>
 #include <fstream>
 #include <cstdlib>
+#include <cstdio>
 #include <list>
+
+#include <chrono>
+using namespace std::chrono;
 
 #include "SDGString.h"
 #include "FastaOstream.h"
@@ -145,9 +149,7 @@ void range_substract(unsigned num_chr, Range query_range, const std::list<RangeP
 int main(int argc, char *argv[]) {
     try {
         std::cout << "Beginning Hasher (version " << VERSION << ")" << std::endl;
-        clock_t begin, end;
-        double time_spent;
-        begin = clock();
+        auto begin = high_resolution_clock::now();
 
         if (argc == 1) {
             help();
@@ -308,6 +310,18 @@ int main(int argc, char *argv[]) {
             filename2 = filename1;
             std::cout << "De novo mode!" <<  std::endl;
         }
+
+        //Write final results
+        std::stringstream alignout_final_name;
+        std::stringstream seqout_final_name;
+        if (!outfilename.empty()) {
+            alignout_final_name << outfilename << ".final.align";
+            seqout_final_name << outfilename << ".final.fa";
+        } else {
+            alignout_final_name << filename1 << ".final.hasher.align";
+            seqout_final_name << filename1 << ".final.hasher.fa";
+        }
+
         connect_dist=(kmer_dist + 1) * kmer_size;
 
         show_parameter(filename1, filename2);
@@ -379,6 +393,7 @@ int main(int argc, char *argv[]) {
 
             unsigned genome_size=0;
             unsigned genome_coverage=0;
+            unsigned query_length=0;
             unsigned numseq = 0;
             std::list< RangePair >  rev_frag_list, compfrag_list, rev_compfrag_list;
             frag_list.clear();
@@ -399,11 +414,14 @@ int main(int argc, char *argv[]) {
                 std::list<Range> query_range_list;
                 range_substract(numseq, query_range, all_frag_list, query_range_list);
 
+
                 unsigned chunk_size = ((chunk_size_kb * 1000) / kmer_size) * kmer_size;
                 for(std::list<Range>::const_iterator it_r=query_range_list.begin();it_r!=query_range_list.end();it_r++){
                     std::cout << "=>Query #" << numseq << ": " << it_r->getStart() << ".." << it_r->getEnd() << std::endl;
                     unsigned start = it_r->getStart()-1;
                     unsigned end = it_r->getEnd()-1;
+                    query_length+=(end-start+1);
+
                     //Search on chunked input sequence
                     if (chunk_size_kb != 0) {
                         unsigned nb_chunk = it_r->getLength() / chunk_size;
@@ -439,7 +457,7 @@ int main(int argc, char *argv[]) {
                 std::cout << "ok!\n" << std::endl;
             }
             in.close();
-            unsigned qval_score=0, qval_len=0;
+            unsigned qval_score=30, qval_len=0;
             double qtile=0.95;
             if(p_value!=1.0) {
                 //Compute stat on resuts and filters false positives
@@ -454,9 +472,11 @@ int main(int argc, char *argv[]) {
                 Hasher::fragSeqAlign(rev_frag_list, filename1, filename2, true, verbosity);
 
                 qval_score = Hasher::fragScoreIdentityStat(rev_frag_list, qtile, genome_coverage);
-                std::cout << "Coverage=" << genome_coverage << " (" << (float) genome_coverage / genome_size << ")"
-                          << " coverage % difference="
-                          << fabs(((float) genome_coverage / genome_size) - prev_genome_perc_coverage) << std::endl;
+                unsigned rev_genome_coverage= Hasher::fragCoverage(rev_frag_list);
+                std::cout << "Coverage=" << genome_coverage << " (" << (float) genome_coverage / query_length << ")"
+                          << " merged coverage % = "
+                          << (float) rev_genome_coverage / query_length
+                          << std::endl;
             }
             std::cout<<"--Real fragment stats:"<<std::endl;
             std::cout << "--Compute score and identity" << std::endl;
@@ -464,7 +484,7 @@ int main(int argc, char *argv[]) {
             Hasher::fragLenFilter(frag_list,qval_len);
             Hasher::fragSeqAlign(frag_list,filename1,filename2,false,verbosity);
 
-            Hasher::fragScoreFilter(frag_list,qval_score);
+            Hasher::fragScoreIdentityFilter(frag_list, qval_score, 65);
             Hasher::fragScoreIdentityStat(frag_list, qtile, genome_coverage);
 
             if(pen_join>0.0){
@@ -484,13 +504,6 @@ int main(int argc, char *argv[]) {
 
             std::cout<<" done!"<<std::endl;
 
-            std::list<RangePair> copy_frag_list=frag_list;
-            all_frag_list.splice(all_frag_list.end(),copy_frag_list);
-
-            genome_coverage=Hasher::fragCoverage(all_frag_list);
-            std::cout<<"**Coverage iteration "<<iter<<" / kmer size:"<<kmer_size<<" = "<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
-                     <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
-
             //Write results
             std::ofstream alignout;
             FastaOstream seqout;
@@ -509,15 +522,22 @@ int main(int argc, char *argv[]) {
 
             std::cout<<"--Write coord in "<<alignout_name.str()<<" ... "<<std::flush;
             alignout.open(alignout_name.str());
-            Hasher::fragAlignWrite(all_frag_list, filename1, filename2, alignout);
+            Hasher::fragAlignWrite(frag_list, filename1, filename2, alignout);
             alignout.close();
             std::cout<<"done!"<<std::endl;
 
             std::cout<<"--Write fasta in "<<seqout_name.str()<<" ... "<<std::flush;
             seqout.open(seqout_name.str());
-            Hasher::fragMergeSeqWrite(all_frag_list, filename1, seqout);
+            Hasher::fragMergeSeqWrite(frag_list, filename1, seqout);
             seqout.close();
             std::cout<<"done!"<<std::endl;
+
+            //concat coords
+            std::list<RangePair> copy_frag_list=frag_list;
+            all_frag_list.splice(all_frag_list.end(),copy_frag_list);
+            genome_coverage=Hasher::fragCoverage(all_frag_list);
+            std::cout<<"**Coverage iteration "<<iter<<" / kmer size:"<<kmer_size<<" = "<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
+                     <<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 
             if(genome_coverage==0) break;
 
@@ -525,34 +545,33 @@ int main(int argc, char *argv[]) {
                 && nb_iter==0 && iter>1)
                 break;
             prev_genome_perc_coverage=(float)genome_coverage/genome_size;
-            filename2=seqout_name.str();
-            kmer_size--;
+
+            //concat align files
+            if(iter==1) remove(alignout_final_name.str().c_str());
+            std::ofstream oalign_a(alignout_final_name.str(), std::ios_base::binary | std::ios_base::app);
+            std::ifstream ialign_b(alignout_name.str(), std::ios_base::binary);
+            oalign_a.seekp(0, std::ios_base::end);
+            oalign_a << ialign_b.rdbuf();
+
+            //concat fasta files
+            if(iter==1) remove(seqout_final_name.str().c_str());
+            std::ofstream oseq_a(seqout_final_name.str(), std::ios_base::binary | std::ios_base::app);
+            std::ifstream iseq_b(seqout_name.str(), std::ios_base::binary);
+            oseq_a.seekp(0, std::ios_base::end);
+            oseq_a << iseq_b.rdbuf();
+
+            filename2=seqout_final_name.str();
+            if(kmer_size>1) kmer_size--;
+            if(mask_hole_period>1) mask_hole_period--;
+            if(step_q>1) step_q--;
+            auto finish = high_resolution_clock::now();
+            duration<double> elapsed = finish - begin;
+            std::cout << "==>Elapsed time at iteration "<<iter<<" : " << elapsed.count() / 60 << " min." << std::endl;
         }
         std::cout << "\nEnd Hasher (version " << VERSION << ")" << std::endl;
-        end = clock();
-        time_spent = (double) (end - begin) / CLOCKS_PER_SEC;
-        std::cout << "====>Total time spent****: " << time_spent << std::endl;
-
-        //Write final results
-        std::stringstream alignout_final_name;
-        std::stringstream seqout_final_name;
-        if (!outfilename.empty()) {
-            alignout_final_name << outfilename << ".final.align";
-            seqout_final_name << outfilename << ".final.fa";
-        } else {
-            alignout_final_name << filename1 << ".final.hasher.align";
-            seqout_final_name << filename1 << ".final.hasher.fa";
-        }
-
-        std::stringstream cmd1,cmd2;
-
-        cmd1<<"cp "<<alignout_name.str()<<" "<<alignout_final_name.str();
-        std::system(cmd1.str().c_str());
-
-        FastaOstream seqout;
-        std::cout<<"--Write final fasta in "<<seqout_final_name.str()<<" ... "<<std::flush;
-        seqout.open(seqout_name.str());
-        Hasher::fragSeqWrite(frag_list, filename1, seqout);
+        auto finish = high_resolution_clock::now();
+        duration<double> elapsed = finish - begin;
+        std::cout << "====>Total time spent****: " << elapsed.count() / 60 << " min."<<std::endl;
 
         exit(EXIT_SUCCESS);
     }
@@ -567,10 +586,10 @@ int main(int argc, char *argv[]) {
         std::cerr << msg << std::endl;
         exit(EXIT_FAILURE);
     }
-    catch (...) {
+/*    catch (...) {
         std::cerr << "****** unknown exception catch !!! ******" << std::endl;
         exit(EXIT_FAILURE);
-    }
+    }*/
 }
 
 

@@ -239,12 +239,12 @@ void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
 }
 //-------------------------------------------------------------------------
 // Filter score on rangePair lists
-void Hasher::fragScoreFilter(std::list< RangePair >& frag, unsigned min_score)
+void Hasher::fragScoreIdentityFilter(std::list<RangePair> &frag, unsigned min_score, unsigned min_identity)
 {
-    std::cout<<"--Filter fragments score <"<<min_score<<" ... "<<std::flush;
+    std::cout<<"--Filter fragments score <"<<min_score<<" and identity <"<<min_identity<<" ... "<<std::flush;
     auto frag_it=frag.begin();
     while(frag_it != frag.end()) {
-        if(frag_it->getScore()<min_score){
+        if(frag_it->getScore()<min_score || frag_it->getIdentity()<min_identity){
             frag_it = frag.erase(frag_it);
         }else{frag_it++;}
     }
