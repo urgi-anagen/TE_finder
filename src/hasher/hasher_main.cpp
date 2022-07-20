@@ -16,7 +16,7 @@ using namespace std::chrono;
 double filter_cutoff=0.0, pen_join=0.5;
 unsigned kmer_size=15, kmer_window=20, step_q=15, bkmer_size=1, kmer_dist=5,mask_hole_length=1,connect_dist=1,
 min_frag_size=20, chunk_size_kb=0, min_count=0, mask_hole_period=4, verbosity=0, overlap=0, nb_iter=1,
-algorithm=1,align_ext=0, min_identity=65, min_score=0;
+algorithm=1,align_ext=0, min_identity=65, min_score=25;
 
 double count_cutoff=1.0, diversity_cutoff=0.0;
 bool repeat=false, stat_only=false;
