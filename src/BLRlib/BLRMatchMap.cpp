@@ -61,7 +61,7 @@ void BLRMatchMap::add_clean(std::list<RangePair> &rp_list,
                             std::list<RangePair>::iterator iter)
 //add a rangePair and post process it removing conflicting subjects
 {
-    // run_test_search_wSW for a conflicting subject
+    // search for a conflicting subject
     bool found_over = false;
     std::list<RangePair> lrp; //list of modified and cleaned RangePair
     lrp.push_back(*iter);
@@ -100,7 +100,7 @@ void BLRMatchMap::add_clean(std::list<RangePair> &rp_list,
                 std::list<RangePair>::iterator it
                         = std::lower_bound(iter, rp_list.end(),
                                            *lrp_it,
-                                           RangePair::greaterScore); // run_test_search_wSW for the right place to insert
+                                           RangePair::greaterScore); // search for the right place to insert
                 while (it != rp_list.end() && it == iter)
                     it++;
                 rp_list.insert(it, *lrp_it);
@@ -158,7 +158,7 @@ void BLRMatchMap::add_clean_path_same_S(std::list<RangePairSet> &rp_list,
                                         std::list<RangePairSet>::iterator iter)
 //add a range pair set and post process it removing conflicting subjects
 {
-    // run_test_search_wSW for a conflicting subject
+    // search for a conflicting subject
     bool found_over = false;
     std::list<RangePairSet> &list
             = map_path[Key(iter->getRangeQ().getNumChr(),
@@ -1035,7 +1035,7 @@ void BLRMatchMap::merge(int verbose) {
 
     if(verbose>2) graph.view();
     //Merge according to connexe componant
-    if(verbose>0){std::cout<<"run_test_search_wSW connexe componants"<<std::endl;}
+    if(verbose>0){std::cout<<"search connexe componants"<<std::endl;}
     std::vector<std::vector<unsigned long> > vec;
     graph.connexComp(vec);
     if(verbose>0){std::cout<<"Nb connexe componante:"<<vec.size()<<std::endl;}

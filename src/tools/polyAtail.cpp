@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
 	s1=s.subseq(0,align_len);
 	s2=s.subseq(slen-align_len,slen);
 
-	//run_test_search_wSW as best local alignments between start and end
+	//search as best local alignments between start and end
 	//of the sequence
 	al.setSeq(s1,polyT);	  
 	for(unsigned n=0;n<nb_sub;n++)

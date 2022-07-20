@@ -178,7 +178,7 @@ void BLRMatchAlign::add_clean_overlap(std::list<RangePair> &rp_list,
                                       std::list<RangePair>::iterator iter)
 //add a rangePair and post process it removing conflicting subjects
 {
-    // run_test_search_wSW for a conflicting subject
+    // search for a conflicting subject
     bool found_over = false;
     std::list<RangePair> lrp; //list of modified and cleaned RangePair
     lrp.push_back(*iter);
@@ -217,7 +217,7 @@ void BLRMatchAlign::add_clean_overlap(std::list<RangePair> &rp_list,
                 std::list<RangePair>::iterator it
                         = std::lower_bound(iter, rp_list.end(),
                                            *lrp_it,
-                                           RangePair::greaterScore); // run_test_search_wSW for the right place to insert
+                                           RangePair::greaterScore); // search for the right place to insert
                 while (it != rp_list.end() && it == iter)
                     it++;
                 rp_list.insert(it, *lrp_it);
@@ -230,7 +230,7 @@ void BLRMatchAlign::add_clean_overlap(std::list<RangePair> &rp_list,
 void BLRMatchAlign::add_clean_included(std::list<RangePair>::iterator iter)
 //add a rangePair and post process it removing conflicting subjects
 {
-    // run_test_search_wSW for a conflicting subject
+    // search for a conflicting subject
     bool found_over = false;
     for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++)
         if (m->first.first == iter->getRangeQ().getNumChr() &&

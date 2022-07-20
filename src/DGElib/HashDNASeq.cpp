@@ -17,7 +17,7 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned ma
   begin = clock();
 
 
-    if (hash_algorithm == 1)
+    if (hash_algorithm == 1 || hash_algorithm == 3)
         std::cout<<"Kmer mask :"<<hseq.getMask()<<" -> Effective Kmer size (without kmer mask size):"<<hseq.getEffectiveKmerSize()<<std::endl;
     else
         std::cout<<"Effective Kmer size (without kmer mask size):"<<kmerSize<<std::endl;
@@ -28,7 +28,7 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned ma
     {
 	  //Count kmers and filters
       std::vector<unsigned> kmer_count;
-        if (hash_algorithm == 1)
+        if (hash_algorithm == 1 || hash_algorithm == 3)
             kmer_count.resize((unsigned) pow(4, hseq.getEffectiveKmerSize()), 0);
         else
             kmer_count.resize((unsigned) pow(4,kmerSize),0);
@@ -79,6 +79,8 @@ void HashDNASeq::load(const SDGString& filenameS, unsigned kmerSize, unsigned ma
                 hashSubjectSeqPos(sS, count_seq, kmerSize, kmer_count);
             else if(hash_algorithm==2)
                 hashSubjectSeqPosMinimizer(sS, count_seq, kmerSize, kmer_count);
+            else if(hash_algorithm==3)
+                hashSubjectSeqPosWHoleMinimizer(sS, count_seq, kmerSize, kmer_count);
 		}
       inS2.close();
       hash_ptr.clear();
@@ -152,7 +154,7 @@ void HashDNASeq::kmer_counts(const SDGString& filenameS, unsigned kmerSize, unsi
       while (inS) {
           if (inS) inS >> sS;
           std::cout << "\n" << ++count_seq << "->" << sS.header << std::flush;
-          if (hash_algorithm == 1)
+          if (hash_algorithm == 1 || hash_algorithm == 3)
               nb_kmer += hashSeqCountWHole(sS, kmerSize, wcount);
           else
               nb_kmer += hashSeqCount(sS, kmerSize, wcount);
@@ -861,6 +863,24 @@ void HashDNASeq::hashSubjectSeqPosMinimizer(const BioSeq &seq, unsigned num_seq,
     }
 }
 //-------------------------------------------------------------------------
+void HashDNASeq::hashSubjectSeqPosWHoleMinimizer(const BioSeq &seq, unsigned num_seq, unsigned wsize, const std::vector<unsigned> &wcount)
+{
+    std::list<std::pair<unsigned,unsigned>> kmer_pos_list;
+    std::set<std::pair<unsigned,unsigned>> minimized_kmer_pos_list;
+    hashSeqPosWHole(seq,wsize,kmer_pos_list);
+    minimize(window_size,kmer_pos_list,minimized_kmer_pos_list);
+
+    for(auto &iter_pos : minimized_kmer_pos_list) {
+        unsigned pos = iter_pos.second;
+        unsigned key_d = iter_pos.first;
+        if (wcount[key_d] != 0) {
+            *(hash_ptr[key_d]) = KmerSpos(pos, num_seq);
+            hash_ptr[key_d]++;
+        }
+
+    }
+}
+//-------------------------------------------------------------------------
 void HashDNASeq::hashSeqPos(const BioSeq &seq, unsigned wsize, std::list<std::pair<unsigned, unsigned> > &kmer_pos_list) {
     unsigned nb_kmer = 0;
     const char *s = seq.c_str();
@@ -915,12 +935,28 @@ void HashDNASeq::hashSeqPos(const BioSeq &seq, unsigned wsize, std::list<std::pa
     }
 }
 //-------------------------------------------------------------------------
+void HashDNASeq::hashSeqPosWHole(const BioSeq &seq, unsigned wsize, std::list<std::pair<unsigned, unsigned> > &kmer_pos_list) {
+
+    unsigned len=seq.length();
+    if(len<=wsize) return;
+    unsigned last_pos=len-wsize;
+    const char *s=seq.c_str();
+    for(unsigned i=0;i<=last_pos;i++)
+    {
+        if (i >= wsize)
+            kmer_pos_list.emplace_back(std::pair<unsigned, unsigned>(hseq(s),i - wsize));
+        s++;
+    }
+}
+//-------------------------------------------------------------------------
 void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
-                        std::vector<std::pair<unsigned, unsigned> > &frag)
+                        std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose)
 {
 	clock_t clock_begin, clock_end;
-	clock_begin = clock();
-	std::cout<<"hashing query sequence..."<<std::flush;
+    if(verbose>0) {
+        clock_begin = clock();
+        std::cout << "hashing query sequence..." << std::flush;
+    }
 	Diag_map diag_map(nbseqS);
 
     if(hash_algorithm==1)
@@ -929,20 +965,27 @@ void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bo
         matchKmers(sequence, start, end, repeat, diag_map);
     else if(hash_algorithm==2)
         matchKmersMinimizer(sequence, start, end, repeat, diag_map);
+    else if(hash_algorithm==3)
+        matchKmersWHoleMinimizer(sequence, start, end, repeat, diag_map);
+    if(verbose>0) {
+        std::cout << "ok" << std::endl;
+        std::cout << diag_map.size() << " hits found";
+        clock_end = clock();
+        std::cout << " --> Time spent: " << (double) (clock_end - clock_begin) / CLOCKS_PER_SEC << " seconds"
+                  << std::endl;
 
-	std::cout<<"ok"<<std::endl;
-	std::cout<<diag_map.size()<<" hits found";
-	clock_end = clock();
-	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
-
-	clock_begin = clock();
-	std::cout<<"run_test_search_wSW fragments..."<<std::flush;
+        clock_begin = clock();
+        std::cout << "search fragments..." << std::flush;
+    }
     diagSearchDist(diag_map,(kmer_size+1)*wdist,kmer_size,frag);
 	diag_map.clear();
-	std::cout<<"ok"<<std::endl;
-	std::cout<<frag.size()<<" fragments found";
-	clock_end = clock();
-	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
+    if(verbose>0) {
+        std::cout << "ok" << std::endl;
+        std::cout << frag.size() << " fragments found";
+        clock_end = clock();
+        std::cout << " --> Time spent: " << (double) (clock_end - clock_begin) / CLOCKS_PER_SEC << " seconds"
+                  << std::endl;
+    }
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
@@ -1028,6 +1071,40 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
 
     BioSeq subseq=sequence.substr(start,end-start+1);
     hashSeqPos(subseq,kmer_size,kmer_pos_list);
+    minimize(window_size,kmer_pos_list,minimized_kmer_pos_list);
+
+    for(auto &iter_pos : minimized_kmer_pos_list){
+        unsigned pos=start+iter_pos.second;
+        unsigned key_d=iter_pos.first;
+
+        auto begin_d = hash2wpos[key_d];
+        auto end_d = hash2wpos[key_d + 1];
+        for (auto j = begin_d; j != end_d; j++) {
+            if (j->numSeq == 0) continue;
+            if (j->numSeq > 0) {
+                long diag = long(pos) - j->pos;
+                if (!repeat || (repeat && pos < j->pos)){
+                    dirhit++;
+                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
+                }
+            }
+        }
+    }
+    std::cout<<dirhit<<" hits found / ";
+}
+//-------------------------------------------------------------------------
+// Search for alignments with kmer matches
+void HashDNASeq::matchKmersWHoleMinimizer(const BioSeq& sequence,
+                                     unsigned start, unsigned end, bool repeat,
+                                     Diag_map& diag_map)
+{
+    unsigned dirhit=0;
+
+    std::list<std::pair<unsigned,unsigned>> kmer_pos_list;
+    std::set<std::pair<unsigned,unsigned>> minimized_kmer_pos_list;
+
+    BioSeq subseq=sequence.substr(start,end-start+1);
+    hashSeqPosWHole(subseq,kmer_size,kmer_pos_list);
     minimize(window_size,kmer_pos_list,minimized_kmer_pos_list);
 
     for(auto &iter_pos : minimized_kmer_pos_list){

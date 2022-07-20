@@ -36,7 +36,7 @@ bool BLRBlasterParameter::start (int numarg, char* tabarg[])
       if(p_dirs!=NULL)
 	{
       if(verbose>0)
-    	  std::cout<<"run_test_search_wSW bank:"<<bankQuery_name<<"..."<<std::flush;
+    	  std::cout<<"search bank:"<<bankQuery_name<<"..."<<std::flush;
 	  std::string dirs=p_dirs;
 	  std::istringstream stream(dirs);
 	  SDGString path, pathfile;
@@ -63,7 +63,7 @@ bool BLRBlasterParameter::start (int numarg, char* tabarg[])
       if(p_dirs!=NULL)
 	{
       if(verbose>0)
-    	  std::cout<<"run_test_search_wSW bank:"<<bank_name<<"..."<<std::flush;
+    	  std::cout<<"search bank:"<<bank_name<<"..."<<std::flush;
 	  std::string dirs=p_dirs;
 	  std::istringstream stream(dirs);
 	  SDGString path, pathfile;

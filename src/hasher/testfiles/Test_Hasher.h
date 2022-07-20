@@ -22,10 +22,12 @@ class Test_Hasher : public CppUnit::TestFixture {
     CPPUNIT_TEST(test_search_wSW );
 	CPPUNIT_TEST(test_searchWHole_wSW );
     CPPUNIT_TEST(test_searchMinimizer_wSW );
+    CPPUNIT_TEST(test_searchWHoleMinimizer_wSW );
 
     CPPUNIT_TEST(test_search_wExt );
     CPPUNIT_TEST(test_searchWHole_wExt );
     CPPUNIT_TEST(test_searchMinimizer_wExt );
+    CPPUNIT_TEST(test_searchWHoleMinimizer_wExt );
 
 	CPPUNIT_TEST( test_diagSearchDist );
 	//CPPUNIT_TEST( test_diagSearchScore );
@@ -102,10 +104,12 @@ protected:
     void test_search_wSW(void );
     void test_searchWHole_wSW(void );
     void test_searchMinimizer_wSW(void );
+    void test_searchWHoleMinimizer_wSW(void );
 
     void test_search_wExt(void );
     void test_searchWHole_wExt(void );
     void test_searchMinimizer_wExt(void );
+    void test_searchWHoleMinimizer_wExt(void );
 
     void test_diagSearchDist( void );
     //void test_diagSearchScore( void );

@@ -271,7 +271,7 @@ void FragAlign::align(void) {
             long long max_score = std::numeric_limits<long long>::min();
             std::list<triple>::iterator j = L.begin();
             std::list<triple>::iterator max_j = L.end();
-            while (j != L.end() && j->lower < hk) // modif Hadi: run_test_search_wSW for ALL rectangle above the current
+            while (j != L.end() && j->lower < hk) // modif Hadi: search for ALL rectangle above the current
             {
                 long long diag1 =
                         (long long) j->iter_range_pair->getRangeQ().getEnd()
@@ -352,7 +352,7 @@ void FragAlign::align(void) {
                         > connect_dist_limit
                     )
                     // modif Hadi to take into account above modifications
-                    //and set limits to run_test_search_wSW for above rectangles
+                    //and set limits to search for above rectangles
                         )
                     n = L.erase(n);
                 else n++;

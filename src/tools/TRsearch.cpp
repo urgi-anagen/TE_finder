@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
 	s1=s.subseq(0,align_len);
 	s2=s.subseq(slen-align_len,slen);
 
-	//run_test_search_wSW LTR method1 as best local alignments between start and end
+	//search LTR method1 as best local alignments between start and end
 	//of the sequence
 	al.setSeq(s1,s2);	  
 	for(unsigned n=0;n<nb_sub;n++)
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 	      }
 	  }
 
-	//run_test_search_wSW ITR method1 as best local alignments between start and end
+	//search ITR method1 as best local alignments between start and end
 	//of the sequence
 	s2c=s2.complement();
 	al.setSeq(s1,s2c);	  
@@ -248,7 +248,7 @@ int main(int argc, char* argv[])
 	      }
 	  }
 	    
-	//run_test_search_wSW TIR methode 2 at the boundaries
+	//search TIR methode 2 at the boundaries
 	altir.alignItr(s);
 	if(altir.getScore()!=0)
 	  {

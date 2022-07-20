@@ -193,6 +193,37 @@ void Test_Hasher::test_searchMinimizer_wSW(void ){
     CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
 }
 //-------------------------------------------------------------------------
+void Test_Hasher::test_searchWHoleMinimizer_wSW(void ){
+
+    unsigned verbosity=1;
+
+    unsigned start=0,end=0,numseq=1,connect_dist=20,min_frag_size=25,min_count=0;
+    std::list< RangePair > frag_list;
+    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=1, kmer_window=15, kmer_dist=10, bkmer_size=2, step_q=1;
+    double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
+
+    bool valid_idx_file = false;
+    unsigned alg=3;
+
+    run_test_search_wSW(alg, verbosity, start, end, numseq,
+                        connect_dist, min_frag_size, min_count,
+                        frag_list, kmer_size, mask_hole_period,
+                        mask_hole_length, kmer_window, kmer_dist,
+                        bkmer_size, step_q, count_cutoff, diversity_cutoff,
+                        gap_pen, valid_idx_file) ;
+
+    std::ostringstream ostr_obs;
+    for(auto f: frag_list){
+        ostr_obs<<f.getIdentity()<<std::endl;
+    }
+
+    std::ostringstream ostr_exp;
+    std::string exp="100\n100\n100\n100\n100\n100\n";
+    ostr_exp<<exp;
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+}
+//-------------------------------------------------------------------------
 void Test_Hasher::test_search_wExt(void ){
     unsigned alg=0;
     unsigned verbosity=1;
@@ -270,6 +301,36 @@ void Test_Hasher::test_searchMinimizer_wExt(void ){
                         mask_hole_length, kmer_window, kmer_dist,
                         bkmer_size, step_q, count_cutoff, diversity_cutoff,
                         gap_pen, valid_idx_file) ;
+
+    std::ostringstream ostr_obs;
+    for(auto f: frag_list){
+        ostr_obs<<f.getIdentity()<<std::endl;
+    }
+
+    std::ostringstream ostr_exp;
+    std::string exp="100\n100\n100\n100\n100\n100\n";
+    ostr_exp<<exp;
+
+    CPPUNIT_ASSERT_EQUAL(ostr_exp.str(),ostr_obs.str());
+}
+//-------------------------------------------------------------------------
+void Test_Hasher::test_searchWHoleMinimizer_wExt(void ){
+
+    unsigned verbosity=1;
+
+    unsigned start=0,end=0,numseq=1,connect_dist=20,min_frag_size=25,min_count=0;
+    std::list< RangePair > frag_list;
+    unsigned kmer_size=10, mask_hole_period=0, mask_hole_length=0, kmer_window=15, kmer_dist=10, bkmer_size=2, step_q=1;
+    double count_cutoff=1.0, diversity_cutoff=0.0, gap_pen=0.01;
+    bool valid_idx_file = false;
+    unsigned alg=3;
+
+    run_test_search_wExt(alg, verbosity, start, end, numseq,
+                         connect_dist, min_frag_size, min_count,
+                         frag_list, kmer_size, mask_hole_period,
+                         mask_hole_length, kmer_window, kmer_dist,
+                         bkmer_size, step_q, count_cutoff, diversity_cutoff,
+                         gap_pen, valid_idx_file) ;
 
     std::ostringstream ostr_obs;
     for(auto f: frag_list){

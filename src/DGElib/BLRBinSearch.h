@@ -129,7 +129,7 @@ class BLRBinSearch
     };
 };
 
-//threaded run_test_search_wSW
+//threaded search
 void threadedSearch(BLRBinSearch* bs, unsigned start, unsigned end, std::vector<unsigned>& vm); 
 #endif
 

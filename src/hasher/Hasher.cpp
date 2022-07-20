@@ -78,9 +78,13 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 		unsigned min_frag_size, bool repeat, std::list< RangePair >& frag, unsigned verbose)
 {
     if(end-start+1<min_frag_size) return;
-	clock_t clock_begin, clock_end;
-	clock_begin = clock();
-	std::cout<<"hashing query sequence #"<<numseq<<" from "<<start<<" to "<<end<<" ..."<<std::flush;
+    clock_t clock_begin, clock_end;
+    if(verbose>0){
+
+        clock_begin = clock();
+        std::cout<<"hashing query sequence #"<<numseq<<" from "<<start<<" to "<<end<<" ..."<<std::flush;
+    }
+
 
     Diag_map diag_map(subject_names.size()+1);
     if(algorithm==0)
@@ -89,19 +93,28 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
         matchKmersHole(sequence, start, end, repeat, diag_map);
     else if(algorithm==2)
         matchKmersMinimizer(sequence, start, end, repeat, diag_map);
+    else if(algorithm==3)
+        matchKmersWHoleMinimizer(sequence, start, end, repeat, diag_map);
 
-	clock_end = clock();
-	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
+    if(verbose>0) {
+        clock_end = clock();
+        std::cout << " --> Time spent: " << (double) (clock_end - clock_begin) / CLOCKS_PER_SEC << " seconds"
+                  << std::endl;
 
-	clock_begin = clock();
-	std::cout<<"run_test_search_wSW fragments..."<<std::flush;
+        clock_begin = clock();
+        std::cout << "search fragments..." << std::flush;
+    }
+
     diagSearchDist(numseq, diag_map, connect_dist, kmer_size, min_frag_size, frag, verbose-1);
 
 	diag_map.clear();
 
-	std::cout<<"ok"<<std::endl;
-	clock_end = clock();
-	std::cout<<" --> Time spent: "<<(double)(clock_end-clock_begin)/CLOCKS_PER_SEC<<" seconds"<<std::endl;
+    if(verbose>0) {
+        std::cout << "ok" << std::endl;
+        clock_end = clock();
+        std::cout << " --> Time spent: " << (double) (clock_end - clock_begin) / CLOCKS_PER_SEC << " seconds"
+                  << std::endl;
+    }
 }
 //-------------------------------------------------------------------------
 // merge found fragments
@@ -241,7 +254,7 @@ void Hasher::fragLenFilter(std::list< RangePair >& frag, unsigned min_len)
 // Filter score on rangePair lists
 void Hasher::fragScoreIdentityFilter(std::list<RangePair> &frag, unsigned min_score, unsigned min_identity)
 {
-    std::cout<<"--Filter fragments score <"<<min_score<<" and identity <"<<min_identity<<" ... "<<std::flush;
+    std::cout<<"--Filter fragments score <"<<min_score<<" or identity <"<<min_identity<<" ... "<<std::flush;
     auto frag_it=frag.begin();
     while(frag_it != frag.end()) {
         if(frag_it->getScore()<min_score || frag_it->getIdentity()<min_identity){

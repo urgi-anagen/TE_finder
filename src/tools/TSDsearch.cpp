@@ -18,7 +18,7 @@ void help(void)
 	   <<" [<options>] <fasta sequence database>"<<std::endl
 	   <<" options:"<<std::endl
 	   <<"   -h, --help:\n\t this help"<<std::endl
-	   <<"   -r, --reputer:\n\t reputer run_test_search_wSW"<<std::endl
+	   <<"   -r, --reputer:\n\t reputer search"<<std::endl
 	   <<"   -w, --word:\n\t word length, default: "<<word_len<<std::endl
 	   <<"   -m, --match:\n\t match bonus (>0), default: "
 	   <<match<<std::endl
