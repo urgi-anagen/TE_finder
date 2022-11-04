@@ -76,8 +76,6 @@ SDGString Cutter::cutDB(SDGString bank_name, int verbose) {
             std::cout << seq.getDE() << ": " << seq.length() << " bp" << std::flush;
             if (seq.length() == 0)
                 std::cout << " --> Cannot cut empty sequence, skip it!" << std::endl;
-            else
-                std::cout << " " <<seq.toString() << std::endl;
         }
 
         if (seq.length() > 0)
