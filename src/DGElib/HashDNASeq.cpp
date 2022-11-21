@@ -949,7 +949,7 @@ void HashDNASeq::hashSeqPosWHole(const BioSeq &seq, unsigned wsize, std::list<st
     }
 }
 //-------------------------------------------------------------------------
-void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+void HashDNASeq::search(const BioSeq &sequence, unsigned numseq, unsigned start, unsigned end, bool repeat,
                         std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose)
 {
 	clock_t clock_begin, clock_end;
@@ -960,13 +960,13 @@ void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bo
 	Diag_map diag_map(nbseqS);
 
     if(hash_algorithm==1)
-        matchKmersHole(sequence, start, end, repeat, diag_map);
+        matchKmersHole(sequence, numseq, start, end, repeat, diag_map);
     else if(hash_algorithm==0)
-        matchKmers(sequence, start, end, repeat, diag_map);
+        matchKmers(sequence, numseq, start, end, repeat, diag_map);
     else if(hash_algorithm==2)
-        matchKmersMinimizer(sequence, start, end, repeat, diag_map);
+        matchKmersMinimizer(sequence, numseq, start, end, repeat, diag_map);
     else if(hash_algorithm==3)
-        matchKmersWHoleMinimizer(sequence, start, end, repeat, diag_map);
+        matchKmersWHoleMinimizer(sequence, numseq, start, end, repeat, diag_map);
     if(verbose>0) {
         std::cout << "ok" << std::endl;
         std::cout << diag_map.size() << " hits found";
@@ -989,7 +989,7 @@ void HashDNASeq::search(const BioSeq &sequence, unsigned start, unsigned end, bo
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
-void HashDNASeq::matchKmersHole(const BioSeq& sequence,
+void HashDNASeq::matchKmersHole(const BioSeq& sequence,unsigned qSeq,
                                 unsigned start, unsigned end, bool repeat,
                                 Diag_map& diag_map)
 {
@@ -1007,12 +1007,14 @@ void HashDNASeq::matchKmersHole(const BioSeq& sequence,
         auto begin_d = hash2wpos[key_d];
         auto end_d = hash2wpos[key_d + 1];
         for (auto j = begin_d; j != end_d; j++) {
-            if (j->numSeq == 0) continue;
-            if (j->numSeq > 0) {
-                long diag = long(i) - j->pos;
-                if (!repeat || (repeat && i < j->pos)){
+            unsigned sSeq=j->numSeq;
+            unsigned sPos=j->pos;
+            if (sSeq == 0) continue;
+            if (sSeq > 0) {
+                long diag = long(i) - sPos;
+                if (!repeat || (repeat && i < sPos && qSeq<=sSeq)){
                     dirhit++;
-                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[sSeq].emplace_back(Diag(diag, sPos, sSeq));
                     found = true;
                 }
             }
@@ -1029,7 +1031,7 @@ void HashDNASeq::matchKmersHole(const BioSeq& sequence,
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
-void HashDNASeq::matchKmers(const BioSeq& sequence,
+void HashDNASeq::matchKmers(const BioSeq& sequence, unsigned qSeq,
                             unsigned start, unsigned end, bool repeat,
                             Diag_map& diag_map)
 {
@@ -1046,12 +1048,14 @@ void HashDNASeq::matchKmers(const BioSeq& sequence,
         auto begin_d = hash2wpos[key_d];
         auto end_d = hash2wpos[key_d + 1];
         for (auto j = begin_d; j != end_d; j++) {
-            if (j->numSeq == 0) continue;
-            if (j->numSeq > 0) {
-                long diag = long(pos) - j->pos;
-                if (!repeat || (repeat && pos < j->pos)){
+            unsigned sSeq=j->numSeq;
+            unsigned sPos=j->pos;
+            if (sSeq == 0) continue;
+            if (sSeq > 0) {
+                long diag = long(pos) - sPos;
+                if (!repeat || (repeat && pos <sPos && qSeq<=sSeq)){
                     dirhit++;
-                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[sSeq].emplace_back(Diag(diag, sPos, sSeq));
                 }
             }
         }
@@ -1060,7 +1064,7 @@ void HashDNASeq::matchKmers(const BioSeq& sequence,
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
-void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
+void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence, unsigned qSeq,
                             unsigned start, unsigned end, bool repeat,
                                      Diag_map& diag_map)
 {
@@ -1080,12 +1084,14 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
         auto begin_d = hash2wpos[key_d];
         auto end_d = hash2wpos[key_d + 1];
         for (auto j = begin_d; j != end_d; j++) {
-            if (j->numSeq == 0) continue;
-            if (j->numSeq > 0) {
-                long diag = long(pos) - j->pos;
-                if (!repeat || (repeat && pos < j->pos)){
+            unsigned sSeq=j->numSeq;
+            unsigned sPos=j->pos;
+            if (sSeq == 0) continue;
+            if (sSeq > 0) {
+                long diag = long(pos) - sPos;
+                if (!repeat || (repeat && pos < sPos && qSeq<=sSeq)){
                     dirhit++;
-                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[sSeq].emplace_back(Diag(diag, sPos, sSeq));
                 }
             }
         }
@@ -1094,7 +1100,7 @@ void HashDNASeq::matchKmersMinimizer(const BioSeq& sequence,
 }
 //-------------------------------------------------------------------------
 // Search for alignments with kmer matches
-void HashDNASeq::matchKmersWHoleMinimizer(const BioSeq& sequence,
+void HashDNASeq::matchKmersWHoleMinimizer(const BioSeq& sequence, unsigned qSeq,
                                      unsigned start, unsigned end, bool repeat,
                                      Diag_map& diag_map)
 {
@@ -1114,12 +1120,14 @@ void HashDNASeq::matchKmersWHoleMinimizer(const BioSeq& sequence,
         auto begin_d = hash2wpos[key_d];
         auto end_d = hash2wpos[key_d + 1];
         for (auto j = begin_d; j != end_d; j++) {
-            if (j->numSeq == 0) continue;
-            if (j->numSeq > 0) {
-                long diag = long(pos) - j->pos;
-                if (!repeat || (repeat && pos < j->pos)){
+            unsigned sSeq=j->numSeq;
+            unsigned sPos=j->pos;
+            if (sSeq == 0) continue;
+            if (sSeq > 0) {
+                long diag = long(pos) - sPos;
+                if (!repeat || (repeat && pos < sPos && qSeq<=sSeq)){
                     dirhit++;
-                    diag_map[j->numSeq].emplace_back(Diag(diag, j->pos, j->numSeq));
+                    diag_map[sSeq].emplace_back(Diag(diag, sPos, sSeq));
                 }
             }
         }

@@ -88,13 +88,13 @@ void Hasher::search(const BioSeq& sequence, unsigned start, unsigned end, unsign
 
     Diag_map diag_map(subject_names.size()+1);
     if(algorithm==0)
-        matchKmers(sequence, start, end, repeat, diag_map);
+        matchKmers(sequence, numseq, start, end, repeat, diag_map);
     else if(algorithm==1)
-        matchKmersHole(sequence, start, end, repeat, diag_map);
+        matchKmersHole(sequence, numseq, start, end, repeat, diag_map);
     else if(algorithm==2)
-        matchKmersMinimizer(sequence, start, end, repeat, diag_map);
+        matchKmersMinimizer(sequence, numseq, start, end, repeat, diag_map);
     else if(algorithm==3)
-        matchKmersWHoleMinimizer(sequence, start, end, repeat, diag_map);
+        matchKmersWHoleMinimizer(sequence, numseq, start, end, repeat, diag_map);
 
     if(verbose>0) {
         clock_end = clock();

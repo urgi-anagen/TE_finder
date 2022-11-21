@@ -1,0 +1,140 @@
+							      >	Max Match   Min Mismatch   Gap-Open Penalty   Gap-Extension P
+							      >	   1          -3              5                  2
+							      >
+							      >	                 Upper Sequence : chunk3.5 DmelChr4-B-G11-Map
+							      >	                         Length : 1190
+							      >	                 Lower Sequence : DmelChr4-B-G11-Map20_classI
+							      >	                         Length : 1240
+							      >
+							      >	      Best Alignment with Constant Cost for Long Insertions
+							      >	      Similarity Score : 1188
+							      >	      Match Percentage : 95%
+							      >	      Number of Matches : 1188
+							      >	      Number of Mismatches : 0
+							      >	      Total Length of Gaps : 54
+							      >	      Note that terminal gaps are not penalized
+							      >
+							      >	    0     .    :    .    :    .    :    .    :    .    :
+							      >	    1 --------------------------------------------------
+							      >	                                                        
+							      >	    1 TACCAAAGACACTACAATAACAAGATGCGTAACGGCCATACATTGGTTTG
+							      >
+							      >	   50     .    :    .    :    .    :    .    :    .    :
+							      >	    1 --CAAAGACCCTAGAATAACAAGATGCGTAACGCCATACGATTTTTTGGC
+							      >	        ||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	   51 ACCAAAGACCCTAGAATAACAAGATGCGTAACGCCATACGATTTTTTGGC
+							      >
+							      >	  100     .    :    .    :    .    :    .    :    .    :
+							      >	   49 ACACGATTTTTTGGCCGTGGCTCTAGAGGTGGCTCCAGGCTCTCTCGAAT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  101 ACACGATTTTTTGGCCGTGGCTCTAGAGGTGGCTCCAGGCTCTCTCGAAT
+							      >
+							      >	  150     .    :    .    :    .    :    .    :    .    :
+							      >	   99 TTTTGTTAGAGAGCGAGAGAGCGAAGAGCGCTACAGCGAACAGCTCTTTT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  151 TTTTGTTAGAGAGCGAGAGAGCGAAGAGCGCTACAGCGAACAGCTCTTTT
+							      >
+							      >	  200     .    :    .    :    .    :    .    :    .    :
+							      >	  149 CAACGCACAAAGTGATAGCAGACAACTGTATGTGTGCACACGTATGCTCA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  201 CAACGCACAAAGTGATAGCAGACAACTGTATGTGTGCACACGTATGCTCA
+							      >
+							      >	  250     .    :    .    :    .    :    .    :    .    :
+							      >	  199 TGCATTGTAAATTTGACAAAATATGCCCTTCACCTTAGAAGTTCTTAGAC
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  251 TGCATTGTAAATTTGACAAAATATGCCCTTCACCTTAGAAGTTCTTAGAC
+							      >
+							      >	  300     .    :    .    :    .    :    .    :    .    :
+							      >	  249 TTTAAATCTATATTATTTTTGATCAATTGGCACCATGCGAAAATTCTATT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  301 TTTAAATCTATATTATTTTTGATCAATTGGCACCATGCGAAAATTCTATT
+							      >
+							      >	  350     .    :    .    :    .    :    .    :    .    :
+							      >	  299 GGCACCATGCGATTCTTGTTTTGCATTGCCTTAACGTTATTATTATTTGA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  351 GGCACCATGCGATTCTTGTTTTGCATTGCCTTAACGTTATTATTATTTGA
+							      >
+							      >	  400     .    :    .    :    .    :    .    :    .    :
+							      >	  349 AAATAGATTAGAAATAGCCAAATCTATGTACATATTATCACAAAAATAAA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  401 AAATAGATTAGAAATAGCCAAATCTATGTACATATTATCACAAAAATAAA
+							      >
+							      >	  450     .    :    .    :    .    :    .    :    .    :
+							      >	  399 TTTCAAAAATGACTTTATATAAGAATATTTGTCATTAGAGTATTCATCTT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  451 TTTCAAAAATGACTTTATATAAGAATATTTGTCATTAGAGTATTCATCTT
+							      >
+							      >	  500     .    :    .    :    .    :    .    :    .    :
+							      >	  449 GCGGCGTGTGAAAAATTAATAAGGCAATGATTGTTGAGTGCTTGTGTCCG
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  501 GCGGCGTGTGAAAAATTAATAAGGCAATGATTGTTGAGTGCTTGTGTCCG
+							      >
+							      >	  550     .    :    .    :    .    :    .    :    .    :
+							      >	  499 CACTTCGTGCCTCAAGATATGAACAAAGCAAAGACACTAGAATAATTCTA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  551 CACTTCGTGCCTCAAGATATGAACAAAGCAAAGACACTAGAATAATTCTA
+							      >
+							      >	  600     .    :    .    :    .    :    .    :    .    :
+							      >	  549 GTGTATTACTTTGATATTACTTTTGCAATAAACAGTTATCATATTTTTAT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  601 GTGTATTACTTTGATATTACTTTTGCAATAAACAGTTATCATATTTTTAT
+							      >
+							      >	  650     .    :    .    :    .    :    .    :    .    :
+							      >	  599 GAAATTTATGAAATTACAGTAGTTATAATAATTTCTATTGTACTTCCTTT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  651 GAAATTTATGAAATTACAGTAGTTATAATAATTTCTATTGTACTTCCTTT
+							      >
+							      >	  700     .    :    .    :    .    :    .    :    .    :
+							      >	  649 AATTATTTAGTATATTTATTAAATCATTTGACTTAATATGATGTAACATT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  701 AATTATTTAGTATATTTATTAAATCATTTGACTTAATATGATGTAACATT
+							      >
+							      >	  750     .    :    .    :    .    :    .    :    .    :
+							      >	  699 AACATTAAAAGTGTTTCAAAAAAAATATTTCGCTTTTAAAAAATTGTCAG
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  751 AACATTAAAAGTGTTTCAAAAAAAATATTTCGCTTTTAAAAAATTGTCAG
+							      >
+							      >	  800     .    :    .    :    .    :    .    :    .    :
+							      >	  749 ATGAGAGACAAATTAGAATTAAACATAAATATAAATGTGTAAACGGTAGC
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  801 ATGAGAGACAAATTAGAATTAAACATAAATATAAATGTGTAAACGGTAGC
+							      >
+							      >	  850     .    :    .    :    .    :    .    :    .    :
+							      >	  799 TAATTCGAGCGGCGATTTTAACAAACAAATTTTAAAAAGCTTTAAAATTA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  851 TAATTCGAGCGGCGATTTTAACAAACAAATTTTAAAAAGCTTTAAAATTA
+							      >
+							      >	  900     .    :    .    :    .    :    .    :    .    :
+							      >	  849 TAATAGTCAGGGCGCGAATTTTTAAAAATTTTTTTATTTTATCATATTGC
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  901 TAATAGTCAGGGCGCGAATTTTTAAAAATTTTTTTATTTTATCATATTGC
+							      >
+							      >	  950     .    :    .    :    .    :    .    :    .    :
+							      >	  899 TAGGAAATTGGCAAAAACTACCCTAATATGTACCATGTAAATTCGTTTCT
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	  951 TAGGAAATTGGCAAAAACTACCCTAATATGTACCATGTAAATTCGTTTCT
+							      >
+							      >	 1000     .    :    .    :    .    :    .    :    .    :
+							      >	  949 TCGATCAGAATTGATTTCGGCCCCGAAAATCGTCTTCTAGCACAACACGC
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	 1001 TCGATCAGAATTGATTTCGGCCCCGAAAATCGTCTTCTAGCACAACACGC
+							      >
+							      >	 1050     .    :    .    :    .    :    .    :    .    :
+							      >	  999 ACACTTATACGCGTTCTCGTCTCTTGTTTTTACTCACACAAGCAAGCAAA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	 1051 ACACTTATACGCGTTCTCGTCTCTTGTTTTTACTCACACAAGCAAGCAAA
+							      >
+							      >	 1100     .    :    .    :    .    :    .    :    .    :
+							      >	 1049 TTATATTTTTAGATTTCTTACGCTCTCAGCGGGAGTGAGCGGAAAGAGAG
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	 1101 TTATATTTTTAGATTTCTTACGCTCTCAGCGGGAGTGAGCGGAAAGAGAG
+							      >
+							      >	 1150     .    :    .    :    .    :    .    :    .    :
+							      >	 1099 TAATTTTGGCCGTCACCAAAAAAGTGGCTGCATAGTGCCAAACCAATGTA
+							      >	      ||||||||||||||||||||||||||||||||||||||||||||||||||
+							      >	 1151 TAATTTTGGCCGTCACCAAAAAAGTGGCTGCATAGTGCCAAACCAATGTA
+							      >
+							      >	 1200     .    :    .    :    .    :    .    :
+							      >	 1149 TGGCCGTTACGCATCTTGTTATTCTAGTGTCTTTGGTTTGTG
+							      >	      ||||||||||||||||||||||||||||||||||||||||  
+							      >	 1201 TGGCCGTTACGCATCTTGTTATTCTAGTGTCTTTGGTTTG--

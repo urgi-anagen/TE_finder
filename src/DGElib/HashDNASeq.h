@@ -195,13 +195,13 @@ protected:
     void hashSeqPos(const BioSeq &seq, unsigned wsize, std::list<std::pair<unsigned,unsigned>>& kmer_pos_list);
     void hashSeqPosWHole(const BioSeq &seq, unsigned wsize, std::list<std::pair<unsigned,unsigned>>& kmer_pos_list);
 
-    void matchKmersHole(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void matchKmersHole(const BioSeq &sequence, unsigned qSeq, unsigned start, unsigned end, bool repeat,
                         Diag_map &diag_map);
-    void matchKmers(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void matchKmers(const BioSeq &sequence, unsigned qSeq, unsigned start, unsigned end, bool repeat,
                     Diag_map &diag_map);
-    void matchKmersMinimizer(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void matchKmersMinimizer(const BioSeq &sequence, unsigned qSeq, unsigned start, unsigned end, bool repeat,
                              Diag_map &diag_map);
-    void matchKmersWHoleMinimizer(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void matchKmersWHoleMinimizer(const BioSeq &sequence, unsigned qSeq, unsigned start, unsigned end, bool repeat,
                              Diag_map &diag_map);
 
     void minimize(unsigned window_size, std::list<std::pair<unsigned, unsigned>> kmer_pos_list,
@@ -252,7 +252,7 @@ public:
                        std::vector<unsigned> &wcount,unsigned &nb_kmer,
                        std::list<Info_kmer> &list_infokmer, Info_kmer &kmer_threshold);
 
-    void search(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void search(const BioSeq &sequence, unsigned numseq, unsigned start, unsigned end, bool repeat,
                 std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose=0);
 };
 

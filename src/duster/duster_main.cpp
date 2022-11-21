@@ -324,22 +324,23 @@ int main(int argc, char* argv[])
 				{
 					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
 					std::cout<<"---direct strand---"<<std::endl;
-                    dstr.search(s, start, start + chunk_size - 1, repeat, frag, verbosity);
+			numseq++;
+                    dstr.search(s, numseq, start, start + chunk_size - 1, repeat, frag, verbosity);
 					std::cout<<"---reverse strand---"<<std::endl;
-                    dstr.search(comp_s, start, start + chunk_size - 1, repeat, frag_comp, verbosity);
+                    dstr.search(comp_s, numseq, start, start + chunk_size - 1, repeat, frag_comp, verbosity);
 					start=start+chunk_size;
 				}
 				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-                dstr.search(s, start, s.length(), repeat, frag, verbosity);
+                dstr.search(s, numseq, start, s.length(), repeat, frag, verbosity);
 				std::cout<<"---reverse strand---"<<std::endl;
-                dstr.search(comp_s, start, s.length(), repeat, frag_comp, verbosity);
+                dstr.search(comp_s, numseq, start, s.length(), repeat, frag_comp, verbosity);
 			}else
 			{
 				std::cout<<"---direct strand---"<<std::endl;
-                dstr.search(s, 1, s.length(), repeat, frag, verbosity);
+                dstr.search(s, numseq, 1, s.length(), repeat, frag, verbosity);
 				std::cout<<"---reverse strand---"<<std::endl;
-                dstr.search(comp_s, 1, s.length(), repeat, frag_comp, verbosity);
+                dstr.search(comp_s, numseq, 1, s.length(), repeat, frag_comp, verbosity);
 
 			}
 			translate_comp(frag_comp, s.length());

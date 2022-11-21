@@ -27,7 +27,7 @@ public:
 
     unsigned getEffectiveKmerSize() override { return hseq.getEffectiveKmerSize(); };
 
-    void search(const BioSeq &sequence, unsigned start, unsigned end, bool repeat,
+    void search(const BioSeq &sequence, unsigned numseq, unsigned start, unsigned end, bool repeat,
                 std::vector<std::pair<unsigned, unsigned> > &fmerged, unsigned verbose);
 
     static void

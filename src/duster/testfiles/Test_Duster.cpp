@@ -47,7 +47,7 @@ void Test_Duster::test_search(void ){
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true, true);
 
-    dstr.search(seq, start, end, numseq, fmerged, verbosity);
+    dstr.search(seq, numseq, start, end, numseq, fmerged, verbosity);
 
     for (  std::vector< std::pair<unsigned,unsigned> >::iterator it = fmerged.begin();
          it!=fmerged.end(); it++){

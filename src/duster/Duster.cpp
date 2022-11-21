@@ -2,13 +2,13 @@
 
 
 //-------------------------------------------------------------------------
-void Duster::search(const BioSeq& sequence, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged, unsigned verbose)
+void Duster::search(const BioSeq& sequence, unsigned numseq, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged, unsigned verbose)
 {
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
 	std::cout<<"hashing query sequence..."<<std::flush;
 	Diag_map diag_map(nbseqS+1);
-    matchKmersHole(sequence, start, end, repeat, diag_map);
+    matchKmersHole(sequence, numseq, start, end, repeat, diag_map);
 	std::cout<<"ok"<<std::endl;
 	std::cout<<diag_map.size()<<" hits found";
 	clock_end = clock();
