@@ -7,9 +7,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION( Test_matcherThreads );
 
 void Test_matcherThreads::setUp()
 {
-    path2exec="../../../cmake-build-debug/src/matcher.threads/";
+    path2exec="../../../build/src/matcher.threads/";
 }
-
+ 
 void Test_matcherThreads::tearDown()
 {
 }

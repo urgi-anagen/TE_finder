@@ -21,7 +21,8 @@
 #include "RangeSeq.h"
 #include "BLRBioSeqDB.h"
 #include "SDGBioSeqDB.h"
-#include "../matcher/BLRMatcherParameter.h"
+#include "BLRJoinParameter.h"
+#include "BLRMatcherThreadsParameter.h"
 #include "Graph.h"
 
 typedef std::list<RangePairSet> RpsList;

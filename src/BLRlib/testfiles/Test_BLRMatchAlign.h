@@ -7,7 +7,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "RangePair.h"
-#include "../../matcher/BLRMatcherParameter.h"
 #include "BLRMatchMap.h"
 
 class Test_BLRMatchAlign: public CPPUNIT_NS::TestFixture

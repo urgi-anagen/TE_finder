@@ -1,7 +1,7 @@
 #include "Test_BLRMatchPath.h"
 #include "SDGString.h"
 #include "FileUtils.h"
-#include "../../matcher/BLRMatcherParameter.h"
+#include "BLRMatcherThreadsParameter.h"
 #include "BLRMatchPath.h"
 #include "Range.h"
 #include "RangePair.h"

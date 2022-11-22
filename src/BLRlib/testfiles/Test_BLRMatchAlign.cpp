@@ -1,12 +1,11 @@
 #include "Test_BLRMatchAlign.h"
 #include "SDGString.h"
 #include "FileUtils.h"
-#include "../../matcher/BLRMatcherParameter.h"
-#include "../../grouper.threads/BLRGrouperParameter.h"
 #include "BLRMatchAlign.h"
 #include "Range.h"
 #include "RangePair.h"
 #include "RangePairSet.h"
+#include "BLRMatcherThreadsParameter.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Test_BLRMatchAlign );
 //---------------------------------------------------------------------------

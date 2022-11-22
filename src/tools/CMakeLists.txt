@@ -66,8 +66,6 @@ target_link_libraries(filterAlign SDGlib DGElib BLRlib)
 target_link_libraries(tabnum2id SDGlib DGElib BLRlib)
 target_link_libraries(rpt_map SDGlib DGElib BLRlib)
 
-install (TARGETS hasher${VERSION} DESTINATION ${CMAKE_SOURCE_DIR}/bin)
-
 install (TARGETS cutterDB DESTINATION ${CMAKE_SOURCE_DIR}/bin)
 install (TARGETS itrsearch DESTINATION ${CMAKE_SOURCE_DIR}/bin)
 install (TARGETS ltrsearch DESTINATION ${CMAKE_SOURCE_DIR}/bin)

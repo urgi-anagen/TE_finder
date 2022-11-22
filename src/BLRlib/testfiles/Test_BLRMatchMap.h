@@ -7,7 +7,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "RangePair.h"
-#include "../../matcher/BLRMatcherParameter.h"
+#include "BLRMatcherThreadsParameter.h"
 #include "BLRMatchMap.h"
 #include "Graph.h"
 

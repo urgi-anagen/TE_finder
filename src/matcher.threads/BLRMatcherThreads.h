@@ -18,7 +18,7 @@ private:
 
 public:
 
-    BLRMatcherThreads( BLRMatcherThreadsParameter* para,  BLRMatchMap* mm):
+    BLRMatcherThreads( BLRMatcherThreadsParameter* para):
             matcher_parameter(para)
     {};
     std::list<RangePairSet> getRpsListFromMapPath(void){

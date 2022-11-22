@@ -27,8 +27,6 @@ add_executable(
 
         ../BLRMatcherThreads.cpp
         ../BLRMatcherThreads.h
-        ../BLRMatcherThreadsParameter.cpp
-        ../BLRMatcherThreadsParameter.h
         Test_matcherThreads.cpp Test_matcherThreads.h
 )
 

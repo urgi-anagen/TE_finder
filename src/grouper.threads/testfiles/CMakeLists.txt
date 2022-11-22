@@ -28,7 +28,6 @@ add_executable(
         ../BLRMemIdxBin.cpp
         ../BLRGroupThreads.cpp
         ../BLRGrouperThreads.cpp
-        ../BLRGrouperParameter.cpp
         Test_BLRGroup.cpp Test_BLRGroup.h
         Test_BLRGrouper.cpp Test_BLRGrouper.h)
 

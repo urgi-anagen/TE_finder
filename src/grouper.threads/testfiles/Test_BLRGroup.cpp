@@ -2,7 +2,7 @@
 #include "Test_BLRGroupUtils.h"
 #include "../BLRGroupThreads.h"
 #include "../BLRMemIdxBin.h"
-#include "../BLRGrouperParameter.h"
+#include "BLRGrouperParameter.h"
 #include "SDGString.h"
 #include "FileUtils.h"
 
