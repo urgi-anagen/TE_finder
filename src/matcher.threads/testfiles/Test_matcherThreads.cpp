@@ -51,7 +51,7 @@ void Test_matcherThreads::test_runAsScript_join_simple( void ){
 	FileUtils::removeFile(outParamFileName);
     FileUtils::removeFile(obsGFF3FileName);
 }
-void Test_matcherThreads::test_runAsScript_join( void ){
+/* void Test_matcherThreads::test_runAsScript_join( void ){
     SDGString inputFileName = "blasterAthaBest.align";
     SDGString expFileName = "blasterAthaBestNoMerge.clean_match.path";
 
@@ -89,7 +89,7 @@ void Test_matcherThreads::test_runAsScript_join( void ){
         file=prefixFileName+prefixObsFileName+".bed";
         FileUtils::removeFile(file);
     }
-}
+} */
 void Test_matcherThreads::test_runAsScript_join_threads( void ){
     SDGString inputFileName = "blasterAthaBest.align";
     SDGString prefixFileName = "test_runAsScript_join_threads_";

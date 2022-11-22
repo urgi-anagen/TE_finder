@@ -11,7 +11,7 @@ class Test_matcherThreads: public CPPUNIT_NS::TestFixture
 	CPPUNIT_TEST_SUITE(Test_matcherThreads);
 	//CPPUNIT_TEST(test_runAsProcess);
 	CPPUNIT_TEST(test_runAsScript_join_simple);
-	CPPUNIT_TEST(test_runAsScript_join);
+	//CPPUNIT_TEST(test_runAsScript_join);
 	CPPUNIT_TEST(test_runAsScript_join_threads);
 	CPPUNIT_TEST(test_runAsScript_join_clean_threads);
 	CPPUNIT_TEST(test_runAsScript_join_merge_threads);
@@ -24,7 +24,7 @@ class Test_matcherThreads: public CPPUNIT_NS::TestFixture
 
 	protected:
 		void test_runAsScript_join_simple(void);
-        void test_runAsScript_join(void);
+        //void test_runAsScript_join(void);
         void test_runAsScript_join_threads(void);
         void test_runAsScript_join_clean_threads(void);
         void test_runAsScript_join_merge_threads(void);

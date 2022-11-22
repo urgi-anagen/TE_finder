@@ -5,7 +5,7 @@
 #ifndef TE_FINDER_BLRMATCHERTHREADS_H
 #define TE_FINDER_BLRMATCHERTHREADS_H
 
-#include "BLRMatchMap.h"
+#include "BLRMatchPath.h"
 #include "BLRMatcherThreadsParameter.h"
 #include "BLRMatchJoin.h"
 
@@ -18,9 +18,11 @@ private:
 
 public:
 
-    BLRMatcherThreads( BLRMatcherThreadsParameter* para, BLRMatchPath mp):
+
+    BLRMatcherThreads( BLRMatcherThreadsParameter* para):
             matcher_parameter(para)
     {};
+
     std::list<RangePairSet> getRpsListFromMapPath(void){
         return map_path.getRpsListFromMapPath();}
     void process(const std::list<RangePair>& rp_list);

@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
         if (para.getVerbose() > 0)
             para.view(std::cout);
 
-        BLRMatchMap match_map;
+        //BLRMatchMap match_map;
 
         // Read input data
         BLRMatchAlign match_align;
@@ -131,7 +131,8 @@ int main(int argc, char *argv[]) {
         if(para.getVerbose()>0) std::cout<<"Initialization..."<<std::endl<<std::flush;
 
         for(unsigned i=0; i<nb_sets; i++)
-            lmatchers.push_back(new BLRMatcherThreads(&para, &match_map));
+            //lmatchers.push_back(new BLRMatcherThreads(&para, &match_map));
+            lmatchers.push_back(new BLRMatcherThreads(&para));
 
         if(para.getVerbose()>0) std::cout<<"Initialization was done."<<std::endl<<std::flush;
 
