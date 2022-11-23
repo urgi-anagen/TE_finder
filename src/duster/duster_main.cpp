@@ -322,15 +322,14 @@ int main(int argc, char* argv[])
 				unsigned nb_chunk=s.length()/chunk_size;
 				for(unsigned i=1;i<nb_chunk;i++)
 				{
-					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
+					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<numseq<<"->"<<start<<".."<<start+chunk_size-1<<std::endl;
 					std::cout<<"---direct strand---"<<std::endl;
-			numseq++;
                     dstr.search(s, numseq, start, start + chunk_size - 1, repeat, frag, verbosity);
 					std::cout<<"---reverse strand---"<<std::endl;
                     dstr.search(comp_s, numseq, start, start + chunk_size - 1, repeat, frag_comp, verbosity);
 					start=start+chunk_size;
 				}
-				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
+				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<numseq<<"->"<<start<<".."<<s.length()<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
                 dstr.search(s, numseq, start, s.length(), repeat, frag, verbosity);
 				std::cout<<"---reverse strand---"<<std::endl;
