@@ -209,8 +209,6 @@ protected:
                         unsigned connect_dist, unsigned kmerSize,
                         std::vector<std::pair<unsigned, unsigned> > &frag);
 
- /*   void diagSearchScore(std::vector<std::list<Diag>> &diag_map,unsigned kmerSize,
-                    std::vector<std::pair<unsigned, unsigned> > &frag, unsigned verbose) const;*/
 public:
 
     HashDNASeq(unsigned kmer_size = 10, unsigned mask_hole_period = 10, unsigned mask_hole_length = 1,

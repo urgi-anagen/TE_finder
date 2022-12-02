@@ -28,7 +28,7 @@ public:
     unsigned getEffectiveKmerSize() override { return hseq.getEffectiveKmerSize(); };
 
     void search(const BioSeq &sequence, unsigned numseq, unsigned start, unsigned end, bool repeat,
-                std::vector<std::pair<unsigned, unsigned> > &fmerged, unsigned verbose);
+                std::vector<std::pair<unsigned, unsigned> > &fmerged);
 
     static void
     writeBED(const SDGString &qname, const std::vector<std::pair<unsigned, unsigned> > &frag, std::ostream &out);

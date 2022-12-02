@@ -36,7 +36,7 @@ void Test_Duster::test_search(void ){
     fout_subject << str_fasta.str();
     fout_subject.close();
 
-    unsigned start=5,end=200,numseq=1,min_frag_size=35,verbosity=0,min_count=0;
+    unsigned start=5,end=200,numseq=1,min_frag_size=35,min_count=0;
     std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
     unsigned kmer_size=10, kmask=12, mask_hole_length=1, kmer_window=0, kmer_dist=1, bkmer_size=2, step_q=1;
     double count_cutoff=1.0, diversity_cutoff=0.0;
@@ -47,7 +47,7 @@ void Test_Duster::test_search(void ){
                count_cutoff, diversity_cutoff,
                min_count,valid_idx_file, true, true);
 
-    dstr.search(seq, numseq, start, end, numseq, fmerged, verbosity);
+    dstr.search(seq, numseq, start, end, numseq, fmerged);
 
     for (  std::vector< std::pair<unsigned,unsigned> >::iterator it = fmerged.begin();
          it!=fmerged.end(); it++){

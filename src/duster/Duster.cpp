@@ -2,7 +2,7 @@
 
 
 //-------------------------------------------------------------------------
-void Duster::search(const BioSeq& sequence, unsigned numseq, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged, unsigned verbose)
+void Duster::search(const BioSeq& sequence, unsigned numseq, unsigned start, unsigned end, bool repeat, std::vector< std::pair<unsigned,unsigned> >& fmerged)
 {
 	clock_t clock_begin, clock_end;
 	clock_begin = clock();
@@ -17,7 +17,6 @@ void Duster::search(const BioSeq& sequence, unsigned numseq, unsigned start, uns
 	clock_begin = clock();
 	std::cout<<"search fragments..."<<std::flush;
 	std::vector< std::pair<unsigned,unsigned> > frag;
-    //diagSearchScore(diag_map,kmer_size,frag,verbose-1);
 	diagSearchDist(diag_map,(kmer_size+1)*wdist,kmer_size,frag);
 	diag_map.clear();
 	std::cout<<"ok"<<std::endl;
