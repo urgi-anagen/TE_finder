@@ -1,0 +1,14 @@
+TEfinder Changelog
+------------------
+
+Release 2.31
+-Add denovo mode to duster
+-Add SSR filter to duster
+-Replace matcher by matcherThreads
+
+Release 2.30
+-Add low complexity filter parameter to blast when invoked with blaster
+-Bug fixes
+
+Release 2.29
+-Add new tool : duster
