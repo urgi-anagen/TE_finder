@@ -98,8 +98,6 @@ protected:
         KmerSpos wpos;
 
         explicit Diag(long d = 0, unsigned p = 0, unsigned n = 0) {
-            if (d > 100000000)
-                throw Long_Out_Of_Range("Diag setup error: d=", d);
             diag = d;
             wpos = KmerSpos(p, n);
         };

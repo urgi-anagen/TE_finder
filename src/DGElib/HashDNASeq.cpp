@@ -1167,7 +1167,7 @@ void HashDNASeq::diagSearchDist(Diag_map & diag_map,
             Diag prev_d = *iter_diag;
             unsigned start = 0;
             unsigned end = 0;
-            int diag = 0;
+            long diag = 0;
             while (++iter_diag != iter_seq.end()) {
                 Diag curr_d = *iter_diag;
                 if (prev_d.diag == curr_d.diag // Same diagonal
