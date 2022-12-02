@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "test_duster2.31",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/src/duster/testfiles/test_duster2.31",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src/duster/testfiles/",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb"
+        },
+        {
             "name": "test_matcherThreads2.31",
             "type": "cppdbg",
             "request": "launch",

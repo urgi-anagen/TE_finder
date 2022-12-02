@@ -95,7 +95,7 @@ public:
       query_name=para.getQuery();
       min_len=20;
       blasting = NULL;
-      count_treated=0;
+      count_seq_treated=0;
       same_db=false;
       
       if(para.get_is_wuBlast())
