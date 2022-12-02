@@ -67,7 +67,7 @@ void FileUtils::removeFile( SDGString file )
 	if( doesFileExist( file ) )
 		remove( file.c_str() );
 	else
-		std::cout<<"WARNING: can't remove file '"<<file<<"'"<<std::endl;
+		std::cout<<"WARNING: can't remove_self_hits file '"<<file<<"'"<<std::endl;
 }
 
 void FileUtils::openFile( SDGString file, std::ofstream &fileStream )

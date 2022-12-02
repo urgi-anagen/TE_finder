@@ -14,6 +14,8 @@
 #include <cppunit/BriefTestProgressListener.h>
 #include "Test_Range.h"
 #include "Test_RangeAlignSet.h"
+#include "Test_FragAlign.h"
+#include "Test_FastExtAlign.h"
 #include "Test_RangePair.h"
 #include "Test_FileUtils.h"
 

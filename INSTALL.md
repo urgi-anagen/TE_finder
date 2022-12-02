@@ -1,7 +1,7 @@
 Dependencies
 ============
 
-* cmake : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
+* cmake3 : if not already installed, download it at https://cmake.org, or intall it from available packages (rpm, debian, brew, ...)
     
     example (Debian): sudo apt -y install cmake
 
@@ -29,7 +29,7 @@ Compilation
 
 1. go to the <TE_finder-root-dir> directory
 
-2. type 'cmake .'
+2. type 'cmake3 .'
 
 3. type 'make install'
 

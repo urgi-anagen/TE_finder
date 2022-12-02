@@ -40,8 +40,8 @@ void BLRGroup::mergeWithExtGroup( GROUPLIST::iterator iQ, GROUPLIST::iterator& i
 
 	vec_memb[*m_it1].merge(ext_gr.vec_memb[m2]);
 	vec_memb[*m_it1].idlist.splice( vec_memb[*m_it1].idlist.end(), ext_gr.vec_memb[m2].idlist );
-	if( vec_memb[*m_it1].getMin() < memIdx->get_start_member_idx( *m_it1 )
-			|| vec_memb[*m_it1].getMax() > memIdx->get_end_member_idx( *m_it1 ) )
+	if( vec_memb[*m_it1].getMin() <= memIdx->get_start_member_idx( *m_it1 )
+			|| vec_memb[*m_it1].getMax() >= memIdx->get_end_member_idx( *m_it1 ) )
 		memIdx->adjust_member_idx( *m_it1, vec_memb[*m_it1].getMin(), vec_memb[*m_it1].getMax() );
 	ext_gr.eraseMember(iS,std::find(iS->begin(),iS->end(),m2));
 
@@ -267,7 +267,7 @@ void BLRGroup::show_group( std::ostream& out )
 	GROUPLIST::iterator group_iter=group_list.begin();
 
 	bool samedb=false;
-	if( grouper_parameter->getBank() == grouper_parameter->getQuery() )
+	if( grouper_parameter.getBank() == grouper_parameter.getQuery() )
 		samedb = true;
 
 	while( group_iter != group_list.end() )
@@ -283,11 +283,11 @@ void BLRGroup::show_group( std::ostream& out )
 			{
 				if( memb.idlist.front() > 0 ) //subject
 					if( samedb )
-						chr_name = match_map->numQ2name( memb.getNumChr() );
+						chr_name = match_map.numQ2name( memb.getNumChr() );
 					else
-						chr_name = match_map->numS2name( memb.getNumChr() );
+						chr_name = match_map.numS2name( memb.getNumChr() );
 				else  // query
-					chr_name = match_map->numQ2name( memb.getNumChr() );
+					chr_name = match_map.numQ2name( memb.getNumChr() );
 				out<<count_group<<"\t"<<count_mb<<"\t";
 				out<<chr_name<<"\t";
 				out<<memb.getStart()<<"\t";
@@ -325,7 +325,7 @@ void BLRGroup::show_group( std::ostream& out )
 //------------------------------------------------------------------------------------------------------------
 void BLRGroup::save( void )
 {
-	unsigned verbose=grouper_parameter->getVerbose();
+	unsigned verbose=grouper_parameter.getVerbose();
 
 	if( verbose > 0 )
 		std::cout<<"Write the results..."<<std::endl<<std::flush;
@@ -343,7 +343,7 @@ void BLRGroup::save( void )
 	count_all=0;
 
 	bool samedb = false;
-	if( grouper_parameter->getBank() == grouper_parameter->getQuery() )
+	if( grouper_parameter.getBank() == grouper_parameter.getQuery() )
 		samedb = true;
 
 	group_iter = group_list.begin();
@@ -372,16 +372,16 @@ void BLRGroup::save( void )
 				if( memb.idlist.front() > 0 ) //subject
 				{
 					if( samedb )
-						chr_name = match_map->numQ2name( memb.getNumChr() );
+						chr_name = match_map.numQ2name( memb.getNumChr() );
 					else
-						chr_name = match_map->numS2name( memb.getNumChr() );
+						chr_name = match_map.numS2name( memb.getNumChr() );
 					subseqname = "MbS"+SDGString(count_all)
 					+"Gr"+SDGString(count_gp)
 					+"Cl"+SDGString(gr2clust[count_gp]);
 				}
 				else  // query
 				{
-					chr_name = match_map->numQ2name( memb.getNumChr() );
+					chr_name = match_map.numQ2name( memb.getNumChr() );
 					subseqname = "MbQ"+SDGString(count_all)
 					+"Gr"+SDGString(count_gp)
 					+"Cl"+SDGString(gr2clust[count_gp]);
@@ -400,8 +400,8 @@ void BLRGroup::save( void )
 	}
 
 	std::ostringstream filename;
-	filename<<grouper_parameter->getPrefixFileName()<<".group.c"
-	<<grouper_parameter->getCoverage();
+	filename<<grouper_parameter.getPrefixFileName()<<".group.c"
+	<<grouper_parameter.getCoverage();
 
 //	if(verbose>0)
 //		std::cout<<"Writing 'map' file..."<<std::flush;
@@ -420,9 +420,9 @@ void BLRGroup::save( void )
 	if(verbose>0)
 		std::cout<<"Writing 'fasta' file..."<<std::flush;
 	SDGString seqfile = filename.str() + ".fa";
-	membmap.writeSeq( seqfile, match_map->getRefQueryDB() );
-	if( !samedb && grouper_parameter->getQuery()!="<not set>")
-		membmap.writeSeq( seqfile, match_map->getRefSubjectDB() );
+	membmap.writeSeq( seqfile, grouper_parameter.getQuery() );
+	if( !samedb && grouper_parameter.getQuery()!="<not set>")
+		membmap.writeSeq( seqfile, grouper_parameter.getBank() );
 	if(verbose>0)
 		std::cout<<" done"<<std::endl;
 
@@ -430,7 +430,7 @@ void BLRGroup::save( void )
 		std::cout<<"Writing 'param' file..."<<std::flush;
 	SDGString parafile = filename.str() + ".param";
 	std::ofstream parastream( parafile );
-	grouper_parameter->view( parastream );
+	grouper_parameter.view( parastream );
 	parastream.close();
 	if(verbose>0)
 		std::cout<<" done"<<std::endl;

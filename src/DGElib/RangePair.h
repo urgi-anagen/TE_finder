@@ -160,13 +160,24 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	static const GreaterLengthQ greaterLengthQ;
 	static const GreaterLengthIdent greaterLengthIdent;
 	static const StrictLess strictLess;
-
+    RangePair (const unsigned numseqQ, unsigned int qstart, unsigned int qend,
+                               const unsigned numseqS, unsigned int sstart, unsigned int send,
+                               unsigned int score, double e_val=0, double ident=0, unsigned i=0)
+                               : e_value(e_val), identity(ident), length(0), score(score),id(i){
+        RangeAlign r1(numseqQ,qstart,qend);
+        setRangeQ(r1);
+        RangeAlign r2(numseqS,sstart,send);
+        setRangeS(r2);
+        length=std::abs((int)(first.getStart()-first.getEnd()))+1;
+    }
 	RangePair(void): e_value(0), identity(0), length(0), score(0),id(0){};
 	RangePair(const RangeAlign& r1,const RangeAlign& r2)
 		:std::pair<RangeAlign,RangeAlign>(r1,r2),e_value(0), identity(0), length(0), score(0),id(0)
-		{};
+		{length=std::abs((int)(first.getStart()-first.getEnd()))+1;};
 	RangePair( BlastMatch al );
 	RangePair( SDGString line );
+
+
 
 
 	friend bool operator==( const RangePair &rp1, const RangePair &rp2 );
@@ -204,6 +215,12 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 			}
 		}
 
+    void setQSName(std::string query_name, std::string subject_name)
+    {
+        first.setNameSeq(query_name);
+        second.setNameSeq(subject_name);
+    }
+
 	bool isPlusStrand(void) const
 		{ return second.isPlusStrand();};
 
@@ -215,6 +232,10 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	const RangeAlign& getRangeS(void) const {return second;}
 	void setRangeQ(const RangeAlign& r){first=r;};
 	void setRangeS(const RangeAlign& r){second=r;};
+
+	long getNumQuery( void ) const {return first.getNumChr();};
+
+	long getNumSubject( void ) const {return second.getNumChr();};
 
 	void set( SDGString );
 
@@ -249,12 +270,15 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 	void viewWithLabel(void)
 	{
 		 std::cout<<"rangeQ "<<std::endl;
-		 first.view(); 
+		 first.view();
+		 if(first.isPlusStrand()) std::cout<<" (+)"; else std::cout<<" (-)";
 		 std::cout<<"rangeS "<<std::endl;
-		 second.view(); 
+		 second.view();
+        if(second.isPlusStrand()) std::cout<<" (+)"; else std::cout<<" (-)";
 		 std::cout<<"id "<<id<<" e_value "<<e_value<<" identity "<<identity<<" length "<<length<<" score "<<score<<std::endl;
 	};
-	void writetxt(std::ostream& out);
+	void write(std::ostream& out) const;
+    void write_raw(std::ostream& out) const;
 
 	void readReputer(std::istream& in);
 	void readtxt(std::istream& in);
@@ -300,12 +324,19 @@ class RangePair: public std::pair<RangeAlign,RangeAlign> // first is range on qu
 			return first.overlap(r.first);
 		};
 
+    bool includedQ(const RangePair& r) const
+    {
+        return first.isIncluded(r.first);
+    };
+
 	RangePair diffQ(const RangePair& r);
 
 	friend std::ostream& operator<<(std::ostream& out, const RangePair& r)
 		{
 		out<<r.first<<"\t";
+		if(r.first.isPlusStrand()) std::cout<<"(+)\t"; else std::cout<<"(-)\t";
 		out<<r.second<<"\t";
+		if(r.second.isPlusStrand()) std::cout<<"(+)\t"; else std::cout<<"(-)\t";
 		out<<"score="<<r.score;
 		out<<" e_value="<<r.e_value;
 		out<<" identity="<<r.identity;

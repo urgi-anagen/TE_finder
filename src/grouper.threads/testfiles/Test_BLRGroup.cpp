@@ -2,22 +2,22 @@
 #include "Test_BLRGroupUtils.h"
 #include "../BLRGroupThreads.h"
 #include "../BLRMemIdxBin.h"
-#include "../BLRGrouperParameter.h"
+#include "BLRGrouperParameter.h"
 #include "SDGString.h"
 #include "FileUtils.h"
 
 #include "BLRMatchMap.h"
-#include "Test_BLRMatchMapUtils.h"
+#include "Test_BLRUtils.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test_BLRGroup);
 //------------------------------------------------------------------------------------------------------------
 void Test_BLRGroup::test_eraseMember( void )
 {
-    para_ptr=new BLRGrouperParameter();
-    BLRMatchMap mm(para_ptr);
+    BLRGrouperParameter para;
+    BLRMatchMap mm(para);
 
     //test
-    BLRGroup gr(para_ptr,&mm,3);
+    BLRGroup gr(para,mm,3);
 
 	Member m1(RangeAlignSet(RangeAlign(1,100,200)),1);
 	Member m2(RangeAlignSet(RangeAlign(2,100,200)),2);
@@ -30,7 +30,7 @@ void Test_BLRGroup::test_eraseMember( void )
 	gr.eraseMember(gr_it,i);
 
 	//expectation
-	BLRGroup gr_exp(para_ptr,&mm,3);
+	BLRGroup gr_exp(para,mm,3);
 	Member m1e=m1,m2e=m2,m3e=m3;
 	GROUPLIST::iterator gr_exp_it=gr_exp.addGroup(m1e,m2e);
 	gr_exp.addMember(gr_exp_it,m3e);

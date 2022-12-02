@@ -66,6 +66,7 @@ class __SDGMemBioSeq :   public __SDGBioSeq
 	  {return sequence.rend();};
 
 	SDGBioSeq complement() const ;
+    SDGBioSeq reverse() const ;
 
 	SDGBioSeq concat(SDGBioSeq seq) const;
 	SDGBioSeq concat(SDGString seq) const;
@@ -114,7 +115,6 @@ class SDGBioSeq : public SDGReference<__SDGBioSeq>
    *********************************/
 
   SDGBioSeq(const __SDGBioSeq &obj=__SDGMemBioSeq());
-  SDGBioSeq(const SDGBioSeq &orig);
 
   /****************************************
    *
@@ -219,7 +219,7 @@ class SDGBioSeq : public SDGReference<__SDGBioSeq>
    * @see   setLinear
    */
 
-  SDGBioSeq subseq(unsigned long d,unsigned long lg=0)   
+  SDGBioSeq subseq(unsigned long d,unsigned long lg=0)   const
     {
       return getPointer()->subseq(d,lg);
     };
@@ -314,6 +314,10 @@ class SDGBioSeq : public SDGReference<__SDGBioSeq>
       return  getPointer()->complement();
     };
 
+    SDGBioSeq reverse() const
+    {
+        return  getPointer()->reverse();
+    };
 
   /**
    * return the char at the position indice of the sequence.
@@ -490,9 +494,6 @@ inline SDGBioSeq __SDGMemBioSeq::subseq(unsigned  long d,
 
 inline  SDGBioSeq::SDGBioSeq(const __SDGBioSeq &obj) : 
   SDGReference<__SDGBioSeq>(obj)  {};
-
-inline  SDGBioSeq::SDGBioSeq(const SDGBioSeq &orig) : 
-    SDGReference<__SDGBioSeq>(orig)  {};
 
 inline SDGBioSeq newSDGMemBioSeq(SDGBioSeq ch)
 {

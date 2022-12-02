@@ -25,8 +25,8 @@ void BLRMatchMapLoader::readAlign(BLRMatchMap& blrmm, std::istream& input_align,
    std::map<long,std::string> num2nameQ = blrmm.getNum2NameQ();	
    std::map<long,std::string> num2nameS = blrmm.getNum2NameS();
 
-    if (blrmm.getParameter()->getBank() == blrmm.getParameter()->getQuery() &&
-        blrmm.getParameter()->getBank() != "<not set>")
+    if (blrmm.getParameter().getBank() == blrmm.getParameter().getQuery() &&
+        blrmm.getParameter().getBank() != "<not set>")
         blrmm.setSameDb(true);
 
     //Check format
@@ -46,9 +46,9 @@ void BLRMatchMapLoader::readAlign(BLRMatchMap& blrmm, std::istream& input_align,
     std::istringstream is(str);
     RangePair rp;
     rp.readtxt(is);
-    if (blrmm.getParameter()->getEvalFilter() > rp.getE_value()
-        && blrmm.getParameter()->getIdFilter() < rp.getIdentity()
-        && blrmm.getParameter()->getLenFilter() < rp.getLength()) {
+    if (blrmm.getParameter().getEvalFilter() > rp.getE_value()
+        && blrmm.getParameter().getIdFilter() < rp.getIdentity()
+        && blrmm.getParameter().getLenFilter() < rp.getLength()) {
         std::map<std::string, long>::iterator it
                 = name2numQ.find(rp.getRangeQ().getNameSeq());
         if (it == name2numQ.end()) {
@@ -83,9 +83,9 @@ void BLRMatchMapLoader::readAlign(BLRMatchMap& blrmm, std::istream& input_align,
         RangePair rp;
         rp.readtxt(input_align);
         if (input_align) {
-            if (blrmm.getParameter()->getEvalFilter() < rp.getE_value()
-                || blrmm.getParameter()->getIdFilter() > rp.getIdentity()
-                || blrmm.getParameter()->getLenFilter() > rp.getLength())
+            if (blrmm.getParameter().getEvalFilter() < rp.getE_value()
+                || blrmm.getParameter().getIdFilter() > rp.getIdentity()
+                || blrmm.getParameter().getLenFilter() > rp.getLength())
                 continue;
 
             std::map<std::string, long>::iterator it
@@ -148,12 +148,13 @@ void BLRMatchMapLoader::readPath(BLRMatchMap& blrmm, std::istream& input_path, i
 	std::map<long,std::string> num2nameQ = blrmm.getNum2NameQ();
 	std::map<long,std::string> num2nameS = blrmm.getNum2NameS();
 
-	if(blrmm.getParameter()->getBank()==blrmm.getParameter()->getQuery() &&
-		blrmm.getParameter()->getBank()!="<not set>")
+	if(blrmm.getParameter().getBank()==blrmm.getParameter().getQuery() &&
+		blrmm.getParameter().getBank()!="<not set>")
 		blrmm.setSameDb(true);
 
 	unsigned long currentId=0, previousId=0;
 	RangePairSet rps;
+    std::list<RangePair> rp_list;
 
 	while(input_path)
 	{
@@ -161,9 +162,9 @@ void BLRMatchMapLoader::readPath(BLRMatchMap& blrmm, std::istream& input_path, i
 		rp.readtxt(input_path);
 		if(input_path)
 		{
-			if(blrmm.getParameter()->getEvalFilter()<rp.getE_value()
-				|| blrmm.getParameter()->getIdFilter()>rp.getIdentity()
-				|| blrmm.getParameter()->getLenFilter()>rp.getLength())
+			if(blrmm.getParameter().getEvalFilter()<rp.getE_value()
+				|| blrmm.getParameter().getIdFilter()>rp.getIdentity()
+				|| blrmm.getParameter().getLenFilter()>rp.getLength())
 				continue;
 
 			std::map<std::string,long>::iterator it
@@ -202,7 +203,7 @@ void BLRMatchMapLoader::readPath(BLRMatchMap& blrmm, std::istream& input_path, i
 					rp.getRangeS().setNumChr(it->second);
 			}
 
-			//remove sequence name to gain space
+			//remove_self_hits sequence name to gain space
 			rp.getRangeQ().setNameSeq("");
 			rp.getRangeS().setNameSeq("");
 
@@ -210,17 +211,20 @@ void BLRMatchMapLoader::readPath(BLRMatchMap& blrmm, std::istream& input_path, i
 			if (previousId != currentId && previousId!=0) //new path
 			{
 			//save previous path
-				rps.setPath(blrmm.para->getDist_pen(),0.0,blrmm.para->getGap_pen());
+                rps.setRpsFromRpList(rp_list);
+                rps.computeScoreWithDynaProg(blrmm.para.getDist_pen(), 0.0, blrmm.para.getGap_pen());
 				blrmm.rpsList.push_back(rps);
 
 			//clear for new path
 				rps.clear();
+                rp_list.clear();
 			}
-			rps.addPath(rp);
+			rp_list.push_back(rp);
 			previousId=currentId;
 		}	
 	}
-	rps.setPath(blrmm.para->getDist_pen(),0.0,blrmm.para->getGap_pen());
+	rps.setRpsFromRpList(rp_list);
+    rps.computeScoreWithDynaProg(blrmm.para.getDist_pen(), 0.0, blrmm.para.getGap_pen());
 	blrmm.rpsList.push_back(rps);
 	blrmm.setName2NumQ(name2numQ);
 	blrmm.setName2NumS(name2numS);
@@ -229,7 +233,7 @@ void BLRMatchMapLoader::readPath(BLRMatchMap& blrmm, std::istream& input_path, i
 
 	if(verbose>0)
 	{
-		std::cout<<"nb of matches: "<<blrmm.rpsList.size()<<std::endl;
+		std::cout<<"nb of path: "<<blrmm.rpsList.size()<<std::endl;
 		if( blrmm.isSameDb() )
 			std::cout<<"nb of distinct queries/subjects: "<<blrmm.getNbQseq()<<std::endl;
 		else

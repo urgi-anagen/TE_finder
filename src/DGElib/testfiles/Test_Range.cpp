@@ -89,6 +89,14 @@ void Test_Range::test_reverse( void )
 	CPPUNIT_ASSERT( i == exp );
 }
 
+void Test_Range::test_translate_comp( void )
+{
+    Range i = Range( 5, 10 );
+    Range exp = Range( 16, 11 );
+    i.translate_comp(20);
+    CPPUNIT_ASSERT( i == exp );
+}
+
 void Test_Range::test_overlap( void )
 {
 	Range i = Range( 1, 10 );

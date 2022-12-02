@@ -1,33 +1,32 @@
 #include <getopt.h>
-#include <fstream>
 #include <cstdlib>
 #include <list>
 
 #include "SDGString.h"
-#include "SDGFastaIstream.h"
-#include "SDGFastaOstream.h"
-#include "SDGMemBioSeq.h"
+#include "BioSeq.h"
+#include "FastaIstream.h"
+#include "FastaOstream.h"
 
 #include "Duster.h"
 
 
-unsigned kmer_size=15, step_q=7, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
-min_size=20, chunk_size_kb=100, nb_iter=0, min_count=0, kmask=4, verbosity=0;
+unsigned kmer_size=15, step_q=7, kmer_window=0, bkmer_size=1, kmer_dist=5, frag_connect_dist=100,
+min_size=20, chunk_size_kb=100, nb_iter=0, min_count=0, mask_hole_period=4, verbosity=0;
 double count_cutoff=1.0, diversity_cutoff=0.0;
-bool repeat=false, stat_only=false;
+bool repeat=false, stat_only=false, filter_ssr=true;
 
 SDGString outfilename="";
 
     
 void help(void)
 {
-  std::cerr<<"usage: duster"
-          << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
-          << " options:" << std::endl
-          << "   -h, --help:\n\t this help" << std::endl
-          << "   -w, --kmer:\n\t kmer length (<16), default: " << kmer_size << std::endl
-          << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
-          << "   -k, --kmask:\n\t period of k-mer mask, default: " << kmask << std::endl
+  std::cerr << "usage: duster"
+            << " [<options>] <fasta query sequence> [<fasta sequence model>]." << std::endl
+            << " options:" << std::endl
+            << "   -h, --help:\n\t this help" << std::endl
+            << "   -w, --kmer:\n\t kmer length (<16), default: " << kmer_size << std::endl
+            << "   -S, --step_q:\n\t step on query sequence, default: " << step_q << std::endl
+            << "   -k, --mask_hole_period:\n\t period of k-mer mask, default: " << mask_hole_period << std::endl
           << "   -d, --kmer_dist:\n\t max number of kmer between two matching kmer to connect, default: "
           << kmer_dist << std::endl
           << "   -f, --frag_connect_dist:\n\t max distance between two fragments to connect, default: "
@@ -47,16 +46,18 @@ void help(void)
           << "   -n, --nb_iter:\n\t number of iteration. A value of 0 make iteration stop if coverage variation is less than 1%."
           << " default:" << nb_iter << std::endl
           << "   -a, --analysis:\n\t compute kmer statistics only" << std::endl
-          << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl;
+          << "   -v, --verbosity:\n\t verbosity level, default:" << verbosity << std::endl
+          << "   -x, --filter_ssr_no:\n\t suppress SSR filter: " ;
+    if(filter_ssr) std::cout<<"No"<< std::endl; else std::cout<<"Yes"<< std::endl;
 };
-void show_parameter(SDGString filename1,SDGString filename2)
+void show_parameter(const SDGString& filename1,const SDGString& filename2)
 {
-  std::cout<<"\nRun with parameters:\n"
-          << "Query sequences: " << filename1 << std::endl
-          << "Model sequences: " << filename2 << std::endl
-          << "   -w, --kmer:\t kmer length (<16): " << kmer_size << std::endl
-          << "   -S, --step_q:\t step on query sequence: " << step_q << std::endl
-          << "   -k, --kmask:\t length of k-mer mask: " << kmask << std::endl
+  std::cout << "\nRun with parameters:\n"
+            << "Query sequences: " << filename1 << std::endl
+            << "Model sequences: " << filename2 << std::endl
+            << "   -w, --kmer:\t kmer length (<16): " << kmer_size << std::endl
+            << "   -S, --step_q:\t step on query sequence: " << step_q << std::endl
+            << "   -k, --mask_hole_period:\t length of k-mer mask: " << mask_hole_period << std::endl
           << "   -d, --kmer_dist:\t max number of kmer between two matching kmer to connect: " << kmer_dist << std::endl
           << "   -f, --frag_connect_dist:\n\t max distance between two fragments to connect: "
           << frag_connect_dist << std::endl
@@ -70,9 +71,16 @@ void show_parameter(SDGString filename1,SDGString filename2)
           << "   -o, --file_out:\t filename for output:" << outfilename << std::endl
           << "   -c, --chunk_size:\t sequence chunk size in kb: " << chunk_size_kb << std::endl
           << "   -n, --nb_iter:\t number of iteration: " << nb_iter << std::endl
-          << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl;
+          << "   -v, --verbosity:\t verbosity level: " << verbosity << std::endl
+          << "   -x, --filter_ssr_no:\t suppress SSR filter: " ;
+  if(filter_ssr) std::cout<<"No"<< std::endl; else std::cout<<"Yes"<< std::endl;
 };
-
+void translate_comp(std::vector< std::pair<unsigned,unsigned> >& frag, unsigned len_seq){
+    for(auto & it : frag){
+        it.first=len_seq-it.first+1;
+        it.second=len_seq-it.second+1;
+    }
+}
 int main(int argc, char* argv[])
 {
   try{
@@ -87,14 +95,14 @@ int main(int argc, char* argv[])
 		exit(EXIT_SUCCESS);
       } 
     int c;
-    while (1)
+    while (true)
       {
 		static struct option long_options[] =
 		{
 		  {"help",no_argument, 0, 'h'},
 		  {"kmer",required_argument, 0, 'w'},
 		  {"step_q",required_argument, 0, 'S'},
-		  {"kmask",required_argument, 0, 'k'},
+		  {"mask_hole_period",required_argument, 0, 'k'},
 		  {"kmer_dist",required_argument, 0, 'd'},
 		  {"frag_connect_dist",required_argument, 0, 'f'},
 		  {"min_size",required_argument, 0, 's'},
@@ -106,13 +114,14 @@ int main(int argc, char* argv[])
 		  {"chunk_size",required_argument, 0, 'c'},
 		  {"nb_iter",required_argument, 0, 'n'},
 		  {"analysis",no_argument, 0, 'a'},
-		  {"verbosity",no_argument, 0, 'v'},
+		  {"verbosity",required_argument, 0, 'v'},
+          {"filter_ssr_no",no_argument, 0, 'x'},
 		  {0, 0, 0, 0}
 		};
 		/* `getopt_long' stores the option index here. */
 		int option_index = 0;
 
-		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:av:",
+		c = getopt_long (argc, argv, "hd:f:w:S:k:s:C:D:m:b:o:c:n:av:x",
 				 long_options, &option_index);
 
 		/* Detect the end of the options. */
@@ -133,7 +142,7 @@ int main(int argc, char* argv[])
                   break;
               }
               case 'k': {
-                  kmask = atoi(optarg);
+                  mask_hole_period = atoi(optarg);
                   break;
               }
               case 'd': {
@@ -184,14 +193,16 @@ int main(int argc, char* argv[])
                   verbosity = atoi(optarg);
                   break;
               }
+              case 'x': {
+                  filter_ssr = false;
+                  break;
+              }
               case '?': {
                   help();
                   break;
               }
-                  return 1;
               default: {
                   abort();
-                  break;
               }
           }
 
@@ -218,7 +229,7 @@ int main(int argc, char* argv[])
     	repeat=true;
     	filename2=filename1;
     	if(min_count==0)
-    		min_count=1;
+    		min_count=2;
     	std::cout<<"De novo mode! min_count="<<min_count<<std::endl;
     }
 
@@ -236,11 +247,10 @@ int main(int argc, char* argv[])
     	exit( EXIT_FAILURE );
     }
 
-
       if (stat_only) {
           std::cout << "\nCompute kmer stat only!" << std::endl;
           for (unsigned bw = 1; bw <= bkmer_size; bw++) {
-              Duster hsrch(kmer_size, kmask, bw, kmer_dist, frag_connect_dist, min_size, step_q);
+              HashDNASeq hsrch(kmer_size, mask_hole_period, 1, bw, kmer_dist, frag_connect_dist, min_size, step_q);
               std::vector<unsigned> kmer_count((unsigned) pow(4, hsrch.getEffectiveKmerSize()), 0);
               std::list<Info_kmer> list_infokmer;
               Info_kmer kmer_threshold;
@@ -249,52 +259,44 @@ int main(int argc, char* argv[])
               std::cout << "\n======Compute kmer background probability for " << bw - 1 << " Markov's chain order======"
                         << std::endl;
 
-              hsrch.kmer_analysis(filename2, kmer_size, kmask, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
+              hsrch.kmer_analysis(filename2, kmer_size, mask_hole_period, 1,kmer_window, bw, kmer_size / 2, count_cutoff, diversity_cutoff,
                                   kmer_count, nb_kmer, list_infokmer, kmer_threshold);
           }
           std::cout << "\nEnd Duster (version " << VERSION << ")" << std::endl;
           exit(EXIT_SUCCESS);
       }
 
-    Duster hsrch(kmer_size, kmask, bkmer_size,kmer_dist,frag_connect_dist, min_size,step_q);
+    Duster dstr(kmer_size, mask_hole_period, 1, bkmer_size, kmer_dist, frag_connect_dist, min_size, step_q);
     bool valid_idx_file=true;
     bool first_iter=true;
 	double prev_genome_perc_coverage=0.0;
+	std::stringstream bedout_name, seqout_name ;
     for(unsigned iter=1; iter<=nb_iter || nb_iter==0;iter++)
     {
-		hsrch.load(filename2,kmer_size, kmask, bkmer_size,kmer_size/2 , count_cutoff, diversity_cutoff, min_count,valid_idx_file, first_iter);
+		dstr.load(filename2, kmer_size, mask_hole_period, 1, kmer_window,bkmer_size, kmer_size / 2 , count_cutoff,
+                  diversity_cutoff, min_count, valid_idx_file, first_iter, filter_ssr);
 
-		std::ofstream out;
-		std::stringstream out_name;
-		if(outfilename!="")
-			out_name<<outfilename<<"."<<iter<<".bed";
-		else
-			out_name<<filename1<<"."<<iter<<".duster.bed";
+        std::ofstream bedout;
+        bedout_name.str("");
+        bedout_name.clear();
+        seqout_name.str("");
+        seqout_name.clear();
+        if (!outfilename.empty()){
+            bedout_name << outfilename << "." << iter << ".bed";
+            seqout_name << outfilename << "." << iter << ".fa";
+        }
+        else{
+            bedout_name << filename1 << "." << iter << ".duster.bed";
+            seqout_name << filename1 << "." << iter << ".duster.fa";
+        }
 
-		out.open(out_name.str());
+		bedout.open(bedout_name.str());
 
-		std::ofstream fragout;
-		if(verbosity>0)
-		{
-			std::stringstream fragout_name;
-			if(outfilename!="")
-				fragout_name<<outfilename<<"."<<iter<<".frag.bed";
-			else
-				fragout_name<<filename1<<"."<<iter<<".duster.frag.bed";
 
-			fragout.open(fragout_name.str());
-		}
-
-		SDGFastaOstream seqout;
-		std::stringstream seqout_name;
-		if(outfilename!="")
-			seqout_name<<outfilename<<"."<<iter<<".fa";
-		else
-			seqout_name<<filename1<<"."<<iter<<".duster.bed.fa";
-
+		FastaOstream seqout;
 		seqout.open(seqout_name.str());
 	
-		SDGFastaIstream in(filename1);
+		FastaIstream in(filename1);
 		if(!in)
 		{
 			std::cerr<<"file:"<<filename1<<" does not exist!"<<std::endl;
@@ -305,56 +307,57 @@ int main(int argc, char* argv[])
 		unsigned numseq=0;
 		while(in)
 		  {
-			SDGBioSeq s;
+			BioSeq s;
 			if(in)
 			  in>>s;
 			numseq++;
 			genome_size+=s.length();
-			std::cout<<s.getDE()<<" len:"<<s.length()<<" read!"<<std::endl;
-			SDGBioSeq comp_s=s.complement();
-			std::vector< std::pair<unsigned,unsigned> > frag,fmerged;
+			std::cout<<s.header<<" len:"<<s.length()<<" read!"<<std::endl;
+			BioSeq comp_s=s.complement();
+			std::vector< std::pair<unsigned,unsigned> > frag,frag_comp,fmerged;
 			if(chunk_size_kb!=0)
 			{
-				unsigned start=1;
+				unsigned start=0;
 				unsigned chunk_size=((chunk_size_kb*1000)/kmer_size)*kmer_size;
 				unsigned nb_chunk=s.length()/chunk_size;
 				for(unsigned i=1;i<nb_chunk;i++)
 				{
-					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<start<<".."<<start+chunk_size-1<<std::endl;
+					std::cout<<"==>chunk #"<<i<<"/"<<nb_chunk<<":"<<numseq<<"->"<<start<<".."<<start+chunk_size-1<<std::endl;
 					std::cout<<"---direct strand---"<<std::endl;
-					hsrch.search(s,start,start+chunk_size-1,numseq,repeat,frag);
+                    dstr.search(s, numseq, start, start + chunk_size - 1, repeat, frag);
 					std::cout<<"---reverse strand---"<<std::endl;
-					hsrch.search(comp_s,start,start+chunk_size-1,numseq,repeat,frag);
+                    dstr.search(comp_s, numseq, start, start + chunk_size - 1, repeat, frag_comp);
 					start=start+chunk_size;
 				}
-				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<start<<".."<<s.length()<<std::endl;
+				std::cout<<"==>chunk #"<<nb_chunk<<"/"<<nb_chunk<<":"<<numseq<<"->"<<start<<".."<<s.length()<<std::endl;
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,start,s.length(),numseq,repeat,frag);
+                dstr.search(s, numseq, start, s.length(), repeat, frag);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,start,s.length(),numseq,repeat,frag);
-
-				hsrch.fragMerge(frag,(kmer_dist+1)*kmer_size,fmerged);
+                dstr.search(comp_s, numseq, start, s.length(), repeat, frag_comp);
 			}else
 			{
 				std::cout<<"---direct strand---"<<std::endl;
-				hsrch.search(s,1,s.length(),numseq,repeat,frag);
+                dstr.search(s, numseq, 1, s.length(), repeat, frag);
 				std::cout<<"---reverse strand---"<<std::endl;
-				hsrch.search(comp_s,1,s.length(),numseq,repeat,frag);
-				hsrch.fragMerge(frag,(kmer_dist+1)*kmer_size,fmerged);
+                dstr.search(comp_s, numseq, 1, s.length(), repeat, frag_comp);
+
 			}
-			genome_coverage+=hsrch.compute_coverage(fmerged);
-			if(verbosity>0) hsrch.writeBED(s.getDE(),frag,fragout);
-			hsrch.writeBED(s.getDE(),fmerged,out);
-			hsrch.get_sequences(fmerged,s,seqout);
+			translate_comp(frag_comp, s.length());
+			frag.insert(frag.begin(), frag_comp.begin(), frag_comp.end());
+			frag_comp.clear();
+			dstr.fragMerge(frag, frag_connect_dist, fmerged);
+
+			genome_coverage+=Duster::compute_coverage(fmerged);
+			Duster::writeBED(s.header, fmerged, bedout);
+			Duster::get_sequences(fmerged, s, seqout);
 		  }
-		out.close();
-		if(verbosity>0) fragout.close();
+		bedout.close();
 		seqout.close();
-		std::cout<<"Coverage="<<genome_coverage<<" ("<<(float)genome_coverage/genome_size<<")"
-				<<" coverage % difference="<<fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
+		std::cout<<"Coverage="<<genome_coverage<<" ("<<(double)genome_coverage/genome_size<<")"
+				<<" coverage % difference="<<fabs(((double)genome_coverage/genome_size)-prev_genome_perc_coverage)<<std::endl;
 		if(genome_coverage==0) break;
-		if(fabs(((float)genome_coverage/genome_size)-prev_genome_perc_coverage)<0.01 && nb_iter==0 && iter>1) break;
-		prev_genome_perc_coverage=(float)genome_coverage/genome_size;
+		if(fabs(((double)genome_coverage/genome_size)-prev_genome_perc_coverage)<0.01 && nb_iter==0 && iter>1) break;
+		prev_genome_perc_coverage=(double)genome_coverage/genome_size;
 		filename2=seqout_name.str();
 		//count_cutoff=1.0;
 		min_count=0;
@@ -366,18 +369,37 @@ int main(int argc, char* argv[])
     time_spent=(double)(end-begin)/CLOCKS_PER_SEC;
     std::cout<<"====>Total time spent****: "<<time_spent<<std::endl;
 
+      //Write final results
+      std::stringstream alignout_final_name;
+      std::stringstream seqout_final_name;
+      if (!outfilename.empty()) {
+          alignout_final_name << outfilename << ".final.bed";
+          seqout_final_name << outfilename << ".final.fa";
+      } else {
+          alignout_final_name << filename1 << ".final.duster.bed";
+          seqout_final_name << filename1 << ".final.duster.fa";
+      }
+
+      std::stringstream cmd1,cmd2;
+
+      cmd1<<"cp "<<bedout_name.str()<<" "<<alignout_final_name.str();
+      std::system(cmd1.str().c_str());
+
+      cmd2<<"cp "<<seqout_name.str()<<" "<<seqout_final_name.str();
+      std::system(cmd2.str().c_str());
 	exit( EXIT_SUCCESS );
   }
-	catch( SDGException e )
-	{
-		std::cout<<"******Exception catched: "<<e.message<<" ******"<<std::endl;
-		exit( EXIT_FAILURE );
-	}
-	catch(...)
-	{
-		std::cout<<"****** unknown exception catch !!! ******"<<std::endl;
-		exit( EXIT_FAILURE );
-	}
+  catch (const SDGException &e) {
+      std::cout << "******Exception catched: " << e.message << " ******" << std::endl;
+      exit(EXIT_FAILURE);
+  }
+  catch (const std::exception &e) {
+      std::cout << "Caught exception \"" << e.what() << "\"\n";
+  }
+  catch (...) {
+      std::cout << "****** unknown exception catch !!! ******" << std::endl;
+      exit(EXIT_FAILURE);
+  }
 }
 
 

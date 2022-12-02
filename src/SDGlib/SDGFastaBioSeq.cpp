@@ -175,6 +175,12 @@ SDGBioSeq __SDGFastaBioSeq::complement() const
   return seq   ;
 }
 
+SDGBioSeq __SDGFastaBioSeq::reverse() const
+{
+    SDGBioSeq seq=newSDGMemBioSeq(toString(),getMO());
+    seq.setDE(getDE());
+    return seq   ;
+}
 //  SDGBioSeq __SDGFastaBioSeq::subseq(unsigned long d, unsigned long lg) 
 //  {
 //    return newSDGSubBioSeq(*this,d,lg);

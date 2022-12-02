@@ -54,13 +54,6 @@ SDGString Cutter::cutDB(SDGString bank_name, int verbose) {
         return extention;
     }
 
-    SDGBioSeq clrseq;
-    if (verbose > 0)
-        std::cout << "loading sequences..." << std::flush;
-    SDGBioSeqDB db(bank_name);
-    if (verbose > 0)
-        std::cout << "found " <<db.getSize() <<" sequences"<<std::endl;
-
     RangeMap clrseq_map;
     RangeMap range_mapN;
     RangeSeq range;
@@ -71,15 +64,18 @@ SDGString Cutter::cutDB(SDGString bank_name, int verbose) {
             std::cout << "parsing sequences and reading low informative regions..." << std::endl;
     }
 
-    for (SDGBioSeqDB::iterator db_it = db.begin(); db_it != db.end(); db_it++) {
-
-        SDGBioSeq seq = (*db_it);
+    SDGFastaIstream bank_in(bank_name);
+    if (!bank_in) {
+        std::cerr << "file:" << bank_name << " does not exist!" << std::endl;
+    }
+    while (bank_in) {
+        SDGBioSeq seq;
+        if (!bank_in)  break;
+        bank_in >> seq;
         if (verbose > 0) {
             std::cout << seq.getDE() << ": " << seq.length() << " bp" << std::flush;
             if (seq.length() == 0)
                 std::cout << " --> Cannot cut empty sequence, skip it!" << std::endl;
-            else
-                std::cout << " " <<seq.toString() << std::endl;
         }
 
         if (seq.length() > 0)
@@ -116,7 +112,7 @@ SDGString Cutter::cutDB(SDGString bank_name, int verbose) {
             range_mapN.add(range);
         }
     }
-    cutin.close();
+    bank_in.close();
 
     range_mapN.save(bank_name + ".Nstretch.map");
 
@@ -134,7 +130,7 @@ SDGString Cutter::cutDB(SDGString bank_name, int verbose) {
 
     if (verbose > 0)
         std::cout << "writing cut bank..." << std::endl;
-    clrseq_map.writeCutSeq(cutfile, db, verbose - 1);
+    clrseq_map.writeCutSeq(cutfile, bank_name, verbose - 1);
 
     if (verbose > 0)
         std::cout << "Bank '" << bank_name << "' was cut." << std::endl;

@@ -695,7 +695,7 @@ int Lalign::addnode(int c, int ci, int cj, int i, int j, int K, int cost)
 }
 
 //--------------------------------------------------------------------------
-/* Find and remove the largest score in list */
+/* Find and remove_self_hits the largest score in list */
 Lalign::vertexptr Lalign::findmax()
 { 
   vertexptr  cur;

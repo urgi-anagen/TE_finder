@@ -22,7 +22,6 @@ add_executable(
         blaster${VERSION}
 
         ${source_files}
-
 )
 
 target_link_libraries(

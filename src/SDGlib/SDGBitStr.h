@@ -21,9 +21,9 @@
 #define SDGBITSTR_H
 
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <iostream>
-#include <limits.h>
+#include <climits>
 #include <math.h>
 
 #include <SDGReference.h>

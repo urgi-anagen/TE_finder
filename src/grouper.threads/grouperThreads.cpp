@@ -14,16 +14,16 @@
 #include "BLRGrouperThreads.h"
 
 //-------------------------------------------------------------------------------------------------------
-void loadFromAlignFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
+void loadFromAlignFile(const BLRGrouperParameter& para, BLRMatchMap& match_map)
 {
-	int verbose=para->getVerbose();
+	int verbose=para.getVerbose();
 
 
 	if(verbose>0) std::cout<<"Load the matches..."<<std::endl<<std::flush;
-    match_map.loadAlign(para->getMatchFileName(), verbose);
+    match_map.loadAlign(para.getMatchFileName(), verbose);
 	if(verbose>0) std::cout<<"Matches were loaded."<<std::endl;
 
-	if( para->getJoin_frag() ) //Join fragments
+	if( para.getJoin_frag() ) //Join fragments
 		{
 			if(verbose>0) std::cout<<"Connect the fragments..."<<std::endl<<std::flush;
 			match_map.mapPath(true, false, false, false, verbose-1);
@@ -35,13 +35,13 @@ void loadFromAlignFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
 	  match_map.mapPath(false, false, false, false, verbose);
 }
 //-------------------------------------------------------------------------------------------------------
-void loadFromPathFile(BLRGrouperParameter* para, BLRMatchMap& match_map)
+void loadFromPathFile(const BLRGrouperParameter& para, BLRMatchMap& match_map)
 {
-	int verbose=para->getVerbose();
+	int verbose=para.getVerbose();
 
 	if(verbose>0) std::cout<<"Load the matches from path file..."<<std::endl<<std::flush;
 	//match_map.loadPath();
-	match_map.loadPath(para->getPath_filename(),1);
+	match_map.loadPath(para.getPath_filename(),1);
 	if(verbose>0) std::cout<<"Load the matches from path file done!"<<std::endl<<std::flush;
 }
 //-------------------------------------------------------------------------------------------------------
@@ -68,11 +68,11 @@ std::list< std::list<RangePairSet> > splitInputData(std::list<RangePairSet>& rp_
 	return lrpl;
 }
 //-------------------------------------------------------------------------------------------------------
-void runOnSet(std::list<RangePairSet>& rp_list,  BLRGroup& gr, BLRGrouperParameter& para, int set_num)
+void runOnSet(std::list<RangePairSet>& rp_list,  BLRGroup& gr, const BLRGrouperParameter& para, int set_num)
 {
 	std::cout<<"Run set ..."<<set_num<<std::endl;
 
-	BLRGrouper grouper(&para);
+	BLRGrouper grouper(para);
 
 	// Build groups via simple-link clustering using percentage of overlap
 	// between matches and merge matches if necessary
@@ -113,11 +113,11 @@ int main( int argc, char* argv[] )
 			para.view(std::cout);
 
 		// Read input data
-		BLRMatchMap match_map(&para);
+		BLRMatchMap match_map(para);
 		if (!para.getLoad_path()) // Load from align file
-			loadFromAlignFile(&para,match_map);
+			loadFromAlignFile(para,match_map);
 		else
-			loadFromPathFile(&para,match_map);
+			loadFromPathFile(para,match_map);
 
 		std::list<RangePairSet> rp_list = match_map.getRpsListFromMapPath();
 		if(para.getVerbose()>0) std::cout<<"list size="<<rp_list.size()<<std::endl;
@@ -139,7 +139,7 @@ int main( int argc, char* argv[] )
 
 
 		for(unsigned i=0; i<nb_sets; i++)
-			lgroups.push_back(new BLRGroup(&para, &match_map, match_map.getNbQseq()));
+			lgroups.push_back(new BLRGroup(para, match_map, match_map.getNbQseq()));
 
 		if(para.getVerbose()>0) std::cout<<"Initialization was done."<<std::endl<<std::flush;
 
@@ -166,7 +166,7 @@ int main( int argc, char* argv[] )
 		int c=1;
 		std::list<BLRGroup*>::iterator lgroups_it=lgroups.begin();
 		lgroups_it++;
-		BLRGrouper grouper(&para);
+		BLRGrouper grouper(para);
 		while(lgroups_it!=lgroups.end())
 		{
 			std::cout<<"Merge group 1 with group "<<++c<<std::endl;

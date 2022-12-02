@@ -25,8 +25,7 @@ int main(int argc, char* argv[])
 
     SDGString dbname(argv[1]);
     dbname=dbname.afterlast("/")+".flank5.fa";
-    SDGBioSeqDB db(argv[2]);
-    range_container.writeFlank5Seq(dbname,db,size);
+    range_container.writeFlank5Seq(dbname,argv[2],size);
   }
   catch(SDGException e)
     {

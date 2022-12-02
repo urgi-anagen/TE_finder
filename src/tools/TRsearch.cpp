@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
 	s1=s.subseq(0,align_len);
 	s2=s.subseq(slen-align_len,slen);
 
-	//search LTR method1 as best local alignments between start and end 
+	//search LTR method1 as best local alignments between start and end
 	//of the sequence
 	al.setSeq(s1,s2);	  
 	for(unsigned n=0;n<nb_sub;n++)
@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
 	      }
 	  }
 
-	//search ITR method1 as best local alignments between start and end 
+	//search ITR method1 as best local alignments between start and end
 	//of the sequence
 	s2c=s2.complement();
 	al.setSeq(s1,s2c);	  

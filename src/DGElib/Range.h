@@ -50,7 +50,8 @@ class Range
   	Less(void){};
   	int operator () (const Range& a, const Range& b) const
   	{
-  		if(a<b) return true;
+  		if(a.getMin()<b.getMin()) return true;
+  		else if(a.getMin()==b.getMin() && a.getMax()<a.getMax()) return true;
   		return false;
   	};
   };
@@ -83,42 +84,74 @@ class Range
 
 	protected:
 
-		unsigned long start,end;
+		unsigned long start,end,min,max;
 
 	public:
-		Range( const Range *o );
-		Range( const Range &o );
-		Range( ulong s=0, ulong e=0 );
+		Range( const Range *o ){
+            start=o->start;
+            end=o->end;
+            min = std::min(start,end);
+            max = std::max(start,end);
+        };
+		Range( const Range &o ){
+            start=o.start;
+            end=o.end;
+            min = std::min(start,end);
+            max = std::max(start,end);
+        };
+		Range( ulong s=0, ulong e=0 )
+                : start(s),end(e)
+        {
+            min = std::min(start,end);
+            max = std::max(start,end);
+        };
 
-    virtual ~Range(void);
+    virtual ~Range(void) {};
     virtual void *clone(void) const;
 
     void set( ulong s=0, ulong e=0 )
     {
     	start = s;
     	end = e;
+    	min = std::min(start,end);
+    	max = std::max(start,end);
     };
+
+    void translate_comp(unsigned len_seq){
+        start=len_seq-start+1;
+        end=len_seq-end+1;
+        min = std::min(start,end);
+        max = std::max(start,end);
+    }
 
     ulong getStart( void ) const { return start; };
 
-    void setStart( ulong s ){ start=s; };
+    void setStart( ulong s ){
+        start=s;
+        min = std::min(start,end);
+        max = std::max(start,end);
+    };
 
     ulong getEnd( void ) const { return end; };
 
-    void setEnd( ulong e ){ end=e; };
+    void setEnd( ulong e ){
+        end=e;
+        min = std::min(start,end);
+        max = std::max(start,end);
+    };
 
     int isPlusStrand( void ) const { return start<end; };
 
-    ulong getMin( void ) const { return std::min( start, end ); };
+    ulong getMin( void ) const { return min; };
 
-    ulong getMax( void ) const { return std::max( start, end ); };
+    ulong getMax( void ) const { return max; };
 
     unsigned long getLength( void ) const
     {
     	return getMax()-getMin()+1;
     };
 
-    const void view( void ) const
+    void view( void ) const
     {
     	std::cout<<"range: start="<<getStart()<<", end="<<getEnd()<<std::endl;
     }
@@ -142,108 +175,35 @@ class Range
 
     bool overlap( const Range& r ) const
     {
-    	ulong s1 = std::min(start,end);
-    	ulong e1 = std::max(start,end);
-    	ulong s2 = std::min(r.start,r.end);
-    	ulong e2 = std::max(r.start,r.end);
-
-    	if( s1>=s2 && s1<=e2 ) return true;
-    	if( s2>=s1 && s2<=e1 ) return true;
-
-    	return false;
-    };
-
-    bool overlap( const Range& r )
-    {
-    	ulong s1 = std::min(start,end);
-    	ulong e1 = std::max(start,end);
-    	ulong s2 = std::min(r.start,r.end);
-    	ulong e2 = std::max(r.start,r.end);
-
-    	if( s1>=s2 && s1<=e2 ) return true;
-    	if( s2>=s1 && s2<=e1 ) return true;
-
+        if( min>=r.min && min<=r.max ) return true;
+    	if( r.min>=min && r.min<=max ) return true;
     	return false;
     };
 
     bool isContained(const Range& r) const
     // object is contained in r
     {
-    	ulong s1=std::min(start,end);
-    	ulong e1=std::max(start,end);
-    	ulong s2=std::min(r.start,r.end);
-    	ulong e2=std::max(r.start,r.end);
-    	if(s2<=s1 && e2>=e1) return true;
-    	return false;
-    };
-
-    bool isContained(const Range& r)
-    // object is contained in r
-    {
-    	ulong s1=std::min(start,end);
-    	ulong e1=std::max(start,end);
-    	ulong s2=std::min(r.start,r.end);
-    	ulong e2=std::max(r.start,r.end);
-    	if(s2<=s1 && e2>=e1) return true;
+    	if(r.min<=min && r.max>=max) return true;
     	return false;
     };
 
     bool isStrictlyContained(const Range& r) const
     // object is strictly contained in r
     {
-    	ulong s1=std::min(start,end);
-    	ulong e1=std::max(start,end);
-    	ulong s2=std::min(r.start,r.end);
-    	ulong e2=std::max(r.start,r.end);
-    	if(s2<s1 && e2>e1) return true;
-    	return false;
-    };
-
-    bool isStrictlyContained(const Range& r)
-    // object is strictly contained in r
-    {
-    	ulong s1=std::min(start,end);
-    	ulong e1=std::max(start,end);
-    	ulong s2=std::min(r.start,r.end);
-    	ulong e2=std::max(r.start,r.end);
-    	if(s2<s1 && e2>e1) return true;
-    	return false;
+        if(r.min<min && r.max>max) return true;
+        return false;
     };
 
     bool isIncluded(const Range& r) const
     {
     	// object contains r
-    	ulong s1=std::min(start,end);
-    	ulong e1=std::max(start,end);
-    	ulong s2=std::min(r.start,r.end);
-    	ulong e2=std::max(r.start,r.end);
-
-    	if(s1<=s2 && e1>=e2) return true;
-
+    	if(min<=r.min && max>=r.max) return true;
     	return false;
-    };
-
-    bool isIncluded(const Range& r)
-    {
-    	// object contains r
-    	ulong s1=std::min(start,end);
-    	ulong e1=std::max(start,end);
-    	ulong s2=std::min(r.start,r.end);
-    	ulong e2=std::max(r.start,r.end);
-
-    	if(s1<=s2 && e1>=e2) return true;
-
-    	return false;
-    };
-
-    long distance(const Range& r)
-    {
-    	return std::min(r.start,r.end)-std::min(start,end);
     };
 
     long distance(const Range& r) const
     {
-    	return std::min(r.start,r.end)-std::min(start,end);
+    	return r.min-max;
     };
 
     Range diff(const Range& r)
@@ -252,10 +212,10 @@ class Range
     	Range new_range;
     	if( overlap(r) )
     	{
-    		ulong is=std::min(start,end);
-    		ulong ie=std::max(start,end);
-    		ulong js=std::min(r.start,r.end);
-    		ulong je=std::max(r.start,r.end);
+    		ulong is=min;
+    		ulong ie=max;
+    		ulong js=r.min;
+    		ulong je=r.max;
 
     		if(is<js)
     		{
@@ -309,6 +269,8 @@ class Range
     			}
     		}
     	} // if
+        min = std::min(start,end);
+        max = std::max(start,end);
     	return new_range;
     };
 
@@ -318,10 +280,10 @@ class Range
      */
     void merge( const Range& r, bool keep_strand=true )
     {
-    	ulong s1 = std::min(start,end);
-    	ulong e1 = std::max(start,end);
-    	ulong s2 = std::min(r.start,r.end);
-    	ulong e2 = std::max(r.start,r.end);
+    	ulong s1 = min;
+    	ulong e1 = max;
+    	ulong s2 = r.min;
+    	ulong e2 = r.max;
 
     	if( ! keep_strand )
     	{
@@ -349,27 +311,27 @@ class Range
     			end = std::min(s1,s2);
     		}
     	}
+        min = std::min(start,end);
+        max = std::max(start,end);
     };
 
     friend bool operator<( const Range& r1, const Range& r2 )
     {
-    	if(std::min(r1.start,r1.end)<std::min(r2.start,r2.end))
+    	if(r1.min<r2.min)
     		return true;
     	else
-    		if(std::min(r1.start,r1.end)==std::min(r2.start,r2.end)
-    		&& std::max(r1.start,r1.end)<std::max(r2.start,r2.end))
+    		if(r1.min==r2.min && r1.max<r2.max)
     			return true;
     	return false;
     };
 
     friend bool operator>( const Range& r1, const Range& r2 )
     {
-    	if(std::max(r1.start,r1.end)>std::max(r2.start,r2.end))
-    		return true;
-    	else
-    		if(std::max(r1.start,r1.end)==std::max(r2.start,r2.end)
-    		&& std::min(r1.start,r1.end)>std::min(r2.start,r2.end))
-    			return true;
+        if(r1.min>r2.min)
+            return true;
+        else
+            if(r1.min==r2.min && r1.max>r2.max)
+                return true;
     	return false;
     };
 

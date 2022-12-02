@@ -137,18 +137,22 @@ void RangeMap::cut(unsigned int length, unsigned int over )
     }
 }
 //-------------------------------------------------------------------
-void RangeMap::selectSrcSeq(const SDGString& outfname,const SDGBioSeqDB& db)
-{
-  SDGFastaOstream out(outfname);
+void RangeMap::selectSrcSeq(const SDGString &outfname, const std::string &fasta_filename) {
+    FastaOstream out(outfname);
 
-  for(SDGBioSeqDB::const_iterator db_it=db.begin();
-      db_it!=db.end();db_it++)
-    {
-      SDGBioSeq chr=(*db_it);
-      std::string h_seq=(const char*)(chr.getDE().start());
-      RangeMap::iterator c=find(h_seq);
-      if(c!=end())
-	out<<chr;
+    FastaIstream in(fasta_filename);
+    if (!in) {
+        std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
+    }
+
+    while (in) {
+        BioSeq chr;
+        if (!in) break;
+        in >> chr;
+        std::string h_seq = chr.header;
+        RangeMap::iterator c = find(h_seq);
+        if (c != end())
+            out << chr;
     }
 }
 //-------------------------------------------------------------------
@@ -173,9 +177,54 @@ void RangeMap::extend(unsigned size_flank)
     }
 }
 //-------------------------------------------------------------------
-void RangeMap::writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const
+void RangeMap::writeSeq(const SDGString& outfname, const SDGString& fastaDB_filename) const
 {
-  SDGFastaOstream out(outfname);
+    FastaOstream out(outfname);
+    FastaIstream in(fastaDB_filename);
+    if (!in) {
+        std::cerr << "file:" << fastaDB_filename << " does not exist!" << std::endl;
+    }
+
+    while (in) {
+        BioSeq seq;
+        if (in)
+            in >> seq;
+        std::cout << seq.header << " len:" << seq.size() << " read!" << std::endl;
+        for (const auto & map_item : *this) {
+            auto list_item=map_item.second;
+            for (const auto & rangeSet_item : list_item) {
+                if (rangeSet_item.getChr() == seq.header) {
+                    BioSeq sseq,rseq;
+                    std::ostringstream name;
+
+                    name << rangeSet_item.getName() << " " << seq.header << ":";
+
+                    bool first=true;
+                    for(auto range_item= rangeSet_item.getRangeSet().begin();
+                        range_item != rangeSet_item.getRangeSet().end(); range_item++)
+                    {
+                        ulong rs=range_item->getStart();
+                        ulong re=range_item->getEnd();
+                        if(range_item->isPlusStrand())
+                            rseq=seq.subseq(rs - 1, re - rs + 1);
+                        else
+                        {
+                            rseq=seq.subseq(re - 1, rs - re + 1);
+                            rseq=rseq.complement();
+                        }
+                        sseq+=rseq;
+                        if(!first) name<<",";
+                        else first=false;
+                        name<<rs<<".."<<re;
+                    }
+
+                    sseq.header=name.str();
+                    out << sseq;
+                }
+            }
+        }
+    }
+/*  SDGFastaOstream out(outfname);
   int count_skip=0;
 
   for(SDGBioSeqDB::const_iterator db_it=db.begin();
@@ -253,10 +302,66 @@ void RangeMap::writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const
 	}
     }
   if(count_skip>0)
-	  std::cout<<count_skip<<" skipped!"<<std::endl;
+	  std::cout<<count_skip<<" skipped!"<<std::endl;*/
+}
+
+//-------------------------------------------------------------------
+void RangeMap::writeCutSeq(const SDGString &outfname, const std::string &fasta_filename, int verbose) {
+    FastaOstream out(outfname);
+    int countTreated = 0;
+    int count_skip = 0;
+    FastaIstream in(fasta_filename);
+    if (!in) {
+        std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
+    }
+
+    while (in) {
+        BioSeq chr;
+        if (!in) break;
+        in >> chr;
+        std::string h_seq = chr.header;
+        RangeMap::const_iterator c = find(h_seq);
+        if (c != end()) {
+            for (std::list<RangeSeq>::const_iterator i = c->second.begin();
+                 i != c->second.end(); i++) {
+                long is = i->getStart();
+                long ie = i->getEnd();
+                if (i->getLength() < 14)// temporaire !!
+                {
+                    count_skip++;
+                    if (verbose > 0)
+                        std::cout << "Squence length < 14 .. skip sequence:" << i->getName() << " " << i->getChr()
+                                  << " {Cut} " << is << ".." << ie << std::endl;
+                    continue;
+                }
+
+                countTreated++;
+                if (verbose > 0) {
+                    std::cout << "   working on range " << countTreated << "/" << countRange
+                              << " length=" << (long) std::abs(is - ie) + 1 << std::endl;
+                    std::cout << *i << std::endl << std::flush;
+                }
+                BioSeq s;
+                if (is <= ie) {
+                    s = chr.subseq(is - 1, ie - is + 1);
+                } else {
+                    s = chr.subseq(ie - 1, is - ie + 1);
+                    s = s.complement();
+                }
+                std::ostringstream name;
+                name << countTreated << " " << i->getName() << " " << i->getChr()
+                     << " {Cut} " << is << ".." << ie;
+                s.header = name.str();
+                out << s;
+            }
+        }
+    }
+    if (count_skip > 0)
+        if (verbose > 0)
+            std::cout << count_skip << " skipped!" << std::endl;
 }
 //-------------------------------------------------------------------
-void RangeMap::writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose )
+/*void RangeMap::writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose )
 {
   SDGFastaOstream out(outfname);
   int countTreated=0;
@@ -312,207 +417,206 @@ void RangeMap::writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, in
   if(count_skip>0)
 	  if(verbose>0)
 		  std::cout<<count_skip<<" skipped!"<<std::endl;
-}
+}*/
 //-------------------------------------------------------------------
-void RangeMap::writeFlank53Seq(const SDGString& outfname,const SDGBioSeqDB& db,unsigned len)
-{
-  SDGFastaOstream out(outfname);
-  int countTreated=0;
-  int count_skip=0;
+void RangeMap::writeFlank53Seq(const SDGString &outfname, const std::string &fasta_filename, unsigned len) {
+    FastaOstream out(outfname);
+    int countTreated = 0;
+    int count_skip = 0;
 
-  for(SDGBioSeqDB::const_iterator db_it=db.begin();
-      db_it!=db.end();db_it++)
-    {
-      SDGBioSeq chr=(*db_it);
-      std::string h_seq=(const char*)(chr.getDE().start());
-      RangeMap::const_iterator c=find(h_seq);
-      if(c!=end())
-	{
-	  for(std::list<RangeSeq>::const_iterator i=c->second.begin();
-	      i!=c->second.end();i++)
-	    {
-	      if(i->getLength()<14)// temporaire !!
-		{
-		  count_skip++;
-		  continue;
-		}
-
-	      std::cout<<"   working on range "<<++countTreated<<"/"<<countRange
-		  <<" length="<<i->getLength()<<std::endl;
-	      std::cout<<*i<<std::endl<<std::flush;
-
-	      SDGBioSeq s1,s2,s3;
-	      ulong is1,ie1,is2,ie2;
-	      if(i->getStart()<i->getEnd())
-		{
-		  // 5' flank
-
-		  is1=len<i->getStart()?i->getStart()-len:1;
-		  ie1=i->getStart();
-		  s1=chr.subseq(is1-1,ie1-is1+1);
-
-		  // 3' flank
-		  is2=i->getEnd();
-		  ie2=i->getEnd()+len;
-		  s2=chr.subseq(is2-1,ie2-is2+1);
-
-		  s3=newSDGMemBioSeq((SDGString)(s1.toString()+s2.toString()));
-		}
-	      else
-		{
-		  // 3' flank
-		  is1=len<i->getEnd()?i->getEnd()-len:1;
-		  ie1=i->getEnd();
-		  s1=chr.subseq(is1-1,ie1-is1+1);
-
-		  // 5' flank
-		  is2=i->getStart();
-		  ie2=i->getStart()+len;
-		  s2=chr.subseq(is2-1,ie2-is2+1);
-
-		  s3=newSDGMemBioSeq(s1.toString()+s2.toString());
-		  s3=s3.complement();
-		}
-
-
-	      //write seq
-	      char start1[256],end1[256];
-	      sprintf(start1,"%ld",is1);
-	      sprintf(end1,"%ld",ie1);
-	      char start2[256],end2[256];
-	      sprintf(start2,"%ld",is2);
-	      sprintf(end2,"%ld",ie2);
-	      std::string name=i->getName()+" "+i->getChr()+
-		" "+start1+".."+end1+","+start2+".."+end2;
-	      s3.setDE(SDGString(name.c_str()));
-	      out<<s3;
-	    }
-	}
+    FastaIstream in(fasta_filename);
+    if (!in) {
+        std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
     }
-  if(count_skip>0)
-	  std::cout<<count_skip<<" skipped!"<<std::endl;
+
+    while (in) {
+        BioSeq chr;
+        if (!in) break;
+        in >> chr;
+        std::string h_seq = chr.header;
+        RangeMap::const_iterator c = find(h_seq);
+        if (c != end()) {
+            for (std::list<RangeSeq>::const_iterator i = c->second.begin();
+                 i != c->second.end(); i++) {
+                if (i->getLength() < 14)// temporaire !!
+                {
+                    count_skip++;
+                    continue;
+                }
+
+                std::cout << "   working on range " << ++countTreated << "/" << countRange
+                          << " length=" << i->getLength() << std::endl;
+                std::cout << *i << std::endl << std::flush;
+
+                BioSeq s1, s2, s3;
+                ulong is1, ie1, is2, ie2;
+                if (i->getStart() < i->getEnd()) {
+                    // 5' flank
+
+                    is1 = len < i->getStart() ? i->getStart() - len : 1;
+                    ie1 = i->getStart();
+                    s1 = chr.subseq(is1 - 1, ie1 - is1 + 1);
+
+                    // 3' flank
+                    is2 = i->getEnd();
+                    ie2 = i->getEnd() + len;
+                    s2 = chr.subseq(is2 - 1, ie2 - is2 + 1);
+
+                    s3 = s1 + s2;
+                } else {
+                    // 3' flank
+                    is1 = len < i->getEnd() ? i->getEnd() - len : 1;
+                    ie1 = i->getEnd();
+                    s1 = chr.subseq(is1 - 1, ie1 - is1 + 1);
+
+                    // 5' flank
+                    is2 = i->getStart();
+                    ie2 = i->getStart() + len;
+                    s2 = chr.subseq(is2 - 1, ie2 - is2 + 1);
+
+                    s3 = s1 + s2;
+                    s3 = s3.complement();
+                }
+
+
+                //write seq
+                char start1[256], end1[256];
+                sprintf(start1, "%ld", is1);
+                sprintf(end1, "%ld", ie1);
+                char start2[256], end2[256];
+                sprintf(start2, "%ld", is2);
+                sprintf(end2, "%ld", ie2);
+                std::string name = i->getName() + " " + i->getChr() +
+                                   " " + start1 + ".." + end1 + "," + start2 + ".." + end2;
+                s3.header = name.c_str();
+                out << s3;
+            }
+        }
+    }
+    if (count_skip > 0)
+        std::cout << count_skip << " skipped!" << std::endl;
 }
+
 //-------------------------------------------------------------------
-void RangeMap::writeFlank5Seq(const SDGString& outfname,const SDGBioSeqDB& db,unsigned len)
-{
-  SDGFastaOstream out(outfname);
-  int countTreated=0;
-  int count_skip=0;
+void RangeMap::writeFlank5Seq(const SDGString &outfname, const std::string &fasta_filename, unsigned len) {
+    FastaOstream out(outfname);
+    int countTreated = 0;
+    int count_skip = 0;
 
-  for(SDGBioSeqDB::const_iterator db_it=db.begin();
-      db_it!=db.end();db_it++)
-    {
-      SDGBioSeq chr=(*db_it);
-      std::string h_seq=(const char*)(chr.getDE().start());
-      RangeMap::const_iterator c=find(h_seq);
-      if(c!=end())
-	{
-	  for(std::list<RangeSeq>::const_iterator i=c->second.begin();
-	      i!=c->second.end();i++)
-	    {
-	      if(i->getLength()<14)// temporaire !!
-		{
-		  count_skip++;
-		  continue;
-		}
-
-	      std::cout<<"   working on range "<<++countTreated<<"/"<<countRange
-		  <<" length="<<i->getLength()<<std::endl;
-	      std::cout<<*i<<std::endl<<std::flush;
-
-	      SDGBioSeq s;
-	      ulong is,ie;
-	      if(i->getStart()<i->getEnd())
-		{
-		  // 5' flank
-		  is=len<i->getStart()?i->getStart()-len:1;
-		  ie=i->getStart();
-		  s=chr.subseq(is-1,ie-is+1);
-		}
-	      else
-		{
-		  // 5' flank
-		  is=i->getStart();
-		  ie=i->getStart()+len;
-		  s=chr.subseq(is-1,ie-is+1);
-		  s=s.complement();
-		}
-
-
-	      //write seq
-	      char start[256],end[256];
-	      sprintf(start,"%ld",is);
-	      sprintf(end,"%ld",ie);
-	      std::string name=i->getName()+" "+i->getChr()+
-		" 5' flank "+start+".."+end;
-	      s.setDE(SDGString(name.c_str()));
-	      out<<s;
-	    }
-	}
+    FastaIstream in(fasta_filename);
+    if (!in) {
+        std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
     }
-  if(count_skip>0)
-	  std::cout<<count_skip<<" skipped!"<<std::endl;
+
+    while (in) {
+        BioSeq chr;
+        if (!in) break;
+        in >> chr;
+        std::string h_seq = chr.header;
+        RangeMap::const_iterator c = find(h_seq);
+        if (c != end()) {
+            for (std::list<RangeSeq>::const_iterator i = c->second.begin();
+                 i != c->second.end(); i++) {
+                if (i->getLength() < 14)// temporaire !!
+                {
+                    count_skip++;
+                    continue;
+                }
+
+                std::cout << "   working on range " << ++countTreated << "/" << countRange
+                          << " length=" << i->getLength() << std::endl;
+                std::cout << *i << std::endl << std::flush;
+
+                BioSeq s;
+                ulong is, ie;
+                if (i->getStart() < i->getEnd()) {
+                    // 5' flank
+                    is = len < i->getStart() ? i->getStart() - len : 1;
+                    ie = i->getStart();
+                    s = chr.subseq(is - 1, ie - is + 1);
+                } else {
+                    // 5' flank
+                    is = i->getStart();
+                    ie = i->getStart() + len;
+                    s = chr.subseq(is - 1, ie - is + 1);
+                    s = s.complement();
+                }
+
+
+                //write seq
+                char start[256], end[256];
+                sprintf(start, "%ld", is);
+                sprintf(end, "%ld", ie);
+                std::string name = i->getName() + " " + i->getChr() +
+                                   " 5' flank " + start + ".." + end;
+                s.header = name.c_str();
+                out << s;
+            }
+        }
+    }
+    if (count_skip > 0)
+        std::cout << count_skip << " skipped!" << std::endl;
 }
+
 //-------------------------------------------------------------------
-void RangeMap::writeFlank3Seq(const SDGString& outfname,const SDGBioSeqDB& db,unsigned len)
-{
-  SDGFastaOstream out(outfname);
-  int countTreated=0;
-  int count_skip=0;
+void RangeMap::writeFlank3Seq(const SDGString &outfname, const std::string &fasta_filename, unsigned len) {
+    FastaOstream out(outfname);
+    int countTreated = 0;
+    int count_skip = 0;
 
-  for(SDGBioSeqDB::const_iterator db_it=db.begin();
-      db_it!=db.end();db_it++)
-    {
-      SDGBioSeq chr=(*db_it);
-      std::string h_seq=(const char*)(chr.getDE().start());
-      RangeMap::const_iterator c=find(h_seq);
-      if(c!=end())
-	{
-	  for(std::list<RangeSeq>::const_iterator i=c->second.begin();
-	      i!=c->second.end();i++)
-	    {
-	      if(i->getLength()<14)// temporaire !!
-		{
-		  count_skip++;
-		  continue;
-		}
-
-	      std::cout<<"   working on range "<<++countTreated<<"/"<<countRange
-		  <<" length="<<i->getLength()<<std::endl;
-	      std::cout<<*i<<std::endl<<std::flush;
-
-	      SDGBioSeq s;
-	      ulong is,ie;
-	      if(i->getStart()<i->getEnd())
-		{
-		  // 3' flank
-		  is=i->getEnd();
-		  ie=i->getEnd()+len;
-		  s=chr.subseq(is-1,ie-is+1);
-		}
-	      else
-		{
-		  // 3' flank
-		  is=len<i->getEnd()?i->getEnd()-len:1;
-		  ie=i->getEnd();
-		  s=chr.subseq(is-1,ie-is+1);
-		  s=s.complement();
-		}
-
-
-	      //write seq
-	      char start[256],end[256];
-	      sprintf(start,"%ld",is);
-	      sprintf(end,"%ld",ie);
-	      std::string name=i->getName()+" "+i->getChr()+
-		" 3' flank "+start+".."+end;
-	      s.setDE(SDGString(name.c_str()));
-	      out<<s;
-	    }
-	}
+    FastaIstream in(fasta_filename);
+    if (!in) {
+        std::cerr << "file:" << fasta_filename << " does not exist!" << std::endl;
     }
-  if(count_skip>0)
-	  std::cout<<count_skip<<" skipped!"<<std::endl;
+
+    while (in) {
+        BioSeq chr;
+        if (!in) break;
+        in >> chr;
+        std::string h_seq = chr.header;
+        RangeMap::const_iterator c = find(h_seq);
+        if (c != end()) {
+            for (std::list<RangeSeq>::const_iterator i = c->second.begin();
+                 i != c->second.end(); i++) {
+                if (i->getLength() < 14)// temporaire !!
+                {
+                    count_skip++;
+                    continue;
+                }
+
+                std::cout << "   working on range " << ++countTreated << "/" << countRange
+                          << " length=" << i->getLength() << std::endl;
+                std::cout << *i << std::endl << std::flush;
+
+                BioSeq s;
+                ulong is, ie;
+                if (i->getStart() < i->getEnd()) {
+                    // 3' flank
+                    is = i->getEnd();
+                    ie = i->getEnd() + len;
+                    s = chr.subseq(is - 1, ie - is + 1);
+                } else {
+                    // 3' flank
+                    is = len < i->getEnd() ? i->getEnd() - len : 1;
+                    ie = i->getEnd();
+                    s = chr.subseq(is - 1, ie - is + 1);
+                    s = s.complement();
+                }
+
+
+                //write seq
+                char start[256], end[256];
+                sprintf(start, "%ld", is);
+                sprintf(end, "%ld", ie);
+                std::string name = i->getName() + " " + i->getChr() +
+                                   " 3' flank " + start + ".." + end;
+                s.header = name.c_str();
+                out << s;
+            }
+        }
+    }
+    if (count_skip > 0)
+        std::cout << count_skip << " skipped!" << std::endl;
 }
 //-------------------------------------------------------------------
 void RangeMap::merge(void)
@@ -613,16 +717,16 @@ void RangeMap::selectOverlap(RangeMap& m, RangeMap& mapout)
 //-------------------------------------------------------------------
 void RangeMap::entropfilt(const SDGString& db, double thres)
 {
-  SDGFastaIstream in(db);
+  FastaIstream in(db);
   int countTreated=0;
   int count_skip=0;
   int countErase=0;
 
-  SDGBioSeq chr;
+  BioSeq chr;
   while(in)
     {
       in>>chr;
-      std::string h_seq=(const char*)(chr.getDE().start());
+      std::string h_seq=chr.header;
       RangeMap::iterator c=find(h_seq);
       if(c!=end())
 	{
@@ -640,7 +744,7 @@ void RangeMap::entropfilt(const SDGString& db, double thres)
 	      std::cout<<"   working on range "<<++countTreated<<"/"<<countRange
 		  <<" length="<<(long)std::abs(is-ie)+1<<std::endl;
 	      std::cout<<*i<<std::endl<<std::flush;
-	      SDGBioSeq s=newSDGMemBioSeq("");
+	      BioSeq s;
 	      if(is<=ie)
 		{
 		  s=chr.subseq(is-1,ie-is+1);
@@ -657,7 +761,7 @@ void RangeMap::entropfilt(const SDGString& db, double thres)
 	      int countC=0;
 	      for(unsigned p=0;p<len;p++)
 		{
-		  switch(s.charAt(p))
+		  switch(s[p])
 		    {
 		    case 'A' : countA++; break;
 		    case 'T' : countT++; break;

@@ -18,7 +18,7 @@ void BLRMatchJoin::join(BLRMatchAlign &map_align, BLRMatchPath &map_path, int ve
                             para.getOverlap());
         list.splice(list.end(),fragAlign.join(m->second));
         for(std::list<RangePairSet>::iterator it=list.begin(); it!=list.end();it++)
-            it->setId(count++);
+            it->setId(++count);
         m->second.clear();
     }
     map_path.setName2NumQ(map_align.getName2NumQ());
@@ -39,7 +39,7 @@ void BLRMatchJoin::noJoin(BLRMatchAlign &map_align, BLRMatchPath &map_path, int 
         for (std::list<RangePair>::iterator i = m->second.begin();
              i != m->second.end(); i++) {
             RangePairSet rps(*i);
-            rps.setId(count++);
+            rps.setId(++count);
             list.push_back(rps);
         }
         m->second.clear();
@@ -71,7 +71,7 @@ void BLRMatchJoin::add_clean_path_all_S(std::list<RangePairSet> &rp_list,
                 = map_path[iter->getRangeQ().getNumChr()];
         for (std::list<RangePairSet>::iterator iter_list = list.begin();
              iter_list != list.end(); iter_list++) {
-            if (RangePair::greaterScore(*iter_list, *iter)
+            if (RangePair::greaterScoreIdLenCoord(*iter_list, *iter)
                 && iter->overlapQ(*iter_list))
                 if (iter->diffQ(*iter_list))
                     found_over = true;
@@ -84,12 +84,10 @@ void BLRMatchJoin::add_clean_path_all_S(std::list<RangePairSet> &rp_list,
                 std::list<RangePairSet>::iterator it
                         = std::lower_bound(iter, rp_list.end(),
                                            *iter,
-                                           RangePair::greaterScore);
+                                           RangePair::greaterScoreIdLenCoord);
                 if (it == iter)
                     it++;
                 rp_list.insert(it, *iter);
-
-
             }
         }
 
@@ -111,7 +109,7 @@ void BLRMatchJoin::clean_conflicts(BLRMatchPath &map_path, int verbose)
     map_path_new.setNum2NameS(map_path.getNum2NameS());
 
     for (BLRMatchPath::MapPath::iterator m = map_path.begin(); m != map_path.end(); m++) {
-        m->second.sort(RangePair::greaterScore);
+        m->second.sort(RangePair::greaterScoreIdLenCoord);
         for (std::list<RangePairSet>::iterator i = m->second.begin();
              i != m->second.end(); i++) {
             add_clean_path_all_S(m->second, i, map_path_new);
@@ -145,15 +143,12 @@ void BLRMatchJoin::merge(BLRMatchPath &map_path, int verbose) {
     unsigned count_merge = 0;
     for (BLRMatchPath::MapPath::iterator m = map_path.begin(); m != map_path.end(); m++)
     {
-
         //Build overlap graph
         Graph<unsigned long> graph;
-
 
         std::map<unsigned long, std::list<RangePairSet>::const_iterator> idToRps;
         for (std::list<RangePairSet>::iterator lrp_it1 =  m->second.begin(); lrp_it1 != m->second.end(); lrp_it1++) {
             graph.add_node(lrp_it1->getId());
-            lrp_it1->computeScoreWithLength();
             idToRps[lrp_it1->getId()] = lrp_it1;
             std::list<RangePairSet>::const_iterator lrp_it2 = lrp_it1;
             lrp_it2++;
@@ -173,14 +168,17 @@ void BLRMatchJoin::merge(BLRMatchPath &map_path, int verbose) {
         std::list<RangePairSet> rpsListAfterMerge;
         for (std::vector<std::vector<unsigned long> >::iterator it_vec = vec.begin(); it_vec != vec.end(); it_vec++) {
             unsigned size = it_vec->size();
-
-            // Get first rps from connex comp
-            RangePairSet firstRps = *idToRps[(*it_vec)[0]];
-
-            //Merge rps with other rps from same connex comp
-            for (unsigned i = 1; i < size; i++) {
+            std::list<RangePairSet> rpsListBeforeMerge;
+            for (unsigned i = 0; i < size; i++) {
                 RangePairSet rps = *(idToRps[(*it_vec)[i]]);
-                firstRps.mergeQ(rps);
+                rpsListBeforeMerge.push_back(rps);
+            }
+            rpsListBeforeMerge.sort( RangePair::greaterScoreIdLenCoord);
+            //Merge rps with other rps from same connex comp
+            RangePairSet firstRps=rpsListBeforeMerge.front();
+            rpsListBeforeMerge.pop_front();
+            for (std::list<RangePairSet>::iterator it = rpsListBeforeMerge.begin(); it != rpsListBeforeMerge.end(); it++) {
+                firstRps.mergeQ(*it);
                 firstRps.orientSubjects();
             }
             rpsListAfterMerge.push_back(firstRps);
@@ -256,7 +254,7 @@ void BLRMatchJoin::add_split_path(std::list<RangePairSet> &rp_list, std::list<Ra
                 rp_list.insert(it, *lrp_it);
             }
     } else if (iter->getRangeQ().getLength() > para.getLenFilter())
-        // No change on rangepairset, insert it normally by increasing coordinates
+        // No change on rangepairset, insert it normally
         map_path.insert(*iter);
 
 }
@@ -276,6 +274,7 @@ void BLRMatchJoin::split(BLRMatchPath &map_path, int verbose)
         m->second.sort(RangePair::lessIdentity);
         for (std::list<RangePairSet>::iterator i = m->second.begin();
              i != m->second.end(); i++) {
+            i->computeScoreWithLengthAndId();
             add_split_path(m->second, i, map_path_new);
         }
     }

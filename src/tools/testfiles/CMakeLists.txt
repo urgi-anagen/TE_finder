@@ -22,8 +22,6 @@ add_executable(
         test_Tools
 
         ${source_files}
-        test_Tools.cpp
-        test_Tools.h
 )
 
 target_link_libraries(

@@ -41,11 +41,8 @@ private:
     std::map<long,std::string> num2nameQ,num2nameS;
 
 
-    void add_clean(std::list<RangePair>& rp_list,
-                   std::list<RangePair>::iterator iter);
-
 public:
-
+    BLRMatchAlign(void) {};
     MapAlign::iterator begin(){ return map_align.begin();};
     MapAlign::iterator end(){ return map_align.end();};
 
@@ -60,9 +57,18 @@ public:
         std::ifstream input_align(filename);
         read(param,input_align, verbose);
     };
+    void setFromRpsList(const BLRJoinParameter& param, const std::list<RangePair>& rp_list, int verbose=0);
     void write(std::ostream& out);
 
     void clear(void){map_align.clear();};
+
+    std::list<RangePair> getRpListFromMatchAlign(void){
+        std::list<RangePair> rp_list;
+        for (MapAlign::iterator m = map_align.begin(); m != map_align.end(); m++)
+            for (std::list<RangePair>::iterator l = m->second.begin(); l != m->second.end(); l++)
+                rp_list.push_back(*l);
+        return rp_list;
+    };
 
     unsigned getNbMatchesInMapAlign(void){
         unsigned nbMatches = 0;
@@ -73,7 +79,9 @@ public:
     MapAlign getMapAlign(void){return map_align;};
 
     void insert(RangePair& range);
-
+    void add_clean_overlap(std::list<RangePair> &rp_list, std::list<RangePair>::iterator iter);
+    void add_clean_included(std::list<RangePair>::iterator iter);
+    void clean_conflicts(void);
 
     std::map<std::string,long> getName2NumQ(void){return name2numQ;};
     std::map<long, std::string> getNum2NameQ(void){return num2nameQ;};

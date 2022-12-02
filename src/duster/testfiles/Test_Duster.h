@@ -12,23 +12,20 @@
 #include "Duster.h"
 #include <list>
 #include <vector>
+#include <iomanip>
 
 class Test_Duster : public CppUnit::TestFixture {
 
 	CPPUNIT_TEST_SUITE(Test_Duster);
-	
-	CPPUNIT_TEST( test_hashSeqCount );
-	CPPUNIT_TEST( test_hashSeqCountwHole );
-	CPPUNIT_TEST( test_reverse_hash );
-	CPPUNIT_TEST( test_reverse_hashwHole );
-	CPPUNIT_TEST( test_diagSearch );
+	CPPUNIT_TEST( test_search );
 	CPPUNIT_TEST( test_fragMerge );
+    CPPUNIT_TEST( test_runAsScript );
 
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 
-	Test_Duster(void) {}
+    Test_Duster(void) {}
 
 	void setUp()
 	{
@@ -38,12 +35,9 @@ public:
 	}
 
 protected:
-	void test_hashSeqCount(void);
-	void test_hashSeqCountwHole(void);
-	void test_reverse_hash(void);
-	void test_reverse_hashwHole(void);
-	void test_diagSearch( void );
+    void test_search( void );
 	void test_fragMerge( void );
+    void test_runAsScript( void );
 
 };
 

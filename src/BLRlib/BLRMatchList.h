@@ -15,7 +15,7 @@
 #include <iterator>
 #include <iomanip>
 #include <BlastMatch.h>
-#include "../blaster/BLRBlasterParameter.h"
+#include <BLRJoinParameter.h>
 
 class BLRMatchList 
 {
@@ -25,22 +25,17 @@ class BLRMatchList
  public: 
   std::list<BlastMatch> match_list;
   //! default constructor
-  BLRMatchList(): match_list(){};
+  BLRMatchList(void): match_list(){};
   //! destructor
   virtual ~BLRMatchList();
   //! - set empty match_list 
   void clear(); 
-  //! - Function to remove the matches that do not need
-  void remove(BLRBlasterParameter para);
-  //! - Function to fill matchlist with matches found 
-  void fill_ncbilist(SDGString& filename);
-  void fill_wulist(SDGString& filename);
-  //!- Function for developement to show the alignlist
-  void readncbiblastfield(std::istream& in);
-  void readwublastfield(std::istream& in);
+  //! - Function to remove_self_hits the matches that do not need
+  void read_blast_results(const std::string& match_filename, double max_eval, unsigned min_length, double min_identity, bool is_wublast);
+  void remove_self_hits(unsigned cut_length, unsigned cut_over);
   void show_list();
   //!- Function to save the matchlist
-  void save_list(SDGString, int flag);
+  void save_list(SDGString, unsigned flag);
   //!- function to get size of the membre of matchlist
   void savebin(std::ostream& out);
   void writetxt(std::ostream& out);

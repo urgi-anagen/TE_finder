@@ -30,7 +30,7 @@ add_executable(
 
         ${source_files}
 
-)
+        Test_BLRUtils.cpp Test_BLRUtils.h)
 
 target_link_libraries(
         test_BLR

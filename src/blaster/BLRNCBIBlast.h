@@ -47,31 +47,31 @@ class BLRNCBIBlast: public BLRBlast
 		 case 0: //NCBI default
 		 {
 			 auto_blastparam=" -e 0.001 -m 8 -v 0 -b 100000000";
-			 auto_blastnparam=" -F F ";
+			 auto_blastnparam=" ";
 			 break;
 		 }
 		 case 1: //WU default
 		 {
 			 auto_blastparam=" -e 0.001 -m 8 -v 0 -b 100000000";
-			 auto_blastnparam=" -r 5 -q -4 -G 10 -E 6 -g T -F F";
+			 auto_blastnparam=" -r 5 -q -4 -G 10 -E 6 -g T";
 			 break;
 		 }
 		 case 2:
 		 {
 			 auto_blastparam=" -e 0.001 -m 8 -v 0 -b 100000000";
-			 auto_blastnparam=" -r 10 -q -10 -G 40 -E 10 -g T -W 8 -F F";
+			 auto_blastnparam=" -r 10 -q -10 -G 40 -E 10 -g T -W 8";
 			 break;
 		 }
 		 case 3:
 		 {
 			 auto_blastparam=" -e 0.001 -m 8 -v 0 -b 100000000";
-			 auto_blastnparam=" -r 10 -q -10 -G 30 -E 10 -g T -W 7 -F F";
+			 auto_blastnparam=" -r 10 -q -10 -G 30 -E 10 -g T -W 7";
 			 break;
 		 }
 		 case 4:
 		 {
 			 auto_blastparam=" -e 0.001 -m 8 -v 0 -b 100000000";
-			 auto_blastnparam=" -r 10 -q -10 -G 20 -E 10 -g T -W 7 -F F";
+			 auto_blastnparam=" -r 10 -q -10 -G 20 -E 10 -g T -W 7";
 			 break;
 		 }
 		 default:
@@ -86,11 +86,6 @@ class BLRNCBIBlast: public BLRBlast
 	 void blast( int verbose=0 );
 
 	 void pressdb( int verbose=0 );
-
-	 Reference<BLRMatchList> getList()
-	 {
-		 return new BLRMatchList(alist);
-	 };
 
 };
 

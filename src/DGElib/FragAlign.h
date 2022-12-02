@@ -121,21 +121,25 @@ class FragAlign
 
  public:
 
-  FragAlign(double mism,double gapo_p,double gape_p, unsigned o, 
-	    unsigned l=20000) 
-    {
-      gapo_pen=gapo_p;
-      gape_pen=gape_p;
-      mism_pen=mism;
-      connect_dist_limit=l;
-      over=o;
+    FragAlign(double mism, double gapo_p, double gape_p, unsigned o,
+              unsigned l = 20000) {
+        gapo_pen = gapo_p;
+        gape_pen = gape_p;
+        mism_pen = mism;
+        connect_dist_limit = l;
+        over = o;
     };
 
-  void alignDirectDirect(std::list<RangePair>& l);
-  void alignDirectCompl(std::list<RangePair>& l);
-  void alignComplDirect(std::list<RangePair>& l);
-  void alignComplCompl(std::list<RangePair>& l);
-  std::list<RangePairSet> join(std::list<RangePair>& l);
+    void alignDirectDirect(std::list<RangePair> &l);
+
+    void alignDirectCompl(std::list<RangePair> &l);
+
+    void alignComplDirect(std::list<RangePair> &l);
+
+    void alignComplCompl(std::list<RangePair> &l);
+
+    std::list<RangePairSet> join(std::list<RangePair> &l);
+
 };
 #endif
 

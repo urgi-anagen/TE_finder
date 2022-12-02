@@ -37,9 +37,8 @@ class BLRGrouper
 
 	private:
 
-		BLRGrouperParameter* grouper_parameter;
-		double cover_limit;
-		//threadpool::ThreadPool pool;
+		BLRGrouperParameter grouper_parameter;
+        double cover_limit ;
 
 		bool compareQ( RangeAlignSet& alignQ, RangeAlignSet& alignS,
 				long long id,
@@ -72,9 +71,9 @@ class BLRGrouper
 
 	public:
 
-		BLRGrouper( BLRGrouperParameter *para ):
-			grouper_parameter(para),cover_limit(0)
-			{};
+		BLRGrouper( const BLRGrouperParameter& para ):
+			grouper_parameter(para)
+			{cover_limit = grouper_parameter.getCoverage();};
 
 		/** \fn void roam_group( RangePairSet& align, int verbose=0 );
 		 * \brief Visit all MEMBLIST of group_list with this alignment

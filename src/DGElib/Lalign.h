@@ -170,6 +170,7 @@ Match   Mismatch   Gap-Open Penalty   Gap-Extension Penalty
 #include <fstream>
 #include   <SDGString.h>
 #include   <SDGMemBioSeq.h>
+#include   <BioSeq.h>
 
 class Lalign
 {
@@ -313,7 +314,7 @@ void small_pass(int count);
 /* Add a new node into list.  */
 int addnode(int c, int ci, int cj, int i, int j, int K, int cost);
 
-/* Find and remove the largest score in list */
+/* Find and remove_self_hits the largest score in list */
  vertexptr findmax();
 
 /* return 1 if no node in LIST share vertices with the area */
@@ -599,6 +600,14 @@ int addnode(int c, int ci, int cj, int i, int j, int K, int cost);
      setSeq(s1,1);
      setSeq(s2,2);
    };
+
+    void setSeq(BioSeq s1, BioSeq s2)
+    {
+        SDGBioSeq seq1= newSDGMemBioSeq(s1.c_str());
+        SDGBioSeq seq2= newSDGMemBioSeq(s2.c_str());
+        setSeq(seq1,1);
+        setSeq(seq2,2);
+    };
 
  void setNbSeq(int n)
    {

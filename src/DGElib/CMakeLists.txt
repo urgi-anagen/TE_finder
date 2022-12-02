@@ -12,7 +12,7 @@ file(
 
         source_files
 
-        *.cpp
+        *
 
 )
 
@@ -27,7 +27,7 @@ add_library(
 
         ${source_files}
 
-)
+        MinimizerFuncDNASeq.h)
 
 target_link_libraries(
         DGElib

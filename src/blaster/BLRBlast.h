@@ -9,8 +9,10 @@
 #include <iostream>
 #include <stdlib.h>
 #include "Reference.h"
-#include "SDGMemBioSeq.h"
+#include "BioSeqDB.h"
+#include "BioSeq.h"
 #include "SDGFastaOstream.h"
+#include "FastaOstream.h"
 #include "SDGString.h"
 #include "BLRMatchList.h"
 #include "BLRBlasterParameter.h"
@@ -24,13 +26,12 @@ class BLRBlast
 
  protected:
   SDGString bank_name,query_name;
-  BLRMatchList alist; /*!< List of alignments produced by blast*/
   BLRBlasterParameter para;
   SDGString query_filename;
   SDGString result_filename;
 
  public:
-  BLRBlast(const BLRBlasterParameter& p){};
+  BLRBlast(const BLRBlasterParameter& p) : para(p){};
 
   virtual ~BLRBlast(){};
 
@@ -46,14 +47,18 @@ class BLRBlast
    * \param lquery list of SDGBioSeq instances
    * \param first_num_seq number of the first sequence
    */
-  void prepblast(const std::list<SDGBioSeq>& lquery,
+  void prepblast(const std::list<unsigned>& batch_num_seq, const BioSeqDB& query_db,
 		  unsigned first_num_seq)
   {
     query_filename=query_name+"_query"+SDGString(first_num_seq)+".fa";
-    SDGFastaOstream fastout(query_filename);
-    for(std::list<SDGBioSeq>::const_iterator i=lquery.begin();
-	i!=lquery.end(); i++)
-      fastout<<(*i);
+    FastaOstream fastout(query_filename);
+    BioSeq s;
+    for(std::list<unsigned>::const_iterator i=batch_num_seq.begin();
+	i!=batch_num_seq.end(); i++){
+        s = query_db[(*i) - 1];
+        fastout<<s;
+    }
+
     fastout.close();
 
     result_filename=query_name+"_"+bank_name.afterlast("/")

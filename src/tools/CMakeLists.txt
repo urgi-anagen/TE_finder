@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 project(tools${VERSION})
 add_subdirectory (testfiles)
 
+
 add_executable(cutterDB cutterDB.cpp)
 add_executable(itrsearch itrsearch.cpp)
 add_executable(ltrsearch ltrsearch.cpp)
@@ -64,7 +65,6 @@ target_link_libraries(align2recon SDGlib DGElib BLRlib)
 target_link_libraries(filterAlign SDGlib DGElib BLRlib)
 target_link_libraries(tabnum2id SDGlib DGElib BLRlib)
 target_link_libraries(rpt_map SDGlib DGElib BLRlib)
-
 
 install (TARGETS cutterDB DESTINATION ${CMAKE_SOURCE_DIR}/bin)
 install (TARGETS itrsearch DESTINATION ${CMAKE_SOURCE_DIR}/bin)

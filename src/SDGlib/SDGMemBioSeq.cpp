@@ -107,7 +107,7 @@ SDGBioSeq __SDGMemBioSeq::complement() const
   SDGBioSeq resultat=newSDGMemBioSeq(ostr.str());
 
   std::ostringstream def;
-  def<<definition<<" re-oriented";
+  def<<definition<<" complemented";
   resultat.setDE(def.str());
   //resultat.setDE(SDGString(definition) + SDGString(" re-oriented"));
   resultat.setAC(access);
@@ -116,6 +116,23 @@ SDGBioSeq __SDGMemBioSeq::complement() const
  return resultat;
 }
 
+SDGBioSeq __SDGMemBioSeq::reverse() const
+{
+    std::ostringstream ostr;
+    for(std::string::const_reverse_iterator i=sequence.rbegin();
+        i!=sequence.rend();i++)
+        ostr<<*i;
+    SDGBioSeq resultat=newSDGMemBioSeq(ostr.str());
+
+    std::ostringstream def;
+    def<<definition<<" reversed";
+    resultat.setDE(def.str());
+    //resultat.setDE(SDGString(definition) + SDGString(" re-oriented"));
+    resultat.setAC(access);
+    resultat.setID(identificateur);
+
+    return resultat;
+}
 
 
 SDGBioSeq __SDGMemBioSeq::concat(SDGBioSeq seq) const

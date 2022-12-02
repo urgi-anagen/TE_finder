@@ -13,13 +13,13 @@
 #include <list>
 
 #include <SDGString.h>
-#include <SDGFastaIstream.h>
-#include <SDGFastaOstream.h>
-
-//#include "SkipList.h"
+#include <FastaIstream.h>
+#include <FastaOstream.h>
+#include <FastaIstream.h>
+#include <BioSeq.h>
 #include "RangeSeq.h"
-#include "SDGBioSeqDB.h"
-//#include "Galign.h"
+
+
 
 class RangeMap
 : public std::map<std::string,std::list<RangeSeq> >
@@ -51,14 +51,15 @@ class RangeMap
   void selectOverlap(RangeMap& m,RangeMap& mapout);
   void merge(void);
   void extend(unsigned size_flank);
-  void selectSrcSeq(const SDGString& outfname,const SDGBioSeqDB& db);
-  void writeSeq(const SDGString& outfname,const SDGBioSeqDB& db) const;
-  void writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose=0 );
-  void writeFlank53Seq(const SDGString& outfname,const SDGBioSeqDB& db,
+  void selectSrcSeq(const SDGString& outfname,const std::string &fasta_filename);
+  void writeSeq(const SDGString& outfname,const SDGString& fastaDB_filename) const;
+  void writeCutSeq( const SDGString& outfname, const std::string& fasta_filename, int verbose=0 );
+  // void writeCutSeq( const SDGString& outfname, const SDGBioSeqDB& db, int verbose=0 );
+  void writeFlank53Seq(const SDGString& outfname,const std::string &fasta_filename,
 		       unsigned len=100);
-  void writeFlank5Seq(const SDGString& outfname,const SDGBioSeqDB& db,
+  void writeFlank5Seq(const SDGString& outfname,const std::string &fasta_filename,
 		      unsigned len=100);
-  void writeFlank3Seq(const SDGString& outfname,const SDGBioSeqDB& db,
+  void writeFlank3Seq(const SDGString& outfname,const std::string &fasta_filename,
 		      unsigned len=100);
   void entropfilt(const SDGString& db, double thres) ;
 };
