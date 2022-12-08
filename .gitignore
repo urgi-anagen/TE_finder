@@ -2978,3 +2978,9 @@ build/src/SDGlib/testfiles/test_in.fa
 build/src/SDGlib/testfiles/test_out.fa
 build/src/SDGlib/testfiles/test.fa
 build/src/matcher.threads/testfiles/input.align
+build/.cmake/api/v1/reply/codemodel-v2-e6c9a811e498aed9012a.json
+build/.cmake/api/v1/reply/index-2022-12-02T17-42-19-0841.json
+build/.cmake/api/v1/reply/target-matcherThreads2.31-Debug-41f307dc355d649b67b3.json
+build/.cmake/api/v1/reply/target-test_DGE-Debug-93f951faf4e4490a4827.json
+build/.cmake/api/v1/reply/target-test_duster2.31-Debug-7ffa06bbe13f3cb4fe22.json
+build/.cmake/api/v1/reply/target-test_matcherThreads2.31-Debug-2c3fa70b6f811b736ed5.json
