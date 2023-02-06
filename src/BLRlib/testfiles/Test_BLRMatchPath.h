@@ -12,13 +12,14 @@
 
 class Test_BLRMatchPath: public CPPUNIT_NS::TestFixture
 {
-  CPPUNIT_TEST_SUITE(Test_BLRMatchPath);
-  CPPUNIT_TEST(test_read);
-  CPPUNIT_TEST(test_load);
-  CPPUNIT_TEST(test_setFromRpsList);
-  CPPUNIT_TEST(test_setFromRpsList2);
-  CPPUNIT_TEST(test_writeBED);
-  CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE(Test_BLRMatchPath);
+    CPPUNIT_TEST(test_read);
+    CPPUNIT_TEST(test_load);
+    CPPUNIT_TEST(test_setFromRpsList);
+    CPPUNIT_TEST(test_setFromRpsList2);
+    CPPUNIT_TEST(test_writeBED);
+    CPPUNIT_TEST(test_writeGFF3);
+    CPPUNIT_TEST_SUITE_END();
 
  public:
     void setUp();
@@ -30,6 +31,7 @@ class Test_BLRMatchPath: public CPPUNIT_NS::TestFixture
     void test_setFromRpsList(void);
     void test_setFromRpsList2(void);
     void test_writeBED(void);
+    void test_writeGFF3(void);
 
 };
 #endif

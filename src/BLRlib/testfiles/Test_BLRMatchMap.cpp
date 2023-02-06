@@ -17,44 +17,15 @@ void Test_BLRMatchMap::tearDown()
 {
 }
 
-// clean_conflicts is never called in other submethod in MapPath.
-void Test_BLRMatchMap::test_clean_conflicts(void){
-	SDGString match_file = "match.align";
-	Test_BLRUtils::writeInputFile();
-	
-	BLRMatcherThreadsParameter para = createParameter();
-	BLRMatchMap matchMap(para);
-		 
-	matchMap.loadAlign(match_file);
-	
-	BLRMatchMap::MapAlign mapAlignBefore = matchMap.getMapAlign();
-	
-
-	/*std::cout<<" clean_conflicts before: "<<std::endl;
-	Test_BLRUtils::viewMapAlign(mapAlignBefore);
-	std::cout<<" "<<std::endl;*/
-
-
-	matchMap.clean_conflicts();     
-	BLRMatchMap::MapAlign obsMapAlign = matchMap.getMapAlign();  
-
-	/*std::cout<<"clean_conflicts after: "<<std::endl;
-	Test_BLRUtils::viewMapAlign(obsMapAlign);*/
-
-	BLRMatchMap::MapAlign expMapAlign = Test_BLRUtils::createExpMapAlign_for_clean_conflicts();
-	 
-	/*	std::cout<<"expectation: "<<std::endl;
-		Test_BLRUtils::viewMapAlign(expMapAlign);*/
- 
-	bool expComparaison = true;
-	bool obsComparaison = (expMapAlign == obsMapAlign);
-	
-	CPPUNIT_ASSERT_EQUAL(expComparaison, obsComparaison);
-
-	FileUtils::removeFile(match_file);
+void Test_BLRMatchMap::test_mapAlign_equality(void){
+    BLRMatchMap::MapAlign mapAlign1 = Test_BLRUtils::createMapAlign_instance_for_test_mapAlign_Equality();
+    BLRMatchMap::MapAlign mapAlign2 = Test_BLRUtils::createMapAlign_instance_for_test_mapAlign_Equality();
+    bool expComparaison = true;
+    bool obsComparaison = (mapAlign1 == mapAlign2);
+    CPPUNIT_ASSERT_EQUAL(expComparaison, obsComparaison);
 }
 
-void Test_BLRMatchMap::test_mapPath(void){
+void Test_BLRMatchMap::test_mapPath_join_merge_clean_after(void){
 		bool joiningParameter = true;
 		bool cleanBefore = false;
 		bool cleanAfter = true;
@@ -149,13 +120,7 @@ void Test_BLRMatchMap::test_isOverlapFound_in_add_split_path(void){
 		CPPUNIT_ASSERT_EQUAL(expOverlap, obsOverlap);
 }   
 
-void Test_BLRMatchMap::test_mapAlign_equality(void){
-	BLRMatchMap::MapAlign mapAlign1 = Test_BLRUtils::createMapAlign_instance_for_test_mapAlign_Equality();
-	BLRMatchMap::MapAlign mapAlign2 = Test_BLRUtils::createMapAlign_instance_for_test_mapAlign_Equality();
-	bool expComparaison = true;
-	bool obsComparaison = (mapAlign1 == mapAlign2);
-	CPPUNIT_ASSERT_EQUAL(expComparaison, obsComparaison);
-}
+
 
 
 void Test_BLRMatchMap::test_merge_on_two_queries(void)

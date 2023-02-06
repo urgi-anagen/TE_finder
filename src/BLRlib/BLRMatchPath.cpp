@@ -239,7 +239,7 @@ void BLRMatchPath::writeBED(std::ostream &out) {
 //---------------------------------------------------------------------------
 void BLRMatchPath::writeGFF3(const SDGString &filename) {
     std::ostringstream gffStream;
-    writeBED(gffStream);
+    writeGFF3(gffStream);
     std::ofstream bedFile(filename);
     bedFile << gffStream.str();
 }

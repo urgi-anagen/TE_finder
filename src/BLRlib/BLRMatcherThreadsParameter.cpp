@@ -80,6 +80,7 @@ void BLRMatcherThreadsParameter::parseOptArg(int numarg, char* tabarg[])
       }
 	  case 'x':
 	    {
+          clean_before=false;
 	      clean_after=true;
 	      break;
 	    }
