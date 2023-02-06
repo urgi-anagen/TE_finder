@@ -109,8 +109,6 @@ int main(int argc, char *argv[]) {
             std::cerr << "No file :" << para.getLoad_path()  << std::endl << std::flush;
 
 
-
-
         std::list<RangePair> rp_list = match_align.getRpListFromMatchAlign();
         if(para.getVerbose()>0) std::cout<<"list size="<<rp_list.size()<<std::endl;
 

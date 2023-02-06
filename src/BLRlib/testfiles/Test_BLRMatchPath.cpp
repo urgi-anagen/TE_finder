@@ -218,7 +218,31 @@ void Test_BLRMatchPath::test_writeBED(void){
 
 	CPPUNIT_ASSERT_EQUAL(exp.str(), obs.str());
 }
+//---------------------------------------------------------------------------
+void Test_BLRMatchPath::test_writeGFF3(void){
 
+    BLRJoinParameter para = Test_BLRUtils::createParameter();
+    BLRMatchPath matchPath;
+
+    std::ostringstream inputData;
+    inputData << "10\tCHR1v01212004\t100\t250\tTNAT1A\t36\t523\t2e-128\t460\t81.56\n";
+    inputData << "10\tCHR1v01212004\t800\t1000\tTNAT1A\t36\t523\t2e-128\t460\t81.56\n";
+    inputData << "20\tCHR2v01212004\t1050\t2000\tTNAT1A\t580\t480\t7e-78\t87\t79.14\n";
+
+    std::istringstream inputDataStream(inputData.str());
+    matchPath.read(para,inputDataStream, 0);
+
+    std::ostringstream obs;
+    matchPath.writeGFF3(obs);
+
+    std::ostringstream exp;
+    exp << "CHR1v01212004\tmatcher\tmatch\t100\t1000\t868\t+\t.\tID=1;Name=TNAT1A;Target=TNAT1A 36 523;Note=e-value:2e-128,identity:81.56\n";
+    exp << "CHR1v01212004\tmatcher\tmatch_part\t100\t250\t460\t+\t.\tID=1.1;Parent=1;Name=TNAT1A.1;Target=TNAT1A 36 523;Note=e-value:2e-128,identity:81.56\n";
+    exp << "CHR1v01212004\tmatcher\tmatch_part\t800\t1000\t460\t+\t.\tID=1.2;Parent=1;Name=TNAT1A.2;Target=TNAT1A 36 523;Note=e-value:2e-128,identity:81.56\n";
+    exp << "CHR2v01212004\tmatcher\tmatch\t1050\t2000\t87\t-\t.\tID=2;Name=TNAT1A;Target=TNAT1A 480 580;Note=e-value:7e-78,identity:79.14\n";
+    exp << "CHR2v01212004\tmatcher\tmatch_part\t1050\t2000\t87\t-\t.\tID=2.1;Parent=2;Name=TNAT1A.1;Target=TNAT1A 480 580;Note=e-value:7e-78,identity:79.14\n";
+    CPPUNIT_ASSERT_EQUAL(exp.str(), obs.str());
+}
 
 
 

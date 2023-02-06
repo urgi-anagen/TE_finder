@@ -15,8 +15,7 @@ class Test_BLRMatchMap: public CPPUNIT_NS::TestFixture
 {
   CPPUNIT_TEST_SUITE(Test_BLRMatchMap);
   CPPUNIT_TEST(test_mapAlign_equality);
-  CPPUNIT_TEST(test_clean_conflicts);
-  CPPUNIT_TEST(test_mapPath);
+  CPPUNIT_TEST(test_mapPath_join_merge_clean_after);
   CPPUNIT_TEST(view_add_clean_path_all_S);
   CPPUNIT_TEST(test_isOverlapFound_in_add_split_path);
   CPPUNIT_TEST(test_merge_on_two_queries);
@@ -46,8 +45,8 @@ class Test_BLRMatchMap: public CPPUNIT_NS::TestFixture
 	protected:
     
     void test_mapAlign_equality(void);
-    void test_clean_conflicts(void);
-    void test_mapPath(void);
+    void test_mapPath_join_clean_before(void);
+    void test_mapPath_join_merge_clean_after(void);
     void view_add_clean_path_all_S(void);
     void test_isOverlapFound_in_add_split_path(void);
     void test_merge_on_two_queries(void);
